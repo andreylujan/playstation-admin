@@ -1,0 +1,54 @@
+<div class="page page-core page-login">
+
+  <div class="text-center"><img class="size-80x80" src="http://d21zid65ggdxzg.cloudfront.net/4538B6A85A8B9CA450766AC4FE6F85DF.png" alt="play_logo"></div>
+  <div class="text-center"><h3 class="text-light text-white">e - Retail</div>
+
+  <div class="container w-420 p-20 bg-blue-ps bright mt-20 text-center br-25">
+
+    <h2 class="text-light text-black mt-15">Crear Cuenta</h2>
+
+    <!-- <h4 class="text-light text-greensea" ng-show="elements.msg.show">{{page.msg.text}}</h4> -->
+    <h3 class="text-light text-{{page.elements.msg.color}}" ng-show="page.elements.msg.show">{{page.elements.msg.text}}</h4>
+
+    <form name="form" class="form-validation mt-20" novalidate>
+
+      <div class="form-group">
+        <input type="email" class="form-control rounded" placeholder="Email" ng-model="newUser.email" disabled required>
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control rounded" placeholder="Rut" ng-model="newUser.rut" ng-disabled="removeMsg()" required>
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control rounded" placeholder="Nombre" ng-model="newUser.firstName" ng-disabled="removeMsg()" required>
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control rounded" placeholder="Apellido" ng-model="newUser.lastName" ng-disabled="removeMsg()" required>
+      </div>
+
+      <!-- <div class="form-group">
+        <input type="text" class="form-control rounded" placeholder="Dirección" ng-model="newUser.address" required>
+      </div> -->
+
+      <div class="form-group">
+        <input type="tel" class="form-control rounded" placeholder="Celular" ng-model="newUser.phoneNumber" ng-disabled="removeMsg()" required>
+      </div>
+
+      <div class="form-group">
+        <input type="text" placeholder="Password" class="form-control rounded" ng-model="newUser.password" ng-disabled="removeMsg()" required>
+      </div>
+
+      <div class="form-group">
+        <input type="text" placeholder="Password" class="form-control rounded" ng-model="newUser.passwordConfirmation" ng-disabled="removeMsg()" required>
+      </div>
+
+    </form>
+
+    <div class="form-group text-center mt-20">
+      <button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="saveAccount()" ng-disabled='form.$invalid || page.elements.saveBtn.disabled'>Guardar</button>
+      </div>
+  </div>
+
+</div>

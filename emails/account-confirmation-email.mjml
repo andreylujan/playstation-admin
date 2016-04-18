@@ -1,0 +1,33 @@
+<mj-body>
+
+	<mj-section padding-bottom="0">
+		<mj-column width="80" >
+			<mj-image padding="0px 0px" src="http://d21zid65ggdxzg.cloudfront.net/4538B6A85A8B9CA450766AC4FE6F85DF.png" />
+		</mj-column>
+		<mj-column width="70%" vertical-align="center">
+			<mj-text color="#3f5b71" font-size="20" padding="0px 0px" align="left">
+				<h4>e-Retail</h4>
+			 </mj-text>
+		</mj-column>
+	</mj-section>
+
+	<mj-section>
+		<mj-text color="#3f5b71" font-size="20" align="center">Cuenta creada</mj-text>
+		<mj-text color="#3f5b71" font-size="15" padding-top="20">Estimado [mail_usuario],</mj-text>
+		<mj-text color="#3f5b71">Bienvenido a e-Retail, esperamos que tengas una excelente experiencia con la aplicación</mj-text>
+		<mj-text color="#3f5b71">Descarga la aplicación disponible para Android y iPhone</mj-text>
+	</mj-section>
+
+	<mj-section>
+		<mj-column>
+			<mj-image width="120" src="http://d21zid65ggdxzg.cloudfront.net/welcome/appstore.png" href="http://www.apple.com/itunes/download/"/>
+		</mj-column>
+		<mj-column>
+			<mj-image width="120" src="http://d21zid65ggdxzg.cloudfront.net/welcome/play-store.png" href="https://play.google.com/store/apps/details?id=com.ewin.echeckit.generic&hl=es/"/>
+		</mj-column>
+
+
+	</mj-section>
+
+
+</mj-body>

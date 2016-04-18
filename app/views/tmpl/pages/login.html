@@ -1,0 +1,32 @@
+<div class="page page-core page-login">
+
+  <div class="text-center"><img class="size-80x80" src="http://d21zid65ggdxzg.cloudfront.net/4538B6A85A8B9CA450766AC4FE6F85DF.png" alt="play_logo"></div>
+  <div class="text-center"><h3 class="text-light text-white">e - Retail</div>
+
+  <div class="container w-420 p-20 bg-blue-ps bright mt-40 text-center br-25">
+
+
+    <h2 class="text-light text-black">Iniciar Sesión</h2>
+
+    <h3 class="text-light text-red" ng-show="elements.msg.show"><fa name="times"></fa> {{elements.msg.text}}</h3>
+
+    <form name="form" class="form-validation mt-20" novalidate>
+
+      <div class="form-group">
+        <input type="email" class="form-control rounded" placeholder="Email de usuario..." ng-model="user.username" ng-change="removeMsg()" required>
+      </div>
+
+      <div class="form-group">
+        <input type="password" placeholder="Clave de usuario..." class="form-control rounded" ng-model="user.password" ng-change="removeMsg()" required>
+      </div>
+
+      <div class="form-group text-left mt-20">
+        <button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="login()" ng-disabled='form.$invalid'>Login</button>
+        <a ui-sref="core.forgotpass" class="pull-right mt-10" style="color:#3f5b71">Recuperar contraseña</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

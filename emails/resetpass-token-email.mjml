@@ -1,0 +1,25 @@
+<mj-body>
+
+	<mj-section padding-bottom="0">
+		<mj-column width="80" >
+			<mj-image padding-right="0" padding="0px 0px" src="http://d21zid65ggdxzg.cloudfront.net/4538B6A85A8B9CA450766AC4FE6F85DF.png" />
+		</mj-column>
+		<mj-column width="70%" vertical-align="center">
+			<mj-text color="#3f5b71" font-size="20" padding="0px 0px" align="left">
+				<h4>e-Retail</h4>
+			 </mj-text>
+		</mj-column>
+	</mj-section>
+
+	<mj-section>
+		<mj-text color="#3f5b71" font-size="20" align="center">¡Hola [nombre_usuario]!</mj-text>
+		<mj-text color="#3f5b71">Has solictado reestablecer tu contraseña.</mj-text>
+		<mj-text color="#3f5b71">Para realizar esta operación introduce el código visitando el link</mj-text>
+		<mj-text color="#3f5b71"><span>Código: </span><span style="color: #f15f4c; font-weight: bold">[token]</span></mj-text>
+		<mj-button href="http://localhost:9000/#/core/resetpass" background-color="#f19122" padding-top="20" padding-bottom="20">Ir a reestablecer contraseña</mj-button>
+		
+		<mj-text color="#3f5b71">Muchas gracias!</mj-text>
+
+	</mj-section>
+
+</mj-body>
