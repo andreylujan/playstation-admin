@@ -108,49 +108,49 @@ angular.module('minovateApp')
 
 		$scope.sendInvitations = function() {
 
-			$log.log($scope.page.formGroups.invite);
+			// $log.log($scope.page.formGroups.invite);
 
 			$scope.responseInvitations = [];
 
-			// for (var i = 0; i < $scope.page.formGroups.invite.length; i++) {
+			for (var i = 0; i < $scope.page.formGroups.invite.length; i++) {
 
-			// 	Invitations.save({
-			// 		"data": {
-			// 			"type": "invitations",
-			// 			"attributes": {
-			// 				"role_id": $scope.page.formGroups.invite[i].roleId,
-			// 				"email": $scope.page.formGroups.invite[i].email
-			// 			}
-			// 		}
-			// 	}, function(success) {
-			// 		$log.log(success);
+				Invitations.save({
+					"data": {
+						"type": "invitations",
+						"attributes": {
+							"role_id": $scope.page.formGroups.invite[i].roleId,
+							"email": $scope.page.formGroups.invite[i].email
+						}
+					}
+				}, function(success) {
+					$log.log(success);
 
-			// 		if (success.data) {
-			// 			$scope.responseInvitations.push({
-			// 				color: 'greensea',
-			// 				icon: 'check',
-			// 				email: success.data.attributes.email
-			// 			});
-			// 		} else {
-			// 			$scope.responseInvitations.push({
-			// 				color: 'danger',
-			// 				icon: 'times',
-			// 				// email: success.data.attributes.email
-			// 				email: success.errors[0].title
-			// 			});
-			// 		}
+					if (success.data) {
+						$scope.responseInvitations.push({
+							color: 'greensea',
+							icon: 'check',
+							email: success.data.attributes.email
+						});
+					} else {
+						$scope.responseInvitations.push({
+							color: 'danger',
+							icon: 'times',
+							// email: success.data.attributes.email
+							email: success.errors[0].title
+						});
+					}
 
-			// 	}, function(error) {
-			// 		$log.log(error);
+				}, function(error) {
+					$log.log(error);
 
-			// 		$scope.responseInvitations.push({
-			// 			color: 'danger',
-			// 			icon: 'times',
-			// 			email: error.data.errors[0].detail
-			// 		});
+					$scope.responseInvitations.push({
+						color: 'danger',
+						icon: 'times',
+						email: error.data.errors[0].detail
+					});
 
-			// 	});
-			// }
+				});
+			}
 
 			clearFormGroups();
 

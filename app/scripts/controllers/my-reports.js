@@ -19,6 +19,7 @@ angular.module('minovateApp')
 		var dealers = [];
 		var stores = [];
 		var loggedUserId = Utils.getInStorage('userid');
+		var i, j;
 
 		var getMyreports = function() {
 
@@ -26,11 +27,11 @@ angular.module('minovateApp')
 
 			Reports.query({}, function(success) {
 
-				$log.log(success);
+				// $log.log(success);
 
 				if (success.data) {
 
-					for (var i = 0; i < success.data.length; i++) {
+					for (i = 0; i < success.data.length; i++) {
 
 						// $log.log('comparo... ' + success.data[i].attributes.creator_id + ' ...con... ' + loggedUserId);
 
@@ -50,8 +51,8 @@ angular.module('minovateApp')
 						}
 					}
 
-					for (var i = 0; i < $scope.reports.length; i++) {
-						for (var j = 0; j < zones.length; j++) {
+					for (i = 0; i < $scope.reports.length; i++) {
+						for (j = 0; j < zones.length; j++) {
 							if ($scope.reports[i].zoneId === zones[j].id) {
 								$scope.reports[i].zoneName = zones[j].name;
 								break;
@@ -59,8 +60,8 @@ angular.module('minovateApp')
 						}
 					}
 
-					for (var i = 0; i < $scope.reports.length; i++) {
-						for (var j = 0; j < dealers.length; j++) {
+					for (i = 0; i < $scope.reports.length; i++) {
+						for (j = 0; j < dealers.length; j++) {
 							if ($scope.reports[i].dealerId === dealers[j].id) {
 								$scope.reports[i].dealerName = dealers[j].name;
 								break;
@@ -68,8 +69,8 @@ angular.module('minovateApp')
 						}
 					}
 
-					for (var i = 0; i < $scope.reports.length; i++) {
-						for (var j = 0; j < stores.length; j++) {
+					for (i = 0; i < $scope.reports.length; i++) {
+						for (j = 0; j < stores.length; j++) {
 							if ($scope.reports[i].storeId === stores[j].id) {
 								$scope.reports[i].storeName = stores[j].name;
 								break;
