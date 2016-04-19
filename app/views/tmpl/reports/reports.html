@@ -75,34 +75,34 @@
           <div class="tile-body">
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="user in reports">
+              <tr ng-repeat="report in reports">
                 <td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
-                  {{user.reportTypeName}}
+                  {{report.reportTypeName}}
                 </td>
                 <!-- <td data-title="'Detalle solicitud'" sortable="'requestDetail'" filter="{ 'requestDetail': 'text' }">
-                  {{user.requestDetail}}
+                  {{report.requestDetail}}
                 </td> -->
                 <td data-title="'Fecha Creacion'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-                  {{user.createdAt | date: 'dd/MM/yyyy'}}
+                  {{report.createdAt | date: 'dd/MM/yyyy'}}
                 </td>
                 <td data-title="'Fecha de vencimiento'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
-                  {{user.limitDate | date: 'dd/MM/yyyy'}}
+                  {{report.limitDate | date: 'dd/MM/yyyy'}}
                 </td>
                 <td data-title="'Zona'" sortable="'zone'" filter="{ 'zone': 'text' }">
-                  {{user.zoneName}}
+                  {{report.zoneName}}
                 </td>
                 <td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-                  {{user.dealerName}}
+                  {{report.dealerName}}
                 </td>
                 <td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-                  {{user.storeName}}
+                  {{report.storeName}}
                 </td>
                 <td data-title="'Creador reporte'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-                  {{user.creatorName}}
+                  {{report.creatorName}}
                 </td>
-                <!-- <td data-title="'Info'" >
-                  <a href="#">info</a>
-                </td> -->
+                <td data-title="'PDF'" >
+                  <a href="{{report.pdf}}">descargar</a>
+                </td>
               </tr>
             </table>
 

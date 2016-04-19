@@ -43,6 +43,8 @@ angular.module('minovateApp')
 							storeId: success.data[i].attributes.dynamic_attributes.store_id,
 							storeName: null,
 							creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+							pdf: success.data[i].attributes.pdf
+							// pdf: 'http://d21zid65ggdxzg.cloudfront.net/50bd2070e8736fe09566fff8db47fc02.pdf'
 						});
 
 					}
