@@ -20,29 +20,16 @@ angular.module('minovateApp')
 					roleId: null,
 					showIcon: false
 				}]
+			},
+			msg: {
+				show: false,
+				text: '',
+				color: ''
 			}
 		};
 
 		$scope.roles = [];
-		$scope.responseInvitations = [
-			// {
-			// 	color: 'greensea',
-			// 	email: 'alsda@adf.com',
-			// 	icon: 'check'
-			// }, {
-			// 	color: 'greensea',
-			// 	email: 'alsda@adf.com',
-			// 	icon: 'check'
-			// }, {
-			// 	color: 'danger',
-			// 	email: 'alsda@adf.com',
-			// 	icon: 'times'
-			// }, {
-			// 	color: 'greensea',
-			// 	email: 'alsda@adf.com',
-			// 	icon: 'check'
-			// }
-		];
+		$scope.responseInvitations = [];
 
 		var getRoles = function() {
 
@@ -111,6 +98,9 @@ angular.module('minovateApp')
 			// $log.log($scope.page.formGroups.invite);
 
 			$scope.responseInvitations = [];
+			$scope.page.msg.color = 'orange-ps';
+			$scope.page.msg.show = true;
+			$scope.page.msg.text = 'Se han enviado las invitaciones a:';
 
 			for (var i = 0; i < $scope.page.formGroups.invite.length; i++) {
 
@@ -123,7 +113,7 @@ angular.module('minovateApp')
 						}
 					}
 				}, function(success) {
-					$log.log(success);
+					// $log.log(success);
 
 					if (success.data) {
 						$scope.responseInvitations.push({

@@ -1872,7 +1872,7 @@ html.boxed-layout {
       padding-left: 30px;
       height: 45px;
       line-height: 45px;
-      background: url(../images/minovate-logo.png) no-repeat 0 10px;
+      background: url(../images/s2go-logo.png) no-repeat 0 10px;
       float: left;
       -webkit-transition: none;
       -moz-transition: none;
@@ -2374,7 +2374,6 @@ html.boxed-layout {
       height: 100% !important; }
   .sidebar-sm #sidebar #navigation,
   .sidebar-xs #sidebar #navigation {
-    margin: 0 -10px;
     height: 100%; }
     .sidebar-sm #sidebar #navigation > li,
     .sidebar-xs #sidebar #navigation > li {
@@ -2511,8 +2510,6 @@ html.boxed-layout {
   left: 40px; }
 
 @media only screen and (max-width: 768px) {
-  #minovate.sidebar-xs.aside-fixed #sidebar {
-    top: 90px; }
   #minovate.sidebar-xs.aside-fixed.header-static #sidebar {
     top: 0;
     z-index: 99; }
@@ -6844,7 +6841,7 @@ blockquote p {
       top: 70%;
       left: 50%;
       color: transparent;
-      content: '•';
+      content: 'ÔÇó';
       text-shadow: 0 0 transparent;
       font-size: 1.2em;
       -webkit-transition: text-shadow 0.3s, color 0.3s;
@@ -10179,6 +10176,9 @@ body {
 
 .text-white {
   color: white; }
+
+.text-orange-ps {
+  color: #f19122; }
 
 .text-xs {
   font-size: 10px !important; }

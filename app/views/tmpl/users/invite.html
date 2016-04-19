@@ -54,8 +54,10 @@
 			<!-- col -->
 			<div class="col-md-12">
 
+				<h4 class="text-{{page.msg.color}}" ng-show="page.msg.show">{{page.msg.text}}</h4>
+
 				<ul class="list-unstyled">
-					<li><p class="text-{{email.color}}" ng-repeat="email in responseInvitations"><fa name="{{email.icon}}"></fa> {{email.email}}</p></li>
+					<li><p ng-repeat="email in responseInvitations"><fa name="{{email.icon}}"></fa> {{email.email}}</p></li>
 				</ul>
 
 				<form class="form-horizontal form-validation" name="form" novalidate>

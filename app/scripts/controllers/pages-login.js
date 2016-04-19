@@ -37,7 +37,7 @@ angular.module('minovateApp')
 				Utils.setInStorage('role', success.data.relationships.user.data.role_id);
 				Utils.setInStorage('loggedIn', true);
 
-				$state.go('app.users.invite');
+				$state.go('app.playStation.reports');
 
 			}, function(error) {
 				$log.log(error);
