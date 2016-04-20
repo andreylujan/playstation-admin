@@ -37,10 +37,11 @@ angular.module('minovateApp')
 							createdAt: success.data[i].attributes.created_at,
 							limitDate: success.data[i].attributes.limit_date,
 							zoneId: success.data[i].attributes.dynamic_attributes.zone_id,
+							zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
 							zoneName: null,
-							dealerId: success.data[i].attributes.dynamic_attributes.dealer_id,
+							dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
 							dealerName: null,
-							storeId: success.data[i].attributes.dynamic_attributes.store_id,
+							storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
 							storeName: null,
 							creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
 							pdf: success.data[i].attributes.pdf
