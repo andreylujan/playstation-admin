@@ -7,8 +7,7 @@
 
     <h2 class="text-light text-black mt-15">Crear Cuenta</h2>
 
-    <!-- <h4 class="text-light text-greensea" ng-show="elements.msg.show">{{page.msg.text}}</h4> -->
-    <h3 class="text-light text-{{page.elements.msg.color}}" ng-show="page.elements.msg.show">{{page.elements.msg.text}}</h4>
+    <h3 class="text-light text-{{page.elements.msg.color}}" ng-show="page.elements.msg.show">{{page.elements.msg.text}}</h3>
 
     <form name="form" class="form-validation mt-20" novalidate>
 
@@ -27,10 +26,6 @@
       <div class="form-group">
         <input type="text" class="form-control rounded" placeholder="Apellido" ng-model="newUser.lastName" ng-disabled="removeMsg()" required>
       </div>
-
-      <!-- <div class="form-group">
-        <input type="text" class="form-control rounded" placeholder="Dirección" ng-model="newUser.address" required>
-      </div> -->
 
       <div class="form-group">
         <input type="tel" class="form-control rounded" placeholder="Celular" ng-model="newUser.phoneNumber" ng-disabled="removeMsg()" required>
