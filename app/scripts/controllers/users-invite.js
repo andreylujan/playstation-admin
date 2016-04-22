@@ -101,7 +101,7 @@ angular.module('minovateApp')
 			$scope.page.msg.color = 'orange-ps';
 			$scope.page.msg.show = true;
 			$scope.page.msg.text = 'Se han enviado las invitaciones a:';
-
+			/* jshint ignore:start */
 			for (var i = 0; i < $scope.page.formGroups.invite.length; i++) {
 
 				Invitations.save({
@@ -141,6 +141,7 @@ angular.module('minovateApp')
 
 				});
 			}
+			/* jshint ignore:end */
 
 			clearFormGroups();
 

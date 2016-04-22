@@ -1,6 +1,6 @@
 'use strict';
 
-var URL = 'http://52.201.182.66';
+var ONLY_URL = 'http://52.201.182.66';
 var API_URL = 'http://52.201.182.66/api/v1';
 // var API_URL = 'http://54.164.4.220/api/v1';
 // var API_URL = 'http://10.100.3.24:3000/api/v1'; // Servidor Pablo
@@ -25,7 +25,7 @@ angular.module('minovateApp')
 // LOGIN
 .factory('Login', function($resource) {
 
-	return $resource(URL + '/oauth/token', {}, {
+	return $resource(ONLY_URL + '/oauth/token', {}, {
 		save: {
 			method: 'POST'
 		},

@@ -36,7 +36,7 @@ angular.module('minovateApp')
 							reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
 							createdAt: success.data[i].attributes.created_at,
 							limitDate: success.data[i].attributes.limit_date,
-							zoneId: success.data[i].attributes.dynamic_attributes.zone_id,
+							// zoneId: success.data[i].attributes.dynamic_attributes.zone_id,
 							zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
 							zoneName: null,
 							dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
