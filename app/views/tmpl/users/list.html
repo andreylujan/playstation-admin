@@ -85,6 +85,9 @@
                 <td data-title="'Email'" sortable="'email'" filter="{ 'email': 'text' }">
                   {{user.email}}
                 </td>
+                <td data-title="'Info'">
+                  <img ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
+                </td>
               </tr>
             </table>
 
@@ -107,5 +110,17 @@
 
 </div>
 <!-- /page content -->
+
+  <script type="text/ng-template" id="userDetails.html">
+    <div class="modal-header text-white">
+      <h3 class="text-center">Nombre usuario</h3>
+    </div>
+    <div class="modal-body text-white">
+      <p>Datos del usuario</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
 
 </div>

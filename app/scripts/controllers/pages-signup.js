@@ -8,19 +8,56 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('SignupCtrl', function($scope, $log, $state, $window, Users, InviteLink) {
-
-		// $log.log($state.params.confirmation_token);
+	.controller('SignupCtrl', function($scope, $log, $state, $window, Users, InviteLink, Validators) {
 
 		$scope.page = {
 			elements: {
 				saveBtn: {
 					disabled: false
 				},
-				msg: {
+				message: {
 					color: '',
 					text: '',
-					show: true
+					show: false
+				},
+				submessage: {
+					color: '',
+					text: '',
+					show: false
+				},
+				newUser: {
+					email: {
+						text: '',
+						disabled: false
+					},
+					rut: {
+						text: '',
+						disabled: false
+					},
+					firstName: {
+						text: '',
+						disabled: false
+					},
+					lastName: {
+						text: '',
+						disabled: false
+					},
+					phoneNumber: {
+						text: '',
+						disabled: false
+					},
+					password: {
+						text: '',
+						disabled: false
+					},
+					passwordConfirmation: {
+						text: '',
+						disabled: false
+					},
+					image: {
+						text: '',
+						disabled: false
+					},
 				}
 			}
 		};
@@ -30,49 +67,56 @@ angular.module('minovateApp')
 			rut: '',
 			firstName: '',
 			lastName: '',
-			// address: '',
 			phoneNumber: '',
 			password: '',
 			passwordConfirmation: '',
-			picture: ''
+			image: ''
 		};
 
 		var acceptInvitation = false;
 
 		$scope.acceptInvitation = function() {
 
-			$log.log($state.params.id);
-			$log.log($state.params.confirmation_token);
+			if ($state.params.id) {
 
-			InviteLink.update({
-				id: $state.params.id,
-				confirmation_token: $state.params.confirmation_token,
-				data: {
-					type: "invitations",
-					id: ($state.params.id).toString(),
-					attributes: {
-						accepted: true
+				// $log.log($state.params.id);
+				// $log.log($state.params.confirmation_token);
+
+				InviteLink.update({
+					id: $state.params.id,
+					confirmation_token: $state.params.confirmation_token,
+					data: {
+						type: 'invitations',
+						id: ($state.params.id).toString(),
+						attributes: {
+							accepted: true
+						}
 					}
-				}
-			}, function(success) {
-				$log.log(success);
+				}, function(success) {
+					// $log.log(success);
 
-				if (success.data) {
-					// saveAccount();
+					if (success.data) {
 
-					$scope.newUser.email = success.data.attributes.email;
+						$scope.page.elements.newUser.email.text = success.data.attributes.email;
 
-					acceptInvitation = true;
-				} else {
-					$window.alert('No se ha podido aceptar la invitación');
+						acceptInvitation = true;
+					} else {
+						$log.log(success);
+						$scope.page.elements.message.color = 'danger';
+						$scope.page.elements.message.text = success.
+						$scope.page.elements.message.text = 'La invitación ya no existe, solicite una nueva invitación';
+						$scope.page.elements.message.show = true;
+						acceptInvitation = false;
+					}
+
+				}, function(error) {
+					$log.log(error);
+					$scope.page.elements.message.color = 'danger';
+					$scope.page.elements.message.text = error.data.errors[0].title;
+					$scope.page.elements.message.show = true;
 					acceptInvitation = false;
-				}
-
-			}, function(error) {
-				$log.log(error);
-				$window.alert('No se ha podido aceptar la invitación');
-				acceptInvitation = false;
-			});
+				});
+			}
 
 		};
 
@@ -80,58 +124,107 @@ angular.module('minovateApp')
 
 		$scope.saveAccount = function() {
 
-			// $log.log('Se intenta crear cuenta');
-
-			// $log.log($scope.newUser.password);
-			// $log.log($scope.newUser.passwordConfirmation);
+			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.rut.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
+				$scope.page.elements.message.color = 'danger';
+				$scope.page.elements.message.text = 'Faltan datos por rellenar';
+				$scope.page.elements.message.show = true;
+				return;
+			}
+			if (!Validators.comparePasswords($scope.page.elements.newUser.password.text, $scope.page.elements.newUser.passwordConfirmation.text)) {
+				$scope.page.elements.message.color = 'danger';
+				$scope.page.elements.message.text = 'Las contraseñas no coinciden';
+				$scope.page.elements.message.show = true;
+				return;
+			}
+			if (!Validators.validateStringLength($scope.page.elements.newUser.password.text, 8)) {
+				$scope.page.elements.message.color = 'danger';
+				$scope.page.elements.message.text = 'La contraseña debe tener un largo mínimo de 8 caracteres';
+				$scope.page.elements.message.show = true;
+				return;
+			}
 
 			if (acceptInvitation) {
-
 				$scope.page.elements.saveBtn.disabled = true;
 
 				Users.save({
 					confirmation_token: $state.params.confirmation_token,
 					data: {
-						type: "users",
+						type: 'users',
 						attributes: {
-							email: $scope.newUser.email,
-							first_name: $scope.newUser.rut,
-							last_name: $scope.newUser.firstName,
-							rut: $scope.newUser.lastName,
-							password: $scope.newUser.password,
-							password_confirmation: $scope.newUser.passwordConfirmation,
-							phone_number: $scope.newUser.phoneNumber,
-							image: ""
+							email: $scope.page.elements.newUser.email.text,
+							first_name: $scope.page.elements.newUser.firstName.text,
+							last_name: $scope.page.elements.newUser.lastName.text,
+							rut: $scope.page.elements.newUser.rut.text,
+							password: $scope.page.elements.newUser.password.text,
+							password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,
+							phone_number: $scope.page.elements.newUser.phoneNumber.text,
+							image: ''
 						}
 					}
 				}, function(success) {
-					$log.log(success);
-
+					// $log.log(success);
 					if (success.data) {
-						$scope.page.elements.msg.color = 'greensea';
-						$scope.page.elements.msg.text = 'Usuario creado exitosamente';
-						$scope.page.elements.msg.show = true;
+						disableForm();
+						$scope.page.elements.message.color = 'greensea';
+						$scope.page.elements.message.text = 'Usuario creado exitosamente';
+						$scope.page.elements.message.show = true;
+
+						$scope.page.elements.submessage.color = 'default';
+						$scope.page.elements.submessage.text = 'puede cerrar esta página';
+						$scope.page.elements.submessage.show = true;
 					} else {
-						$scope.page.elements.msg.color = 'danger';
-						$scope.page.elements.msg.text = success.errors[0].detail;
-						$scope.page.elements.msg.show = true;
+						$scope.page.elements.saveBtn.disabled = false;
+						$scope.page.elements.message.color = 'danger';
+						$scope.page.elements.message.text = success.errors[0].detail;
+						$scope.page.elements.message.show = true;
 					}
 
 				}, function(error) {
+					$scope.page.elements.saveBtn.disabled = false;
 					$log.log(error);
-
-					$scope.page.elements.msg.color = 'danger';
-					$scope.page.elements.msg.text = 'No se ha podido crear el usuario';
-					$scope.page.elements.msg.show = true;
+					$scope.page.elements.message.color = 'danger';
+					$scope.page.elements.message.text = 'No se ha podido crear el usuario';
+					$scope.page.elements.message.show = true;
 				});
 			}
 
 		};
 
 		$scope.removeMsg = function() {
-			$scope.page.elements.msg.color = '';
-			$scope.page.elements.msg.text = '';
-			$scope.page.elements.msg.show = false;
+			$scope.page.elements.message.color = '';
+			$scope.page.elements.message.text = '';
+			$scope.page.elements.message.show = false;
+
+			$scope.page.elements.submessage.color = '';
+			$scope.page.elements.submessage.text = '';
+			$scope.page.elements.submessage.show = false;
+		};
+
+		$scope.enableCreateAccountBtn = function() {
+			$scope.page.elements.saveBtn.disabled = false;
+		};
+
+		var disableForm = function() {
+
+			$scope.page.elements.newUser.email.disabled = true;
+			$scope.page.elements.newUser.firstName.disabled = true;
+			$scope.page.elements.newUser.lastName.disabled = true;
+			$scope.page.elements.newUser.rut.disabled = true;
+			$scope.page.elements.newUser.password.disabled = true;
+			$scope.page.elements.newUser.passwordConfirmation.disabled = true;
+			$scope.page.elements.newUser.phoneNumber.disabled = true;
+
+		};
+
+		$scope.enableForm = function() {
+
+			$scope.page.elements.newUser.email.disabled = true;
+			$scope.page.elements.newUser.firstName.disabled = true;
+			$scope.page.elements.newUser.lastName.disabled = true;
+			$scope.page.elements.newUser.rut.disabled = true;
+			$scope.page.elements.newUser.password.disabled = true;
+			$scope.page.elements.newUser.passwordConfirmation.disabled = true;
+			$scope.page.elements.newUser.phoneNumber.disabled = true;
 		};
 
 	});
