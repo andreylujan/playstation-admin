@@ -1,7 +1,8 @@
 #content {
   padding-top: 45px;
   width: auto;
-  //overflow-y: auto;
+  // revisar
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: -blackberry-touch;
   @include transition(right .25s $ease-in-circ, padding-right .25s $ease-in-circ);

@@ -50,12 +50,7 @@ angular
 		'easypiechart',
 		'uiGmapgoogle-maps',
 		'ui.calendar',
-
-		'LocalStorageModule',
-		'angular-jsonapi',
-		'angular-jsonapi-rest',
-		'angular-jsonapi-local',
-		'angular-jsonapi-parse'
+		'LocalStorageModule'
 	])
 	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',
 		function($rootScope, $state, $stateParams, $log, Utils) {

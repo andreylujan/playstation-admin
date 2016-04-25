@@ -37,6 +37,14 @@ angular.module('minovateApp')
 				Utils.setInStorage('role', success.data.relationships.user.data.role_id);
 				Utils.setInStorage('loggedIn', true);
 
+				if (success.data.relationships.user.data.image) {
+					Utils.setInStorage('image', success.data.relationships.user.data.image);
+				} else {
+					Utils.setInStorage('image', 'images/placeholder-user-photo.png');
+				}
+
+				if (true) {};
+
 				$state.go('app.playStation.reports');
 
 			}, function(error) {

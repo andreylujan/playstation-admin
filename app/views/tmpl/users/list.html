@@ -78,12 +78,18 @@
           <div class="tile-body">
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="user in $data">
-                <td data-title="'Nombre'" sortable="'userName'" filter="{ 'userName': 'text' }">
-                  {{user.userName}}
+              <tr ng-repeat="user in users">
+                <td data-title="'Nombre'" sortable="'firstName'" filter="{ 'firstName': 'text' }">
+                  {{user.firstName}}
+                </td>
+                <td data-title="'Apellido'" sortable="'lastName'" filter="{ 'lastName': 'text' }">
+                  {{user.lastName}}
                 </td>
                 <td data-title="'Email'" sortable="'email'" filter="{ 'email': 'text' }">
                   {{user.email}}
+                </td>
+                <td data-title="'Rol'" sortable="'roleName'" filter="{ 'roleName': 'text' }">
+                  {{user.roleName}}
                 </td>
                 <td data-title="'Info'">
                   <img ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
@@ -104,21 +110,66 @@
   </div>
   <!-- /row -->
 
-
-
-
-
 </div>
 <!-- /page content -->
 
   <script type="text/ng-template" id="userDetails.html">
-    <div class="modal-header text-white">
-      <h3 class="text-center">Nombre usuario</h3>
+    <div class="modal-header text-gray">
+      <h3 class="text-center">{{elements.title}}</h3>
     </div>
-    <div class="modal-body text-white">
-      <p>Datos del usuario</p>
+    <div class="modal-body text-gray">
+      <div class="alert alert-{{elements.alert.color}}" ng-show="elements.alert.show"> <strong>{{elements.alert.title}}</strong> {{elements.alert.text}} </div>
+      <div class="row">
+        <div class="col-md-5">
+          <img class="img-responsive" ng-src="{{user.image}}" alt="profile-pic">
+        </div>
+        <div class="col-md-7">
+          <form name="form" class="form-validation form-horizontal" role="form" novalidate>
+            <div class="form-group">
+              <label for="userFirstName" class="col-sm-3 control-label">Nombre</label>
+              <div class="col-md-8">
+                <input type="text" id="userFirstName" class="form-control underline-input" placeholder="Nombre de usuario..." ng-model="user.firstName.text" ng-disabled="user.firstName.disabled" ng-change="hideAlert()" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userLastName" class="col-sm-3 control-label">Apellido</label>
+              <div class="col-md-8">
+                <input type="text" id="userLastName" class="form-control underline-input" placeholder="Apellido de usuario..." ng-model="user.lastName.text" ng-disabled="user.lastName.disabled" ng-change="hideAlert()" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userEmail" class="col-sm-3 control-label">Email</label>
+              <div class="col-md-8">
+                <input type="text" id="userEmail" class="form-control underline-input" placeholder="Email de usuario..." ng-model="user.email.text" ng-disabled="user.email.disabled" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userRut" class="col-sm-3 control-label">Rut</label>
+              <div class="col-md-8">
+                <input type="text" id="userRut" class="form-control underline-input" placeholder="Rut de usuario..." ng-model="user.rut.text" ng-disabled="user.rut.disabled" ng-change="hideAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userPhoneNumber" class="col-sm-3 control-label">Teléfono</label>
+              <div class="col-md-8">
+                <input type="text" id="userPhoneNumber" class="form-control underline-input" placeholder="Teléfono..." ng-model="user.phoneNumber.text" ng-disabled="user.phoneNumber.disabled" ng-change="hideAlert()" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userRole" class="col-sm-3 control-label">Rol</label>
+              <div class="col-md-8">
+                <label class="checkbox checkbox-custom-alt" id="userRole" ng-repeat="role in roles">
+                  <input type="radio" value="{{role.id}}" name="{{role.index}}" ng-model="user.role.id" ng-disabled="user.role.disabled" ng-change="hideAlert()" required><i></i> {{role.name}}
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-danger btn-rounded-10 {{elements.buttons.removeUser.border}} mb-10" type="button" ng-click="removeUser(user.id)" >{{elements.buttons.removeUser.text}}</button>
+      <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id)" ng-disabled="form.$invalid">{{elements.buttons.editUser.text}}</button>
       <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
     </div>
   </script>

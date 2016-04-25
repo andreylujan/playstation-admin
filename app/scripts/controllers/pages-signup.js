@@ -158,7 +158,7 @@ angular.module('minovateApp')
 							password: $scope.page.elements.newUser.password.text,
 							password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,
 							phone_number: $scope.page.elements.newUser.phoneNumber.text,
-							image: ''
+							image: null
 						}
 					}
 				}, function(success) {

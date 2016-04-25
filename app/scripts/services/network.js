@@ -12,7 +12,7 @@ angular.module('minovateApp')
 	var token = localStorage.getItem('ls.token');
 	if (token) {
 		token = token.replace(/\"/g, "");
-	}	
+	}
 
 	return {
 		getToken: function() {
@@ -90,14 +90,13 @@ angular.module('minovateApp')
 // USUARIOS
 .factory('Users', function($resource, Token) {
 
-	return $resource(API_URL + '/users', {}, {
+	return $resource(API_URL + '/users/:idUser', {
+		idUser: '@idUser'
+	}, {
 		save: {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/vnd.api+json'
-			},
-			params: {
-				confirmation_token: '@confirmation_token'
 			}
 		},
 		query: {
@@ -106,9 +105,21 @@ angular.module('minovateApp')
 				'Authorization': 'Bearer ' + Token.getToken()
 			},
 			params: {
-				email: '@email',
-				reset_password_token: '@reset_password_token'
+				fields: '@fields'
 			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				'Authorization': 'Bearer ' + Token.getToken()
+			},
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
+			},
 		}
 	});
 

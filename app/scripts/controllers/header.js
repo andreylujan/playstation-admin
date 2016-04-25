@@ -12,7 +12,8 @@ angular.module('minovateApp')
 
   	$scope.page = {
   		user: {
-  			fullName: Utils.getInStorage('fullName')
+        fullName: Utils.getInStorage('fullName'),
+  			image: Utils.getInStorage('image')
   		}
   	};
 
