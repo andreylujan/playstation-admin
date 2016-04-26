@@ -10,7 +10,7 @@
 
 angular.module('minovateApp')
 
-.service('Validators', function() {
+.service('Validators', function($log, Utils) {
 
 	var valid = false;
 
@@ -43,6 +43,45 @@ angular.module('minovateApp')
 		}
 
 		return valid;
+	};
+
+	this.validateRutCheckDigit = function(rut) {
+
+		if (!isNaN(rut) || rut) {
+
+			if (rut.indexOf('.') !== -1 || rut.indexOf('-') !== -1 || rut.indexOf(',') !== -1) {
+				rut = Utils.replaceAll(rut, ',', '');
+				rut = Utils.replaceAll(rut, '.', '');
+				rut = Utils.replaceAll(rut, '-', '');
+			}
+
+			var RUT = rut.substring(0, rut.length - 1);
+			var elRut = RUT.split('');
+			var factor = 2;
+			var suma = 0;
+			var dv;
+			for (var i = (elRut.length - 1); i >= 0; i--) {
+				factor = factor > 7 ? 2 : factor;
+				suma += parseInt(elRut[i]) * parseInt(factor++);
+			}
+			dv = 11 - (suma % 11);
+			if (dv === 11) {
+				dv = 0;
+			} else if (dv === 10) {
+				dv = "k";
+			}
+
+			if (dv === rut.substring(rut.length, rut.length - 1).toLowerCase()) {
+				// alert("El rut es válido!!");
+				return true;
+			} else {
+				// alert("El rut es incorrecto");
+				return false;
+			}
+		} else {
+			// alert("Formato incorrecto");
+			return false;
+		}
 	};
 
 });

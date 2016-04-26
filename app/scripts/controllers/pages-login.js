@@ -43,8 +43,6 @@ angular.module('minovateApp')
 					Utils.setInStorage('image', 'images/placeholder-user-photo.png');
 				}
 
-				if (true) {};
-
 				$state.go('app.playStation.reports');
 
 			}, function(error) {

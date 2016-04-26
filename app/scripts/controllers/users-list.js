@@ -149,7 +149,7 @@ angular.module('minovateApp')
 		}, function(success) {
 			if (success.data) {
 
-				$scope.elements.title = success.data.attributes.first_name + ' ' + success.data.attributes.last_name
+				$scope.elements.title = success.data.attributes.first_name + ' ' + success.data.attributes.last_name;
 
 				$scope.user.id = success.data.id;
 				$scope.user.firstName.text = success.data.attributes.first_name;

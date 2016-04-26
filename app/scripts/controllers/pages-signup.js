@@ -8,12 +8,12 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('SignupCtrl', function($scope, $log, $state, $window, Users, InviteLink, Validators) {
+	.controller('SignupCtrl', function($scope, $log, $state, $window, Users, InviteLink, Validators, Utils) {
 
 		$scope.page = {
 			elements: {
 				saveBtn: {
-					disabled: false
+					disabled: true
 				},
 				message: {
 					color: '',
@@ -27,50 +27,39 @@ angular.module('minovateApp')
 				},
 				newUser: {
 					email: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					rut: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					firstName: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					lastName: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					phoneNumber: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					password: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					passwordConfirmation: {
-						text: '',
+						text: null,
 						disabled: false
 					},
 					image: {
-						text: '',
+						text: null,
 						disabled: false
-					},
+					}
 				}
 			}
-		};
-
-		$scope.newUser = {
-			email: '',
-			rut: '',
-			firstName: '',
-			lastName: '',
-			phoneNumber: '',
-			password: '',
-			passwordConfirmation: '',
-			image: ''
 		};
 
 		var acceptInvitation = false;
@@ -124,7 +113,7 @@ angular.module('minovateApp')
 
 		$scope.saveAccount = function() {
 
-			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.rut.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
+			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.lastName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
 				$scope.page.elements.message.color = 'danger';
 				$scope.page.elements.message.text = 'Faltan datos por rellenar';
 				$scope.page.elements.message.show = true;
@@ -225,6 +214,17 @@ angular.module('minovateApp')
 			$scope.page.elements.newUser.password.disabled = true;
 			$scope.page.elements.newUser.passwordConfirmation.disabled = true;
 			$scope.page.elements.newUser.phoneNumber.disabled = true;
+		};
+
+		$scope.formatRut = function(rut) {
+
+			if (Validators.validateRutCheckDigit(rut)) {
+				$scope.page.elements.newUser.rut.text = Utils.formatRut(rut);
+				$scope.page.elements.saveBtn.disabled = false;
+			} else {
+				$scope.page.elements.saveBtn.disabled = true;
+			}
+
 		};
 
 	});

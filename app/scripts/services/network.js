@@ -215,6 +215,20 @@ angular.module('minovateApp')
 
 })
 
+// PRODUCTS
+.factory('Products', function($resource, Token) {
+
+	return $resource(API_URL + '/top_list', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
+			}
+		}
+	});
+
+})
+
 // ROLES
 .factory('Roles', function($resource, Token) {
 

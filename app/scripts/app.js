@@ -201,6 +201,12 @@ angular
 			controller: 'StoresCtrl',
 			templateUrl: 'views/tmpl/masters/stores.html'
 		})
+		//masters/products
+		.state('app.masters.products', {
+			url: '/products',
+			controller: 'ProductsCtrl',
+			templateUrl: 'views/tmpl/masters/products.html'
+		})
 		//mail
 		.state('app.mail', {
 			abstract: true,
