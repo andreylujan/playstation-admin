@@ -113,69 +113,78 @@ angular.module('minovateApp')
 
 		$scope.saveAccount = function() {
 
-			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.lastName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
-				$scope.page.elements.message.color = 'danger';
-				$scope.page.elements.message.text = 'Faltan datos por rellenar';
-				$scope.page.elements.message.show = true;
-				return;
-			}
-			if (!Validators.comparePasswords($scope.page.elements.newUser.password.text, $scope.page.elements.newUser.passwordConfirmation.text)) {
-				$scope.page.elements.message.color = 'danger';
-				$scope.page.elements.message.text = 'Las contraseñas no coinciden';
-				$scope.page.elements.message.show = true;
-				return;
-			}
-			if (!Validators.validateStringLength($scope.page.elements.newUser.password.text, 8)) {
-				$scope.page.elements.message.color = 'danger';
-				$scope.page.elements.message.text = 'La contraseña debe tener un largo mínimo de 8 caracteres';
-				$scope.page.elements.message.show = true;
-				return;
-			}
+			var rutNoFormatted = Utils.replaceAll($scope.page.elements.newUser.rut.text, '.', '');
 
-			if (acceptInvitation) {
-				$scope.page.elements.saveBtn.disabled = true;
-
-				Users.save({
-					confirmation_token: $state.params.confirmation_token,
-					data: {
-						type: 'users',
-						attributes: {
-							email: $scope.page.elements.newUser.email.text,
-							first_name: $scope.page.elements.newUser.firstName.text,
-							last_name: $scope.page.elements.newUser.lastName.text,
-							rut: $scope.page.elements.newUser.rut.text,
-							password: $scope.page.elements.newUser.password.text,
-							password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,
-							phone_number: $scope.page.elements.newUser.phoneNumber.text,
-							image: null
-						}
-					}
-				}, function(success) {
-					// $log.log(success);
-					if (success.data) {
-						disableForm();
-						$scope.page.elements.message.color = 'greensea';
-						$scope.page.elements.message.text = 'Usuario creado exitosamente';
-						$scope.page.elements.message.show = true;
-
-						$scope.page.elements.submessage.color = 'default';
-						$scope.page.elements.submessage.text = 'puede cerrar esta página';
-						$scope.page.elements.submessage.show = true;
-					} else {
-						$scope.page.elements.saveBtn.disabled = false;
-						$scope.page.elements.message.color = 'danger';
-						$scope.page.elements.message.text = success.errors[0].detail;
-						$scope.page.elements.message.show = true;
-					}
-
-				}, function(error) {
-					$scope.page.elements.saveBtn.disabled = false;
-					$log.log(error);
+			if (!Validators.validateRutCheckDigit(rutNoFormatted)) {
 					$scope.page.elements.message.color = 'danger';
-					$scope.page.elements.message.text = 'No se ha podido crear el usuario';
+					$scope.page.elements.message.text = 'Rut no válido';
 					$scope.page.elements.message.show = true;
-				});
+					return;
 			}
+
+			// if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.lastName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
+			// 	$scope.page.elements.message.color = 'danger';
+			// 	$scope.page.elements.message.text = 'Faltan datos por rellenar';
+			// 	$scope.page.elements.message.show = true;
+			// 	return;
+			// }
+			// if (!Validators.comparePasswords($scope.page.elements.newUser.password.text, $scope.page.elements.newUser.passwordConfirmation.text)) {
+			// 	$scope.page.elements.message.color = 'danger';
+			// 	$scope.page.elements.message.text = 'Las contraseñas no coinciden';
+			// 	$scope.page.elements.message.show = true;
+			// 	return;
+			// }
+			// if (!Validators.validateStringLength($scope.page.elements.newUser.password.text, 8)) {
+			// 	$scope.page.elements.message.color = 'danger';
+			// 	$scope.page.elements.message.text = 'La contraseña debe tener un largo mínimo de 8 caracteres';
+			// 	$scope.page.elements.message.show = true;
+			// 	return;
+			// }
+
+			// if (acceptInvitation) {
+			// 	$scope.page.elements.saveBtn.disabled = true;
+
+			// 	Users.save({
+			// 		confirmation_token: $state.params.confirmation_token,
+			// 		data: {
+			// 			type: 'users',
+			// 			attributes: {
+			// 				email: $scope.page.elements.newUser.email.text,
+			// 				first_name: $scope.page.elements.newUser.firstName.text,
+			// 				last_name: $scope.page.elements.newUser.lastName.text,
+			// 				rut: $scope.page.elements.newUser.rut.text,
+			// 				password: $scope.page.elements.newUser.password.text,
+			// 				password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,
+			// 				phone_number: $scope.page.elements.newUser.phoneNumber.text,
+			// 				image: null
+			// 			}
+			// 		}
+			// 	}, function(success) {
+			// 		// $log.log(success);
+			// 		if (success.data) {
+			// 			disableForm();
+			// 			$scope.page.elements.message.color = 'greensea';
+			// 			$scope.page.elements.message.text = 'Usuario creado exitosamente';
+			// 			$scope.page.elements.message.show = true;
+
+			// 			$scope.page.elements.submessage.color = 'default';
+			// 			$scope.page.elements.submessage.text = 'puede cerrar esta página';
+			// 			$scope.page.elements.submessage.show = true;
+			// 		} else {
+			// 			$scope.page.elements.saveBtn.disabled = false;
+			// 			$scope.page.elements.message.color = 'danger';
+			// 			$scope.page.elements.message.text = success.errors[0].detail;
+			// 			$scope.page.elements.message.show = true;
+			// 		}
+
+			// 	}, function(error) {
+			// 		$scope.page.elements.saveBtn.disabled = false;
+			// 		$log.log(error);
+			// 		$scope.page.elements.message.color = 'danger';
+			// 		$scope.page.elements.message.text = 'No se ha podido crear el usuario';
+			// 		$scope.page.elements.message.show = true;
+			// 	});
+			// }
 
 		};
 
@@ -220,9 +229,11 @@ angular.module('minovateApp')
 
 			if (Validators.validateRutCheckDigit(rut)) {
 				$scope.page.elements.newUser.rut.text = Utils.formatRut(rut);
-				$scope.page.elements.saveBtn.disabled = false;
+				// $scope.page.elements.saveBtn.disabled = false;
+				// $log.log('dv valido');
 			} else {
-				$scope.page.elements.saveBtn.disabled = true;
+				// $scope.page.elements.saveBtn.disabled = true;
+				// $log.log('dv NO valido');
 			}
 
 		};
