@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:MailComposeCtrl
+ * @name minovateApp.controller:UsersListCtrl
  * @description
- * # MailComposeCtrl
+ * # UsersListCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
@@ -34,29 +34,36 @@ angular.module('minovateApp')
 						roleName: success.data[i].attributes.role_name,
 					});
 				}
+
+				$scope.tableParams = new ngTableParams({
+					page: 1, // show first page
+					count: 10, // count per page
+					filter: {
+						//name: 'M'       // initial filter
+					},
+					sorting: {
+						firstName: 'asc' // initial sorting
+					}
+				}, {
+					total: $scope.users.length, // length of $scope.users
+					getData: function($defer, params) {
+						var filteredData = params.filter() ?
+							$filter('filter')($scope.users, params.filter()) :
+							$scope.users;
+						var orderedData = params.sorting() ?
+							$filter('orderBy')(filteredData, params.orderBy()) :
+							$scope.users;
+
+						params.total(orderedData.length); // set total for recalc pagination
+						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+					}
+				});
+
 			} else {
 				$log.log(success);
 			}
 		}, function(error) {
 			$log.log(error);
-		});
-
-		$scope.tableParams = new ngTableParams({
-			page: 1, // show first page
-			count: 10, // count per page
-			sorting: {
-				firstName: 'asc' // initial sorting
-			}
-		}, {
-			total: $scope.users.length, // length of $scope.users
-			getData: function($defer, params) {
-				// use build-in angular filter
-				var orderedData = params.sorting() ?
-					$filter('orderBy')($scope.users, params.orderBy()) :
-					$scope.users;
-
-				$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			}
 		});
 
 	};
@@ -76,12 +83,14 @@ angular.module('minovateApp')
 			}
 		});
 
-		modalInstance.result.then(function() {}, function() {});
+		modalInstance.result.then(function() {}, function() {
+			// $scope.getUsers();
+		});
 	};
 
 })
 
-.controller('UserDetailsInstance', function($scope, $log, $modalInstance, idUser, Users, Roles, Validators) {
+.controller('UserDetailsInstance', function($scope, $log, $modalInstance, idUser, Users, Roles, Validators, Utils) {
 
 	$scope.user = {
 		id: null,
@@ -208,8 +217,6 @@ angular.module('minovateApp')
 			$scope.elements.buttons.editUser.border = '';
 			enableFormInputs();
 		} else {
-			$scope.elements.buttons.editUser.text = 'Editar';
-			$scope.elements.buttons.editUser.border = 'btn-border';
 
 			// $log.log($scope.user.firstName.text);
 			// $log.log($scope.user.lastName.text);
@@ -218,12 +225,26 @@ angular.module('minovateApp')
 			// $log.log($scope.user.role.id);
 
 			if (!Validators.validaRequiredField($scope.user.firstName.text) || !Validators.validaRequiredField($scope.user.lastName.text) || !Validators.validaRequiredField($scope.user.role.id)) {
-				$scope.elements.alert.show = true;
 				$scope.elements.alert.title = 'Faltan datos por rellenar';
 				$scope.elements.alert.text = '';
 				$scope.elements.alert.color = 'danger';
+				$scope.elements.alert.show = true;
 				return;
 			}
+
+			var rutUnformatted = Utils.replaceAll($scope.user.rut.text, '.', '');
+
+			if (!Validators.validateRutCheckDigit(rutUnformatted)) {
+				$scope.elements.alert.color = 'danger';
+				$scope.elements.alert.title = 'Rut no válido';
+				$scope.elements.alert.text = 'Revise el dígito verificador';
+				$scope.elements.alert.show = true;
+				return;
+			}
+
+			$scope.elements.buttons.editUser.text = 'Editar';
+			$scope.elements.buttons.editUser.border = 'btn-border';
+			disableFormInputs();
 
 			Users.update({
 				data: {
@@ -241,10 +262,10 @@ angular.module('minovateApp')
 				idUser: idUser
 			}, function(success) {
 				if (success.data) {
-					$scope.elements.alert.show = true;
 					$scope.elements.alert.title = 'Se han actualizado los datos del usuario';
 					$scope.elements.alert.text = '';
 					$scope.elements.alert.color = 'success';
+					$scope.elements.alert.show = true;
 
 					disableFormInputs();
 
@@ -291,6 +312,14 @@ angular.module('minovateApp')
 
 			$scope.ok();
 
+		}
+
+	};
+
+	$scope.formatRut = function(rut) {
+
+		if (Validators.validateRutCheckDigit(rut)) {
+			$scope.user.rut.text = Utils.formatRut(rut);
 		}
 
 	};

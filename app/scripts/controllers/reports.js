@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:MailComposeCtrl
+ * @name minovateApp.controller:ReportsCtrl
  * @description
- * # MailComposeCtrl
+ * # ReportsCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
 	.controller('ReportsCtrl', function($scope, $filter, $log, ngTableParams, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
-			title: 'Reportes'
+			title: 'Lista de reportes'
 		};
 
 		$scope.reports = [];
@@ -26,8 +26,6 @@ angular.module('minovateApp')
 
 			Reports.query({}, function(success) {
 
-				// $log.log(success);
-
 				if (success.data) {
 
 					for (i = 0; i < success.data.length; i++) {
@@ -36,7 +34,6 @@ angular.module('minovateApp')
 							reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
 							createdAt: success.data[i].attributes.created_at,
 							limitDate: success.data[i].attributes.limit_date,
-							// zoneId: success.data[i].attributes.dynamic_attributes.zone_id,
 							zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
 							zoneName: null,
 							dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
@@ -45,7 +42,6 @@ angular.module('minovateApp')
 							storeName: null,
 							creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
 							pdf: success.data[i].attributes.pdf
-							// pdf: 'http://d21zid65ggdxzg.cloudfront.net/50bd2070e8736fe09566fff8db47fc02.pdf'
 						});
 
 					}
@@ -77,28 +73,35 @@ angular.module('minovateApp')
 						}
 					}
 
+					$scope.tableParams = new ngTableParams({
+						page: 1, // show first page
+						count: 50, // count per page
+						filter: {
+							//name: 'M'       // initial filter
+						},
+						sorting: {
+							firstName: 'asc' // initial sorting
+						}
+					}, {
+						total: $scope.reports.length, // length of $scope.reports
+						getData: function($defer, params) {
+							var filteredData = params.filter() ?
+								$filter('filter')($scope.reports, params.filter()) :
+								$scope.reports;
+							var orderedData = params.sorting() ?
+								$filter('orderBy')(filteredData, params.orderBy()) :
+								$scope.reports;
+
+							params.total(orderedData.length); // set total for recalc pagination
+							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+						}
+					});
+
+				} else {
+					$log.log(success);
 				}
 			}, function(error) {
 				$log.log(error);
-			});
-
-
-			$scope.tableParams = new ngTableParams({
-				page: 1, // show first page
-				count: 10, // count per page
-				sorting: {
-					name: 'asc' // initial sorting
-				}
-			}, {
-				total: $scope.reports.length, // length of reports
-				getData: function($defer, params) {
-					// use build-in angular filter
-					var orderedData = params.sorting() ?
-						$filter('orderBy')($scope.reports, params.orderBy()) :
-						$scope.reports;
-
-					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				}
 			});
 
 		};

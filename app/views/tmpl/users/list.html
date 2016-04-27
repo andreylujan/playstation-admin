@@ -78,7 +78,7 @@
           <div class="tile-body">
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="user in users">
+              <tr ng-repeat="user in $data">
                 <td data-title="'Nombre'" sortable="'firstName'" filter="{ 'firstName': 'text' }">
                   {{user.firstName}}
                 </td>
@@ -118,7 +118,7 @@
       <h3 class="text-center">{{elements.title}}</h3>
     </div>
     <div class="modal-body text-gray">
-      <div class="alert alert-{{elements.alert.color}}" ng-show="elements.alert.show"> <strong>{{elements.alert.title}}</strong> {{elements.alert.text}} </div>
+      <div class="alert alert-{{elements.alert.color}}" ng-show="elements.alert.show"> <h4 class="text-md"><strong>{{elements.alert.title}}</strong></h4> {{elements.alert.text}} </div>
       <div class="row">
         <div class="col-md-5">
           <img class="img-responsive" ng-src="{{user.image}}" alt="profile-pic">
@@ -146,7 +146,7 @@
             <div class="form-group">
               <label for="userRut" class="col-sm-3 control-label">Rut</label>
               <div class="col-md-8">
-                <input type="text" id="userRut" class="form-control underline-input" placeholder="Rut de usuario..." ng-model="user.rut.text" ng-disabled="user.rut.disabled" ng-change="hideAlert()">
+                <input type="text" id="userRut" class="form-control underline-input" placeholder="Rut de usuario..." ng-model="user.rut.text" ng-disabled="user.rut.disabled" ng-blur="formatRut(user.rut.text)" ng-change="hideAlert()">
               </div>
             </div>
             <div class="form-group">
@@ -169,7 +169,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-danger btn-rounded-10 {{elements.buttons.removeUser.border}} mb-10" type="button" ng-click="removeUser(user.id)" >{{elements.buttons.removeUser.text}}</button>
-      <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id)" ng-disabled="form.$invalid">{{elements.buttons.editUser.text}}</button>
+      <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id)" >{{elements.buttons.editUser.text}}</button>
       <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
     </div>
   </script>

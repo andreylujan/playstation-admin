@@ -2,62 +2,68 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:MailComposeCtrl
+ * @name minovateApp.controller:ZonesCtrl
  * @description
- * # MailComposeCtrl
+ * # ZonesCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('ZonesCtrl', function($scope, $log, ngTableParams, $filter, Zones) {
 
-		$scope.page = {
-			title: 'Zonas'
-		};
+.controller('ZonesCtrl', function($scope, $log, ngTableParams, $filter, Zones) {
+
+	$scope.page = {
+		title: 'Zonas'
+	};
+
+	$scope.zones = [];
+
+	$scope.getZones = function() {
 
 		$scope.zones = [];
 
-		$scope.getZones = function() {
+		Zones.query({
 
-			$scope.zones = [];
-
-			Zones.query({}, function(success) {
-
-				$log.log(success);
-
+		}, function(success) {
+			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.zones.push({
 						name: success.data[i].attributes.name
 					});
 				}
 
-				$log.log($scope.zones);
-
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
 					count: 10, // count per page
+					filter: {
+						//name: 'M'       // initial filter
+					},
 					sorting: {
 						name: 'asc' // initial sorting
 					}
 				}, {
 					total: $scope.zones.length, // length of zones
 					getData: function($defer, params) {
-						// use build-in angular filter
+						var filteredData = params.filter() ?
+							$filter('filter')($scope.zones, params.filter()) :
+							$scope.zones;
 						var orderedData = params.sorting() ?
-							$filter('orderBy')($scope.zones, params.orderBy()) :
+							$filter('orderBy')(filteredData, params.orderBy()) :
 							$scope.zones;
 
+						params.total(orderedData.length); // set total for recalc pagination
 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 					}
 				});
+			} else {
+				$log.log(success);
+			}
 
-			}, function(error) {
-				$log.log(error);
-			});
+		}, function(error) {
+			$log.log(error);
+		});
 
+	};
 
+	$scope.getZones();
 
-		};
-
-		$scope.getZones();
-
-	});
+});
