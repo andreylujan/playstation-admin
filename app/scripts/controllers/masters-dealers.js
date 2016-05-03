@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('DealersCtrl', function($scope, $log, ngTableParams, $filter, Dealers) {
+	.controller('DealersCtrl', function($scope, $log, $filter, ngTableParams, Dealers) {
 
 		$scope.page = {
 			title: 'Dealers'
@@ -22,30 +22,33 @@ angular.module('minovateApp')
 
 			Dealers.query({}, function(success) {
 
-				$log.log(success);
-
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.dealers.push({
 						name: success.data[i].attributes.name
 					});
 				}
 
-				$log.log($scope.dealers);
-
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
 					count: 10, // count per page
+					filter: {
+						//name: 'M'       // initial filter
+					},
 					sorting: {
-						name: 'asc' // initial sorting
+						name: 'asc'     // initial sorting
 					}
 				}, {
-					total: $scope.dealers.length, // length of dealers
+					total: $scope.dealers.length, // length of $scope.dealers
 					getData: function($defer, params) {
 						// use build-in angular filter
+						var filteredData = params.filter() ?
+							$filter('filter')($scope.dealers, params.filter()) :
+							$scope.dealers;
 						var orderedData = params.sorting() ?
-							$filter('orderBy')($scope.dealers, params.orderBy()) :
+							$filter('orderBy')(filteredData, params.orderBy()) :
 							$scope.dealers;
 
+						params.total(orderedData.length); // set total for recalc pagination
 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 					}
 				});

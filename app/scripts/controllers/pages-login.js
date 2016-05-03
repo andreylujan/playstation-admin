@@ -43,7 +43,12 @@ angular.module('minovateApp')
 					Utils.setInStorage('image', 'images/placeholder-user-photo.png');
 				}
 
-				$state.go('app.playStation.reports');
+				if (Utils.getInStorage('role') === 1) {
+					$state.go('app.playStation.reports');
+				} else if (Utils.getInStorage('role') === 2) {
+					$state.go('app.playStation.my-reports');
+				}
+				
 
 			}, function(error) {
 				$log.log(error);

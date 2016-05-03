@@ -164,6 +164,10 @@ angular.module('minovateApp')
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/json'
+			},
+			params: {
+				'page[number]': '@number',
+				'page[size]': '@size'
 			}
 		}
 	});

@@ -11,7 +11,10 @@ angular.module('minovateApp')
 	.controller('ForgotPasswordCtrl', function($scope, $log, SendPasswordToken) {
 
 		$scope.user = {
-			email: ''
+			email: {
+				text:'',
+				disabled: false
+			}
 		};
 
 		$scope.page = {
@@ -19,13 +22,19 @@ angular.module('minovateApp')
 				color: '',
 				text: '',
 				show: false
+			},
+			sendBtn: {
+				disabled: false
 			}
 		};
 
 		$scope.resetPassword = function() {
 
+			$scope.page.sendBtn.disabled = true;
+			$scope.user.email.disabled = true;
+
 			SendPasswordToken.save({
-				email: $scope.user.email
+				email: $scope.user.email.text
 			}, function(success) {
 				// $log.log(success);
 

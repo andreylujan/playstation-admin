@@ -11,7 +11,10 @@ angular.module('minovateApp')
 	.controller('MyTasksCtrl', function($scope, $log, ngTableParams, $filter, Utils, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
-			title: 'Mis tareas'
+			title: 'Mis tareas',
+			prevBtn: {
+				disabled: true
+			}
 		};
 
 		$scope.reports = [];
@@ -20,20 +23,36 @@ angular.module('minovateApp')
 		var stores = [];
 		var loggedUserId = Utils.getInStorage('userid');
 		var i, j;
+		var currentPage = 0;
+		var pageSize = 30;
 
-		var getMyTasks = function() {
+		$scope.getMyTasks = function(mode) {
 
 			$scope.reports = [];
 
-			Reports.query({}, function(success) {
+			if (currentPage === 2) {
+				$scope.page.prevBtn.disabled = true;
+			}
 
-				// $log.log(success);
+			if (mode === 'prev') {
+				if (currentPage > 1) {
+					currentPage--;
+				}
+			} else if (mode === 'next') {
+				currentPage++;
+				if (currentPage > 1) {
+					$scope.page.prevBtn.disabled = false;
+				}
+			}
+
+			Reports.query({
+				'page[number]': currentPage,
+				'page[size]': pageSize
+			}, function(success) {
 
 				if (success.data) {
 
 					for (i = 0; i < success.data.length; i++) {
-
-						// $log.log('comparo... ' + success.data[i].attributes.assigned_user_id + ' ...con... ' + loggedUserId);
 
 						if (success.data[i].attributes.assigned_user_id === loggedUserId) {
 							$scope.reports.push({
@@ -47,6 +66,8 @@ angular.module('minovateApp')
 								storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
 								storeName: null,
 								creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+								pdfUploaded: success.data[i].attributes.pdf_uploaded,
+								pdf: success.data[i].attributes.pdf
 							});
 						}
 					}
@@ -85,11 +106,12 @@ angular.module('minovateApp')
 
 			$scope.tableParams = new ngTableParams({
 				page: 1, // show first page
-				count: 10, // count per page
+				count: $scope.reports.length, // count per page
 				sorting: {
 					name: 'asc' // initial sorting
 				}
 			}, {
+				counts: [],
 				total: $scope.reports.length, // length of reports
 				getData: function($defer, params) {
 					// use build-in angular filter
@@ -152,7 +174,7 @@ angular.module('minovateApp')
 					});
 				}
 
-				getMyTasks();
+				$scope.getMyTasks('next');
 
 			}, function(error) {
 				$log.log(error);

@@ -11,8 +11,20 @@ angular.module('minovateApp')
 	.controller('MyReportsCtrl', function($scope, $log, ngTableParams, $filter, Utils, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
-			title: 'Mis Reportes'
+			title: 'Mis Reportes',
+			prevBtn: {
+				disabled: true
+			},
+			myReportsMysTasksSel: [{
+				id: 1,
+				name: 'Mis Reportes'
+			}, {
+				name: 'Mis Tareas',
+				id: 2
+			}]
 		};
+
+		$scope.option = $scope.page.myReportsMysTasksSel[0];
 
 		$scope.reports = [];
 		var zones = [];
@@ -20,34 +32,75 @@ angular.module('minovateApp')
 		var stores = [];
 		var loggedUserId = Utils.getInStorage('userid');
 		var i, j;
+		var currentPage = 0;
+		var pageSize = 4;
 
-		var getMyreports = function() {
+		$scope.getMyreports = function(mode) {
+
+
 
 			$scope.reports = [];
 
-			Reports.query({}, function(success) {
+			if (currentPage === 2) {
+				$scope.page.prevBtn.disabled = true;
+			}
 
-				// $log.log(success);
+			if (mode === 'prev') {
+				if (currentPage > 1) {
+					currentPage--;
+				}
+			} else if (mode === 'next') {
+				currentPage++;
+				if (currentPage > 1) {
+					$scope.page.prevBtn.disabled = false;
+				}
+			}
+
+			Reports.query({
+				'page[number]': currentPage,
+				'page[size]': pageSize
+			}, function(success) {
 
 				if (success.data) {
 
 					for (i = 0; i < success.data.length; i++) {
 
-						// $log.log('comparo... ' + success.data[i].attributes.creator_id + ' ...con... ' + loggedUserId);
+						if ($scope.option.id === 1) { // Si se busca por Mis Reportes (soy el creador del reporte)
 
-						if (success.data[i].attributes.creator_id === loggedUserId) {
-							$scope.reports.push({
-								reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
-								createdAt: success.data[i].attributes.created_at,
-								limitDate: success.data[i].attributes.limit_date,
-								zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
-								zoneName: null,
-								dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
-								dealerName: null,
-								storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
-								storeName: null,
-								creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
-							});
+							if (success.data[i].attributes.creator_id === loggedUserId) {
+								$scope.reports.push({
+									reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
+									createdAt: success.data[i].attributes.created_at,
+									limitDate: success.data[i].attributes.limit_date,
+									zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
+									zoneName: null,
+									dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
+									dealerName: null,
+									storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
+									storeName: null,
+									creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+									pdfUploaded: success.data[i].attributes.pdf_uploaded,
+									pdf: success.data[i].attributes.pdf
+								});
+							}
+						} else if ($scope.option.id === 2) { // Si se busca por Mis Tareas (soy el asignado)
+
+							if (success.data[i].attributes.assigned_user_id === loggedUserId) {
+								$scope.reports.push({
+									reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
+									createdAt: success.data[i].attributes.created_at,
+									limitDate: success.data[i].attributes.limit_date,
+									zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
+									zoneName: null,
+									dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
+									dealerName: null,
+									storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
+									storeName: null,
+									creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+									pdfUploaded: success.data[i].attributes.pdf_uploaded,
+									pdf: success.data[i].attributes.pdf
+								});
+							}
 						}
 					}
 
@@ -85,11 +138,12 @@ angular.module('minovateApp')
 
 			$scope.tableParams = new ngTableParams({
 				page: 1, // show first page
-				count: 10, // count per page
+				count: $scope.reports.length, // count per page
 				sorting: {
 					name: 'asc' // initial sorting
 				}
 			}, {
+				counts: [],
 				total: $scope.reports.length, // length of reports
 				getData: function($defer, params) {
 					// use build-in angular filter
@@ -152,7 +206,7 @@ angular.module('minovateApp')
 					});
 				}
 
-				getMyreports();
+				$scope.getMyreports('next');
 
 			}, function(error) {
 				$log.log(error);

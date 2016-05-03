@@ -17,14 +17,14 @@
 			</p>
 
 			<div class="form-group">
-			 <input type="email" class="form-control rounded" placeholder="Email de usuario..." ng-model="user.email" ng-change="removeMsg()" required>
+			 <input type="email" class="form-control rounded" placeholder="Email de usuario..." ng-model="user.email.text" ng-change="removeMsg()" ng-disabled="user.email.disabled" required>
 			</div>
 
 
 		</form>
 
 		<div class="form-group text-center mt-20">
-			<button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="resetPassword()" ng-disabled='form.$invalid'>Enviar</button>
+			<button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="resetPassword()" ng-disabled='form.$invalid || page.sendBtn.disabled'>Enviar</button>
 		</div>
 
 	</div>

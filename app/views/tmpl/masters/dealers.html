@@ -78,9 +78,9 @@
           <div class="tile-body">
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="user in dealers">
-                <td data-title="'Nombre'" sortable="'zone'" filter="{ 'zone': 'text' }">
-                  {{user.name}}
+              <tr ng-repeat="dealer in dealers">
+                <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
+                  {{dealer.name}}
                 </td>
                 <td data-title="'Info'" >
                   <a href="#">info</a>

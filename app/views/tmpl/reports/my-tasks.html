@@ -82,9 +82,6 @@
                 <td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
                   {{user.reportTypeName}}
                 </td>
-                <!-- <td data-title="'Detalle solicitud'" sortable="'requestDetail'" filter="{ 'requestDetail': 'text' }">
-                  {{user.requestDetail}}
-                </td> -->
                 <td data-title="'Fecha Creacion'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
                   {{user.createdAt | date: 'dd/MM/yyyy'}}
                 </td>
@@ -103,11 +100,16 @@
                 <td data-title="'Creador reporte'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
                   {{user.creatorName}}
                 </td>
-                <!-- <td data-title="'Info'" >
-                  <a href="#">info</a>
-                </td> -->
+                <td data-title="'PDF'" >
+                  <input ng-if="report.pdfUploaded" class="text-center" type="image" src="images/pdf-icon.png" tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
+                  <input ng-if="!report.pdfUploaded" class="text-center" type="image" src="images/pdf-denied-icon.png" tooltip="PDF no disponible" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" />
+                </td>
               </tr>
             </table>
+            <div class="text-center">
+              <button type="button" class="btn btn-default" ng-click="getMyTasks('prev')" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
+              <button type="button" class="btn btn-default" ng-click="getMyTasks('next')">Siguiente &gt; </button>
+            </div>
 
         </div>
         <!-- /tile body -->

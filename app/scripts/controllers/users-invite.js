@@ -38,7 +38,7 @@ angular.module('minovateApp')
 			Roles.query({
 				idOrganization: 1
 			}, function(success) {
-				$log.log(success);
+				// $log.log(success);
 
 				if (success.data) {
 					for (var i = 0; i < success.data.length; i++) {
@@ -52,7 +52,6 @@ angular.module('minovateApp')
 					$log.log('error al obtener los roles');
 				}
 
-				$log.log($scope.roles);
 			}, function(error) {
 				$log.log(error);
 			});
