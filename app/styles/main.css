@@ -10084,6 +10084,20 @@ body {
   .bg-blue-ps.bright {
     background-color: #edf1f5 !important; }
 
+.bg-orange-ps {
+  background-color: #f19122 !important;
+  color: white !important; }
+  .bg-orange-ps.dk {
+    background-color: #eb850f !important; }
+  .bg-orange-ps.dker {
+    background-color: #d77a0e !important; }
+  .bg-orange-ps.lt {
+    background-color: #f39d3a !important; }
+  .bg-orange-ps.lter {
+    background-color: #f4a952 !important; }
+  .bg-orange-ps.bright {
+    background-color: white !important; }
+
 .no-bg {
   background-color: transparent !important; }
 
@@ -10338,6 +10352,9 @@ body {
 .pb-10 {
   padding-bottom: 10px !important; }
 
+.pb-7 {
+  padding-bottom: 7px !important; }
+
 .pb-0 {
   padding-bottom: 0px !important; }
 
@@ -10353,6 +10370,9 @@ body {
 .pt-10 {
   padding-top: 10px !important; }
 
+.pt-7 {
+  padding-top: 7px !important; }
+
 .pt-0 {
   padding-top: 0 !important; }
 
@@ -10364,6 +10384,9 @@ body {
 
 .pl-15 {
   padding-left: 15px !important; }
+
+.pl-12 {
+  padding-left: 12px !important; }
 
 .pl-10 {
   padding-left: 10px !important; }
@@ -10379,6 +10402,9 @@ body {
 
 .pr-15 {
   padding-right: 15px !important; }
+
+.pr-12 {
+  padding-right: 12px !important; }
 
 .pr-10 {
   padding-right: 10px !important; }

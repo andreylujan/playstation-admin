@@ -9,7 +9,7 @@
 
 			<ul class="page-breadcrumb">
 				<li>
-					<a ui-sref="app.dashboard"><i class="fa fa-gamepad"></i> {{main.title}}</a>
+					<a ui-sref="app.dashboard"> {{main.title}}</a>
 				</li>
 				<li>
 					<a href="javascript:;">Reportes</a>
@@ -75,7 +75,7 @@
 					<div class="tile-body">
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in reports">
+							<tr ng-repeat="report in $data">
 								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
@@ -109,6 +109,7 @@
 
 						<div class="text-center">
 							<button type="button" class="btn btn-default" ng-click="getReports('prev')" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
+							<span class="ml-5 mr-5">{{currentPage}}</span>
 							<button type="button" class="btn btn-default" ng-click="getReports('next')">Siguiente &gt; </button>
 						</div>
 

@@ -12,7 +12,7 @@
 
       <ul class="page-breadcrumb">
         <li>
-          <a ui-sref="app.users.list"><i class="fa fa-gamepad"></i> {{main.title}}</a>
+          <a ui-sref="app.users.list"> {{main.title}}</a>
         </li>
         <li>
           <a href="javascript:;">Usuarios</a>
@@ -44,9 +44,9 @@
           <div class="tile-header dvd dvd-btm">
             <h1 class="custom-font"></h1>
             <ul class="controls">
-              <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+              <li class="dropdown" dropdown on-toggle="toggled(open)">
 
-                <a href uib-dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
+                <a href dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
 
                 <ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
                   <li>
@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="getUsers()">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -91,8 +91,12 @@
                 <td data-title="'Rol'" sortable="'roleName'" filter="{ 'roleName': 'text' }">
                   {{user.roleName}}
                 </td>
+                <td data-title="'Activo'" sortable="'active'" filter="{ 'active': 'text' }" class="text-center">
+                  <span ng-if="user.active" class="text-greensea"><i class="fa fa-check-circle-o"></i></span>
+                  <button ng-if="!user.active" tooltip="reenviar invitación" type="button" ng-if="user.active" class="btn btn-orange-ps btn-border" ng-click="resendInvitation(user.email, user.roleId)"><fa name="paper-plane"></fa></button>
+                </td>
                 <td data-title="'Info'">
-                  <img ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
+                  <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
                 </td>
               </tr>
             </table>

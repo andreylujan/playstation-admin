@@ -103,9 +103,6 @@ angular.module('minovateApp')
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken()
-			},
-			params: {
-				fields: '@fields'
 			}
 		},
 		update: {
@@ -166,6 +163,9 @@ angular.module('minovateApp')
 				'Content-Type': 'application/json'
 			},
 			params: {
+				'all': '@all',
+				'filter[assigned_user_id]': '@assigned_user_id',
+				'filter[creator_id]': '@creator_id',
 				'page[number]': '@number',
 				'page[size]': '@size'
 			}

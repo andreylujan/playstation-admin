@@ -22,30 +22,31 @@ angular.module('minovateApp')
 		var dealers = [];
 		var stores = [];
 		var i, j;
-		var currentPage = 0;
+		$scope.currentPage = 0;
 		var pageSize = 4;
 
 		$scope.getReports = function(mode) {
 
 			$scope.reports = [];
 
-			if (currentPage === 2) {
+			if ($scope.currentPage === 2) {
 				$scope.page.prevBtn.disabled = true;
 			}
 
 			if (mode === 'prev') {
-				if (currentPage > 1) {
-					currentPage--;
+				if ($scope.currentPage > 1) {
+					$scope.currentPage--;
 				}
 			} else if (mode === 'next') {
-				currentPage++;
-				if (currentPage > 1) {
+				$scope.currentPage++;
+				if ($scope.currentPage > 1) {
 					$scope.page.prevBtn.disabled = false;
 				}
 			}
 
 			Reports.query({
-				'page[number]': currentPage,
+				all: true,
+				'page[number]': $scope.currentPage,
 				'page[size]': pageSize
 			}, function(success) {
 

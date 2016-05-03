@@ -22,8 +22,10 @@ angular.module('minovateApp')
 		$scope.users = [];
 
 		Users.query({
-			idUser: 'all'
+			idUser: ''
 		}, function(success) {
+
+			$log.log(success);
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.users.push({
@@ -32,17 +34,19 @@ angular.module('minovateApp')
 						lastName: success.data[i].attributes.last_name,
 						email: success.data[i].attributes.email,
 						roleName: success.data[i].attributes.role_name,
+						roleId: success.data[i].attributes.role_id,
+						active: success.data[i].attributes.active
 					});
 				}
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
-					count: 10, // count per page
+					count: 50, // count per page
 					filter: {
 						//name: 'M'       // initial filter
 					},
 					sorting: {
-						firstName: 'asc' // initial sorting
+						active: 'desc' // initial sorting
 					}
 				}, {
 					total: $scope.users.length, // length of $scope.users
@@ -86,6 +90,11 @@ angular.module('minovateApp')
 		modalInstance.result.then(function() {}, function() {
 			// $scope.getUsers();
 		});
+	};
+
+	$scope.resendInvitation = function(email, roleId) {
+		$log.log(email);
+		$log.log(roleId);
 	};
 
 })
