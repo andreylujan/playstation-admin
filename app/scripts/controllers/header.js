@@ -24,6 +24,7 @@ angular.module('minovateApp')
       Utils.setInStorage('fullName', null);
       Utils.setInStorage('role', null);
       Utils.setInStorage('loggedIn', false);
+      Utils.setInStorage('image', null);
 
       $state.go('core.login');
 

@@ -36,12 +36,7 @@ angular.module('minovateApp')
 				Utils.setInStorage('fullName', success.data.relationships.user.data.full_name);
 				Utils.setInStorage('role', success.data.relationships.user.data.role_id);
 				Utils.setInStorage('loggedIn', true);
-
-				if (success.data.relationships.user.data.image) {
-					Utils.setInStorage('image', success.data.relationships.user.data.image);
-				} else {
-					Utils.setInStorage('image', 'images/placeholder-user-photo.png');
-				}
+				Utils.setInStorage('image', success.data.relationships.user.data.image);
 
 				if (Utils.getInStorage('role') === 1) {
 					$state.go('app.playStation.reports');
@@ -49,7 +44,6 @@ angular.module('minovateApp')
 					$state.go('app.playStation.my-reports');
 				}
 				
-
 			}, function(error) {
 				$log.log(error);
 				if (error.status === 401) {
