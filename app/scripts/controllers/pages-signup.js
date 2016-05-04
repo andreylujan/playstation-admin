@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('SignupCtrl', function($scope, $log, $state, $window, Users, InviteLink, Validators, Utils) {
+	.controller('SignupCtrl', function($scope, $log, $state, $window, $filter, Users, InviteLink, Validators, Utils) {
 
 		$scope.page = {
 			elements: {
@@ -156,8 +156,8 @@ angular.module('minovateApp')
 						type: 'users',
 						attributes: {
 							email: $scope.page.elements.newUser.email.text,
-							first_name: $scope.page.elements.newUser.firstName.text,
-							last_name: $scope.page.elements.newUser.lastName.text,
+							first_name: $filter('capitalize')($scope.page.elements.newUser.firstName.text, true),
+							last_name: $filter('capitalize')($scope.page.elements.newUser.lastName.text, true),
 							rut: $scope.page.elements.newUser.rut.text,
 							password: $scope.page.elements.newUser.password.text,
 							password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,

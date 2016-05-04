@@ -8,7 +8,8 @@
 
 		<h2 class="text-light text-black">Reestablecer contraseña</h2>
 
-		<h4 class="text-light text-{{page.msg.color}} text-center" ng-show="page.msg.show"> {{page.msg.text}}</h4>
+		<h4 class="text-light text-{{page.msg.color}} " ng-show="page.msg.show"> {{page.msg.text}} </h4>
+		<a class="text-center" style="color: #f19122" ui-sref="core.login" ng-show="page.anchor.show">{{page.anchor.text}}</a>
 
 		<form name="form" class="form-validation mt-20" novalidate>
 
@@ -17,22 +18,22 @@
 			</p>
 
 			<div class="form-group">
-			 <input type="text" class="form-control rounded" placeholder="Código..." ng-model="user.token" ng-change="removeMsg()" required>
+			 <input type="text" class="form-control rounded" placeholder="Código..." ng-model="user.token.text" ng-change="removeMsg()"  ng-disabled="user.token.disabled" required>
 			</div>
 
 			<div class="form-group">
-			 <input type="password" class="form-control rounded" placeholder="Nueva contraseña..." ng-model="user.password" ng-change="removeMsg()" required>
+			 <input type="password" class="form-control rounded" placeholder="Nueva contraseña..." ng-model="user.password.text" ng-change="removeMsg()"  ng-disabled="user.password.disabled" required>
 			</div>
 
 			<div class="form-group">
-			 <input type="password" class="form-control rounded" placeholder="Repita nueva contraseña..." ng-model="user.passwordConfirmation" ng-change="removeMsg()" required>
+			 <input type="password" class="form-control rounded" placeholder="Repita nueva contraseña..." ng-model="user.passwordConfirmation.text" ng-change="removeMsg()" ng-disabled="user.passwordConfirmation.disabled" required>
 			</div>
 
 
 		</form>
 
 		<div class="form-group text-center mt-20">
-			<button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="validateToken()" ng-disabled='form.$invalid'>Reestablecer</button>
+			<button type="submit" class="btn btn-orange-ps b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="validateToken()" ng-disabled='form.$invalid || page.reestablishBtn.disabled'>Reestablecer</button>
 		</div>
 
 	</div>

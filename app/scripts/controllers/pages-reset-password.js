@@ -11,9 +11,18 @@ angular.module('minovateApp')
 	.controller('ResetPasswordCtrl', function($scope, $log, $stateParams, Users, ResetPassword, Validators) {
 
 		$scope.user = {
-			token: '',
-			password: '',
-			passwordConfirmation: ''
+			token: {
+				text: '',
+				disabled: false
+			},
+			password: {
+				text: '',
+				disabled: false
+			},
+			passwordConfirmation: {
+				text: '',
+				disabled: false
+			}
 		};
 
 		$scope.page = {
@@ -21,6 +30,14 @@ angular.module('minovateApp')
 				color: '',
 				text: '',
 				show: false
+			},
+			anchor: {
+				color: '',
+				text: '',
+				show: false
+			},
+			reestablishBtn: {
+				disabled: false
 			}
 		};
 
@@ -28,14 +45,14 @@ angular.module('minovateApp')
 
 		$scope.validateToken = function() {
 
-			if (!Validators.validateStringLength($scope.user.password, passLength)) {
+			if (!Validators.validateStringLength($scope.user.password.text, passLength)) {
 				$scope.page.msg.color = 'danger';
 				$scope.page.msg.text = 'Las debe tener ' + passLength + ' caracteres como mínimo';
 				$scope.page.msg.show = true;
 				return;
 			}
 
-			if (!Validators.comparePasswords($scope.user.password, $scope.user.passwordConfirmation)) {
+			if (!Validators.comparePasswords($scope.user.password.text, $scope.user.passwordConfirmation.text)) {
 				$scope.page.msg.color = 'danger';
 				$scope.page.msg.text = 'Las contraseñas no coinciden';
 				$scope.page.msg.show = true;
@@ -45,12 +62,12 @@ angular.module('minovateApp')
 			Users.verifyPassToken({
 				idUser: 'verify',
 				email: $stateParams.email,
-				reset_password_token: $scope.user.token
+				reset_password_token: $scope.user.token.text
 			}, function(success) {
-				// $log.log(success);
+				$log.log(success);
 
 				if (success.data) {
-					resetPass();
+					resetPass(success.data.id);
 				} else {
 					$scope.page.msg.color = 'danger';
 					$scope.page.msg.text = success.errors[0].detail;
@@ -66,21 +83,28 @@ angular.module('minovateApp')
 
 		};
 
-		var resetPass = function() {
+		var resetPass = function(idUser) {
 
 			ResetPassword.update({
-				idOrganization: 1,
-				password: $scope.user.password,
-				password_confirmation: $scope.user.passwordConfirmation,
-				reset_password_token: $scope.user.token
+				idOrganization: idUser,
+				password: $scope.user.password.text,
+				password_confirmation: $scope.user.passwordConfirmation.text,
+				reset_password_token: $scope.user.token.text
 			}, function(success) {
-				$log.log(success);
 
-				if (success.data) {
-					$scope.page.msg.color = 'danger';
-					$scope.page.msg.text = success.errors[0].detail;
-					$scope.page.msg.show = true;
-				}
+				$scope.page.msg.color = 'greensea';
+				$scope.page.msg.text = 'Se ha reestablecido tu contraseña';
+				$scope.page.msg.show = true;
+
+				$scope.page.anchor.color = 'orange-ps';
+				$scope.page.anchor.text = 'Ir a login';
+				$scope.page.anchor.show = true;
+
+				$scope.user.token.disabled = true;
+				$scope.user.password.disabled = true;
+				$scope.user.passwordConfirmation.disabled = true;
+				$scope.page.reestablishBtn.disabled = true;
+
 			}, function(error) {
 				$log.log(error);
 
@@ -94,18 +118,17 @@ angular.module('minovateApp')
 		$scope.resetPassword = function() {
 
 			ResetPassword.save({
-				email: $scope.user.email
+				email: $scope.user.email.text
 			}, function(success) {
 				// $log.log(success);
 
-				// Si el servicio se ejecuta (200) pero lanza un error de validacion
 				if (success.errors) {
 					$scope.page.msg.color = 'danger';
 					$scope.page.msg.text = success.errors[0].detail;
 					$scope.page.msg.show = true;
 				} else {
 					$scope.page.msg.color = 'greensea';
-					$scope.page.msg.text = 'Te hemos enviado un correo con instrucciones, si el correo no aparece por favor revisa tu carpeta de spam';
+					$scope.page.msg.text = 'Te hemos enviado un correo con instrucciones, si el correo no aparece en tu bandeja principal revisa tu carpeta de spam';
 					$scope.page.msg.show = true;
 				}
 
@@ -121,6 +144,10 @@ angular.module('minovateApp')
 			$scope.page.msg.color = '';
 			$scope.page.msg.text = '';
 			$scope.page.msg.show = false;
+
+			$scope.page.anchor.color = '';
+			$scope.page.anchor.text = '';
+			$scope.page.anchor.show = false;
 		};
 
 	});
