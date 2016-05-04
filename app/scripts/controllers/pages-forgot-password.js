@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('ForgotPasswordCtrl', function($scope, $log, SendPasswordToken) {
+	.controller('ForgotPasswordCtrl', function($scope, $log, Users) {
 
 		$scope.user = {
 			email: {
@@ -28,12 +28,13 @@ angular.module('minovateApp')
 			}
 		};
 
-		$scope.resetPassword = function() {
+		$scope.sendPassToken = function() {
 
 			$scope.page.sendBtn.disabled = true;
 			$scope.user.email.disabled = true;
 
-			SendPasswordToken.save({
+			Users.sendEmailWithToken({
+				idUser: 'reset_password_token',
 				email: $scope.user.email.text
 			}, function(success) {
 				// $log.log(success);
@@ -55,6 +56,7 @@ angular.module('minovateApp')
 				$scope.page.msg.text = error.errors[0].detail;
 				$scope.page.msg.show = true;
 			});
+
 		};
 
 		$scope.removeMsg = function() {

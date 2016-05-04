@@ -14,6 +14,9 @@ angular.module('minovateApp')
 			title: 'Lista de reportes',
 			prevBtn: {
 				disabled: true
+			},
+			nextBtn: {
+				disabled: false
 			}
 		};
 
@@ -99,6 +102,13 @@ angular.module('minovateApp')
 						}
 					}
 
+					// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
+					if ($scope.reports.length < pageSize) {
+						$scope.page.nextBtn.disabled = true;
+					} else {
+						$scope.page.nextBtn.disabled = false;
+					}
+
 					$scope.tableParams = new ngTableParams({
 						page: 1, // show first page
 						count: $scope.reports.length, // count per page
@@ -106,7 +116,7 @@ angular.module('minovateApp')
 							//name: 'M'       // initial filter
 						},
 						sorting: {
-							firstName: 'asc' // initial sorting
+							'report.id': 'asc' // initial sorting
 						}
 					}, {
 						counts: [],

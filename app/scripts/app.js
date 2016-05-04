@@ -80,7 +80,7 @@ angular
 			// Listener que se ejecuta cuando se carga una pagina
 			$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 
-				var isLogin = toState.name === 'core.login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup';
+				var isLogin = toState.name === 'core.login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup' || toState.name === 'core.page404';
 				
 				// $log.log('is in Login or forgotpass or resetpass or signup... ' + isLogin);
 				// $log.log('loggedIn storage... ' + Utils.getInStorage('loggedIn'));
@@ -698,7 +698,7 @@ angular
 		})
 		//forgot password
 		.state('core.resetpass', {
-			url: '/resetpass',
+			url: '/resetpass?email',
 			controller: 'ResetPasswordCtrl',
 			templateUrl: 'views/tmpl/pages/resetpass.html'
 		})

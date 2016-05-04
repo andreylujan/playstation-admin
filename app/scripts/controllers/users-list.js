@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('UsersListCtrl', function($scope, $log, $filter, $modal, ngTableParams, Users) {
+.controller('UsersListCtrl', function($scope, $log, $filter, $modal, ngTableParams, Users, Invitations) {
 
 	$scope.page = {
 		title: 'Lista de usuarios'
@@ -92,9 +92,45 @@ angular.module('minovateApp')
 		});
 	};
 
+	var openSendInvitation = function(userEmail) {
+
+		var modalInstance = $modal.open({
+			animation: true,
+			templateUrl: 'sendInvitation.html',
+			controller: 'SendInvitationInstance',
+			resolve: {
+				userEmail: function() {
+					return userEmail;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {
+			// $scope.getUsers();
+		});
+	};
+
 	$scope.resendInvitation = function(email, roleId) {
-		$log.log(email);
-		$log.log(roleId);
+
+		Invitations.save({
+			"data": {
+				"type": "invitations",
+				"attributes": {
+					"role_id": roleId,
+					"email": email
+				}
+			}
+		}, function(success) {
+			$log.log(success);
+
+			if (success.data) {
+				openSendInvitation(email);
+			}
+
+		}, function(error) {
+			$log.log(error);
+
+		});
 	};
 
 })
@@ -355,5 +391,18 @@ angular.module('minovateApp')
 		$scope.elements.alert.text = '';
 		$scope.elements.alert.color = '';
 	};
+
+})
+
+.controller('SendInvitationInstance', function($scope, $log, $modalInstance, userEmail) {
+
+	$scope.user = {
+		email: userEmail
+	};
+
+	$scope.ok = function() {
+		$modalInstance.close();
+	};
+
 
 });

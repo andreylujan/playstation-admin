@@ -75,29 +75,29 @@
 					<div class="tile-body">
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in $data">
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+							<tr ng-repeat="report in reports">
+								<td data-title="'ID'" sortable="'report.id'" filter="{ 'report.id': 'text' }">
 									{{report.id}}
 								</td>
-								<td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
+								<td data-title="'Tipo de reporte'" sortable="'report.reportTypeName'" filter="{ 'report.reportTypeName': 'text' }">
 									{{report.reportTypeName}}
 								</td>
-								<td data-title="'Fecha Creacion'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
+								<td data-title="'Fecha Creacion'" sortable="'report.createdAt'" filter="{ 'report.createdAt': 'text' }">
 									{{report.createdAt | date: 'dd/MM/yyyy'}}
 								</td>
-								<td data-title="'Fecha de vencimiento'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
+								<td data-title="'Fecha de vencimiento'" sortable="'report.limitDate'" filter="{ 'report.limitDate': 'text' }">
 									{{report.limitDate | date: 'dd/MM/yyyy'}}
 								</td>
-								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
+								<td data-title="'Zona'" sortable="'report.zoneName'" filter="{ 'report.zoneName': 'text' }">
 									{{report.zoneName}}
 								</td>
-								<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
+								<td data-title="'Dealer'" sortable="'report.dealerName'" filter="{ 'report.dealerName': 'text' }">
 									{{report.dealerName}}
 								</td>
-								<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
+								<td data-title="'Tienda'" sortable="'report.storeName'" filter="{ 'report.storeName': 'text' }">
 									{{report.storeName}}
 								</td>
-								<td data-title="'Creador reporte'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
+								<td data-title="'Creador reporte'" sortable="'report.creatorName'" filter="{ 'report.creatorName': 'text' }">
 									{{report.creatorName}}
 								</td>
 								<td data-title="'PDF'" >
@@ -110,7 +110,7 @@
 						<div class="text-center">
 							<button type="button" class="btn btn-default" ng-click="getReports('prev')" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
 							<span class="ml-5 mr-5">{{currentPage}}</span>
-							<button type="button" class="btn btn-default" ng-click="getReports('next')">Siguiente &gt; </button>
+							<button type="button" class="btn btn-default" ng-click="getReports('next')" ng-disabled="page.nextBtn.disabled">Siguiente &gt; </button>
 						</div>
 
 				</div>

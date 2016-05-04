@@ -92,8 +92,8 @@
                   {{user.roleName}}
                 </td>
                 <td data-title="'Activo'" sortable="'active'" filter="{ 'active': 'text' }" class="text-center">
-                  <span ng-if="user.active" class="text-greensea"><i class="fa fa-check-circle-o"></i></span>
-                  <button ng-if="!user.active" tooltip="reenviar invitación" type="button" ng-if="user.active" class="btn btn-orange-ps btn-border" ng-click="resendInvitation(user.email, user.roleId)"><fa name="paper-plane"></fa></button>
+                  <img  ng-if="user.active"src="images/check.png" style="width:24px">
+                  <img  ng-if="!user.active"src="images/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId)" tooltip="Reenviar invitación">
                 </td>
                 <td data-title="'Info'">
                   <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
@@ -175,6 +175,19 @@
       <button class="btn btn-danger btn-rounded-10 {{elements.buttons.removeUser.border}} mb-10" type="button" ng-click="removeUser(user.id)" >{{elements.buttons.removeUser.text}}</button>
       <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id)" >{{elements.buttons.editUser.text}}</button>
       <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="sendInvitation.html">
+    <div class="modal-body text-gray">
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="text-center">La invitación a <strong>{{user.email}}</strong> ha sido reenviada</h4>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default btn-rounded-10 " type="button" ng-click="ok()" >Cerrar</button>
     </div>
   </script>
 

@@ -8,7 +8,7 @@
 
 		<h2 class="text-light text-black">Reestablecer contraseña</h2>
 
-		<h4 class="text-light text-{{page.msg.color}} text-justify" ng-show="page.msg.show"> {{page.msg.text}}</h4>
+		<h4 class="text-light text-{{page.msg.color}} text-center" ng-show="page.msg.show"> {{page.msg.text}}</h4>
 
 		<form name="form" class="form-validation mt-20" novalidate>
 
@@ -17,7 +17,7 @@
 			</p>
 
 			<div class="form-group">
-			 <input type="number" class="form-control rounded" placeholder="Código..." ng-model="user.token" ng-change="removeMsg()" required>
+			 <input type="text" class="form-control rounded" placeholder="Código..." ng-model="user.token" ng-change="removeMsg()" required>
 			</div>
 
 			<div class="form-group">

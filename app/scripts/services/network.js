@@ -36,20 +36,6 @@ angular.module('minovateApp')
 
 })
 
-// RESET PASSWORD (ENVÍA UN CORREO CON UN PIN DE 4 DIGITOS)
-.factory('ResetPassword', function($resource) {
-
-	return $resource(API_URL + '/users/reset_password_token', {}, {
-		save: {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/vnd.api+json'
-			}
-		}
-	});
-
-})
-
 // Invitaciones
 .factory('Invitations', function($resource, Token) {
 
@@ -117,19 +103,21 @@ angular.module('minovateApp')
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken()
 			},
-		}
-	});
-
-})
-
-// SEND EMAIL WITH TOKEN
-.factory('SendPasswordToken', function($resource) {
-
-	return $resource(API_URL + '/users/reset_password_token', {}, {
-		save: {
+		},
+		sendEmailWithToken: {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		verifyPassToken: {
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
+			},
+			params: {
+				email: '@email',
+				reset_password_token: '@reset_password_token'
 			}
 		}
 	});
@@ -143,7 +131,7 @@ angular.module('minovateApp')
 		idOrganization: '@idOrganization'
 	}, {
 		update: {
-			method: 'POST',
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/vnd.api+json'
 			}

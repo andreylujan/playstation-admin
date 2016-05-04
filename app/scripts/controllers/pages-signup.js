@@ -100,10 +100,16 @@ angular.module('minovateApp')
 
 				}, function(error) {
 					$log.log(error);
-					$scope.page.elements.message.color = 'danger';
-					$scope.page.elements.message.text = error.data.errors[0].title;
-					$scope.page.elements.message.show = true;
-					acceptInvitation = false;
+
+					if (error.data.errors[0].status === '422') {
+						$state.go('core.page404');
+						acceptInvitation = false;
+					} else {
+						$scope.page.elements.message.color = 'danger';
+						$scope.page.elements.message.text = error.data.errors[0].title;
+						$scope.page.elements.message.show = true;
+						acceptInvitation = false;
+					}
 				});
 			}
 
@@ -116,10 +122,10 @@ angular.module('minovateApp')
 			var rutUnformatted = Utils.replaceAll($scope.page.elements.newUser.rut.text, '.', '');
 
 			if (!Validators.validateRutCheckDigit(rutUnformatted)) {
-					$scope.page.elements.message.color = 'danger';
-					$scope.page.elements.message.text = 'Rut no válido';
-					$scope.page.elements.message.show = true;
-					return;
+				$scope.page.elements.message.color = 'danger';
+				$scope.page.elements.message.text = 'Rut no válido';
+				$scope.page.elements.message.show = true;
+				return;
 			}
 
 			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.lastName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {

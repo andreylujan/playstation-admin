@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('ResetPasswordCtrl', function($scope, $log, Users, ResetPassword) {
+	.controller('ResetPasswordCtrl', function($scope, $log, $stateParams, Users, ResetPassword, Validators) {
 
 		$scope.user = {
 			token: '',
@@ -24,19 +24,44 @@ angular.module('minovateApp')
 			}
 		};
 
+		var passLength = 8;
+
 		$scope.validateToken = function() {
 
-			Users.query({
-				email: 'atroncoso@ewin.cl',
+			if (!Validators.validateStringLength($scope.user.password, passLength)) {
+				$scope.page.msg.color = 'danger';
+				$scope.page.msg.text = 'Las debe tener ' + passLength + ' caracteres como mínimo';
+				$scope.page.msg.show = true;
+				return;
+			}
+
+			if (!Validators.comparePasswords($scope.user.password, $scope.user.passwordConfirmation)) {
+				$scope.page.msg.color = 'danger';
+				$scope.page.msg.text = 'Las contraseñas no coinciden';
+				$scope.page.msg.show = true;
+				return;
+			}
+
+			Users.verifyPassToken({
+				idUser: 'verify',
+				email: $stateParams.email,
 				reset_password_token: $scope.user.token
 			}, function(success) {
-				$log.log(success);
+				// $log.log(success);
 
-				// SI SE HIZO LA CONSULTA BIEN
-				resetPass();
+				if (success.data) {
+					resetPass();
+				} else {
+					$scope.page.msg.color = 'danger';
+					$scope.page.msg.text = success.errors[0].detail;
+					$scope.page.msg.show = true;
+				}
 
 			}, function(error) {
 				$log.log(error);
+				$scope.page.msg.color = 'danger';
+				$scope.page.msg.text = error.data.errors[0].detail;
+				$scope.page.msg.show = true;
 			});
 
 		};
@@ -50,8 +75,18 @@ angular.module('minovateApp')
 				reset_password_token: $scope.user.token
 			}, function(success) {
 				$log.log(success);
+
+				if (success.data) {
+					$scope.page.msg.color = 'danger';
+					$scope.page.msg.text = success.errors[0].detail;
+					$scope.page.msg.show = true;
+				}
 			}, function(error) {
 				$log.log(error);
+
+				$scope.page.msg.color = 'danger';
+				$scope.page.msg.text = error.data.errors[0].detail;
+				$scope.page.msg.show = true;
 			});
 
 		};
