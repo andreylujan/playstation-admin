@@ -92,8 +92,8 @@
                   {{user.roleName}}
                 </td>
                 <td data-title="'Activo'" sortable="'active'" filter="{ 'active': 'text' }" class="text-center">
-                  <img  ng-if="user.active"src="images/check.png" style="width:24px">
-                  <img  ng-if="!user.active"src="images/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId)" tooltip="Reenviar invitación">
+                  <img  ng-if="user.active" ng-src="images/check.png" style="width:24px">
+                  <img  ng-if="!user.active" ng-src="images/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId)" tooltip="Reenviar invitación">
                 </td>
                 <td data-title="'Info'">
                   <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="images/info.png" style="width:24px; cursor:pointer" tooltip="Más info">

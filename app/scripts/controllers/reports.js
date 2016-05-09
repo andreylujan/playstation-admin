@@ -26,7 +26,7 @@ angular.module('minovateApp')
 		var stores = [];
 		var i, j;
 		$scope.currentPage = 0;
-		var pageSize = 4;
+		var pageSize = 30;
 
 		$scope.getReports = function(mode) {
 

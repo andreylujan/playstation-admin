@@ -121,7 +121,7 @@ angular.module('minovateApp')
 				}
 			}
 		}, function(success) {
-			$log.log(success);
+			// $log.log(success);
 
 			if (success.data) {
 				openSendInvitation(email);
