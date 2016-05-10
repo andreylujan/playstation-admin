@@ -9,5 +9,5 @@ angular.module('minovateApp')
 		return (!!input) ? input.replace(reg, function(txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		}) : '';
-	}
+	};
 });

@@ -37,4 +37,4 @@ angular.module('minovateApp')
       return compile(element, attrs);
     };
     return tooltip;
-  });;
+  });

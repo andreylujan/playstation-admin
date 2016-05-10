@@ -236,4 +236,37 @@ angular.module('minovateApp')
 		}
 	});
 
+})
+
+// PROMOTIONS
+.factory('Promotions', function($resource, Token) {
+
+	return $resource(API_URL + '/promotions/:idPromotion', {
+		idPromotion: '@idPromotion'
+	}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/json'
+			},
+			params: {
+				include: '@include'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		}
+	});
+
 });

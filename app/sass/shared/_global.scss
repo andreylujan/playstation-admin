@@ -547,6 +547,81 @@ body {
   }
 }
 
+.bg-yellow-ps {
+  background-color: $yellow-ps!important;
+  color: white!important;
+
+  &.dk {
+    background-color: $darken-yellow-ps!important;
+  }
+
+  &.dker {
+    background-color: $darker-yellow-ps!important;
+  }
+
+  &.lt {
+    background-color: $lighten-yellow-ps!important;
+  }
+
+  &.lter {
+    background-color: $lighter-yellow-ps!important;
+  }
+
+  &.bright {
+    background-color: $bright-yellow-ps!important;
+  }
+}
+
+.bg-red-ps {
+  background-color: $red-ps!important;
+  color: white!important;
+
+  &.dk {
+    background-color: $darken-red-ps!important;
+  }
+
+  &.dker {
+    background-color: $darker-red-ps!important;
+  }
+
+  &.lt {
+    background-color: $lighten-red-ps!important;
+  }
+
+  &.lter {
+    background-color: $lighter-red-ps!important;
+  }
+
+  &.bright {
+    background-color: $bright-red-ps!important;
+  }
+}
+
+.bg-blue-ps {
+  background-color: $blue-ps!important;
+  color: white!important;
+
+  &.dk {
+    background-color: $darken-blue-ps!important;
+  }
+
+  &.dker {
+    background-color: $darker-blue-ps!important;
+  }
+
+  &.lt {
+    background-color: $lighten-blue-ps!important;
+  }
+
+  &.lter {
+    background-color: $lighter-blue-ps!important;
+  }
+
+  &.bright {
+    background-color: $bright-blue-ps!important;
+  }
+}
+
 
 
 .no-bg {

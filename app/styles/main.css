@@ -3678,7 +3678,7 @@ fieldset[disabled] .checkbox-custom input + i:before {
 
 .ui-select-bootstrap > .ui-select-match {
   border-color: #dbe0e2 !important;
-  border-radius: 2px; }
+  border-radius: 15px; }
   .ui-select-bootstrap > .ui-select-match > span:first-of-type {
     color: #bfc7cb;
     font-style: italic;
@@ -3692,8 +3692,12 @@ fieldset[disabled] .checkbox-custom input + i:before {
     color: #bfc7cb; }
     .ui-select-bootstrap > .ui-select-match > span:nth-of-type(2) > a:hover {
       color: #428bca; }
-.ui-select-bootstrap .ui-select-match-item.btn-primary {
-  color: white; }
+.ui-select-bootstrap .ui-select-match-item {
+  background-color: transparent;
+  border-radius: 15px;
+  border: none; }
+  .ui-select-bootstrap .ui-select-match-item.btn-primary {
+    color: white; }
 
 .ui-select-choices .ui-select-choices-row {
   padding: 0; }
@@ -7645,10 +7649,11 @@ blockquote p {
   .nav-tabs > li.tabs-title {
     display: none; } }
 .modal-content {
-  border-radius: 0; }
+  border-radius: 15px; }
 
 .modal-footer {
-  background-color: #f8f8f8; }
+  background-color: #f8f8f8;
+  border-radius: 0 0 15px 15px; }
 
 .modal-backdrop {
   bottom: 0; }
@@ -10097,6 +10102,48 @@ body {
     background-color: #f4a952 !important; }
   .bg-orange-ps.bright {
     background-color: white !important; }
+
+.bg-yellow-ps {
+  background-color: #fcc111 !important;
+  color: white !important; }
+  .bg-yellow-ps.dk {
+    background-color: #f0b503 !important; }
+  .bg-yellow-ps.dker {
+    background-color: #dca603 !important; }
+  .bg-yellow-ps.lt {
+    background-color: #fcc82a !important; }
+  .bg-yellow-ps.lter {
+    background-color: #fdce43 !important; }
+  .bg-yellow-ps.bright {
+    background-color: white !important; }
+
+.bg-red-ps {
+  background-color: #f15f4c !important;
+  color: white !important; }
+  .bg-red-ps.dk {
+    background-color: #ef4a34 !important; }
+  .bg-red-ps.dker {
+    background-color: #ee3921 !important; }
+  .bg-red-ps.lt {
+    background-color: #f37464 !important; }
+  .bg-red-ps.lter {
+    background-color: #f5897b !important; }
+  .bg-red-ps.bright {
+    background-color: white !important; }
+
+.bg-blue-ps {
+  background-color: #3f5b71 !important;
+  color: white !important; }
+  .bg-blue-ps.dk {
+    background-color: #364e61 !important; }
+  .bg-blue-ps.dker {
+    background-color: #2f4354 !important; }
+  .bg-blue-ps.lt {
+    background-color: #486881 !important; }
+  .bg-blue-ps.lter {
+    background-color: #517592 !important; }
+  .bg-blue-ps.bright {
+    background-color: #edf1f5 !important; }
 
 .no-bg {
   background-color: transparent !important; }

@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css" />
     <link rel="stylesheet" href="bower_components/chosen/chosen.min.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css" />
     <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
     <link rel="stylesheet" href="bower_components/ngImgCrop/compile/minified/ng-img-crop.css" />
     <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
@@ -91,7 +92,15 @@
     <script src="bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
     <script src="bower_components/chosen/chosen.jquery.min.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
-    <script src="bower_components/textAngular/dist/textAngular.min.js"></script>
+    <script src="bower_components/rangy/rangy-core.js"></script>
+    <script src="bower_components/rangy/rangy-classapplier.js"></script>
+    <script src="bower_components/rangy/rangy-highlighter.js"></script>
+    <script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
+    <script src="bower_components/rangy/rangy-serializer.js"></script>
+    <script src="bower_components/rangy/rangy-textrange.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
+    <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
     <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
     <script src="bower_components/angular-file-upload/angular-file-upload.min.js"></script>
     <script src="bower_components/ngImgCrop/compile/minified/ng-img-crop.js"></script>
@@ -130,6 +139,7 @@
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
     <script src="bower_components/ui-select/dist/select.js"></script>
     <!-- endbower -->
+    <script src="bower_components/angular-i18n/angular-locale_es-cl.js"></script>
 
     <!-- endbuild -->
 
@@ -226,6 +236,7 @@
     <script src="scripts/directives/submitvalidate.js"></script>
 
     <script src="scripts/filters/capitalize.js"></script>
+    <script src="scripts/filters/props-filter.js"></script>
 
     <script src="scripts/controllers/header.js"></script>
     <script src="scripts/controllers/users-invite.js"></script>
@@ -237,6 +248,8 @@
     <script src="scripts/controllers/masters-dealers.js"></script>
     <script src="scripts/controllers/masters-stores.js"></script>
     <script src="scripts/controllers/masters-products.js"></script>
+    <script src="scripts/controllers/promotions-list.js"></script>
+    <script src="scripts/controllers/new-promotion.js"></script>
 
     <script src="scripts/services/network.js"></script>
     <script src="scripts/services/utils.js"></script>

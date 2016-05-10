@@ -60,6 +60,11 @@ angular.module('minovateApp')
 				inbox: {
 					show: true
 				}
+			},
+			promotions: {
+				list: {
+					show: true
+				}
 			}
 		};
 
@@ -70,13 +75,15 @@ angular.module('minovateApp')
 			$scope.nav.reports.reports.show = true;
 			$scope.nav.reports.myReportsMyTasks.show = true;
 			$scope.nav.masters.show = true;
-		} else if(Utils.getInStorage('role') === 2) {
+			$scope.nav.promotions.list.show = true;
+		} else if (Utils.getInStorage('role') === 2) {
 			$scope.nav.dashboard.show = false;
 			$scope.nav.users.show = false;
 			$scope.nav.reports.show = true;
 			$scope.nav.reports.reports.show = false;
 			$scope.nav.reports.myReportsMyTasks.show = true;
 			$scope.nav.masters.show = false;
+			$scope.nav.promotions.list.show = false;
 		}
 
 	});

@@ -207,6 +207,23 @@ angular
 			controller: 'ProductsCtrl',
 			templateUrl: 'views/tmpl/masters/products.html'
 		})
+		//promotions
+		.state('app.promotions', {
+			url: '/promotions',
+			template: '<div ui-view></div>'
+		})
+		//promotions
+		.state('app.promotions.list', {
+			url: '/promotions',
+			controller: 'PromotionsListCtrl',
+			templateUrl: 'views/tmpl/promotions/promotions-list.html'
+		})
+		//promotions
+		.state('app.promotions.new', {
+			url: '/new-promotion',
+			controller: 'NewPromotionCtrl',
+			templateUrl: 'views/tmpl/promotions/new-promotion.html'
+		})
 		//mail
 		.state('app.mail', {
 			abstract: true,

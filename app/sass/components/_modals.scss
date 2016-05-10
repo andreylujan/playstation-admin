@@ -1,11 +1,12 @@
 //default modals
 
 .modal-content {
-  border-radius: 0;
+  border-radius: 15px;
 }
 
 .modal-footer {
   background-color: #f8f8f8;
+  border-radius: 0 0 15px 15px;
 }
 
 .modal-backdrop {

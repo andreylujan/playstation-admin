@@ -726,7 +726,7 @@ fieldset[disabled] .checkbox-custom input+i:before {
 .ui-select-bootstrap {
   >.ui-select-match {
     border-color: $bright-default!important;
-    border-radius: 2px;
+    border-radius: 15px;
 
     >span{
       &:first-of-type {
@@ -751,6 +751,9 @@ fieldset[disabled] .checkbox-custom input+i:before {
     }
   }
   .ui-select-match-item {
+    background-color: transparent;
+    border-radius: 15px;
+    border: none;
     &.btn-primary {
       color: white;
     }
