@@ -769,10 +769,19 @@ fieldset[disabled] .checkbox-custom input+i:before {
 
     &.active {
       >a {
-        background: $lighter-default;
+        background: $blue-ps;
       }
     }
   }
+}
+.ui-select-choices.ui-select-choices-content.ui-select-dropdown {
+  border-radius: 15px;
+}
+.ui-select-match-item.btn.btn-default.btn-xs {
+  color: white;
+}
+.ui-select-match-item.btn.btn-default.btn-xs:hover {
+  background-color: transparent;
 }
 .ui-select-multiple.ui-select-bootstrap {
   &.open {

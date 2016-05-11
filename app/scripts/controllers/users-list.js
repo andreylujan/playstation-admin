@@ -25,7 +25,7 @@ angular.module('minovateApp')
 			idUser: ''
 		}, function(success) {
 
-			$log.log(success);
+			// $log.log(success);
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.users.push({

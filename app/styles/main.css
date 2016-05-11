@@ -3705,7 +3705,16 @@ fieldset[disabled] .checkbox-custom input + i:before {
     color: #616f77;
     font-size: 12px; }
   .ui-select-choices .ui-select-choices-row.active > a {
-    background: #798992; }
+    background: #3f5b71; }
+
+.ui-select-choices.ui-select-choices-content.ui-select-dropdown {
+  border-radius: 15px; }
+
+.ui-select-match-item.btn.btn-default.btn-xs {
+  color: white; }
+
+.ui-select-match-item.btn.btn-default.btn-xs:hover {
+  background-color: transparent; }
 
 .ui-select-multiple.ui-select-bootstrap.open {
   border-color: #22beef; }

@@ -266,6 +266,13 @@ angular.module('minovateApp')
 				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
 		}
 	});
 

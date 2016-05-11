@@ -220,7 +220,7 @@ angular
 		})
 		//promotions
 		.state('app.promotions.new', {
-			url: '/new-promotion',
+			url: '/new-promotion?idPromotion',
 			controller: 'NewPromotionCtrl',
 			templateUrl: 'views/tmpl/promotions/new-promotion.html'
 		})

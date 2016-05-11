@@ -4,12 +4,16 @@
 	<div class="pageheader">
 
 		<h2>{{page.title}} <span></span></h2>
+		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion()">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
 
 		<div class="page-bar">
 
 			<ul class="page-breadcrumb">
 				<li>
 					<a ui-sref="app.dashboard"> {{main.title}}</a>
+				</li>
+				<li>
+					<a ui-sref="app.promotions.list"> Promociones</a>
 				</li>
 				<li>
 					<a ui-sref="app.playStation.reports">{{page.title}}</a>
@@ -67,6 +71,9 @@
 						</ul>
 					</div>
 					<!-- /tile header -->
+					<style type="text/css">
+						
+					</style>
 
 					<!-- tile body -->
 					<div class="tile-body">
@@ -115,7 +122,7 @@
 	<div class="col-md-12 mb-5">
 		<label for="selZone" class="col-md-2 control-label" >Fecha inicio/fin</label>
 		<div class="col-md-10">
-			<button  class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="rangeOptions" date-begin="page.startDate" date-end="page.endDate">
+			<button  class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.rangeOptions" date-begin="page.startDate" date-end="page.endDate">
 				<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.startDate}} - {{page.endDate}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
 			</button>
 		</div>
@@ -125,10 +132,10 @@
 <div class="row">
 	<div class="col-md-12 mb-5">
 		<div class="form-group">
-			<label class="col-md-2 control-label" >Asunto/Título</label>
+			<label class="col-md-2 control-label" >Título</label>
 			<div class="col-md-9">
 				<div class="form-group">
-					<input type="text" class="form-control underline-input" ng-mode="page.subject" placeholder="Agregar asunto/título">
+					<input type="text" class="form-control underline-input" ng-model="page.subject" placeholder="Agregar asunto/título">
 				</div>
 			</div>
 		</div>
@@ -143,10 +150,6 @@
 
 </div>
 <!-- /tile body -->
-
-<div class="tile-footer">
-	<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion()">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
-</div>
 
 </section>
 <!-- /tile -->
@@ -164,5 +167,18 @@
 
 </div>
 <!-- /page content -->
+
+<script type="text/ng-template" id="messageModal.html" class="">
+  <div class="modal-body text-gray">
+    <div class="row mb-20">
+      <div class="col-md-12">
+        <h4 class="text-center">{{modal.message.title}}</h4>
+      </div>
+    </div>
+    <div class="text-center">
+    	<button class="btn br-15 bg-red-ps" ng-click="cancel()">Aceptar</button>
+    </div>
+  </div>
+</script>
 
 </div>
