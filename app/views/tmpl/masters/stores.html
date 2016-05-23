@@ -77,13 +77,15 @@
           <!-- tile body -->
           <div class="tile-body">
 
+            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateStore()">Nueva tienda</button>
+
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="sote in stores">
+              <tr ng-repeat="store in stores">
                 <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
-                  {{sote.name}}
+                  {{store.name}}
                 </td>
                 <td data-title="'Info'" >
-                  <a href="#">info</a>
+                  <img ng-click="openModalCreateStore(store.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
                 </td>
               </tr>
             </table>
@@ -107,5 +109,87 @@
 
 </div>
 <!-- /page content -->
+
+<script type="text/ng-template" id="createStore.html">
+  <div class="modal-header text-gray">
+    <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
+  </div>
+  <div class="modal-body text-gray">
+    <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="inputStoreName" class="col-sm-2 control-label">Nombre</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" id="inputStoreName" placeholder="Nombre" ng-model="modal.store.name.text" ng-disabled="modal.store.name.disabled" ng-change="removeAlert()" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputStoreContact" class="col-sm-2 control-label">Contacto</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control rounded" id="inputStoreContact" placeholder="email" ng-model="modal.store.contact.text" ng-disabled="modal.store.contact.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputStorePhone" class="col-sm-2 control-label">Teléfono</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" id="inputStorePhone" placeholder="+56 9 11111111" ng-model="modal.store.phone.text" ng-disabled="modal.store.phone.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputDealerAddress" class="col-sm-2 control-label">Dirección</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" id="inputDealerAddress" placeholder="dirección #111" ng-model="modal.store.address.text" ng-disabled="modal.store.address.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputMonthlyClp" class="col-sm-2 control-label">Meta mensual (CLP)</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" id="inputMonthlyClp" placeholder="dirección #111" ng-model="modal.store.address.text" ng-disabled="modal.store.address.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputMonthlyGoalUsd" class="col-sm-2 control-label">Meta mensual (USD)</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" id="inputMonthlyGoalUsd" placeholder="dirección #111" ng-model="modal.store.address.text" ng-disabled="modal.store.address.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="selectMultiZone" class="col-sm-2 control-label">Zonas</label>
+            <div class="col-sm-10">
+              <ui-select class="bg-white b-solid br-15" multiple ng-model="modal.zones.selectedZones" theme="bootstrap" sortable="true" close-on-select="false" ng-disabled="modal.zones.disabled" ng-change="removeAlert()">
+                  <ui-select-match placeholder="Seleccionar zona...">{{$item.name}}</ui-select-match>
+                  <ui-select-choices repeat="zone in modal.zones.zones | propsFilter: {name: $select.search}">
+                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="selectMultiDealers" class="col-sm-2 control-label">Dealers</label>
+            <div class="col-sm-10">
+              <ui-select class="bg-white b-solid br-15" multiple ng-model="modal.dealers.selectedDealers" theme="bootstrap" sortable="true" close-on-select="false" ng-disabled="modal.dealers.disabled" ng-change="removeAlert()">
+                  <ui-select-match placeholder="Seleccionar dealer...">{{$item.name}}</ui-select-match>
+                  <ui-select-choices repeat="dealer in modal.dealers.dealers | propsFilter: {name: $select.search}">
+                  <div ng-bind-html="dealer.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createDealer()" >{{modal.buttons.create.text}}</button>
+    
+    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editDealer()" >{{modal.buttons.edit.text}}</button>
+    
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteDealer()" >{{modal.buttons.delete.text}}</button>
+    
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>
 
 </div>

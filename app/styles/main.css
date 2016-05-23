@@ -3711,7 +3711,10 @@ fieldset[disabled] .checkbox-custom input + i:before {
   border-radius: 15px; }
 
 .ui-select-match-item.btn.btn-default.btn-xs {
-  color: white; }
+  color: #C7C7C7; }
+
+.ui-select-multiple.ui-select-bootstrap {
+  padding: 3px 5px; }
 
 .ui-select-match-item.btn.btn-default.btn-xs:hover {
   background-color: transparent; }
@@ -10252,6 +10255,9 @@ body {
 
 .text-orange-ps {
   color: #f19122; }
+
+.text-gray {
+  color: #969696; }
 
 .text-xs {
   font-size: 10px !important; }

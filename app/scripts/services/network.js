@@ -165,12 +165,34 @@ angular.module('minovateApp')
 // ZONES
 .factory('Zones', function($resource, Token) {
 
-	return $resource(API_URL + '/zones', {}, {
+	return $resource(API_URL + '/zones/:zoneId', {
+		zoneId: '@zoneId'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
 			}
 		}
 	});
@@ -180,12 +202,34 @@ angular.module('minovateApp')
 // DEALERS
 .factory('Dealers', function($resource, Token) {
 
-	return $resource(API_URL + '/dealers', {}, {
+	return $resource(API_URL + '/dealers/:dealerId', {
+		dealerId: '@dealerId'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
 			}
 		}
 	});
@@ -201,6 +245,26 @@ angular.module('minovateApp')
 			headers: {
 				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/json'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken(),
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Bearer ' + Token.getToken()
 			}
 		}
 	});

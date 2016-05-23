@@ -217,7 +217,7 @@ angular.module('minovateApp')
 				if (success.data.attributes.image) {
 					$scope.user.image = success.data.attributes.image;
 				} else {
-					$scope.user.image = 'images/placeholder-user-photo.png';
+					$scope.user.image = 'http://dhg7r6mxe01qf.cloudfront.net/icons/admin/placeholder-user-photo.png';
 				}
 
 			} else {
