@@ -59,7 +59,7 @@ angular.module('minovateApp')
 
 	$scope.openModalCreateStore = function(idStore) {
 
-		var idStore = idStore;
+		// var idStore = idStore;
 
 		var modalInstance = $modal.open({
 			animation: true,
@@ -67,7 +67,7 @@ angular.module('minovateApp')
 			controller: 'CreateStoreModalInstance',
 			resolve: {
 				idStore: function() {
-					return idStore
+					return idStore;
 				}
 			}
 		});
@@ -306,7 +306,7 @@ angular.module('minovateApp')
 			zones.push({
 				type: $scope.modal.zones.selectedZones[i].type,
 				id: $scope.modal.zones.selectedZones[i].id
-			})
+			});
 		}
 
 		Dealers.save({
@@ -385,7 +385,7 @@ angular.module('minovateApp')
 				zones.push({
 					type: $scope.modal.zones.selectedZones[i].type,
 					id: $scope.modal.zones.selectedZones[i].id
-				})
+				});
 			}
 
 			Dealers.update({

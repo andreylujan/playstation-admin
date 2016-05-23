@@ -63,7 +63,7 @@ angular.module('minovateApp')
 
 	$scope.openModalCreateDealer = function(idDealer) {
 
-		var idDealer = idDealer;
+		// var idDealer = idDealer;
 
 		var modalInstance = $modal.open({
 			animation: true,
@@ -71,7 +71,7 @@ angular.module('minovateApp')
 			controller: 'CreateDealerModalInstance',
 			resolve: {
 				idDealer: function() {
-					return idDealer
+					return idDealer;
 				}
 			}
 		});
@@ -271,7 +271,7 @@ angular.module('minovateApp')
 			zones.push({
 				type: $scope.modal.zones.selectedZones[i].type,
 				id: $scope.modal.zones.selectedZones[i].id
-			})
+			});
 		}
 
 		Dealers.save({
@@ -350,7 +350,7 @@ angular.module('minovateApp')
 				zones.push({
 					type: $scope.modal.zones.selectedZones[i].type,
 					id: $scope.modal.zones.selectedZones[i].id
-				})
+				});
 			}
 
 			Dealers.update({
