@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('StoresCtrl', function($scope, $log, $modal, $filter, ngTableParams, Stores) {
 
 	$scope.page = {
-		title: 'Zonas'
+		title: 'Tiendas'
 	};
 
 	$scope.stores = [];
@@ -23,15 +23,16 @@ angular.module('minovateApp')
 
 		Stores.query({}, function(success) {
 
-			$log.log(success);
+			// $log.log(success);
 
 			for (var i = 0; i < success.data.length; i++) {
 				$scope.stores.push({
+					id: success.data[i].id,
 					name: success.data[i].attributes.name
 				});
 			}
 
-			$log.log($scope.stores);
+			// $log.log($scope.stores);
 
 			$scope.tableParams = new ngTableParams({
 				page: 1, // show first page
@@ -73,7 +74,7 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getDealers();
+			$scope.getStores();
 		}, function() {});
 	};
 
@@ -85,44 +86,45 @@ angular.module('minovateApp')
 
 	$scope.modal = {
 		title: {
-			text: ''
+			text: null
 		},
 		subtitle: {
-			text: ''
+			text: null
 		},
 		alert: {
 			color: '',
 			show: false,
 			title: '',
-			text: ''
+			text: null
 		},
 		store: {
 			name: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			contact: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			phone: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			address: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			montlyGoalClp: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			montlyGoalUsd: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			disabled: true,
-			zonesIds: []
+			zoneId: null,
+			dealerId: null
 		},
 		zones: {
 			selectedZones: [],
@@ -171,9 +173,7 @@ angular.module('minovateApp')
 					});
 				}
 
-				if (idStore) {
-					getStoreDetails(idStore);
-				}
+				getDealers();
 
 			}
 			// $log.log(success);
@@ -182,6 +182,7 @@ angular.module('minovateApp')
 		});
 
 	};
+
 	var getDealers = function() {
 
 		Dealers.query({}, function(success) {
@@ -197,9 +198,9 @@ angular.module('minovateApp')
 					});
 				}
 
-				// if (idStore) {
-				// 	getStoreDetails(idStore);
-				// }
+				if (idStore) {
+					getStoreDetails(idStore);
+				}
 
 			}
 			// $log.log(success);
@@ -210,28 +211,33 @@ angular.module('minovateApp')
 	};
 
 	var getStoreDetails = function(idStore) {
-		Dealers.query({
-			dealerId: idStore
+		Stores.query({
+			storeId: idStore
 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
-				$scope.modal.dealer.name.text = success.data.attributes.name;
-				$scope.modal.dealer.contact.text = success.data.attributes.contact;
-				$scope.modal.dealer.phone.text = success.data.attributes.phone_number;
-				$scope.modal.dealer.address.text = success.data.attributes.address;
+				$scope.modal.store.name.text = success.data.attributes.name;
+				$scope.modal.store.contact.text = success.data.attributes.contact;
+				$scope.modal.store.phone.text = success.data.attributes.phone_number;
+				$scope.modal.store.address.text = success.data.attributes.address;
+				$scope.modal.store.zoneId = success.data.attributes.zone_id;
+				$scope.modal.store.dealerId = success.data.attributes.dealer_id;
+				$scope.modal.store.montlyGoalClp.text = success.data.attributes.monthly_goal_clp;
+				$scope.modal.store.montlyGoalUsd.text = success.data.attributes.monthly_goal_usd;
 
-				$scope.modal.dealer.zonesIds = success.data.attributes.zone_ids;
+
 				selectZones();
+				selectDealers();
 			} else {
 				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.title = 'Ha ocurrido un error al obtener los datos de la dealer';
+				$scope.modal.alert.title = 'Ha ocurrido un error al obtener los datos de la tienda';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.show = true;
 				$log.log(success);
 			}
 		}, function(error) {
 			$scope.modal.alert.color = 'danger';
-			$scope.modal.alert.title = 'Ha ocurrido un error al obtener los datos de la dealer';
+			$scope.modal.alert.title = 'Ha ocurrido un error al obtener los datos de la tienda';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			$log.log(error);
@@ -239,88 +245,79 @@ angular.module('minovateApp')
 	};
 
 	var selectZones = function() {
-		for (i = 0; i < $scope.modal.dealer.zonesIds.length; i++) {
-			for (j = 0; j < $scope.modal.zones.zones.length; j++) {
-				if ($scope.modal.dealer.zonesIds[i] === parseInt($scope.modal.zones.zones[j].id)) {
-					$scope.modal.zones.selectedZones.push({
-						id: $scope.modal.zones.zones[j].id,
-						name: $scope.modal.zones.zones[j].name,
-						type: 'zones'
-					});
-				}
+		for (i = 0; i < $scope.modal.zones.zones.length; i++) {
+			if (parseInt($scope.modal.zones.zones[i].id) === parseInt($scope.modal.store.zoneId)) {
+				$scope.modal.zones.selectedZones.id = $scope.modal.zones.zones[i].id;
+				$scope.modal.zones.selectedZones.name = $scope.modal.zones.zones[i].name;
+				$scope.modal.zones.selectedZones.type = $scope.modal.zones.zones[i].type;
+				break;
 			}
 		}
 	};
 
-	$scope.createDealer = function() {
+	var selectDealers = function() {
+		for (i = 0; i < $scope.modal.dealers.dealers.length; i++) {
+			if (parseInt($scope.modal.dealers.dealers[i].id) === parseInt($scope.modal.store.dealerId)) {
+				$scope.modal.dealers.selectedDealers.id = $scope.modal.dealers.dealers[i].id;
+				$scope.modal.dealers.selectedDealers.name = $scope.modal.dealers.dealers[i].name;
+				$scope.modal.dealers.selectedDealers.type = $scope.modal.dealers.dealers[i].type;
+				break;
+			}
+		}
+	};
 
-		if (!Validators.validaRequiredField($scope.modal.dealer.name.text)) {
+	$scope.createStore = function() {
+
+		if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'Faltan datos';
-			$scope.modal.alert.text = 'Debe indicar un nombre para el dealer';
+			$scope.modal.alert.text = 'Debe indicar un nombre para la tienda';
 			$scope.modal.alert.show = true;
-
 			return;
 		}
-
-		// if (!Validators.validaRequiredField($scope.modal.dealer.contact.text)) {
-		// 	$scope.modal.alert.color = 'danger';
-		// 	$scope.modal.alert.title = 'Faltan datos';
-		// 	$scope.modal.alert.text = 'Debe indicar un email de contacto para el dealer';
-		// 	$scope.modal.alert.show = true;
-
-		// 	return;
-		// }
-
-		// if (!Validators.validaRequiredField($scope.modal.dealer.phone.text)) {
-		// 	$scope.modal.alert.color = 'danger';
-		// 	$scope.modal.alert.title = 'Faltan datos';
-		// 	$scope.modal.alert.text = 'Debe indicar un teléfono de contacto para el dealer';
-		// 	$scope.modal.alert.show = true;
-
-		// 	return;
-		// }
-
-		// if (!Validators.validaRequiredField($scope.modal.dealer.address.text)) {
-		// 	$scope.modal.alert.color = 'danger';
-		// 	$scope.modal.alert.title = 'Faltan datos';
-		// 	$scope.modal.alert.text = 'Debe indicar una dirección para el dealer';
-		// 	$scope.modal.alert.show = true;
-
-		// 	return;
-		// }
 
 		if ($scope.modal.zones.selectedZones.length === 0) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'Faltan datos';
-			$scope.modal.alert.text = 'Debe indicar al menos una zona para el dealer';
+			$scope.modal.alert.text = 'Debe indicar una zona para la tienda';
 			$scope.modal.alert.show = true;
-
 			return;
 		}
 
-		var zones = [];
-		// var dealerName = $scope.modal.dealer.name;
-
-		for (var i = 0; i < $scope.modal.zones.selectedZones.length; i++) {
-			zones.push({
-				type: $scope.modal.zones.selectedZones[i].type,
-				id: $scope.modal.zones.selectedZones[i].id
-			});
+		if ($scope.modal.dealers.selectedDealers.length === 0) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.title = 'Faltan datos';
+			$scope.modal.alert.text = 'Debe indicar un dealer para la tienda';
+			$scope.modal.alert.show = true;
+			return;
 		}
 
-		Dealers.save({
+		var zone = {
+			type: $scope.modal.zones.selectedZones.type,
+			id: $scope.modal.zones.selectedZones.id
+		};
+		var dealer = {
+			type: $scope.modal.dealers.selectedDealers.type,
+			id: $scope.modal.dealers.selectedDealers.id
+		};
+
+		Stores.save({
 			data: {
-				type: "dealers",
+				type: "stores",
 				attributes: {
-					name: $scope.modal.dealer.name.text,
-					contact: $scope.modal.dealer.contact.text,
-					phone_number: $scope.modal.dealer.phone.text,
-					address: $scope.modal.dealer.address.text
+					name: $scope.modal.store.name.text,
+					contact: $scope.modal.store.contact.text,
+					phone_number: $scope.modal.store.phone.text,
+					address: $scope.modal.store.address.text,
+					monthly_goal_clp: $scope.modal.store.montlyGoalClp.text,
+					monthly_goal_usd: $scope.modal.store.montlyGoalUsd.text
 				},
 				relationships: {
-					zones: {
-						data: zones
+					zone: {
+						data: zone
+					},
+					dealer: {
+						data: dealer
 					}
 				}
 			}
@@ -329,7 +326,7 @@ angular.module('minovateApp')
 		}, function(error) {
 
 			$scope.modal.alert.color = 'danger';
-			$scope.modal.alert.title = 'No se ha podido crear el dealer';
+			$scope.modal.alert.title = 'No se ha podido crear la tienda';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 
@@ -338,16 +335,19 @@ angular.module('minovateApp')
 
 	};
 
-	$scope.editDealer = function() {
+	$scope.editStore = function() {
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
 			$scope.modal.buttons.edit.text = 'Si, Editar';
 			$scope.modal.buttons.edit.border = false;
-			$scope.modal.dealer.name.disabled = false;
-			$scope.modal.dealer.contact.disabled = false;
-			$scope.modal.dealer.phone.disabled = false;
-			$scope.modal.dealer.address.disabled = false;
+			$scope.modal.store.name.disabled = false;
+			$scope.modal.store.contact.disabled = false;
+			$scope.modal.store.phone.disabled = false;
+			$scope.modal.store.address.disabled = false;
+			$scope.modal.store.montlyGoalClp.disabled = false;
+			$scope.modal.store.montlyGoalUsd.disabled = false;
 			$scope.modal.zones.disabled = false;
+			$scope.modal.dealers.disabled = false;
 
 			$scope.modal.alert.color = 'warning';
 			$scope.modal.alert.title = 'Para efectuar la edición, presione nuevamente el botón';
@@ -355,53 +355,67 @@ angular.module('minovateApp')
 			$scope.modal.alert.show = true;
 		} else {
 			$scope.modal.buttons.edit.text = 'Editar';
-			$scope.modal.dealer.name.disabled = true;
-			$scope.modal.dealer.contact.disabled = true;
-			$scope.modal.dealer.phone.disabled = true;
-			$scope.modal.dealer.address.disabled = true;
+			$scope.modal.store.name.disabled = true;
+			$scope.modal.store.contact.disabled = true;
+			$scope.modal.store.phone.disabled = true;
+			$scope.modal.store.address.disabled = true;
+			$scope.modal.store.montlyGoalClp.disabled = true;
+			$scope.modal.store.montlyGoalUsd.disabled = true;
 			$scope.modal.zones.disabled = true;
+			$scope.modal.dealers.disabled = true;
 
-			if (!Validators.validaRequiredField($scope.modal.dealer.name)) {
+			if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'Faltan datos';
-				$scope.modal.alert.text = 'Debe indicar un nombre para la dealer';
+				$scope.modal.alert.text = 'Debe indicar un nombre para la tienda';
 				$scope.modal.alert.show = true;
-
 				return;
 			}
 
 			if ($scope.modal.zones.selectedZones.length === 0) {
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'Faltan datos';
-				$scope.modal.alert.text = 'Debe indicar al menos una dealer para el dealer';
+				$scope.modal.alert.text = 'Debe indicar una zona para la tienda';
 				$scope.modal.alert.show = true;
-
 				return;
 			}
 
-			var zones = [];
-
-			for (var i = 0; i < $scope.modal.zones.selectedZones.length; i++) {
-				zones.push({
-					type: $scope.modal.zones.selectedZones[i].type,
-					id: $scope.modal.zones.selectedZones[i].id
-				});
+			if ($scope.modal.dealers.selectedDealers.length === 0) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.title = 'Faltan datos';
+				$scope.modal.alert.text = 'Debe indicar un dealer para la tienda';
+				$scope.modal.alert.show = true;
+				return;
 			}
 
-			Dealers.update({
-				dealerId: idStore,
+			var zone = {
+				type: $scope.modal.zones.selectedZones.type,
+				id: $scope.modal.zones.selectedZones.id
+			};
+			var dealer = {
+				type: $scope.modal.dealers.selectedDealers.type,
+				id: $scope.modal.dealers.selectedDealers.id
+			};
+
+			Stores.update({
+				storeId: idStore,
 				data: {
-					type: "dealers",
-					id: idStore,
+					type: "stores",
+					id : idStore,
 					attributes: {
-						name: $scope.modal.dealer.name.text,
-						contact: $scope.modal.dealer.contact.text,
-						phone_number: $scope.modal.dealer.phone.text,
-						address: $scope.modal.dealer.address.text
+						name: $scope.modal.store.name.text,
+						contact: $scope.modal.store.contact.text,
+						phone_number: $scope.modal.store.phone.text,
+						address: $scope.modal.store.address.text,
+						monthly_goal_clp: $scope.modal.store.montlyGoalClp.text,
+						monthly_goal_usd: $scope.modal.store.montlyGoalUsd.text
 					},
 					relationships: {
-						zones: {
-							data: zones
+						zone: {
+							data: zone
+						},
+						dealer: {
+							data: dealer
 						}
 					}
 				}
@@ -411,7 +425,7 @@ angular.module('minovateApp')
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.title = 'No se ha podido crear el dealer';
+				$scope.modal.alert.title = 'No se ha podido editar la tienda';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.show = true;
 
@@ -419,38 +433,29 @@ angular.module('minovateApp')
 			});
 		}
 
-		if (!Validators.validaRequiredField($scope.modal.dealer.name)) {
-			$scope.modal.alert.color = 'danger';
-			$scope.modal.alert.title = 'Faltan datos';
-			$scope.modal.alert.text = 'Debe indicar un nombre para el dealer';
-			$scope.modal.alert.show = true;
-
-			return;
-		}
-
 	};
 
-	$scope.deleteDealer = function() {
+	$scope.deleteStore = function() {
 
 		if ($scope.modal.buttons.delete.text === 'Eliminar') {
 			$scope.modal.buttons.delete.text = 'Si, Eliminar';
 			$scope.modal.buttons.delete.border = false;
 
 			$scope.modal.alert.color = 'danger';
-			$scope.modal.alert.title = '¿Seguro que desea eliminar la dealer?';
+			$scope.modal.alert.title = '¿Seguro que desea eliminar la tienda?';
 			$scope.modal.alert.text = 'Para eliminarla, vuelva a presionar el botón';
 			$scope.modal.alert.show = true;
 		} else {
 			$scope.modal.buttons.delete.text = 'Eliminar';
 
-			Dealers.delete({
-				dealerId: idStore
+			Stores.delete({
+				storeId: idStore
 			}, function(success) {
 				$modalInstance.close();
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.title = 'No se ha podido borrar la dealer';
+				$scope.modal.alert.title = 'No se ha podido borrar la tienda';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.show = true;
 
@@ -479,7 +484,7 @@ angular.module('minovateApp')
 	getZones();
 
 	if (idStore) {
-		$scope.modal.title.text = 'Información dealer';
+		$scope.modal.title.text = 'Información tienda';
 		$scope.modal.subtitle.text = '';
 		$scope.modal.buttons.create.show = false;
 		$scope.modal.buttons.edit.show = true;
@@ -489,23 +494,30 @@ angular.module('minovateApp')
 		$scope.modal.buttons.create.border = true;
 		$scope.modal.buttons.delete.border = true;
 
-		$scope.modal.dealer.name.disabled = true;
-		$scope.modal.dealer.contact.disabled = true;
-		$scope.modal.dealer.phone.disabled = true;
-		$scope.modal.dealer.address.disabled = true;
+		$scope.modal.store.name.disabled = true;
+		$scope.modal.store.contact.disabled = true;
+		$scope.modal.store.phone.disabled = true;
+		$scope.modal.store.address.disabled = true;
+		$scope.modal.store.montlyGoalClp.disabled = true;
+		$scope.modal.store.montlyGoalUsd.disabled = true;
 		$scope.modal.zones.disabled = true;
+		$scope.modal.dealers.disabled = true;
 
 	} else {
-		$scope.modal.title.text = 'Crear dealer';
+		$scope.modal.title.text = 'Crear tienda';
+		$scope.modal.subtitle.text = '';
 		$scope.modal.buttons.create.show = true;
 		$scope.modal.buttons.edit.show = false;
 		$scope.modal.buttons.delete.show = false;
 
-		$scope.modal.dealer.name.disabled = false;
-		$scope.modal.dealer.contact.disabled = false;
-		$scope.modal.dealer.phone.disabled = false;
-		$scope.modal.dealer.address.disabled = false;
+		$scope.modal.store.name.disabled = false;
+		$scope.modal.store.contact.disabled = false;
+		$scope.modal.store.phone.disabled = false;
+		$scope.modal.store.address.disabled = false;
+		$scope.modal.store.montlyGoalClp.disabled = false;
+		$scope.modal.store.montlyGoalUsd.disabled = false;
 		$scope.modal.zones.disabled = false;
+		$scope.modal.dealers.disabled = false;
 	}
 
 });

@@ -89,32 +89,32 @@ angular.module('minovateApp')
 
 	$scope.modal = {
 		title: {
-			text: ''
+			text: null
 		},
 		subtitle: {
-			text: ''
+			text: null
 		},
 		alert: {
 			color: '',
 			show: false,
 			title: '',
-			text: ''
+			text: null
 		},
 		dealer: {
 			name: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			contact: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			phone: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			address: {
-				text: '',
+				text: null,
 				disabled: true
 			},
 			disabled: true,
@@ -224,7 +224,6 @@ angular.module('minovateApp')
 			$scope.modal.alert.title = 'Faltan datos';
 			$scope.modal.alert.text = 'Debe indicar un nombre para el dealer';
 			$scope.modal.alert.show = true;
-
 			return;
 		}
 

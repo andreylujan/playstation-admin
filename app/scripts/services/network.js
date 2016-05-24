@@ -239,7 +239,9 @@ angular.module('minovateApp')
 // STORES
 .factory('Stores', function($resource, Token) {
 
-	return $resource(API_URL + '/stores', {}, {
+	return $resource(API_URL + '/stores/:storeId', {
+		storeId: '@storeId'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {
