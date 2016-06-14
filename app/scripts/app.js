@@ -50,7 +50,9 @@ angular
 		'easypiechart',
 		'uiGmapgoogle-maps',
 		'ui.calendar',
-		'LocalStorageModule'
+		'LocalStorageModule',
+		'satellizer',
+		'naif.base64'
 	])
 	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',
 		function($rootScope, $state, $stateParams, $log, Utils) {
@@ -108,6 +110,14 @@ angular
 	function(localStorageServiceProvider) {
 		localStorageServiceProvider
 			.setStorageType('localStorage');
+	}
+])
+
+.config(['$authProvider',
+	function($authProvider) {
+		// Parametros de configuración
+		$authProvider.loginUrl = 'http://52.201.182.66/oauth/token';
+		$authProvider.tokenName = 'access_token';
 	}
 ])
 

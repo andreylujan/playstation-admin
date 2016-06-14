@@ -22,20 +22,6 @@ angular.module('minovateApp')
 
 })
 
-// LOGIN
-.factory('Login', function($resource) {
-
-	return $resource(ONLY_URL + '/oauth/token', {}, {
-		save: {
-			method: 'POST'
-		},
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
-
-})
-
 // Invitaciones
 .factory('Invitations', function($resource, Token) {
 
@@ -44,7 +30,6 @@ angular.module('minovateApp')
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
-				'Authorization': 'Bearer ' + Token.getToken()
 			}
 		}
 
@@ -62,7 +47,6 @@ angular.module('minovateApp')
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
-				'Authorization': 'Bearer ' + Token.getToken()
 			},
 			params: {
 				confirmation_token: '@confirmation_token'
@@ -88,21 +72,18 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
-				'Authorization': 'Bearer ' + Token.getToken()
 			},
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
-			},
+			headers: {},
 		},
 		sendEmailWithToken: {
 			method: 'POST',
@@ -113,7 +94,7 @@ angular.module('minovateApp')
 		verifyPassToken: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
+				Accept: 'application/vnd.api+json'
 			},
 			params: {
 				email: '@email',
@@ -147,8 +128,8 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
 			},
 			params: {
 				'all': '@all',
@@ -171,29 +152,25 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/vnd.api+json'
+				// 'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		save: {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
-			}
+			headers: {}
 		}
 	});
 
@@ -208,29 +185,25 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		save: {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
-			}
+			headers: {}
 		}
 	});
 
@@ -245,29 +218,25 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		save: {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
-			}
+			headers: {}
 		}
 	});
 
@@ -276,11 +245,36 @@ angular.module('minovateApp')
 // PRODUCTS
 .factory('Products', function($resource, Token) {
 
-	return $resource(API_URL + '/top_list', {}, {
+	return $resource(API_URL + '/products/:idProduct', {
+		idProduct: '@idProduct'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				include: '@include'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/vnd.api+json',
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Accept': 'application/vnd.api+json',
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Accept': 'application/vnd.api+json'
 			}
 		}
 	});
@@ -296,8 +290,8 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});
@@ -313,8 +307,8 @@ angular.module('minovateApp')
 		query: {
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
 			},
 			params: {
 				include: '@include'
@@ -322,22 +316,75 @@ angular.module('minovateApp')
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {
-				'Authorization': 'Bearer ' + Token.getToken()
-			}
+			headers: {}
 		},
 		save: {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Authorization': 'Bearer ' + Token.getToken(),
 				'Content-Type': 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// PRODUCT TYPES
+.factory('ProductTypes', function($resource, Token) {
+
+	return $resource(API_URL + '/product-types', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// PRODUCT DESTINATIONS
+.factory('ProductDestinations', function($resource, Token) {
+
+	return $resource(API_URL + '/product-destinations', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// PLATFORMS
+.factory('Platforms', function($resource, Token) {
+
+	return $resource(API_URL + '/platforms', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// FILES
+.factory('Files', function($resource, Token) {
+
+	return $resource(API_URL + '/images', {}, {
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});

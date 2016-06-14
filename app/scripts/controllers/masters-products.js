@@ -8,54 +8,692 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('ProductsCtrl', function($scope, $log, $filter, ngTableParams, Products) {
 
-		$scope.page = {
-			title: 'Zonas'
-		};
+.controller('ProductsCtrl', function($scope, $log, $filter, $window, $modal, ngTableParams, Products) {
 
-		$scope.products = [];
 
-		$scope.getProducts = function() {
+	$scope.status = {
+		open: true
+	};
 
-			$scope.products = [];
+	$scope.page = {
+		title: 'Productos'
+	};
 
-			Products.query({}, function(success) {
+	var i = 0,
+		j = 0;
 
-				$log.log(success);
+	var data = [];
 
-				// for (var i = 0; i < success.data.length; i++) {
-				// 	$scope.products.push({
-				// 		name: success.data[i].attributes.name
-				// 	});
-				// }
+	var productsIncluded = [];
 
-				$log.log($scope.products);
+	$scope.getProducts = function() {
+
+		data = [];
+
+		Products.query({
+			include: 'product_type,product_destination,platform,images'
+		}, function(success) {
+
+			// $log.log(success);
+
+			if (success.errors) {
+				$log.error(success);
+				return;
+			} else if (success.data) {
+
+				productsIncluded = success.included;
+
+				for (i = 0; i < success.data.length; i++) {
+					data.push({
+						name: success.data[i].attributes.name,
+						id: success.data[i].id,
+						description: success.data[i].attributes.description,
+						sku: success.data[i].attributes.sku,
+						plu: success.data[i].attributes.plu,
+						validityCode: success.data[i].attributes.validity_code,
+						createdAt: success.data[i].attributes.created_at,
+						typeId: success.data[i].relationships.product_type.data.id,
+						typeName: '',
+						brand: success.data[i].attributes.brand,
+						minPrice: success.data[i].attributes.min_price,
+						maxPrice: success.data[i].attributes.max_price,
+						destinationId: success.data[i].relationships.product_destination.data.id,
+						destinationName: '',
+						isTop: success.data[i].attributes.is_top
+
+					});
+
+					for (j = 0; j < productsIncluded.length; j++) {
+						if (productsIncluded[j].type === 'product_types') {
+							if (data[i].typeId === productsIncluded[j].id) {
+								data[i].typeName = productsIncluded[j].attributes.name;
+							}
+						}
+					}
+
+					for (j = 0; j < productsIncluded.length; j++) {
+						if (productsIncluded[j].type === 'product_destinations') {
+							if (data[i].destinationId === productsIncluded[j].id) {
+								data[i].destinationName = productsIncluded[j].attributes.name;
+							}
+						}
+					}
+
+				}
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
 					count: 10, // count per page
+					filter: {
+						//name: 'M'       // initial filter
+					},
 					sorting: {
-						name: 'asc' // initial sorting
+						//name: 'asc'     // initial sorting
 					}
 				}, {
-					total: $scope.products.length, // length of products
+					total: data.length, // length of data
 					getData: function($defer, params) {
 						// use build-in angular filter
+						var filteredData = params.filter() ?
+							$filter('filter')(data, params.filter()) :
+							data;
 						var orderedData = params.sorting() ?
-							$filter('orderBy')($scope.stores, params.orderBy()) :
-							$scope.products;
+							$filter('orderBy')(filteredData, params.orderBy()) :
+							data;
 
+						params.total(orderedData.length); // set total for recalc pagination
 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 					}
 				});
+			}
 
+
+		}, function(error) {
+			$log.log(error);
+		});
+
+	};
+
+	$scope.openModalCreateProduct = function(idProduct) {
+
+		var modalInstance = $modal.open({
+			animation: true,
+			templateUrl: 'createProduct.html',
+			controller: 'CreateProductModalInstance',
+			resolve: {
+				idProduct: function() {
+					return idProduct;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			$scope.getProducts();
+			// closed
+		}, function() {
+			// dismissed 
+		});
+	};
+
+	$scope.getProducts();
+
+})
+
+.controller('CreateProductModalInstance', function($scope, $log, $modal, $modalInstance, $window, ProductTypes, ProductDestinations, Platforms, idProduct, Validators, Utils, Products, Files) {
+
+
+	$scope.modal = {
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: ''
+		},
+		product: {
+			name: {
+				text: '',
+				disabled: false
+			},
+			description: {
+				text: '',
+				disabled: false
+			},
+			sku: {
+				text: '',
+				disabled: false
+			},
+			plu: {
+				text: '',
+				disabled: false
+			},
+			validityCode: {
+				text: '',
+				disabled: false
+			},
+			brand: {
+				text: '',
+				disabled: false
+			},
+			minPrice: {
+				text: '',
+				disabled: false
+			},
+			maxPrice: {
+				text: '',
+				disabled: false
+			},
+			stock: {
+				text: '',
+				disabled: false
+			},
+			isTop: {
+				value: false,
+				disabled: false
+			},
+			isListed: {
+				value: false,
+				disabled: false
+			},
+			type: {
+				id: null,
+				name: null,
+				disabled: false
+			},
+			destination: {
+				id: null,
+				name: null,
+				disabled: false
+			},
+			platform: {
+				id: null,
+				name: null,
+				disabled: false
+			},
+			images: {
+				src: [],
+				disabled: false,
+				show: false
+			},
+		},
+		productTypes: [],
+		destinations: [],
+		platforms: [],
+		imagesUploaded: [],
+		buttons: {
+			create: {
+				show: false,
+				text: null,
+				border: false,
+				disabled: false
+			},
+			edit: {
+				show: false,
+				text: null,
+				border: false,
+				disabled: true
+			},
+			delete: {
+				show: false,
+				text: null,
+				border: false,
+				disabled: true
+			}
+		}
+	};
+
+	var getProductDetails = function() {
+		Products.query({
+			idProduct: idProduct,
+			include: 'product_type,product_destination,platform,images'
+		}, function(success) {
+			// $log.log(success);
+			$scope.modal.product.name.text = success.data.attributes.name;
+			$scope.modal.product.description.text = success.data.attributes.description;
+			$scope.modal.product.sku.text = success.data.attributes.sku;
+			$scope.modal.product.plu.text = success.data.attributes.plu;
+			$scope.modal.product.brand.text = success.data.attributes.brand;
+			$scope.modal.product.validityCode.text = success.data.attributes.validity_code;
+			$scope.modal.product.minPrice.text = success.data.attributes.min_price;
+			$scope.modal.product.maxPrice.text = success.data.attributes.max_price;
+			$scope.modal.product.stock.text = success.data.attributes.stock;
+			$scope.modal.product.isTop.value = success.data.attributes.is_top;
+			$scope.modal.product.isListed.value = success.data.attributes.is_listed;
+
+			for (var i = 0; i < $scope.modal.productTypes.length; i++) {
+				if ($scope.modal.productTypes[i].id === success.data.relationships.product_type.data.id) {
+					$scope.modal.product.type.id = $scope.modal.productTypes[i].id;
+					$scope.modal.product.type.name = $scope.modal.productTypes[i].name;
+					break;
+				}
+			}
+			for (i = 0; i < $scope.modal.destinations.length; i++) {
+				if ($scope.modal.destinations[i].id === success.data.relationships.product_destination.data.id) {
+					$scope.modal.product.destination.id = $scope.modal.destinations[i].id;
+					$scope.modal.product.destination.name = $scope.modal.destinations[i].name;
+					break;
+				}
+			}
+			for (i = 0; i < $scope.modal.platforms.length; i++) {
+				if (success.data.relationships.platform.data) {
+					if ($scope.modal.platforms[i].id === success.data.relationships.platform.data.id) {
+						$scope.modal.product.platform.id = $scope.modal.platforms[i].id;
+						$scope.modal.product.platform.name = $scope.modal.platforms[i].name;
+						break;
+					}
+				}
+			}
+
+			$scope.modal.buttons.edit.disabled = false;
+			$scope.modal.buttons.delete.disabled = false;
+
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	var setDisabledStateForInputs = function(state) {
+		$scope.modal.product.name.disabled = state;
+		$scope.modal.product.description.disabled = state;
+		$scope.modal.product.sku.disabled = state;
+		$scope.modal.product.plu.disabled = state;
+		$scope.modal.product.brand.disabled = state;
+		$scope.modal.product.validityCode.disabled = state;
+		$scope.modal.product.minPrice.disabled = state;
+		$scope.modal.product.maxPrice.disabled = state;
+		$scope.modal.product.stock.disabled = state;
+		$scope.modal.product.isTop.disabled = state;
+		$scope.modal.product.isListed.disabled = state;
+		$scope.modal.product.type.disabled = state;
+		$scope.modal.product.destination.disabled = state;
+		$scope.modal.product.platform.disabled = state;
+		$scope.modal.product.images.disabled = state;
+	};
+
+	var getProductTypes = function() {
+		ProductTypes.query({}, function(success) {
+			// $log.log(success);
+			if (success.data) {
+
+				for (var i = 0; i < success.data.length; i++) {
+					$scope.modal.productTypes.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+
+				getProductDestinations();
+
+			} else if (success.errors) {
+				$log.error(success);
+				return;
+			}
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	var getProductDestinations = function() {
+		ProductDestinations.query({}, function(success) {
+			// $log.log(success);
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					$scope.modal.destinations.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+				getPlaforms();
+			} else if (success.errors) {
+				$log.error(success);
+				return;
+			}
+		}, function(error) {
+			$log.log(error);
+		});
+	};
+
+	var getPlaforms = function() {
+		Platforms.query({}, function(success) {
+			// $log.log(success);
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					$scope.modal.platforms.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+
+				if (idProduct) {
+					getProductDetails();
+				}
+
+			} else if (success.errors) {
+				$log.error(success);
+				return;
+			}
+		}, function(error) {
+			$log.log(error);
+		});
+	};
+
+	var setAlertProperties = function(show, color, title, text) {
+		$scope.modal.alert.color = color;
+		$scope.modal.alert.show = show;
+		$scope.modal.alert.title = title;
+		$scope.modal.alert.text = text;
+	};
+
+	$scope.uploadImages = function() {
+		// $log.log($scope.modal.product.images.src);
+		$scope.modal.buttons.create.disabled = true;
+		setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo imágenes');
+		Utils.gotoAnyPartOfPage('topModal');
+
+		var imagesUploaded = 0;
+
+		/* jshint ignore:start */
+		for (var i = 0; i < $scope.modal.product.images.src.length; i++) {
+			// $log.log($scope.modal.product.images.src[i]);
+			Files.save({
+				category_id: null,
+				report_id: null,
+				last_image: null,
+				image: 'data:' + $scope.modal.product.images.src[i].filetype + 'base64,' + $scope.modal.product.images.src[i].base64
+			}, function(success) {
+				$log.log(success);
+				if (success.data) {
+					$scope.modal.imagesUploaded.push({
+						type: 'images',
+						id: success.data.id
+					});
+				}
+				imagesUploaded++;
+				if (imagesUploaded === ($scope.modal.product.images.src.length)) {
+					setAlertProperties(false, null, null, null);
+					saveProduct();
+				}
 			}, function(error) {
-				$log.log(error);
+				$log.error(error);
+				imagesUploaded++;
+				if (imagesUploaded === ($scope.modal.product.images.src.length)) {
+					setAlertProperties(false, null, null, null);
+					saveProduct();
+				}
 			});
+		}
+		/* jshint ignore:end */
+	};
 
-		};
+	var saveProduct = function() {
 
-		$scope.getProducts();
+		if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'Faltan campos por rellenar';
+			$scope.modal.alert.text = 'Debe indicar el nombre del producto';
+			Utils.gotoAnyPartOfPage('topModal');
+			return;
+		}
 
-	});
+		if (!Validators.validaRequiredField($scope.modal.product.sku.text)) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'Faltan campos por rellenar';
+			$scope.modal.alert.text = 'Debe indicar el sku del producto';
+			Utils.gotoAnyPartOfPage('topModal');
+			return;
+		}
+
+		if (!$scope.modal.product.type) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'Faltan campos por rellenar';
+			$scope.modal.alert.text = 'Debe indicar el tipo de producto';
+			Utils.gotoAnyPartOfPage('topModal');
+			return;
+		}
+		if (!$scope.modal.product.destination) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'Faltan campos por rellenar';
+			$scope.modal.alert.text = 'Debe indicar el destino del producto';
+			Utils.gotoAnyPartOfPage('topModal');
+			return;
+		}
+
+		setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo información del producto');
+		Utils.gotoAnyPartOfPage('topModal');
+
+		Products.save({
+			data: {
+				type: 'products',
+				attributes: {
+					name: $scope.modal.product.name.text,
+					description: $scope.modal.product.description.text,
+					sku: $scope.modal.product.sku.text,
+					plu: $scope.modal.product.plu.text,
+					validity_code: $scope.modal.product.validityCode.text,
+					brand: $scope.modal.product.brand.text,
+					min_price: $scope.modal.product.minPrice.text,
+					max_price: $scope.modal.product.maxPrice.text,
+					// stock: $scope.modal.product.stock.text,
+					is_top: $scope.modal.product.isTop.value,
+					is_listed: $scope.modal.product.isListed.value
+				},
+				relationships: {
+					product_type: {
+						data: {
+							type: 'product_types',
+							id: $scope.modal.product.type.id
+						}
+					},
+					product_destination: {
+						data: {
+							type: 'product_destinations',
+							id: $scope.modal.product.destination.id
+						}
+					},
+					platform: {
+						data: {
+							type: 'platforms',
+							id: $scope.modal.product.platform.id
+						}
+					},
+					images: {
+						data: $scope.modal.imagesUploaded
+					}
+				}
+			}
+		}, function(success) {
+			// $log.log(success);
+			setAlertProperties(false, null, null, null);
+			$modalInstance.close();
+		}, function(error) {
+			$log.error(error);
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'Error al agregar producto';
+			$scope.modal.alert.text = error.data.errors[0].detail;
+			Utils.gotoAnyPartOfPage('topModal');
+			return;
+		});
+
+	};
+
+	$scope.editProduct = function() {
+
+		if (!$scope.modal.buttons.edit.border) {
+			$scope.modal.buttons.edit.border = true;
+			$scope.modal.buttons.edit.text = 'Guardar edición';
+			setDisabledStateForInputs(false);
+			Utils.gotoAnyPartOfPage('topModal');
+		} else {
+
+			if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el nombre del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+
+			if (!Validators.validaRequiredField($scope.modal.product.sku.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el sku del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+
+			if (!$scope.modal.product.type) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el tipo de producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+			if (!$scope.modal.product.destination) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el destino del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+
+			Products.update({
+					idProduct: idProduct,
+					data: {
+						type: "products",
+						id: idProduct,
+						attributes: {
+							name: $scope.modal.product.name.text,
+							description: $scope.modal.product.description.text,
+							sku: $scope.modal.product.sku.text,
+							plu: $scope.modal.product.plu.text,
+							validity_code: $scope.modal.product.validityCode.text,
+							brand: $scope.modal.product.brand.text,
+							min_price: $scope.modal.product.minPrice.text,
+							max_price: $scope.modal.product.maxPrice.text,
+							is_top: $scope.modal.product.isTop.value,
+							is_listed: $scope.modal.product.isListed.value
+						},
+						relationships: {
+							product_type: {
+								data: {
+									type: 'product_types',
+									id: $scope.modal.product.type.id
+								}
+							},
+							product_destination: {
+								data: {
+									type: 'product_destinations',
+									id: $scope.modal.product.destination.id
+								}
+							},
+							platform: {
+								data: {
+									type: 'platforms',
+									id: $scope.modal.product.platform.id
+								}
+							},
+							images: {
+								data: [
+
+								]
+							}
+						}
+					}
+				}, function(success) {
+					// $log.log(success);
+					$modalInstance.close();
+				},
+				function(error) {
+					$log.error(error);
+				});
+		}
+
+	};
+
+	$scope.deleteProduct = function() {
+
+		if (!$scope.modal.buttons.delete.border) {
+			$scope.modal.buttons.delete.border = true;
+			$scope.modal.buttons.delete.text = 'Si, eliminar';
+			// setDisabledStateForInputs(false);
+		} else {
+			Products.delete({
+				idProduct: idProduct
+			}, function(success) {
+				// $log.log(success);
+				$modalInstance.close();
+			}, function(error) {
+				$log.error(error);
+			});
+		}
+
+	};
+
+	$scope.openModalProductImages = function() {
+		var modalInstance = $modal.open({
+			animation: true,
+			templateUrl: 'productImages.html',
+			controller: 'ProductImagesModalInstance',
+			resolve: {
+				idProduct: function() {
+					return idProduct;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			// closed
+		}, function() {
+			// dismissed 
+		});
+	};
+
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	};
+
+	if (idProduct) {
+
+		setDisabledStateForInputs(true);
+		$scope.modal.product.images.show = false;
+
+		$scope.modal.title.text = 'Editar producto';
+		$scope.modal.buttons.create.show = false;
+		$scope.modal.buttons.create.text = 'Guardar';
+		$scope.modal.buttons.edit.show = true;
+		$scope.modal.buttons.edit.text = 'Editar';
+		$scope.modal.buttons.delete.show = true;
+		$scope.modal.buttons.delete.text = 'Borrar';
+	} else {
+		$scope.modal.product.images.show = true;
+		$scope.modal.title.text = 'Nuevo producto';
+		$scope.modal.buttons.create.show = true;
+		$scope.modal.buttons.create.text = 'Guardar';
+		$scope.modal.buttons.edit.show = false;
+		$scope.modal.buttons.edit.text = 'Editar';
+		$scope.modal.buttons.delete.show = false;
+		$scope.modal.buttons.delete.text = 'Borrar';
+	}
+
+	getProductTypes();
+
+})
+
+.controller('ProductImagesModalInstance', function($scope, $log, $modalInstance, idProduct) {
+
+});

@@ -40,6 +40,7 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    <link rel="stylesheet" href="bower_components/uiswitch/uiswitch.css" />
   </head>
   <body id="minovate" class="{{main.settings.navbarHeaderColor}} {{main.settings.activeColor}} {{containerClass}}" ng-class="{'header-fixed':main.settings.headerFixed, 'header-static':!main.settings.headerFixed, 'aside-fixed':main.settings.asideFixed, 'aside-static':!main.settings.asideFixed, 'rightbar-show': false, 'rightbar-hidden': true }">
 
@@ -141,6 +142,8 @@
     <script src="bower_components/ui-select/dist/select.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/angular-underscore/angular-underscore.js"></script>
+    <script src="bower_components/satellizer/satellizer.js"></script>
+    <script src="bower_components/angular-base64-upload/src/angular-base64-upload.js"></script>
     <!-- endbower -->
     <script src="bower_components/angular-i18n/angular-locale_es-cl.js"></script>
 
@@ -237,9 +240,11 @@
     <script src="scripts/controllers/offcanvaslayout.js"></script>
     <script src="scripts/directives/offcanvas-sidebar.js"></script>
     <script src="scripts/directives/submitvalidate.js"></script>
+    <script src="scripts/directives/file-model.js"></script>
 
     <script src="scripts/filters/capitalize.js"></script>
     <script src="scripts/filters/props-filter.js"></script>
+    <script src="scripts/filters/cut-word.js"></script>
 
     <script src="scripts/controllers/header.js"></script>
     <script src="scripts/controllers/users-invite.js"></script>

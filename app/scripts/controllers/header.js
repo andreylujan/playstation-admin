@@ -8,25 +8,23 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-  .controller('HeaderCtrl', function($scope, $state, Utils) {
+  .controller('HeaderCtrl', function($scope, $state, $auth, Utils) {
 
-  	$scope.page = {
-  		user: {
+    $scope.page = {
+      user: {
         fullName: Utils.getInStorage('fullName'),
-  			image: Utils.getInStorage('image')
-  		}
-  	};
+        image: Utils.getInStorage('image')
+      }
+    };
 
     $scope.logout = function() {
 
-      Utils.setInStorage('token', null);
-      Utils.setInStorage('userid', null);
-      Utils.setInStorage('fullName', null);
-      Utils.setInStorage('role', null);
-      Utils.setInStorage('loggedIn', false);
-      Utils.setInStorage('image', null);
+      $auth.logout()
+        .then(function() {
+          Utils.clearAllStorage();
+          $state.go('core.login');
+        });
 
-      $state.go('core.login');
 
     };
 

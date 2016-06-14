@@ -10,7 +10,7 @@
 
 angular.module('minovateApp')
 
-.service('Utils', function($state, $log, localStorageService) {
+.service('Utils', function($state, $log, $anchorScroll, $location, localStorageService) {
 
 	this.setInStorage = function(key, val) {
 		return localStorageService.set(key, val);
@@ -18,6 +18,16 @@ angular.module('minovateApp')
 
 	this.getInStorage = function(key) {
 		return localStorageService.get(key);
+	};
+
+	this.clearAllStorage = function() {
+		return localStorageService.clearAll();
+	};
+
+	// El flag debe ser el id del algún tag
+	this.gotoAnyPartOfPage = function(flag) {
+		$location.hash(flag);
+		$anchorScroll();
 	};
 
 	this.gotoPage = function(page) {
