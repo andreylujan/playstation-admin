@@ -1,0 +1,180 @@
+<div class="page page-ng-table">
+
+
+
+
+  <!-- page header -->
+  <div class="pageheader">
+
+    <h2>{{page.title}} <span></span></h2>
+
+    <div class="page-bar">
+
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard"> {{main.title}}</a>
+        </li>
+        <li>
+          <a href="javascript:;">Usuarios</a>
+        </li>
+        <li>
+          <a ui-sref="app.users.list">{{page.title}}</a>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+  <!-- /page header -->
+
+  <!-- page content -->
+  <div class="pagecontent">
+
+    <!-- row -->
+    <div class="row">
+
+      <!-- col -->
+      <div class="col-md-6 col-md-offset-3">
+
+
+        <!-- tile -->
+        <section class="tile" fullscreen="isFullscreen06">
+
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"></h1>
+            <ul class="controls">
+              <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+
+                <a href uib-dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
+
+                <ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
+                  <li>
+                    <a href tile-control-toggle>
+                      <span class="minimize"><fa name="angle-down"></fa>&nbsp;&nbsp;&nbsp;Minimizar</span>
+                      <span class="expand"><fa name="angle-up"></fa>&nbsp;&nbsp;&nbsp;Maximizar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                      <fa name="refresh"></fa> Refrescar
+                    </a>
+                  </li>
+                  <li>
+                    <a href tile-control-fullscreen ng-click="isFullscreen06 = !isFullscreen06">
+                      <fa name="expand"></fa> Pantalla completa
+                    </a>
+                  </li>
+
+                </ul>
+
+              </li>
+              <li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
+            </ul>
+          </div>
+          <!-- /tile header -->
+          <!-- tile body -->
+          <div class="tile-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Usuario</label>
+                <div class="col-sm-8">
+                  <ui-select class="bg-white b-solid br-15" ng-model="page.newTask.users.selectedUser" sortable="true" ng-change="removeAlert()">
+                    <ui-select-match placeholder="Seleccionar tipo...">
+                      <span ng-bind="$select.selected.fullName"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user in (page.newTask.users.list | filter: $select.search) track by user.id">
+                      <span ng-bind="user.fullName"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Fecha vencimiento</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{page.dateOptions.format}}" ng-model="page.newTask.limitDate" is-open="page.dateOptions.datepickerOpened" datepicker-options="page.dateOptions" show-button-bar="false"/>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Tipo reporte</label>
+                <div class="col-sm-8">
+                  <ui-select class="bg-white b-solid br-15" ng-model="page.newTask.reportTypes.selectedReportType" sortable="true" ng-change="removeAlert()">
+                    <ui-select-match placeholder="Seleccionar tipo de reporte...">
+                      <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="reportType in (page.newTask.reportTypes.list | filter: $select.search) track by reportType.id">
+                      <span ng-bind="reportType.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Zona</label>
+                <div class="col-sm-8">
+                  <ui-select class="bg-white b-solid br-15" ng-model="page.newTask.zones.selectedZone" sortable="true" ng-change="removeAlert()">
+                    <ui-select-match placeholder="Seleccionar tipo...">
+                      <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="zone in (page.newTask.zones.list | filter: $select.search) track by zone.id">
+                      <span ng-bind="zone.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Dealer</label>
+                <div class="col-sm-8">
+                  <ui-select class="bg-white b-solid br-15" ng-model="page.newTask.dealers.selectedDealer" sortable="true"ng-change="removeAlert()">
+                    <ui-select-match placeholder="Seleccionar dealer...">
+                      <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="dealer in (page.newTask.dealers.list | filter: $select.search) track by dealer.id">
+                      <span ng-bind="dealer.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Tienda</label>
+                <div class="col-sm-8">
+                  <ui-select class="bg-white b-solid br-15" ng-model="page.newTask.stores.selectedStore" sortable="true" ng-change="removeAlert()">
+                    <ui-select-match placeholder="Seleccionar tienda...">
+                      <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="store in (page.newTask.stores.list | filter: $select.search) track by store.id">
+                      <span ng-bind="store.name"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-10">
+                  <button type="submit" class="btn btn-rounded btn-primary" ng-click="createTask()">Crear</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <!-- /tile body -->
+
+        </section>
+        <!-- /tile -->
+
+      </div>
+      <!-- /col -->
+
+
+    </div>
+    <!-- /row -->
+
+
+  </div>
+  <!-- /page content -->
+
+</div>

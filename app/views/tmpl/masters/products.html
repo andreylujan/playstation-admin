@@ -87,11 +87,11 @@
               <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
                 {{product.name}}
               </td>
-              <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" tooltip="{{product.description}}">
+              <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" popover="{{product.description}}">
                 <span style="cursor:pointer">{{product.description | cut:true:5:'...'}}</span>
               </td>
-              <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }">
-                {{product.sku}}
+              <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" popover="{{product.sku}}">
+                <span style="cursor:pointer">{{product.sku | cut:true:5:'...'}}</span>
               </td>
               <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" popover="{{product.plu}}">
                 <span style="cursor:pointer">{{product.plu | cut:true:5:'...'}}</span>
@@ -118,8 +118,8 @@
                 {{product.destinationName}}
               </td>
               <td data-title="'Top'" sortable="'isTop'" filter="{ 'isTop': 'text' }" ng-switch="{{product.isTop}}">
-                <fa name="check" ng-switch-when="true"></fa>
-                <fa name="times" ng-switch-when="false"></fa>
+                <fa class="text-greensea" name="check" ng-switch-when="true"></fa>
+                <fa class="text-danger" name="times" ng-switch-when="false"></fa>
               </td>
             </tr>
           </table>
@@ -260,21 +260,21 @@
               </ui-select>
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="col-sm-3 control-label">Fotos</label>
             <div class="col-sm-8">
               <input type="file" class="form-control" ng-model="modal.product.images.src" base-sixty-four-input ng-change="removeAlert()" ng-disabled="modal.product.images.disabled" ng-show="modal.product.images.show" multiple>
               <button class="btn btn-default" ng-click="openModalProductImages()" ng-show="!modal.product.images.show">Ver fotos del producto</button>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="uploadImages()" ng-disabled="modal.buttons.create.disabled">{{modal.buttons.create.text}}</button>
+    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="validateForm()" ng-disabled="modal.buttons.create.disabled">{{modal.buttons.create.text}}</button>
     
-    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editProduct()" ng-disabled="modal.buttons.edit.disabled">{{modal.buttons.edit.text}}</button>
+    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="validateForm()" ng-disabled="modal.buttons.edit.disabled">{{modal.buttons.edit.text}}</button>
     
     <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteProduct()" ng-disabled="modal.buttons.delete.disabled">{{modal.buttons.delete.text}}</button>
     
@@ -335,6 +335,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>
   </div>
 </script>
 </div>

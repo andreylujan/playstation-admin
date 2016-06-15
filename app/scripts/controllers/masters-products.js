@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ProductsCtrl', function($scope, $log, $filter, $window, $modal, ngTableParams, Products) {
+.controller('ProductsCtrl', function($scope, $log, $filter, $window, $uibModal, ngTableParams, Products) {
 
 
 	$scope.status = {
@@ -32,7 +32,7 @@ angular.module('minovateApp')
 		data = [];
 
 		Products.query({
-			include: 'product_type,product_destination,platform,images'
+			include: 'product_type,product_classification,platform,images'
 		}, function(success) {
 
 			// $log.log(success);
@@ -58,7 +58,7 @@ angular.module('minovateApp')
 						brand: success.data[i].attributes.brand,
 						minPrice: success.data[i].attributes.min_price,
 						maxPrice: success.data[i].attributes.max_price,
-						destinationId: success.data[i].relationships.product_destination.data.id,
+						destinationId: success.data[i].relationships.product_classification.data.id,
 						destinationName: '',
 						isTop: success.data[i].attributes.is_top
 
@@ -73,7 +73,7 @@ angular.module('minovateApp')
 					}
 
 					for (j = 0; j < productsIncluded.length; j++) {
-						if (productsIncluded[j].type === 'product_destinations') {
+						if (productsIncluded[j].type === 'product_classifications') {
 							if (data[i].destinationId === productsIncluded[j].id) {
 								data[i].destinationName = productsIncluded[j].attributes.name;
 							}
@@ -84,7 +84,7 @@ angular.module('minovateApp')
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
-					count: 10, // count per page
+					count: 25, // count per page
 					filter: {
 						//name: 'M'       // initial filter
 					},
@@ -107,8 +107,6 @@ angular.module('minovateApp')
 					}
 				});
 			}
-
-
 		}, function(error) {
 			$log.log(error);
 		});
@@ -117,7 +115,7 @@ angular.module('minovateApp')
 
 	$scope.openModalCreateProduct = function(idProduct) {
 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'createProduct.html',
 			controller: 'CreateProductModalInstance',
@@ -133,6 +131,7 @@ angular.module('minovateApp')
 			// closed
 		}, function() {
 			// dismissed 
+			$scope.getProducts();
 		});
 	};
 
@@ -140,8 +139,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateProductModalInstance', function($scope, $log, $modal, $modalInstance, $window, ProductTypes, ProductDestinations, Platforms, idProduct, Validators, Utils, Products, Files) {
-
+.controller('CreateProductModalInstance', function($scope, $log, $uibModal, $uibModalInstance, $window, ProductTypes, ProductDestinations, Platforms, idProduct, Validators, Utils, Products, Files) {
 
 	$scope.modal = {
 		title: {
@@ -251,7 +249,7 @@ angular.module('minovateApp')
 	var getProductDetails = function() {
 		Products.query({
 			idProduct: idProduct,
-			include: 'product_type,product_destination,platform,images'
+			include: 'product_type,product_classification,platform,images'
 		}, function(success) {
 			// $log.log(success);
 			$scope.modal.product.name.text = success.data.attributes.name;
@@ -274,7 +272,7 @@ angular.module('minovateApp')
 				}
 			}
 			for (i = 0; i < $scope.modal.destinations.length; i++) {
-				if ($scope.modal.destinations[i].id === success.data.relationships.product_destination.data.id) {
+				if ($scope.modal.destinations[i].id === success.data.relationships.product_classification.data.id) {
 					$scope.modal.product.destination.id = $scope.modal.destinations[i].id;
 					$scope.modal.product.destination.name = $scope.modal.destinations[i].name;
 					break;
@@ -390,45 +388,143 @@ angular.module('minovateApp')
 		$scope.modal.alert.text = text;
 	};
 
-	$scope.uploadImages = function() {
+	var uploadImages = function() {
 		// $log.log($scope.modal.product.images.src);
-		$scope.modal.buttons.create.disabled = true;
-		setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo imágenes');
 		Utils.gotoAnyPartOfPage('topModal');
+		if ($scope.modal.product.images.src.length > 0) {
+			setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo imágenes');
 
-		var imagesUploaded = 0;
+			var imagesUploaded = 0;
 
-		/* jshint ignore:start */
-		for (var i = 0; i < $scope.modal.product.images.src.length; i++) {
-			// $log.log($scope.modal.product.images.src[i]);
-			Files.save({
-				category_id: null,
-				report_id: null,
-				last_image: null,
-				image: 'data:' + $scope.modal.product.images.src[i].filetype + 'base64,' + $scope.modal.product.images.src[i].base64
-			}, function(success) {
-				$log.log(success);
-				if (success.data) {
-					$scope.modal.imagesUploaded.push({
-						type: 'images',
-						id: success.data.id
-					});
-				}
-				imagesUploaded++;
-				if (imagesUploaded === ($scope.modal.product.images.src.length)) {
-					setAlertProperties(false, null, null, null);
-					saveProduct();
-				}
-			}, function(error) {
-				$log.error(error);
-				imagesUploaded++;
-				if (imagesUploaded === ($scope.modal.product.images.src.length)) {
-					setAlertProperties(false, null, null, null);
-					saveProduct();
-				}
-			});
+			/* jshint ignore:start */
+			for (var i = 0; i < $scope.modal.product.images.src.length; i++) {
+				// $log.log($scope.modal.product.images.src[i]);
+				Files.save({
+					category_id: null,
+					report_id: null,
+					last_image: null,
+					image: 'data:' + $scope.modal.product.images.src[i].filetype + 'base64,' + $scope.modal.product.images.src[i].base64
+				}, function(success) {
+					// $log.log(success);
+					if (success.data) {
+						$scope.modal.imagesUploaded.push({
+							type: 'images',
+							id: success.data.id
+						});
+					}
+					imagesUploaded++;
+					if (imagesUploaded === ($scope.modal.product.images.src.length)) {
+						setAlertProperties(false, null, null, null);
+						if (idProduct) {
+							editProduct();
+						} else {
+							saveProduct();
+						}
+					}
+				}, function(error) {
+					$log.error(error);
+					imagesUploaded++;
+					if (imagesUploaded === ($scope.modal.product.images.src.length)) {
+						setAlertProperties(false, null, null, null);
+						if (idProduct) {
+							editProduct();
+						} else {
+							saveProduct();
+						}
+					}
+				});
+			}
+			/* jshint ignore:end */
+		} else {
+			setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo información del producto');
+			if (idProduct) {
+				editProduct();
+			} else {
+				saveProduct();
+			}
 		}
-		/* jshint ignore:end */
+	};
+
+	$scope.validateForm = function() {
+
+		if (idProduct) {
+			if (!$scope.modal.buttons.edit.border) {
+				$scope.modal.buttons.edit.border = true;
+				$scope.modal.buttons.edit.text = 'Guardar edición';
+				setDisabledStateForInputs(false);
+				$scope.modal.product.images.show = true;
+				Utils.gotoAnyPartOfPage('topModal');
+			} else {
+				if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
+					$scope.modal.alert.color = 'danger';
+					$scope.modal.alert.show = true;
+					$scope.modal.alert.title = 'Faltan campos por rellenar';
+					$scope.modal.alert.text = 'Debe indicar el nombre del producto';
+					Utils.gotoAnyPartOfPage('topModal');
+					return;
+				}
+				if (!Validators.validaRequiredField($scope.modal.product.sku.text)) {
+					$scope.modal.alert.color = 'danger';
+					$scope.modal.alert.show = true;
+					$scope.modal.alert.title = 'Faltan campos por rellenar';
+					$scope.modal.alert.text = 'Debe indicar el sku del producto';
+					Utils.gotoAnyPartOfPage('topModal');
+					return;
+				}
+				if (!$scope.modal.product.type) {
+					$scope.modal.alert.color = 'danger';
+					$scope.modal.alert.show = true;
+					$scope.modal.alert.title = 'Faltan campos por rellenar';
+					$scope.modal.alert.text = 'Debe indicar el tipo de producto';
+					Utils.gotoAnyPartOfPage('topModal');
+					return;
+				}
+				if (!$scope.modal.product.destination) {
+					$scope.modal.alert.color = 'danger';
+					$scope.modal.alert.show = true;
+					$scope.modal.alert.title = 'Faltan campos por rellenar';
+					$scope.modal.alert.text = 'Debe indicar el destino del producto';
+					Utils.gotoAnyPartOfPage('topModal');
+					return;
+				}
+				uploadImages();
+			}
+		} else {
+			if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el nombre del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+			if (!Validators.validaRequiredField($scope.modal.product.sku.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el sku del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+			if (!$scope.modal.product.type) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el tipo de producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+			if (!$scope.modal.product.destination) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.show = true;
+				$scope.modal.alert.title = 'Faltan campos por rellenar';
+				$scope.modal.alert.text = 'Debe indicar el destino del producto';
+				Utils.gotoAnyPartOfPage('topModal');
+				return;
+			}
+			$scope.modal.buttons.create.disabled = true;
+			uploadImages();
+		}
 	};
 
 	var saveProduct = function() {
@@ -494,9 +590,9 @@ angular.module('minovateApp')
 							id: $scope.modal.product.type.id
 						}
 					},
-					product_destination: {
+					product_classification: {
 						data: {
-							type: 'product_destinations',
+							type: 'product_classifications',
 							id: $scope.modal.product.destination.id
 						}
 					},
@@ -514,7 +610,7 @@ angular.module('minovateApp')
 		}, function(success) {
 			// $log.log(success);
 			setAlertProperties(false, null, null, null);
-			$modalInstance.close();
+			$uibModalInstance.close();
 		}, function(error) {
 			$log.error(error);
 			$scope.modal.alert.color = 'danger';
@@ -524,105 +620,57 @@ angular.module('minovateApp')
 			Utils.gotoAnyPartOfPage('topModal');
 			return;
 		});
-
 	};
 
-	$scope.editProduct = function() {
-
-		if (!$scope.modal.buttons.edit.border) {
-			$scope.modal.buttons.edit.border = true;
-			$scope.modal.buttons.edit.text = 'Guardar edición';
-			setDisabledStateForInputs(false);
-			Utils.gotoAnyPartOfPage('topModal');
-		} else {
-
-			if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
-				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.show = true;
-				$scope.modal.alert.title = 'Faltan campos por rellenar';
-				$scope.modal.alert.text = 'Debe indicar el nombre del producto';
-				Utils.gotoAnyPartOfPage('topModal');
-				return;
-			}
-
-			if (!Validators.validaRequiredField($scope.modal.product.sku.text)) {
-				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.show = true;
-				$scope.modal.alert.title = 'Faltan campos por rellenar';
-				$scope.modal.alert.text = 'Debe indicar el sku del producto';
-				Utils.gotoAnyPartOfPage('topModal');
-				return;
-			}
-
-			if (!$scope.modal.product.type) {
-				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.show = true;
-				$scope.modal.alert.title = 'Faltan campos por rellenar';
-				$scope.modal.alert.text = 'Debe indicar el tipo de producto';
-				Utils.gotoAnyPartOfPage('topModal');
-				return;
-			}
-			if (!$scope.modal.product.destination) {
-				$scope.modal.alert.color = 'danger';
-				$scope.modal.alert.show = true;
-				$scope.modal.alert.title = 'Faltan campos por rellenar';
-				$scope.modal.alert.text = 'Debe indicar el destino del producto';
-				Utils.gotoAnyPartOfPage('topModal');
-				return;
-			}
-
-			Products.update({
-					idProduct: idProduct,
-					data: {
-						type: "products",
-						id: idProduct,
-						attributes: {
-							name: $scope.modal.product.name.text,
-							description: $scope.modal.product.description.text,
-							sku: $scope.modal.product.sku.text,
-							plu: $scope.modal.product.plu.text,
-							validity_code: $scope.modal.product.validityCode.text,
-							brand: $scope.modal.product.brand.text,
-							min_price: $scope.modal.product.minPrice.text,
-							max_price: $scope.modal.product.maxPrice.text,
-							is_top: $scope.modal.product.isTop.value,
-							is_listed: $scope.modal.product.isListed.value
-						},
-						relationships: {
-							product_type: {
-								data: {
-									type: 'product_types',
-									id: $scope.modal.product.type.id
-								}
-							},
-							product_destination: {
-								data: {
-									type: 'product_destinations',
-									id: $scope.modal.product.destination.id
-								}
-							},
-							platform: {
-								data: {
-									type: 'platforms',
-									id: $scope.modal.product.platform.id
-								}
-							},
-							images: {
-								data: [
-
-								]
+	var editProduct = function() {
+		Products.update({
+				idProduct: idProduct,
+				data: {
+					type: "products",
+					id: idProduct,
+					attributes: {
+						name: $scope.modal.product.name.text,
+						description: $scope.modal.product.description.text,
+						sku: $scope.modal.product.sku.text,
+						plu: $scope.modal.product.plu.text,
+						validity_code: $scope.modal.product.validityCode.text,
+						brand: $scope.modal.product.brand.text,
+						min_price: $scope.modal.product.minPrice.text,
+						max_price: $scope.modal.product.maxPrice.text,
+						is_top: $scope.modal.product.isTop.value,
+						is_listed: $scope.modal.product.isListed.value
+					},
+					relationships: {
+						product_type: {
+							data: {
+								type: 'product_types',
+								id: $scope.modal.product.type.id
 							}
+						},
+						product_classification: {
+							data: {
+								type: 'product_classifications',
+								id: $scope.modal.product.destination.id
+							}
+						},
+						platform: {
+							data: {
+								type: 'platforms',
+								id: $scope.modal.product.platform.id
+							}
+						},
+						images: {
+							data: $scope.modal.imagesUploaded
 						}
 					}
-				}, function(success) {
-					// $log.log(success);
-					$modalInstance.close();
-				},
-				function(error) {
-					$log.error(error);
-				});
-		}
-
+				}
+			}, function(success) {
+				$log.log(success);
+				$uibModalInstance.close();
+			},
+			function(error) {
+				$log.error(error);
+			});
 	};
 
 	$scope.deleteProduct = function() {
@@ -630,22 +678,24 @@ angular.module('minovateApp')
 		if (!$scope.modal.buttons.delete.border) {
 			$scope.modal.buttons.delete.border = true;
 			$scope.modal.buttons.delete.text = 'Si, eliminar';
-			// setDisabledStateForInputs(false);
+			setAlertProperties(true, 'danger', '¿Realmente desea borrar el produto?', 'Para hacerlo vuelva a presionar el boton eliminar');
+			Utils.gotoAnyPartOfPage('topModal');
 		} else {
+
+
 			Products.delete({
 				idProduct: idProduct
 			}, function(success) {
 				// $log.log(success);
-				$modalInstance.close();
+				$uibModalInstance.close();
 			}, function(error) {
 				$log.error(error);
 			});
 		}
-
 	};
 
 	$scope.openModalProductImages = function() {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'productImages.html',
 			controller: 'ProductImagesModalInstance',
@@ -664,7 +714,7 @@ angular.module('minovateApp')
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 
 	if (idProduct) {
@@ -694,6 +744,10 @@ angular.module('minovateApp')
 
 })
 
-.controller('ProductImagesModalInstance', function($scope, $log, $modalInstance, idProduct) {
+.controller('ProductImagesModalInstance', function($scope, $log, $uibModalInstance, idProduct) {
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
 
 });

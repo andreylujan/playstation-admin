@@ -188,6 +188,12 @@ angular
 			controller: 'MyTasksCtrl',
 			templateUrl: 'views/tmpl/reports/my-tasks.html'
 		})
+		//playStation/create-task
+		.state('app.playStation.create-task', {
+			url: '/create-task',
+			controller: 'CreateTaskCtrl',
+			templateUrl: 'views/tmpl/reports/create-task.html'
+		})
 		//Masters
 		.state('app.masters', {
 			url: '/masters',
@@ -233,6 +239,23 @@ angular
 			url: '/new-promotion?idPromotion',
 			controller: 'NewPromotionCtrl',
 			templateUrl: 'views/tmpl/promotions/new-promotion.html'
+		})
+		//inbox
+		.state('app.inbox', {
+			url: '/inbox',
+			template: '<div ui-view></div>'
+		})
+		//inbox
+		.state('app.inbox.list', {
+			url: '/inbox',
+			controller: 'InboxListCtrl',
+			templateUrl: 'views/tmpl/inbox/inbox-list.html'
+		})
+		//inbox
+		.state('app.inbox.new', {
+			url: '/new-promotion?idPromotion',
+			controller: 'NewPromotionCtrl',
+			templateUrl: 'views/tmpl/inbox/new-promotion.html'
 		})
 		//mail
 		.state('app.mail', {

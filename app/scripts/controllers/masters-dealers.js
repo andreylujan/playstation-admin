@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DealersCtrl', function($scope, $log, $modal, $filter, ngTableParams, Dealers) {
+.controller('DealersCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Dealers) {
 
 	$scope.page = {
 		title: 'Dealers'
@@ -65,7 +65,7 @@ angular.module('minovateApp')
 
 		// var idDealer = idDealer;
 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'createDealer.html',
 			controller: 'CreateDealerModalInstance',
@@ -85,7 +85,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateDealerModalInstance', function($scope, $log, $modalInstance, idDealer, Dealers, Zones, Validators) {
+.controller('CreateDealerModalInstance', function($scope, $log, $uibModalInstance, idDealer, Dealers, Zones, Validators) {
 
 	$scope.modal = {
 		title: {
@@ -289,7 +289,7 @@ angular.module('minovateApp')
 				}
 			}
 		}, function(success) {
-			$modalInstance.close();
+			$uibModalInstance.close();
 		}, function(error) {
 
 			$scope.modal.alert.color = 'danger';
@@ -371,7 +371,7 @@ angular.module('minovateApp')
 				}
 			}, function(success) {
 				// $log.log(success);
-				$modalInstance.close();
+				$uibModalInstance.close();
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
@@ -410,7 +410,7 @@ angular.module('minovateApp')
 			Dealers.delete({
 				dealerId: idDealer
 			}, function(success) {
-				$modalInstance.close();
+				$uibModalInstance.close();
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
@@ -425,12 +425,12 @@ angular.module('minovateApp')
 	};
 
 	$scope.ok = function() {
-		// $modalInstance.close($scope.selected.item);
-		$modalInstance.close();
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 
 	$scope.removeAlert = function() {

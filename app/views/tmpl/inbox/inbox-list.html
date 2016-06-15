@@ -1,0 +1,141 @@
+<div class="page page-ng-table">
+
+	<!-- page header -->
+	<div class="pageheader">
+
+		<h2>{{page.title}} <span></span></h2>
+
+		<div class="page-bar">
+
+			<ul class="page-breadcrumb">
+				<li>
+					<a ui-sref="app.dashboard"> {{main.title}}</a>
+				</li>
+				<li>
+					<a ui-sref="app.playStation.reports">{{page.title}}</a>
+				</li>
+			</ul>
+
+		</div>
+
+	</div>
+	<!-- /page header -->
+
+	<!-- page content -->
+	<div class="pagecontent">
+
+		<!-- row -->
+		<div class="row">
+
+			<!-- col -->
+			<div class="col-md-12">
+
+
+				<!-- tile -->
+				<section class="tile" fullscreen="isFullscreen06">
+
+					<!-- tile header -->
+					<div class="tile-header dvd dvd-btm">
+						<h1 class="custom-font"></h1>
+						<ul class="controls">
+							<li class="dropdown" dropdown on-toggle="toggled(open)">
+
+								<a href dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
+
+								<ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
+									<li>
+										<a href tile-control-toggle>
+											<span class="minimize"><fa name="angle-down"></fa>&nbsp;&nbsp;&nbsp;Minimizar</span>
+											<span class="expand"><fa name="angle-up"></fa>&nbsp;&nbsp;&nbsp;Maximizar</span>
+										</a>
+									</li>
+									<li>
+										<a href ng-click="getPromotions()">
+											<fa name="refresh"></fa> Refrescar
+										</a>
+									</li>
+									<li>
+										<a href tile-control-fullscreen ng-click="isFullscreen06 = !isFullscreen06">
+											<fa name="expand"></fa> Pantalla completa
+										</a>
+									</li>
+
+								</ul>
+
+							</li>
+							<li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
+						</ul>
+					</div>
+					<!-- /tile header -->
+
+					<!-- tile body -->
+					<div class="tile-body">
+
+						<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewPromotion()">Nueva promoción</button>
+
+						<table ng-table="tableParams" show-filter="true" class="table table-custom">
+							<tr ng-repeat="promotion in $data">
+								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
+									{{promotion.title}}
+								</td>
+								<td data-title="'Fecha inicio'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
+									{{promotion.startDate | date: 'dd/MM/yyyy'}}
+								</td>
+								<td data-title="'Fecha fin'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
+									{{promotion.endDate | date: 'dd/MM/yyyy'}}
+								</td>
+								<td data-title="'Zonas'" sortable="'zone.name'" filter="{ 'zone.name': 'text' }">
+									<p ng-repeat="zone in promotion.zones">
+										{{zone.name}}
+									</p>
+								</td>
+								<td data-title="'Dealers'" sortable="'dealer.name'" filter="{ 'dealer.name': 'text' }">
+									<p ng-repeat="dealer in promotion.dealers">
+										{{dealer.name}}
+									</p>
+								</td>
+								<td data-title="'Usuarios'" sortable="'user.fullName'" filter="{ 'user.fullName': 'text' }">
+									<p ng-repeat="user in promotion.users">
+										{{user.fullName}}
+									</p>
+								</td>
+								<td data-title="'Info'">
+									<img ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info" ng-click="gotoNewPromotion(promotion.id)">
+								</td>
+								<td data-title="'Borrar'" class="text-center">
+									<img ng-click="openModalRemovePromotion(promotion.id)" ng-src="images/delete.png" style="width:18px; cursor:pointer" tooltip="Borrar promoción">
+								</td>
+							</tr>
+						</table>
+
+				</div>
+				<!-- /tile body -->
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+		<!-- /col -->
+
+
+	</div>
+	<!-- /row -->
+
+</div>
+<!-- /page content -->
+
+<script type="text/ng-template" id="removeModal.html" class="">
+  <div class="modal-body text-gray">
+    <div class="row">
+      <div class="col-md-12">
+        <h4 class="text-center">¿Seguro desea eliminar la promoción <strong>{{modal.promotion.title}}</strong>? </h4>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+  	<button class="btn btn-danger" ng-click="removePromotion()">Si, eliminar</button>
+  	<button class="btn btn-default" ng-click="cancel()">Cancelar</button>
+  </div>
+</script>
+
+</div>

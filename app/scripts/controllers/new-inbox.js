@@ -2,20 +2,20 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:NewInboxCtrl
+ * @name minovateApp.controller:PromotionsCtrl
  * @description
- * # NewInboxCtrl
+ * # PromotionsCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
 
-.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Inbox, Validators) {
+.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Promotions, Validators) {
 
 	var i = 0;
 	var j = 0;
 
 	$scope.page = {
-		title: 'Nuevo mensaje',
+		title: 'Nueva promoción',
 		html: '',
 		subject: '',
 		zones: [],

@@ -15,11 +15,11 @@
           </ul>
         </li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.playStation')}" ng-show="nav.reports.show">
-          <a ui-sref="app.playStation"><fa name="file-text-o"></fa> <span>Reportes</span></a>
+          <a ui-sref="app.playStation"><fa name="file-text-o"></fa> <span>Reportes/Tareas</span></a>
           <ul>
             <li ui-sref-active="active" ng-show="nav.reports.reports.show"><a ui-sref="app.playStation.reports"><fa name="caret-right"></fa> Reportes</a></li>
             <li ui-sref-active="active" ng-show="nav.reports.myReportsMyTasks.show"><a ui-sref="app.playStation.my-reports"><fa name="caret-right"></fa> Mis Reportes/Tareas</a></li>
-            <!-- <li ui-sref-active="active"><a ui-sref="app.playStation.my-tasks"><fa name="caret-right"></fa> Mis Tareas</a></li> -->
+            <li ui-sref-active="active"><a ui-sref="app.playStation.create-task"><fa name="caret-right"></fa> Crear Tarea</a></li>
           </ul>
         </li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.masters')}" ng-show="nav.masters.show">
@@ -34,6 +34,7 @@
           </ul>
         </li>
         <li ui-sref-active="active" ng-show="nav.promotions.list.show"><a ui-sref="app.promotions.list"><fa name="tag"></fa> <span>Promociones</span></a></li>
+        <li ui-sref-active="active"><a ui-sref="app.inbox.list"><fa name="mail"></fa> <span>Inbox</span></a></li>
 
   </accordion>
 </div>

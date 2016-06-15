@@ -351,7 +351,7 @@ angular.module('minovateApp')
 // PRODUCT DESTINATIONS
 .factory('ProductDestinations', function($resource, Token) {
 
-	return $resource(API_URL + '/product-destinations', {}, {
+	return $resource(API_URL + '/product-classifications', {}, {
 		query: {
 			method: 'GET',
 			headers: {
@@ -363,6 +363,22 @@ angular.module('minovateApp')
 })
 
 // PLATFORMS
+.factory('ReportTypes', function($resource, Token) {
+
+	return $resource(API_URL + '/organizations/:idOrganization/report-types', {
+		idOrganization: ':idOrganization'
+	}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// REPORT TYPES
 .factory('Platforms', function($resource, Token) {
 
 	return $resource(API_URL + '/platforms', {}, {
@@ -370,6 +386,42 @@ angular.module('minovateApp')
 			method: 'GET',
 			headers: {
 				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// INBOX
+.factory('Inbox', function($resource) {
+
+	return $resource(API_URL + '/inbox/:idInbox', {
+		idInbox: '@idInbox'
+	}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				include: '@include'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/vnd.api+json'
 			}
 		}
 	});

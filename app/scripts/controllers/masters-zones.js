@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ZonesCtrl', function($scope, $log, $modal, $filter, ngTableParams, Zones) {
+.controller('ZonesCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Zones) {
 
 	$scope.page = {
 		title: 'Zonas'
@@ -69,7 +69,7 @@ angular.module('minovateApp')
 
 		// var idZone = idZone;
 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'createZone.html',
 			controller: 'CreateZoneModalInstance',
@@ -89,7 +89,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateZoneModalInstance', function($scope, $log, $modalInstance, idZone, Dealers, Zones, Validators) {
+.controller('CreateZoneModalInstance', function($scope, $log, $uibModalInstance, idZone, Dealers, Zones, Validators) {
 
 	$scope.modal = {
 		title: {
@@ -243,7 +243,7 @@ angular.module('minovateApp')
 				}
 			}
 		}, function(success) {
-			$modalInstance.close();
+			$uibModalInstance.close();
 		}, function(error) {
 
 			$scope.modal.alert.color = 'danger';
@@ -317,7 +317,7 @@ angular.module('minovateApp')
 				}
 			}, function(success) {
 				// $log.log(success);
-				$modalInstance.close();
+				$uibModalInstance.close();
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
@@ -356,7 +356,7 @@ angular.module('minovateApp')
 			Zones.delete({
 				zoneId: idZone
 			}, function(success) {
-				$modalInstance.close();
+				$uibModalInstance.close();
 			}, function(error) {
 
 				$scope.modal.alert.color = 'danger';
@@ -371,12 +371,12 @@ angular.module('minovateApp')
 	};
 
 	$scope.ok = function() {
-		// $modalInstance.close($scope.selected.item);
-		$modalInstance.close();
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 
 	$scope.removeAlert = function() {

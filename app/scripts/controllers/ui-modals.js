@@ -15,13 +15,13 @@ angular.module('minovateApp')
     };
   })
 
-  .controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+  .controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
 
     $scope.items = ['item1', 'item2', 'item3'];
 
     $scope.open = function(size) {
 
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'myModalContent.html',
         controller: 'ModalInstanceCtrl',
         size: size,
@@ -40,10 +40,10 @@ angular.module('minovateApp')
     };
   })
 
-  // Please note that $modalInstance represents a modal window (instance) dependency.
-  // It is not the same as the $modal service used above.
+  // Please note that $uibModalInstance represents a modal window (instance) dependency.
+  // It is not the same as the $uibModal service used above.
 
-  .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+  .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
 
     $scope.items = items;
     $scope.selected = {
@@ -51,22 +51,22 @@ angular.module('minovateApp')
     };
 
     $scope.ok = function () {
-      $modalInstance.close($scope.selected.item);
+      $uibModalInstance.close($scope.selected.item);
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
   })
 
-  .controller('SplashDemoCtrl', function ($scope, $modal, $log) {
+  .controller('SplashDemoCtrl', function ($scope, $uibModal, $log) {
     $scope.items = ['item1', 'item2', 'item3'];
 
     $scope.openSplash = function(event, size) {
 
       var options = angular.element(event.target).data('options');
 
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'mySplashContent.html',
         controller: 'ModalInstanceCtrl',
         size: size,

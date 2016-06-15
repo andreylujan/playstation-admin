@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('UsersListCtrl', function($scope, $log, $filter, $modal, ngTableParams, Users, Invitations) {
+.controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, ngTableParams, Users, Invitations) {
 
 	$scope.page = {
 		title: 'Lista de usuarios'
@@ -76,7 +76,7 @@ angular.module('minovateApp')
 
 	$scope.openModalUserDetails = function(idUser) {
 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'userDetails.html',
 			controller: 'UserDetailsInstance',
@@ -94,7 +94,7 @@ angular.module('minovateApp')
 
 	var openSendInvitation = function(userEmail) {
 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'sendInvitation.html',
 			controller: 'SendInvitationInstance',
@@ -135,7 +135,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('UserDetailsInstance', function($scope, $log, $modalInstance, idUser, Users, Roles, Validators, Utils) {
+.controller('UserDetailsInstance', function($scope, $log, $uibModalInstance, idUser, Users, Roles, Validators, Utils) {
 
 	$scope.user = {
 		id: null,
@@ -188,12 +188,12 @@ angular.module('minovateApp')
 	};
 
 	$scope.ok = function() {
-		// $modalInstance.close($scope.selected.item);
-		$modalInstance.close();
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 
 	$scope.getUserDetails = function(idUser) {
@@ -394,14 +394,14 @@ angular.module('minovateApp')
 
 })
 
-.controller('SendInvitationInstance', function($scope, $log, $modalInstance, userEmail) {
+.controller('SendInvitationInstance', function($scope, $log, $uibModalInstance, userEmail) {
 
 	$scope.user = {
 		email: userEmail
 	};
 
 	$scope.ok = function() {
-		$modalInstance.close();
+		$uibModalInstance.close();
 	};
 
 
