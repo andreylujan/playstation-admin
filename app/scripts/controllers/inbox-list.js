@@ -22,52 +22,62 @@ angular.module('minovateApp')
 	var dealers = [];
 	var users = [];
 
-	$scope.inboxes = [];
+	var data = [];
+	var inboxIncluded = null;
+	var messageActionName = null;
+	var recipients = [];
+	var recipientsNames = null;
 
 	var getInboxes = function() {
 
-		$scope.inboxes = [];
+		data = [];
 
 		Inbox.query({
-			include: ''
+			include: 'message_action,recipients'
 		}, function(success) {
 
 			if (success.data) {
 
+				inboxIncluded = success.included;
+
 				for (i = 0; i < success.data.length; i++) {
 
-					$scope.inboxes.push({
-						
+					messageActionName = null;
+					recipients = [];
+					recipientsNames = '';
+
+					for (j = 0; j < inboxIncluded.length; j++) {
+						if (inboxIncluded[j].type === 'message_actions') {
+							if (success.data[i].relationships.message_action.data.id === inboxIncluded[j].id) {
+								messageActionName = inboxIncluded[j].attributes.name;
+							}
+						}
+					}
+
+					for (k = 0; k < success.data[i].relationships.recipients.data.length; k++) {
+						for (j = 0; j < inboxIncluded.length; j++) {
+							if (inboxIncluded[j].type === 'users') {
+								if (success.data[i].relationships.recipients.data[k].id === inboxIncluded[j].id) {
+									if (k === 0) {
+										recipientsNames = inboxIncluded[j].attributes.first_name + ' ' + inboxIncluded[j].attributes.last_name;
+									} else {
+										recipientsNames = inboxIncluded[j].attributes.first_name + ' ' + inboxIncluded[j].attributes.last_name + ' <br>' + recipientsNames;
+									}
+								}
+							}
+						}
+					}
+
+					data.push({
+						id: parseInt(success.data[i].id),
+						messageActionId: success.data[i].relationships.message_action.data.id,
+						messageActionName: messageActionName,
+						title: success.data[i].attributes.title,
+						sendAt: success.data[i].attributes.send_at,
+						recipients: recipientsNames
 					});
 
 				}
-
-				// for (i = 0; i < $scope.promotions.length; i++) {
-				// 	for (j = 0; j < $scope.promotions[i].zones.length; j++) {
-				// 		for (k = 0; k < zones.length; k++) {
-				// 			if (parseInt($scope.promotions[i].zones[j].id) === parseInt(zones[k].id)) {
-				// 				$scope.promotions[i].zones[j].name = zones[k].name;
-				// 				break;
-				// 			}
-				// 		}
-				// 	}
-				// 	for (j = 0; j < $scope.promotions[i].dealers.length; j++) {
-				// 		for (k = 0; k < dealers.length; k++) {
-				// 			if (parseInt($scope.promotions[i].dealers[j].id) === parseInt(dealers[k].id)) {
-				// 				$scope.promotions[i].dealers[j].name = dealers[k].name;
-				// 				break;
-				// 			}
-				// 		}
-				// 	}
-				// 	for (j = 0; j < $scope.promotions[i].users.length; j++) {
-				// 		for (k = 0; k < users.length; k++) {
-				// 			if (parseInt($scope.promotions[i].users[j].id) === parseInt(users[k].id)) {
-				// 				$scope.promotions[i].users[j].fullName = users[k].fullName;
-				// 				break;
-				// 			}
-				// 		}
-				// 	}
-				// }
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
@@ -76,30 +86,30 @@ angular.module('minovateApp')
 						//name: 'M'       // initial filter
 					},
 					sorting: {
-						title: 'asc' // initial sorting
+						id: 'asc' // initial sorting
 					}
 				}, {
-					total: $scope.inboxes.length, // length of $scope.inboxes
+					total: data.length, // length of data
 					getData: function($defer, params) {
 						var filteredData = params.filter() ?
-							$filter('filter')($scope.inboxes, params.filter()) :
-							$scope.inboxes;
+							$filter('filter')(data, params.filter()) :
+							data;
 						var orderedData = params.sorting() ?
 							$filter('orderBy')(filteredData, params.orderBy()) :
-							$scope.inboxes;
+							data;
 
 						params.total(orderedData.length); // set total for recalc pagination
 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 					}
 				});
 
-				// $log.log($scope.inboxes);
+				// $log.log(data);
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 		});
 
 	};
@@ -152,7 +162,7 @@ angular.module('minovateApp')
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
 					users.push({
-						id: success.data[i].id,
+						id: parseInt(success.data[i].id),
 						firstName: success.data[i].attributes.first_name,
 						lastName: success.data[i].attributes.last_name,
 						fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name,
@@ -162,7 +172,7 @@ angular.module('minovateApp')
 						active: success.data[i].attributes.active
 					});
 				}
-				getPromotions();
+				getInboxes();
 
 			} else {
 				$log.log(success);
@@ -170,18 +180,6 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.log(error);
 		});
-
-	};
-
-	$scope.gotoNewPromotion = function(idInbox) {
-
-		if (idInbox) {
-			$state.go('app.inbox.new', {
-				idInbox: idInbox
-			});
-		} else {
-			$state.go('app.inox.new');
-		}
 
 	};
 
@@ -200,8 +198,19 @@ angular.module('minovateApp')
 		modalInstance.result.then(function() {
 			getInboxes();
 		}, function() {
-			// getPromotions();
+			// getInboxes();
 		});
+	};
+	
+	$scope.gotoNewInbox = function(idInbox) {
+
+		if (idInbox) {
+			$state.go('app.inbox.new', {
+				idInbox: idInbox
+			});
+		} else {
+			$state.go('app.inbox.new');
+		}
 	};
 
 	getZones();

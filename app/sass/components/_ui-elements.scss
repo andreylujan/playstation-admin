@@ -52,9 +52,12 @@ accordion {
 .panel {
   border-radius: 0;
   @include box-shadow(none);
+  border: 0 solid transparent;
 
   .panel-heading {
     border-radius: 0;
+    background-color: $sidebar-bg;
+    color: $font-color;
 
     .panel-title .accordion-toggle {
       display: block;
@@ -78,6 +81,10 @@ accordion {
         }
       }
     }
+  }
+  .panel-body{
+    padding: 0 15px;
+    border-top: 0 !important;
   }
 
   &.panel-cyan {

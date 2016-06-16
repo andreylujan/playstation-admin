@@ -2,147 +2,55 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:PromotionsCtrl
+ * @name minovateApp.controller:NewInboxCtrl
  * @description
- * # PromotionsCtrl
+ * # NewInboxCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
 
-.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Promotions, Validators) {
+.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Inbox, Users, Validators, MessageActions) {
 
-	var i = 0;
-	var j = 0;
+	var i = 0,
+		j = 0;
+
 
 	$scope.page = {
-		title: 'Nueva promoción',
-		html: '',
-		subject: '',
-		zones: [],
-		dealers: [],
-		stores: [],
+		title: 'Nuevo mensaje',
+		html: {
+			value: '',
+			disabled: false
+		},
+		subject: {
+			text: '',
+			disabled: false
+		},
 		users: [],
-		zone: {
-			selectedZone: []
-		},
-		dealer: {
-			selectedDealer: []
-		},
 		user: {
-			selectedUser: []
+			selectedUser: [],
+			disabled: false
 		},
-		rangeOptions: {
-			minDate: $moment()
+		messageActions: [],
+		messageAction: {
+			selectedMessageAction: [],
+			disabled: false
 		},
-		startDate: '',
-		endDate: ''
-	};
-
-	$scope.rangeOptions = {
-		minDate: $moment()
-	};
-
-	var selectInfoPromotion = function(data) {
-
-		$scope.page.zone.selectedZone = [];
-		$scope.page.dealer.selectedDealer = [];
-		$scope.page.user.selectedUser = [];
-
-		// $log.log(data);
-
-		for (i = 0; i < $scope.page.zones.length; i++) {
-			for (j = 0; j < data.relationships.zones.data.length; j++) {
-				if (parseInt($scope.page.zones[i].id) === parseInt(data.relationships.zones.data[j].id)) {
-					$scope.page.zone.selectedZone.push($scope.page.zones[i]);
-					break;
-				}
+		dateTimePicker: {
+			date: new Date(),
+			open: false,
+			disabled: false
+		},
+		checkSendImmediate: {
+			disabled: false
+		},
+		checkSendToAll: {
+			disabled: false
+		},
+		buttons: {
+			sendInbox: {
+				show: true
 			}
 		}
-
-		for (i = 0; i < $scope.page.dealers.length; i++) {
-			for (j = 0; j < data.relationships.dealers.data.length; j++) {
-				if (parseInt($scope.page.dealers[i].id) === parseInt(data.relationships.dealers.data[j].id)) {
-					$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
-					break;
-				}
-			}
-		}
-
-		for (i = 0; i < $scope.page.users.length; i++) {
-			for (j = 0; j < data.relationships.users.data.length; j++) {
-				if (parseInt($scope.page.users[i].id) === parseInt(data.relationships.users.data[j].id)) {
-					$scope.page.user.selectedUser.push($scope.page.users[i]);
-					break;
-				}
-			}
-		}
-
-		$scope.page.startDate = $moment(data.attributes.start_date).format("MMM D, YYYY");
-		$scope.page.endDate = $moment(data.attributes.end_date).format("MMM D, YYYY");
-		$scope.page.subject = data.attributes.title;
-		$scope.page.html = data.attributes.html;
-
-	};
-
-	var getInfoPromotion = function(idPromotion) {
-		if (idPromotion) {
-			Promotions.query({
-				idPromotion: idPromotion,
-				include: 'checklist,users,zones,dealers'
-			}, function(success) {
-				if (success.data) {
-					selectInfoPromotion(success.data);
-				} else {
-					$log.log(success);
-				}
-			}, function(error) {
-				$log.log(error);
-			});
-		}
-	};
-
-	var getZones = function() {
-		$scope.page.zones = [];
-
-		Zones.query({}, function(success) {
-			for (i = 0; i < success.data.length; i++) {
-				$scope.page.zones.push({
-					type: 'zones',
-					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
-				});
-			}
-
-			for (i = 0; i < $scope.page.zones.length; i++) {
-				$scope.page.zone.selectedZone.push($scope.page.zones[i]);
-			}
-
-			getDealers();
-
-		}, function(error) {
-			$log.log(error);
-		});
-	};
-
-	var getDealers = function() {
-		$scope.page.dealers = [];
-
-		Dealers.query({}, function(success) {
-			for (i = 0; i < success.data.length; i++) {
-				$scope.page.dealers.push({
-					type: 'dealers',
-					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
-				});
-			}
-			for (i = 0; i < $scope.page.dealers.length; i++) {
-				$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
-			}
-			getUsers();
-
-		}, function(error) {
-			$log.log(error);
-		});
 	};
 
 	var getUsers = function() {
@@ -154,16 +62,19 @@ angular.module('minovateApp')
 
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
-					$scope.page.users.push({
-						type: 'users',
-						id: success.data[i].id,
-						firstName: success.data[i].attributes.first_name,
-						lastName: success.data[i].attributes.last_name,
-						fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-					});
+					if (success.data[i].attributes.active) {
+						$scope.page.users.push({
+							type: 'users',
+							id: success.data[i].id,
+							firstName: success.data[i].attributes.first_name,
+							lastName: success.data[i].attributes.last_name,
+							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
+						});
+					}
 				}
+				$scope.page.user.selectedUser = $scope.page.users[0];
 
-				getInfoPromotion($stateParams.idPromotion);
+				getMessageActions();
 
 			} else {
 				$log.log(success);
@@ -171,27 +82,109 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.log(error);
 		});
-
 	};
 
-	$scope.createPromotion = function() {
+	var getMessageActions = function() {
+		$scope.page.messageActions = [];
 
-		var zones = [];
-		var dealers = [];
+		MessageActions.query({}, function(success) {
+
+			if (success.data) {
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.messageActions.push({
+						type: 'message_actions',
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+				$scope.page.messageAction.selectedMessageAction = $scope.page.messageActions[0];
+
+				if ($stateParams.idInbox) {
+					getInfoInbox($stateParams.idInbox);
+					$scope.page.dateTimePicker.disabled = true;
+					$scope.page.checkSendImmediate.disabled = true;
+					$scope.page.checkSendToAll.disabled = true;
+					$scope.page.user.disabled = true;
+					$scope.page.messageAction.disabled = true;
+					$scope.page.subject.disabled = true;
+					$scope.page.html.disabled = true;
+					$scope.page.buttons.sendInbox.show = false;
+				} else {
+					$scope.page.dateTimePicker.disabled = false;
+					$scope.page.checkSendImmediate.disabled = false;
+					$scope.page.checkSendToAll.disabled = false;
+					$scope.page.user.disabled = false;
+					$scope.page.messageAction.disabled = false;
+					$scope.page.subject.disabled = false;
+					$scope.page.html.disabled = false;
+					$scope.page.buttons.sendInbox.show = true;
+				}
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	var getInfoInbox = function(idInbox) {
+		Inbox.query({
+			idInbox: idInbox,
+			include: 'message_action,recipients'
+		}, function(success) {
+			if (success.data) {
+				selectInfoPromotion(success.data);
+			} else {
+				$log.log(success);
+			}
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	var selectInfoPromotion = function(data) {
+
+		var dateCreatedAt = new Date(data.attributes.created_at);
+		var day = dateCreatedAt.getUTCDate();
+		var month = dateCreatedAt.getUTCMonth();
+		var year = dateCreatedAt.getUTCFullYear();
+		var hour = dateCreatedAt.getUTCHours();
+		var minutes = dateCreatedAt.getUTCMinutes();
+
+		$scope.page.dateTimePicker.date = new Date(year, month, day, hour, minutes);
+
+		$scope.page.user.selectedUser = [];
+
+		for (i = 0; i < $scope.page.users.length; i++) {
+			if (data.relationships.recipients.data.length > 0) {
+				for (j = 0; j < data.relationships.recipients.data.length; j++) {
+					if (parseInt($scope.page.users[i].id) === parseInt(data.relationships.recipients.data[j].id)) {
+						$scope.page.user.selectedUser.push($scope.page.users[i]);
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		$scope.page.user.selectedMessageAction = [];
+
+		for (i = 0; i < $scope.page.messageActions.length; i++) {
+			if (parseInt($scope.page.messageActions[i].id) === parseInt(data.relationships.message_action.data.id)) {
+				$scope.page.user.selectedMessageAction = $scope.page.messageActions[i];
+				break;
+			}
+		}
+
+		$scope.page.subject.text = data.attributes.title;
+		$scope.page.html.value = data.attributes.html;
+	};
+
+	$scope.createInbox = function() {
+
 		var users = [];
 
-		for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
-			zones.push({
-				id: $scope.page.zone.selectedZone[i].id,
-				type: $scope.page.zone.selectedZone[i].type
-			});
-		}
-		for (i = 0; i < $scope.page.dealer.selectedDealer.length; i++) {
-			dealers.push({
-				id: $scope.page.dealer.selectedDealer[i].id,
-				type: $scope.page.dealer.selectedDealer[i].type
-			});
-		}
 		for (i = 0; i < $scope.page.user.selectedUser.length; i++) {
 			users.push({
 				id: $scope.page.user.selectedUser[i].id,
@@ -199,126 +192,71 @@ angular.module('minovateApp')
 			});
 		}
 
-		if (zones.length === 0) {
-			openModalMessage('Debe indicar al menos una zona');
+		if (!$scope.checkSentToAll) {
+			if (users.length === 0) {
+				openModalMessage('Debe indicar al menos un usuario');
+				return;
+			}
+		}
+		if (!$scope.checkSendImmediate) {
+			if (!Validators.validaRequiredField($scope.page.dateTimePicker.date)) {
+				openModalMessage('Debe indicar la fecha de envío del mensaje');
+				return;
+			}
+		}
+
+		if (!Validators.validaRequiredField($scope.page.subject.text)) {
+			openModalMessage('Debe indicar el asunto del mensaje');
 			return;
 		}
-		if (dealers.length === 0) {
-			openModalMessage('Debe indicar al menos un dealer');
-			return;
-		}
-		if (users.length === 0) {
-			openModalMessage('Debe indicar al menos un usuario');
-			return;
-		}
-		if (!Validators.validaRequiredField($scope.page.startDate)) {
-			openModalMessage('Debe indicar la fecha de inicio de la promoción');
-			return;
-		}
-		if (!Validators.validaRequiredField($scope.page.endDate)) {
-			openModalMessage('Debe indicar la fecha de fin de la promoción');
-			return;
-		}
-		if (!Validators.validaRequiredField($scope.page.subject)) {
-			openModalMessage('Debe indicar el título de la promoción');
-			return;
-		}
-		if (!Validators.validaRequiredField($scope.page.html)) {
+		if (!Validators.validaRequiredField($scope.page.html.value)) {
 			openModalMessage('Debe indicar el cuerpo del mensaje');
 			return;
 		}
 
-		var startDate = $moment($scope.page.startDate).toISOString();
-		var endDate = $moment($scope.page.endDate).toISOString();
+		if ($stateParams.idInbox) {
 
-		if ($stateParams.idPromotion) {
-			Promotions.update({
-				idPromotion: $stateParams.idPromotion,
-				"data": {
-					"id" : $stateParams.idPromotion,
-					"type": "promotions",
-					"attributes": {
-						"title": $scope.page.subject,
-						"start_date": startDate,
-						"end_date": endDate,
-						"html": $scope.page.html
-					},
-					"relationships": {
-						// "checklist": {
-						// 	"data": {
-						// 		"type": "checklists",
-						// 		"id": "1"
-						// 	}
-						// },
-						"zones": {
-							"data": zones
-						},
-						"dealers": {
-							"data": dealers
-						},
-						"users": {
-							"data": users
-						}
-					}
-				}
-			}, function(success) {
-				if (success.data) {
-					openModalMessage('Se ha actualizado la promoción con éxito');
-					$state.go('app.promotions.list');
-				} else {
-					$log.log(success);
-				}
-			}, function(error) {
-				$log.log(error);
-			});
 		} else {
-			Promotions.save({
-				"data": {
-					"type": "promotions",
-					"attributes": {
-						"title": $scope.page.subject,
-						"start_date": startDate,
-						"end_date": endDate,
-						"html": '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html + '</html>'
+
+			Inbox.save({
+				data: {
+					type: 'broadcasts',
+					attributes: {
+						title: $scope.page.subject.text,
+						html: '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html.value + '</html>',
+						// Este campo es OPCIONAL, por mientra no lo pesques
+						// resource_id: 1,
+						// Este campo también es opcional, si NO se manda se envían los mensajes al tiro
+						// Si se fija, se enviarán en la fecha indicada
+						send_at: $scope.page.dateTimePicker.date,
+						is_immediate: $scope.checkSendImmediate, // indica si se envia de inmediato
+						send_to_all: $scope.checkSentToAll // indica si se envia a todos los users
 					},
-					"relationships": {
-						// "checklist": {
-						// 	"data": {
-						// 		"type": "checklists",
-						// 		"id": "1"
-						// 	}
-						// },
-						"zones": {
-							"data": zones
+					relationships: {
+						recipients: {
+							data: users
 						},
-						"dealers": {
-							"data": dealers
-						},
-						"users": {
-							"data": users
+						message_action: {
+							data: {
+								type: 'message_actions',
+								id: $scope.page.messageAction.selectedMessageAction.id
+							}
 						}
 					}
 				}
 			}, function(success) {
-				if (success.data) {
-					openModalMessage('Se ha creado la promoción con éxito');
-					$state.go('app.promotions.list');
-				} else {
-					$log.log(success);
-				}
+				$log.log(success);
 			}, function(error) {
-				$log.log(error);
+				$log.error(error);
 			});
 		}
-
-
 	};
 
 	var openModalMessage = function(title) {
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'messageModal.html',
-			controller: 'MessageModalInstance',
+			controller: 'MessageNewInboxModalInstance',
 			resolve: {
 				title: function() {
 					return title;
@@ -327,17 +265,21 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			// $scope.getPromotions();
+			// $scope.getInboxes();
 		}, function() {
-			// $scope.getPromotions();
+			// $scope.getInboxes();
 		});
 	};
 
-	getZones();
+	$scope.openCalendar = function(e) {
+		$scope.page.dateTimePicker.open = true;
+	};
+
+	getUsers();
 
 })
 
-.controller('MessageModalInstance', function($scope, $log, $uibModalInstance, title) {
+.controller('MessageNewInboxModalInstance', function($scope, $log, $uibModalInstance, title) {
 
 	$scope.modal = {
 		message: {

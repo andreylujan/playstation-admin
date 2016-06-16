@@ -1,11 +1,12 @@
 <div id="sidebar-wrap" ng-controller="NavCtrl">
-  <accordion close-others="oneAtTime" slimscroll="{height: '100%'}">
 
-    <accordion-group is-open="status.isFirstOpen" ng-class="{'open': status.isFirstOpen, 'closed': !status.isFirstOpen}">
-      <accordion-heading>
+  <uib-accordion close-others="oneAtTime" >
+    <uib-accordion-group is-open="status.isFirstOpen" nav-collapse>
+    
+      <uib-accordion-heading>
         <!-- Navigation <i class="fa" ng-class="{'fa-angle-up': status.isFirstOpen, 'fa-angle-down': !status.isFirstOpen}"></i> -->
-      </accordion-heading>
-      <ul id="navigation" nav-collapse ripple>
+      </uib-accordion-heading>
+      <ul id="navigation" ripple>
         <li ui-sref-active="active" ng-show="nav.dashboard.show"><a ui-sref="app.dashboard"><fa name="dashboard"></fa> <span>Dashboard</span></a></li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.users')}" ng-show="nav.users.show">
           <a ui-sref="app.users"><fa name="user"></fa> <span>Usuarios</span></a>
@@ -34,7 +35,7 @@
           </ul>
         </li>
         <li ui-sref-active="active" ng-show="nav.promotions.list.show"><a ui-sref="app.promotions.list"><fa name="tag"></fa> <span>Promociones</span></a></li>
-        <li ui-sref-active="active"><a ui-sref="app.inbox.list"><fa name="mail"></fa> <span>Inbox</span></a></li>
+        <li ui-sref-active="active"><a ui-sref="app.inbox.list"><fa name="envelope"></fa> <span>Inbox</span></a></li>
 
-  </accordion>
+  </uib-accordion>
 </div>

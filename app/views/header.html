@@ -22,9 +22,9 @@
 	<!-- Right-side navigation -->
 	<ul class="nav-right pull-right list-inline">
 
-		<li class="dropdown nav-profile" dropdown on-toggle="toggled(open)">
+		<li class="dropdown nav-profile" uib-dropdown on-toggle="toggled(open)">
 
-			<a href class="dropdown-toggle" dropdown-toggle>
+			<a href class="dropdown-toggle" uib-dropdown-toggle>
 				<img ng-src="images/placeholder-user-photo.png" alt="prof_pic" class="img-circle size-30x30" ng-if="!page.user.image">
 				<img ng-src="{{page.user.image}}" alt="prof_pic" class="img-circle size-30x30" ng-if="page.user.image">
 				<span>{{page.user.fullName}} <fa name="angle-down"></fa></span>

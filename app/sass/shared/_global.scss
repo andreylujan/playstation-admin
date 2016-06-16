@@ -1204,8 +1204,16 @@ body {
   border-radius: 2px 0 0 2px!important;
 }
 
+.br-15-l {
+  border-radius: 15px 0 0 15px!important;
+}
+
 .br-2-r {
   border-radius: 0 2px 2px 0!important;
+}
+
+.br-15-r {
+  border-radius: 0 15px 15px 0!important;
 }
 
 .br-2-t {
@@ -1376,4 +1384,15 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="file"].custom-input-file {
+  display: none;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
 }

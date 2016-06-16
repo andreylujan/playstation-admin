@@ -15,7 +15,7 @@
           <a ui-sref="app.dashboard"> {{main.title}}</a>
         </li>
         <li>
-          <a href="javascript:;">Usuarios</a>
+          <a href="javascript:;">Maestros</a>
         </li>
         <li>
           <a ui-sref="app.users.list">{{page.title}}</a>
@@ -87,16 +87,16 @@
               <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
                 {{product.name}}
               </td>
-              <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" popover="{{product.description}}">
+              <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" uib-popover="{{product.description}}">
                 <span style="cursor:pointer">{{product.description | cut:true:5:'...'}}</span>
               </td>
-              <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" popover="{{product.sku}}">
+              <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" uib-popover="{{product.sku}}">
                 <span style="cursor:pointer">{{product.sku | cut:true:5:'...'}}</span>
               </td>
-              <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" popover="{{product.plu}}">
+              <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" uib-popover="{{product.plu}}">
                 <span style="cursor:pointer">{{product.plu | cut:true:5:'...'}}</span>
               </td>
-              <td data-title="'ID Vigencia'" sortable="'validityCode'" filter="{ 'validityCode': 'text' }" popover="{{product.validityCode}}">
+              <td data-title="'ID Vigencia'" sortable="'validityCode'" filter="{ 'validityCode': 'text' }" uib-popover="{{product.validityCode}}">
                 <span style="cursor:pointer">{{product.validityCode | cut:true:5:'...'}}</span>
               </td>
               <td data-title="'Creado el'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">

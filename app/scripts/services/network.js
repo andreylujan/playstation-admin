@@ -122,13 +122,13 @@ angular.module('minovateApp')
 })
 
 // REPORTS
-.factory('Reports', function($resource, Token) {
+.factory('Reports', function($resource) {
 
 	return $resource(API_URL + '/reports', {}, {
 		query: {
 			method: 'GET',
 			headers: {
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/vnd.api+json',
 				Accept: 'application/vnd.api+json'
 			},
 			params: {
@@ -137,6 +137,13 @@ angular.module('minovateApp')
 				'filter[creator_id]': '@creator_id',
 				'page[number]': '@number',
 				'page[size]': '@size'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});
@@ -392,10 +399,24 @@ angular.module('minovateApp')
 
 })
 
+// Message Actions
+.factory('MessageActions', function($resource) {
+
+	return $resource(API_URL + '/message-actions', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
 // INBOX
 .factory('Inbox', function($resource) {
 
-	return $resource(API_URL + '/inbox/:idInbox', {
+	return $resource(API_URL + '/broadcasts/:idInbox', {
 		idInbox: '@idInbox'
 	}, {
 		query: {
@@ -415,7 +436,8 @@ angular.module('minovateApp')
 		save: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		update: {

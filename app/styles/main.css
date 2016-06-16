@@ -2341,9 +2341,6 @@ html.boxed-layout {
     position: absolute;
     width: 80px;
     background-color: #3f5b71; }
-  .sidebar-sm #sidebar.dropdown-open,
-  .sidebar-xs #sidebar.dropdown-open {
-    width: 100% !important; }
   .sidebar-sm #sidebar .slimScrollDiv .slimScrollBar,
   .sidebar-sm #sidebar .slimScrollDiv .slimScrollRail,
   .sidebar-xs #sidebar .slimScrollDiv .slimScrollBar,
@@ -2376,7 +2373,6 @@ html.boxed-layout {
       height: 100% !important; }
   .sidebar-sm #sidebar #navigation,
   .sidebar-xs #sidebar #navigation {
-    margin: 0 -10px;
     height: 100%; }
     .sidebar-sm #sidebar #navigation > li,
     .sidebar-xs #sidebar #navigation > li {
@@ -3797,9 +3793,12 @@ accordion .panel .panel-heading {
 .panel {
   border-radius: 0;
   -webkit-box-shadow: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border: 0 solid transparent; }
   .panel .panel-heading {
-    border-radius: 0; }
+    border-radius: 0;
+    background-color: #3f5b71;
+    color: #616f77; }
     .panel .panel-heading .panel-title .accordion-toggle {
       display: block;
       cursor: pointer;
@@ -3815,6 +3814,9 @@ accordion .panel .panel-heading {
           padding-left: 5px; }
           .panel .panel-heading .panel-title .accordion-toggle:hover span.text-muted {
             padding-left: 0; }
+  .panel .panel-body {
+    padding: 0 15px;
+    border-top: 0 !important; }
   .panel.panel-cyan {
     border-color: #22beef; }
     .panel.panel-cyan > .panel-heading {
@@ -10576,8 +10578,14 @@ body {
 .br-2-l {
   border-radius: 2px 0 0 2px !important; }
 
+.br-15-l {
+  border-radius: 15px 0 0 15px !important; }
+
 .br-2-r {
   border-radius: 0 2px 2px 0 !important; }
+
+.br-15-r {
+  border-radius: 0 15px 15px 0 !important; }
 
 .br-2-t {
   border-radius: 2px 2px 0 0 !important; }
@@ -10697,6 +10705,15 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s; }
+
+input[type="file"].custom-input-file {
+  display: none; }
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer; }
 
 .color-schemes a.scheme-black {
   background-color: #1c2b36; }

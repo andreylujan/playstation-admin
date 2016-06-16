@@ -4,7 +4,7 @@
 	<div class="pageheader">
 
 		<h2>{{page.title}} <span></span></h2>
-		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion()">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
+		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createInbox()" ng-show="page.buttons.sendInbox.show">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
 
 		<div class="page-bar">
 
@@ -13,10 +13,10 @@
 					<a ui-sref="app.dashboard"> {{main.title}}</a>
 				</li>
 				<li>
-					<a ui-sref="app.promotions.list"> Promociones</a>
+					<a ui-sref="app.inbox.list"> Inbox</a>
 				</li>
 				<li>
-					<a ui-sref="app.playStation.reports">{{page.title}}</a>
+					<a ui-sref="#">{{page.title}}</a>
 				</li>
 			</ul>
 
@@ -71,115 +71,120 @@
 						</ul>
 					</div>
 					<!-- /tile header -->
-					<style type="text/css">
-						
-					</style>
 
 					<!-- tile body -->
 					<div class="tile-body">
 
 						<div class="row">
 							<div class="col-md-12 mb-5">
-								<label for="selZone" class="col-md-2 control-label" >Zona</label>
-								<div class="col-md-2">
-									<ui-select class="bg-red-ps br-15 b-0" multiple ng-model="page.zone.selectedZone" theme="bootstrap" sortable="true" close-on-select="false">
-									<ui-select-match placeholder="Seleccionar zona...">{{$item.name}}</ui-select-match>
-									<ui-select-choices repeat="zone in page.zones | propsFilter: {name: $select.search}">
-									<div ng-bind-html="zone.name | highlight: $select.search"></div>
-								</ui-select-choices>
-							</ui-select>
+								<div class="form-group">
+									<label for="selUser" class="col-md-2 control-label" >Fecha/hora de envío</label>
+									<div class="col-sm-4">
+										<p class="input-group">
+											<input type="text" class="form-control bg-red-ps br-15-l" datetime-picker="dd/MM/yyyy HH:mm" ng-model="page.dateTimePicker.date" is-open="page.dateTimePicker.open" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled" />
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default bg-red-ps br-15-r" ng-click="openCalendar($event)" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled"><i class="fa fa-calendar"></i></button>
+											</span>
+										</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Enviar de inmediato</label>
+									<div class="col-sm-1">
+										<input type="checkbox" ng-model="checkSendImmediate" ng-init="checkSendImmediate = true" ng-disabled="page.checkSendImmediate.disabled">
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="mt-10 mb-10">
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<label for="selUser" class="col-md-2 control-label" >Usuario</label>
+								<div class="col-md-4">
+									<ui-select class="bg-blue-ps br-15 b-0" multiple ng-model="page.user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false" ng-disabled="checkSentToAll || page.user.disabled">
+										<ui-select-match placeholder="Seleccionar usuario...">{{$item.fullName}}</ui-select-match>
+										<ui-select-choices repeat="user in page.users | propsFilter: {fullName: $select.search}">
+											<div ng-bind-html="user.fullName | highlight: $select.search"></div>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Enviar a todos</label>
+										<div class="col-sm-3">
+											<input type="checkbox" ng-model="checkSentToAll" ng-init="checkSentToAll = true" ng-disabled="page.checkSendToAll.disabled">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="mt-10 mb-10">
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<label for="selUser" class="col-md-2 control-label">Acción</label>
+								<div class="col-md-4">
+									<ui-select class="bg-yellow-ps b-solid br-15" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled">
+										<ui-select-match placeholder="Seleccione acción...">
+											<span ng-bind="$select.selected.name"></span>
+										</ui-select-match>
+										<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id">
+											<span ng-bind="messageAction.name"></span>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+							</div>
+						</div>
+						<hr class="mt-10 mb-10">
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<div class="form-group">
+									<label class="col-md-2 control-label" >Título</label>
+									<div class="col-md-9">
+										<div class="form-group">
+											<input type="text" class="form-control underline-input" ng-model="page.subject.text" placeholder="Asunto/título" ng-disabled="page.subject.disabled">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
-						<label for="selDealer" class="col-md-1 control-label">Dealer</label>
-						<div class="col-md-2">
-							<ui-select class="bg-orange-ps br-15 b-0" multiple ng-model="page.dealer.selectedDealer" theme="bootstrap" sortable="true" close-on-select="false">
-							<ui-select-match placeholder="Seleccionar dealer...">{{$item.name}}</ui-select-match>
-							<ui-select-choices repeat="dealer in page.dealers | propsFilter: {name: $select.search}">
-							<div ng-bind-html="dealer.name | highlight: $select.search"></div>
-						</ui-select-choices>
-					</ui-select>
+						<div class="row">
+							<div class="col-md-12">
+								<text-angular ng-model="page.html.value" ta-disabled="page.html.disabled"></text-angular>
+							</div>
+						</div>
+
+					</div>
+					<!-- /tile body -->
+
+				</section>
+				<!-- /tile -->
+
+			</div>
+			<!-- /col -->
+
+
+		</div>
+		<!-- /row -->
+
+
+
+
+
+	</div>
+	<!-- /page content -->
+
+	<script type="text/ng-template" id="messageModal.html" class="">
+		<div class="modal-body text-gray">
+			<div class="row mb-20">
+				<div class="col-md-12">
+					<h4 class="text-center">{{modal.message.title}}</h4>
 				</div>
 			</div>
-		</div>
-
-		<hr class="mt-10 mb-10">
-
-		<div class="row">
-			<div class="col-md-12 mb-5">
-				<label for="selUser" class="col-md-2 control-label" >Usuario</label>
-				<div class="col-md-4">
-					<ui-select ng-change="hola()" class="bg-blue-ps br-15 b-0" multiple ng-model="page.user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false">
-					<ui-select-match placeholder="Seleccionar usuario...">{{$item.fullName}}</ui-select-match>
-					<ui-select-choices repeat="user in page.users | propsFilter: {fullName: $select.search}">
-					<div ng-bind-html="user.fullName | highlight: $select.search"></div>
-				</ui-select-choices>
-			</ui-select>
-		</div>
-	</div>
-</div>
-<hr class="mt-10 mb-10">
-<div class="row">
-	<div class="col-md-12 mb-5">
-		<label for="selZone" class="col-md-2 control-label" >Fecha inicio/fin</label>
-		<div class="col-md-10">
-			<button  class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.rangeOptions" date-begin="page.startDate" date-end="page.endDate">
-				<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.startDate}} - {{page.endDate}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
-			</button>
-		</div>
-	</div>
-</div>
-<hr class="mt-10 mb-10">
-<div class="row">
-	<div class="col-md-12 mb-5">
-		<div class="form-group">
-			<label class="col-md-2 control-label" >Título</label>
-			<div class="col-md-9">
-				<div class="form-group">
-					<input type="text" class="form-control underline-input" ng-model="page.subject" placeholder="Agregar asunto/título">
-				</div>
+			<div class="text-center">
+				<button class="btn br-15 bg-red-ps" ng-click="cancel()">Aceptar</button>
 			</div>
 		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12">
-		<button type="button" class="btn btn-default" name="insertImage" ta-button="ta-button"  title="Insert image" unselectable="on"><i class="fa fa-picture-o"></i></button>
-		<text-angular ng-model="page.html"></text-angular>
-	</div>
-</div>
-
-</div>
-<!-- /tile body -->
-
-</section>
-<!-- /tile -->
-
-</div>
-<!-- /col -->
-
-
-</div>
-<!-- /row -->
-
-
-
-
-
-</div>
-<!-- /page content -->
-
-<script type="text/ng-template" id="messageModal.html" class="">
-  <div class="modal-body text-gray">
-    <div class="row mb-20">
-      <div class="col-md-12">
-        <h4 class="text-center">{{modal.message.title}}</h4>
-      </div>
-    </div>
-    <div class="text-center">
-    	<button class="btn br-15 bg-red-ps" ng-click="cancel()">Aceptar</button>
-    </div>
-  </div>
-</script>
+	</script>
 
 </div>

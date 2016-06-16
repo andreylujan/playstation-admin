@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('CreateTaskCtrl', function($scope, $log, Utils, Zones, Dealers, Stores, Users, ReportTypes, Reports) {
+.controller('CreateTaskCtrl', function($scope, $log, Utils, Zones, Dealers, Stores, Users, ReportTypes, Reports, Validators) {
 
 	$scope.page = {
 		title: 'Crear tarea',
@@ -46,6 +46,12 @@ angular.module('minovateApp')
 			format: 'dd-MMMM-yyyy',
 			datepickerOpened: false,
 			minDate: new Date()
+		},
+		alert: {
+			color: null,
+			show: false,
+			title: null,
+			text: null
 		}
 	};
 
@@ -174,18 +180,78 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.createTask = function() {
-		Reports.save({
+	$scope.setAlertProperties = function(show, color, title, text) {
+		$scope.page.alert.color = color;
+		$scope.page.alert.show = show;
+		$scope.page.alert.title = title;
+		$scope.page.alert.text = text;
+	};
 
+	var validateForm = function() {
+		if (!Validators.validaRequiredField($scope.page.newTask.users.selectedUser)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar un usuario');
+			return false;
+		}
+		if (!Validators.validaRequiredField($scope.page.newTask.limitDate)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar una fecha límite');
+			return false;
+		}
+		if (!Validators.validaRequiredField($scope.page.newTask.reportTypes.selectedReportType)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar un tipo de reporte');
+			return false;
+		}
+		if (!Validators.validaRequiredField($scope.page.newTask.zones.selectedZone)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar una zona');
+			return false;
+		}
+		if (!Validators.validaRequiredField($scope.page.newTask.dealers.selectedDealer)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar un dealer');
+			return false;
+		}
+		if (!Validators.validaRequiredField($scope.page.newTask.stores.selectedStore)) {
+			$scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar una tienda');
+			return false;
+		}
+		return true;
+	};
+
+	$scope.createTask = function() {
+
+		if (!validateForm()) {
+			Utils.gotoAnyPartOfPage('topPageCreateTask');
+			return;
+		}
+
+		Reports.save({
+			dynamic_attributes: {
+				sections: [{
+					id: 1,
+					data_section: [{
+						map_location: {}
+					}, {
+						zone_location: {
+							zone: $scope.page.newTask.zones.selectedZone.id,
+							dealer: $scope.page.newTask.dealers.selectedDealer.id,
+							store: $scope.page.newTask.stores.selectedStore.id
+						}
+					}, {
+						address_location: {}
+					}]
+				}]
+			},
+			report_type_id: $scope.page.newTask.reportTypes.selectedReportType.id,
+			assigned_user_id: $scope.page.newTask.users.selectedUser.id,
+			limit_date: $scope.page.newTask.limitDate.toISOString()
 		}, function(success) {
 			$log.log(success);
 			if (success.data) {
-
+				$scope.setAlertProperties(true, 'success', 'Tarea creada', 'Tarea creada con éxito');
+				Utils.gotoAnyPartOfPage('topPageCreateTask');
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 		});
 	};
 

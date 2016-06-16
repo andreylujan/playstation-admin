@@ -61,7 +61,9 @@
     "angular-underscore": "~0.5.0",
     "satellizer": "~0.14.1",
     "uiswitch": "~1.0.1",
-    "angular-base64-upload": "~0.1.19"
+    "angular-base64-upload": "~0.1.19",
+    "bootstrap-ui-datetime-picker": "~2.4.0",
+    "ng-droplet": "~0.5.16"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
