@@ -9,9 +9,14 @@
  */
 angular.module('minovateApp')
 
-.controller('AddFileModalInstanceCtrl', function($scope) {
+.controller('AddFileModalInstanceCtrl', function($scope, $log) {
 
 	$scope.$on('$dropletReady', function whenDropletReady() {
 		$scope.interface.allowedExtensions(['png', 'jpg', 'bmp', 'gif']);
 	});
+
+	$scope.uploadImages = function() {
+		$log.log('hola');
+	};
+
 });

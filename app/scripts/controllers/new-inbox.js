@@ -14,7 +14,6 @@ angular.module('minovateApp')
 	var i = 0,
 		j = 0;
 
-
 	$scope.page = {
 		title: 'Nuevo mensaje',
 		html: {

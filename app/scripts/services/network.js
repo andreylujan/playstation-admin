@@ -450,6 +450,70 @@ angular.module('minovateApp')
 
 })
 
+// Checklists
+.factory('Checklists', function($resource) {
+
+	return $resource(API_URL + '/data_parts/:idChecklist', {
+		idChecklist: '@idChecklist'
+	}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'filter[type]': '@type',
+				include: '@include'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// ChecklistActions
+.factory('ChecklistActions', function($resource) {
+
+	return $resource(API_URL + '/checklists/:idChecklist', {
+		idChecklist: '@idChecklist'
+	}, {
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		},
+	});
+
+})
+
 // FILES
 .factory('Files', function($resource, Token) {
 

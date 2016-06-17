@@ -1,0 +1,149 @@
+<div class="page page-ng-table">
+
+
+
+
+  <!-- page header -->
+  <div class="pageheader">
+
+    <h2>{{page.title}} <span></span></h2>
+
+    <div class="page-bar">
+
+      <ul class="page-breadcrumb">
+        <li>
+          <a ui-sref="app.dashboard"> {{main.title}}</a>
+        </li>
+        <li>
+          <a href="javascript:;">Maestros</a>
+        </li>
+        <li>
+          <a ui-sref="app.master.checklist">{{page.title}}</a>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+  <!-- /page header -->
+
+  <!-- page content -->
+  <div class="pagecontent">
+
+    <!-- row -->
+    <div class="row">
+
+      <!-- col -->
+      <div class="col-md-12">
+
+
+        <!-- tile -->
+        <section class="tile" fullscreen="isFullscreen06">
+
+          <!-- tile header -->
+          <div class="tile-header dvd dvd-btm">
+            <h1 class="custom-font"></h1>
+            <ul class="controls">
+              <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+
+                <a href uib-dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
+
+                <ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
+                  <li>
+                    <a href tile-control-toggle>
+                      <span class="minimize"><fa name="angle-down"></fa>&nbsp;&nbsp;&nbsp;Minimizar</span>
+                      <span class="expand"><fa name="angle-up"></fa>&nbsp;&nbsp;&nbsp;Maximizar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                      <fa name="refresh"></fa> Refrescar
+                    </a>
+                  </li>
+                  <li>
+                    <a href tile-control-fullscreen ng-click="isFullscreen06 = !isFullscreen06">
+                      <fa name="expand"></fa> Pantalla completa
+                    </a>
+                  </li>
+
+                </ul>
+
+              </li>
+              <li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
+            </ul>
+          </div>
+          <!-- /tile header -->
+
+          <!-- tile body -->
+          <div class="tile-body">
+            <!-- <h4><strong>Título: </strong><input class="form-control b-0" type="text" ng-model="checklist.name" ></h4> -->
+
+            <button class="bg-orange-ps b-0 br-15 pt-7 pb-7 pr-12 pl-12" ng-click="createChecklist()">Guardar</button>
+
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-1 control-label text-uppercase pt-10"><strong>Título</strong></label>
+                <div class="col-sm-3">
+                  <input class="form-control b-0" type="text" ng-model="checklist.name" >
+                </div>
+              </div>
+            </form>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nombre item</th>
+                  <th>Tipo</th>
+                  <th>Datos solicitados</th>
+                  <th>Orden relativo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in checklist.items">
+                  <td>
+                    <input class="form-control b-0" type="text" ng-model="item.name" >
+                  </td>
+                  <td>
+                    <ui-select class="bg-white b-solid br-15" ng-model="item.option" sortable="true">
+                      <ui-select-match placeholder="Seleccionar opciones...">
+                        <span ng-bind="$select.selected.name"></span>
+                      </ui-select-match>
+                      <ui-select-choices repeat="option in (checklistOptions | filter: $select.search) track by option.id">
+                        <span ng-bind="option.name"></span>
+                      </ui-select-choices>
+                    </ui-select>
+                  </td>
+                  <td>
+                    <input type="checkbox" class="" ng-model="item.required">
+                  </td>
+                  <td>
+                    <input class="form-control b-0" type="text" ng-model="item.position" >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-right">
+              <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 10px 17px" ng-click="generateItem()"><strong>+</strong></button>
+            </div>
+            
+          </div>
+          <!-- /tile body -->
+
+        </section>
+        <!-- /tile -->
+
+      </div>
+      <!-- /col -->
+
+
+    </div>
+    <!-- /row -->
+
+
+
+
+
+  </div>
+  <!-- /page content -->
+
+</div>

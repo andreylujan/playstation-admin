@@ -3,7 +3,10 @@
 	</div>
 	<div class="modal-body">
 
-		<div class="add-files">
+
+		<input type="file" class="form-control" ng-model="" base-sixty-four-input multiple>
+
+		<!-- <div class="add-files">
 			<droplet-upload-multiple ng-model="interface"></droplet-upload-multiple>
 		</div>
 
@@ -18,11 +21,12 @@
 
 			</ul>
 
-		</droplet>
+		</droplet> -->
 		<!-- <section data-droplet ng-model="interface"></section> -->
 
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-default btn-border" ng-click="interface.uploadFiles()">Subir imágenes</button>
+		<button class="btn btn-default btn-border" ng-click="uploadImages()">Subir imágenes</button>
+		<!-- <button class="btn btn-default btn-border" ng-click="interface.uploadFiles()">Subir imágenes</button> -->
 		<button class="btn btn-default btn-border" ng-click="cancel()">Cerrar</button>
 	</div>

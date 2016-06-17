@@ -134,7 +134,7 @@ angular
 				var modalInstance = $uibModal.open({
 					templateUrl: './views/tmpl/modals/addFileModalContent.html',
 					controller: 'AddFileModalInstanceCtrl',
-					size: 'lg',
+					size: 'md',
 					resolve: {}
 				});
 
@@ -256,6 +256,12 @@ angular
 				url: '/checklist',
 				controller: 'ChecklistCtrl',
 				templateUrl: 'views/tmpl/masters/checklist.html'
+			})
+			//masters/checklist
+			.state('app.masters.new-checklist', {
+				url: '/new-checklist?idChecklist',
+				controller: 'NewChecklistCtrl',
+				templateUrl: 'views/tmpl/masters/new-checklist.html'
 			})
 			//promotions
 			.state('app.promotions', {

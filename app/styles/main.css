@@ -10569,6 +10569,9 @@ body {
 .b-default {
   border-color: #616f77 !important; }
 
+.br-50-percent {
+  border-radius: 50% !important; }
+
 .br-0 {
   border-radius: 0 !important; }
 

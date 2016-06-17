@@ -77,15 +77,18 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo dealer</button>
+            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewChecklist()">Nuevo checklist</button>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="dealer in dealers">
+              <tr ng-repeat="checklist in checklists">
                 <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
-                  {{dealer.name}}
+                  {{checklist.name}}
                 </td>
-                <td data-title="'Info'" >
-                  <img ng-click="openModalCreateDealer(dealer.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
+                <td data-title="'Editar'" >
+                  <img ng-click="gotoNewChecklist(checklist.id)" ng-src="images/edit.png" style="width:24px; cursor:pointer" uib-tooltip="Editar checklist {{checklist.name}}">
+                </td>
+                <td data-title="'Eliminar'" >
+                  <img ng-click="openModalDeleteChecklist(checklist.id)" ng-src="images/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar checklist {{checklist.name}}">
                 </td>
               </tr>
             </table>
@@ -110,61 +113,18 @@
 </div>
 <!-- /page content -->
 
-<script type="text/ng-template" id="createDealer.html">
-  <div class="modal-header text-gray">
+<script type="text/ng-template" id="messageListChecklist.html">
+  <!-- <div class="modal-header text-gray">
     <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
-  </div>
-  <div class="modal-body text-gray">
-    <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
-    <div class="row">
-      <div class="col-md-12">
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label for="inputDealerName" class="col-sm-2 control-label">Nombre</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control rounded" id="inputDealerName" placeholder="Nombre" ng-model="modal.dealer.name.text" ng-disabled="modal.dealer.name.disabled" ng-change="removeAlert()" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputDealerContact" class="col-sm-2 control-label">Contacto</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control rounded" id="inputDealerContact" placeholder="email" ng-model="modal.dealer.contact.text" ng-disabled="modal.dealer.contact.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputDealerPhone" class="col-sm-2 control-label">Teléfono</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control rounded" id="inputDealerPhone" placeholder="+56 9 11111111" ng-model="modal.dealer.phone.text" ng-disabled="modal.dealer.phone.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputDealerAddress" class="col-sm-2 control-label">Dirección</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control rounded" id="inputDealerAddress" placeholder="dirección #111" ng-model="modal.dealer.address.text" ng-disabled="modal.dealer.address.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">Zonas</label>
-            <div class="col-sm-10">
-              <ui-select class="bg-white b-solid br-15" multiple ng-model="modal.zones.selectedZones" theme="bootstrap" sortable="true" close-on-select="false" ng-disabled="modal.zones.disabled" ng-change="removeAlert()">
-                  <ui-select-match placeholder="Seleccionar zone...">{{$item.name}}</ui-select-match>
-                  <ui-select-choices repeat="zone in modal.zones.zones | propsFilter: {name: $select.search}">
-                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+  </div> -->
+  <div class="modal-body text-center text-gray">
+    <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
+    <h3>¿Seguro que deseas eliminar este checklist?</h3>
+    <p>Al eliminar un checklist, se perderá toda la información contenida en éste. Verifica si quieres eliminar este checklist</p>
+    
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createDealer()" >{{modal.buttons.create.text}}</button>
-    
-    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editDealer()" >{{modal.buttons.edit.text}}</button>
-    
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteDealer()" >{{modal.buttons.delete.text}}</button>
-    
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteChecklist()" >{{modal.buttons.delete.text}}</button>    
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>
 </script>
