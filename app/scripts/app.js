@@ -127,6 +127,9 @@ angular
 	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', function(taRegisterTool, taOptions, $uibModal) {
 		// $delegate is the taOptions we are decorating
 		// register the tool with textAngular
+
+		var imageUrl = null;
+
 		taRegisterTool('colourRed', {
 			iconclass: "fa fa-picture-o",
 			action: function(deferred, restoreSelection) {
@@ -138,7 +141,12 @@ angular
 					resolve: {}
 				});
 
-				// this.$editor().wrapSelection('insertHTML', "<img src='http://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'>", true);
+				modalInstance.result.then(function(url) {
+					imageUrl = url;
+				}, function() {
+				});
+
+				this.$editor().wrapSelection('insertHTML', "<img src='" + imageUrl + "'>", true);
 
 			}
 
