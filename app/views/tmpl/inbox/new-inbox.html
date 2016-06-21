@@ -123,13 +123,9 @@
 							<div class="col-md-12 mb-5">
 								<label for="selUser" class="col-md-2 control-label">Acción</label>
 								<div class="col-md-4">
-									<ui-select class="bg-yellow-ps b-solid br-15" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled">
-										<ui-select-match placeholder="Seleccione acción...">
-											<span ng-bind="$select.selected.name"></span>
-										</ui-select-match>
-										<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id">
-											<span ng-bind="messageAction.name"></span>
-										</ui-select-choices>
+									<ui-select class="br-15 b-0" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled">
+										<ui-select-match placeholder="Seleccione acción..."><span ng-bind="$select.selected.name"></span></ui-select-match>
+										<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id"><span ng-bind="messageAction.name"></span></ui-select-choices>
 									</ui-select>
 								</div>
 							</div>

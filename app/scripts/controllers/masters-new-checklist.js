@@ -77,7 +77,6 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.error(error);
 		});
-
 	};
 
 	$scope.generateItem = function() {
@@ -90,7 +89,6 @@ angular.module('minovateApp')
 			option: null,
 			required: false
 		});
-
 	};
 
 	var getChecklistOptions = function() {
@@ -138,7 +136,6 @@ angular.module('minovateApp')
 			});
 
 		}
-
 	};
 
 	$scope.createChecklist = function() {
@@ -160,6 +157,7 @@ angular.module('minovateApp')
 			$log.log(success);
 			if (success.data) {
 				$log.log(success);
+				$state.go('app.masters.checklist');
 			} else {
 				$log.error(success);
 			}
@@ -168,7 +166,113 @@ angular.module('minovateApp')
 		});
 	};
 
+	$scope.openModalAddOptions = function(idItem) {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'addItemOptionsModal.html',
+			controller: 'addItemOptionsModalInstance',
+			resolve: {
+				idItem: function() {
+					return idItem;
+				},
+				idChecklist: function() {
+					return idChecklist;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+	};
+
 	getChecklistOptions();
+
+})
+
+.controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, idChecklist, idItem, Checklists) {
+
+	$scope.modal = {
+		checklistOptions: [],
+		selectedOption: {},
+		options: []
+	};
+
+	var i = 0,
+		j = 0,
+		k = 0;
+
+	$scope.getInfoChecklist = function() {
+
+		Checklists.query({
+			idChecklist: idChecklist
+		}, function(success) {
+			if (success.data) {
+
+				for (i = 0; i < success.data.attributes.children.length; i++) {
+					for (j = 0; j < success.data.attributes.children[i].data.option_ids.length; j++) {
+						$scope.checklist.items.push({
+							options: [{
+								id: success.data.attributes.children[i].data.option_ids[j]
+							}]
+						});
+					}
+				}
+
+				for (i = 0; i < $scope.checklistOptions.length; i++) {
+					for (j = 0; j < $scope.checklist.items.length; j++) {
+						for (k = 0; k < $scope.checklist.items[j].options.length; k++) {
+							if (parseInt($scope.checklist.items[j].options[k].id) === parseInt($scope.checklistOptions[i].id)) {
+								$scope.checklist.items[j].option = $scope.checklistOptions[i];
+								break;
+							}
+						}
+					}
+				}
+
+			} else {
+				$log.error(success);
+			}
+
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	var getChecklistOptions = function() {
+		Checklists.query({
+			'filter[type]': 'ChecklistOption',
+			include: 'detail'
+		}, function(success) {
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					$scope.modal.checklistOptions.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	$scope.generateItem = function() {
+		$scope.modal.options.push({});
+	};
+
+	$scope.ok = function() {
+		$uibModalInstance.close();
+	};
+
+	getChecklistOptions();
+
+	if (idItem) {
+
+	} else {
+		$scope.generateItem();
+	}
 
 });
 

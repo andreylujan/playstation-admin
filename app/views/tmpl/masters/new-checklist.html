@@ -93,8 +93,9 @@
               <thead>
                 <tr>
                   <th>Nombre item</th>
-                  <th>Tipo</th>
-                  <th>Datos solicitados</th>
+                  <th>Opciones</th>
+                  <!-- <th>Tipo</th> -->
+                  <!-- <th>Datos solicitados</th> -->
                   <th>Orden relativo</th>
                 </tr>
               </thead>
@@ -104,6 +105,9 @@
                     <input class="form-control b-0" type="text" ng-model="item.name" >
                   </td>
                   <td>
+                    <button class="btn bg-blue-ps br-15 b-0" ng-click="openModalAddOptions(item.id)">Agregar opciones</button>
+                  </td>
+                  <!-- <td>
                     <ui-select class="bg-white b-solid br-15" ng-model="item.option" sortable="true">
                       <ui-select-match placeholder="Seleccionar opciones...">
                         <span ng-bind="$select.selected.name"></span>
@@ -115,7 +119,7 @@
                   </td>
                   <td>
                     <input type="checkbox" class="" ng-model="item.required">
-                  </td>
+                  </td> -->
                   <td>
                     <input class="form-control b-0" type="text" ng-model="item.position" >
                   </td>
@@ -145,5 +149,47 @@
 
   </div>
   <!-- /page content -->
+
+  <script type="text/ng-template" id="addItemOptionsModal.html">
+  <!-- <div class="modal-header text-gray">
+    <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
+  </div> -->
+  <div class="modal-body text-center text-gray">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Opción</th>
+          <th>Datos requeridos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="option in ">
+          <td>
+          <ui-select class="bg-white b-solid br-15" ng-model="modal.selectedOption" sortable="true">
+              <ui-select-match placeholder="Seleccionar opciones...">
+                <span ng-bind="$select.selected.name"></span>
+              </ui-select-match>
+              <ui-select-choices repeat="option in (modal.checklistOptions | filter: $select.search) track by option.id">
+                <span ng-bind="option.name"></span>
+              </ui-select-choices>
+            </ui-select>
+          </td>
+          <td>
+            <input type="checkbox" class="" >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-right">
+      <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 5px 11px" ng-click="generateItem()"><strong>+</strong></button>
+    </div>
+    
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-rounded-10 mb-10" type="button" ng-click="ok()">Aceptar</button>    
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>
 
 </div>

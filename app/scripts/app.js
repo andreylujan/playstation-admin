@@ -124,15 +124,19 @@ angular
 ])
 
 .config(function($provide) {
-	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', function(taRegisterTool, taOptions, $uibModal) {
+	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', '$rootScope', '$log', function(taRegisterTool, taOptions, $uibModal, $rootScope, $log) {
 		// $delegate is the taOptions we are decorating
 		// register the tool with textAngular
 
 		var imageUrl = null;
 
-		taRegisterTool('colourRed', {
-			iconclass: "fa fa-picture-o",
+		taRegisterTool('insertImageFromDevice', {
+			tooltiptext: 'Insertar imágen de dispositivo',
+			iconclass: "fa fa-cloud-upload",
 			action: function(deferred, restoreSelection) {
+				var that = this;
+
+				var insertLinkmodalScope = $rootScope.$new();
 
 				var modalInstance = $uibModal.open({
 					templateUrl: './views/tmpl/modals/addFileModalContent.html',
@@ -142,17 +146,15 @@ angular
 				});
 
 				modalInstance.result.then(function(url) {
-					imageUrl = url;
-				}, function() {
+					return that.$editor().wrapSelection('insertHTML', "<img src='" + url + "'>", true);
 				});
-
-				this.$editor().wrapSelection('insertHTML', "<img src='" + imageUrl + "'>", true);
 
 			}
 
 		});
+
 		// add the button to the default toolbar definition
-		taOptions.toolbar[3].push('colourRed');
+		taOptions.toolbar[3].splice(2, 0, 'insertImageFromDevice');
 		return taOptions;
 	}]);
 })

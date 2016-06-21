@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('AddFileModalInstanceCtrl', function($scope, $log, $uibModalInstance, Files) {
+.controller('AddFileModalInstanceCtrl', function($scope, $log, $uibModalInstance, $window, Files) {
 
 	$scope.modal = {
 		images: {
@@ -34,14 +34,15 @@ angular.module('minovateApp')
 			last_image: null,
 			image: 'data:' + $scope.modal.images.src.filetype + 'base64,' + $scope.modal.images.src.base64
 		}, function(success) {
-			$log.log(success);
 			if (success.data) {
 				imageUrl = success.data.attributes.url;
 				$uibModalInstance.close(imageUrl);
-				$log.log('todo ok');
+			} else {
+				$window.alert('Error al subir la imágen, por favor intente nuevamente');
 			}
 		}, function(error) {
 			$log.error(error);
+			$window.alert('Error al subir la imágen, por favor intente nuevamente');
 		});
 
 	};
