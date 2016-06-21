@@ -123,8 +123,8 @@ angular
 	}
 ])
 
-.config(function($provide) {
-	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', '$rootScope', '$log', function(taRegisterTool, taOptions, $uibModal, $rootScope, $log) {
+.config(['$provide', function($provide) {
+	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', '$log', function(taRegisterTool, taOptions, $uibModal, $log) {
 		// $delegate is the taOptions we are decorating
 		// register the tool with textAngular
 
@@ -135,8 +135,6 @@ angular
 			iconclass: "fa fa-cloud-upload",
 			action: function(deferred, restoreSelection) {
 				var that = this;
-
-				var insertLinkmodalScope = $rootScope.$new();
 
 				var modalInstance = $uibModal.open({
 					templateUrl: './views/tmpl/modals/addFileModalContent.html',
@@ -157,7 +155,7 @@ angular
 		taOptions.toolbar[3].splice(2, 0, 'insertImageFromDevice');
 		return taOptions;
 	}]);
-})
+}])
 
 .config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {

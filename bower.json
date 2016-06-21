@@ -70,6 +70,11 @@
     "angular-scenario": "1.2.16"
   },
   "overrides": {
+    "uiswitch": {
+      "main": [
+        "uiswitch.css"
+      ]
+    },
     "bootstrap": {
       "main": [
         "dist/css/bootstrap.css"

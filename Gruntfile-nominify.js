@@ -42,7 +42,7 @@ module.exports = function (grunt) {
       },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'karma']
+        tasks: ['newer:jshint:test'/*, 'karma'*/]
       },
       styles: {
         files: ['<%= yeoman.app %>/sass/{,*/}*.scss'],
@@ -395,12 +395,12 @@ module.exports = function (grunt) {
     },
 
     // Test settings
-    karma: {
-      unit: {
-        configFile: 'test/karma.conf.js',
-        singleRun: true
-      }
-    }
+    // karma: {
+    //   unit: {
+    //     configFile: 'test/karma.conf.js',
+    //     singleRun: true
+    //   }
+    // }
   });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -428,8 +428,8 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test',
-    'karma'
+    'connect:test'
+    // 'karma'
   ]);
 
   grunt.registerTask('build', [
@@ -443,11 +443,11 @@ module.exports = function (grunt) {
     'ngmin',
     'copy:dist',
     'cdnify',
-    //'cssmin',
-    //'uglify',
+    'cssmin',
+    'uglify',
     'filerev',
     'usemin',
-    //'htmlmin'
+    'htmlmin'
   ]);
 
   grunt.registerTask('default', [
