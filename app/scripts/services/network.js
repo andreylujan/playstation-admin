@@ -30,6 +30,7 @@ angular.module('minovateApp')
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 
@@ -47,6 +48,7 @@ angular.module('minovateApp')
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			},
 			params: {
 				confirmation_token: '@confirmation_token'
@@ -66,7 +68,8 @@ angular.module('minovateApp')
 		save: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		query: {
@@ -79,6 +82,7 @@ angular.module('minovateApp')
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			},
 		},
 		delete: {
@@ -88,7 +92,8 @@ angular.module('minovateApp')
 		sendEmailWithToken: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		verifyPassToken: {
