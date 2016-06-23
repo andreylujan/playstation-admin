@@ -139,7 +139,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateProductModalInstance', function($scope, $log, $uibModal, $uibModalInstance, $window, ProductTypes, ProductDestinations, Platforms, idProduct, Validators, Utils, Products, Files) {
+.controller('CreateProductModalInstance', function($scope, $log, $uibModal, $uibModalInstance, $window, ProductTypes, ProductClassifications, Platforms, idProduct, Validators, Utils, Products, Files) {
 
 	$scope.modal = {
 		title: {
@@ -219,6 +219,10 @@ angular.module('minovateApp')
 				disabled: false,
 				show: false
 			},
+			publisher: {
+				disabled: false,
+				text: null
+			}
 		},
 		productTypes: [],
 		destinations: [],
@@ -263,6 +267,7 @@ angular.module('minovateApp')
 			$scope.modal.product.stock.text = success.data.attributes.stock;
 			$scope.modal.product.isTop.value = success.data.attributes.is_top;
 			$scope.modal.product.isListed.value = success.data.attributes.is_listed;
+			$scope.modal.product.publisher.text = success.data.attributes.publisher;
 
 			for (var i = 0; i < $scope.modal.productTypes.length; i++) {
 				if ($scope.modal.productTypes[i].id === success.data.relationships.product_type.data.id) {
@@ -312,6 +317,7 @@ angular.module('minovateApp')
 		$scope.modal.product.destination.disabled = state;
 		$scope.modal.product.platform.disabled = state;
 		$scope.modal.product.images.disabled = state;
+		$scope.modal.product.publisher.disabled = state;
 	};
 
 	var getProductTypes = function() {
@@ -338,7 +344,7 @@ angular.module('minovateApp')
 	};
 
 	var getProductDestinations = function() {
-		ProductDestinations.query({}, function(success) {
+		ProductClassifications.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
@@ -581,7 +587,8 @@ angular.module('minovateApp')
 					max_price: $scope.modal.product.maxPrice.text,
 					// stock: $scope.modal.product.stock.text,
 					is_top: $scope.modal.product.isTop.value,
-					is_listed: $scope.modal.product.isListed.value
+					is_listed: $scope.modal.product.isListed.value,
+					publisher: $scope.modal.product.publisher.text
 				},
 				relationships: {
 					product_type: {
@@ -638,7 +645,8 @@ angular.module('minovateApp')
 						min_price: $scope.modal.product.minPrice.text,
 						max_price: $scope.modal.product.maxPrice.text,
 						is_top: $scope.modal.product.isTop.value,
-						is_listed: $scope.modal.product.isListed.value
+						is_listed: $scope.modal.product.isListed.value,
+						publisher: $scope.modal.product.publisher.text
 					},
 					relationships: {
 						product_type: {

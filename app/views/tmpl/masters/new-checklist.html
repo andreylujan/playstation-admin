@@ -78,13 +78,13 @@
           <div class="tile-body">
             <!-- <h4><strong>Título: </strong><input class="form-control b-0" type="text" ng-model="checklist.name" ></h4> -->
 
-            <button class="bg-orange-ps b-0 br-15 pt-7 pb-7 pr-12 pl-12" ng-click="createChecklist()">Guardar</button>
+            <button class="bg-orange-ps b-0 br-15 pt-7 pb-7 pr-12 pl-12" ng-click="updateOrCreateChecklist()">Guardar</button>
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <label class="col-sm-1 control-label text-uppercase pt-10"><strong>Título</strong></label>
                 <div class="col-sm-3">
-                  <input class="form-control b-0" type="text" ng-model="checklist.name" >
+                  <input class="form-control underline-input" type="text" ng-model="checklist.name" >
                 </div>
               </div>
             </form>
@@ -102,32 +102,22 @@
               <tbody>
                 <tr ng-repeat="item in checklist.items">
                   <td>
-                    <input class="form-control b-0" type="text" ng-model="item.name" >
+                    <input class="form-control underline-input" type="text" ng-model="item.name" >
                   </td>
                   <td>
                     <button class="btn bg-blue-ps br-15 b-0" ng-click="openModalAddOptions(item.id)">Agregar opciones</button>
                   </td>
-                  <!-- <td>
-                    <ui-select class="bg-white b-solid br-15" ng-model="item.option" sortable="true">
-                      <ui-select-match placeholder="Seleccionar opciones...">
-                        <span ng-bind="$select.selected.name"></span>
-                      </ui-select-match>
-                      <ui-select-choices repeat="option in (checklistOptions | filter: $select.search) track by option.id">
-                        <span ng-bind="option.name"></span>
-                      </ui-select-choices>
-                    </ui-select>
+                  <td>
+                    <input class="form-control underline-input" type="number" ng-model="item.position" >
                   </td>
                   <td>
-                    <input type="checkbox" class="" ng-model="item.required">
-                  </td> -->
-                  <td>
-                    <input class="form-control b-0" type="text" ng-model="item.position" >
+                    <input class="" type="checkbox" ng-model="item.required" >
                   </td>
                 </tr>
               </tbody>
             </table>
             <div class="text-right">
-              <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 10px 17px" ng-click="generateItem()"><strong>+</strong></button>
+              <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 10px 17px" ng-click="generateItem()" ng-disabled="page.buttons.oneMoreItem.disabled"><strong>+</strong></button>
             </div>
             
           </div>
@@ -160,34 +150,34 @@
       <thead>
         <tr>
           <th>Opción</th>
-          <th>Datos requeridos</th>
+          <!-- <th>Datos requeridos</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="option in ">
+        <tr ng-repeat="option in modal.options">
           <td>
-          <ui-select class="bg-white b-solid br-15" ng-model="modal.selectedOption" sortable="true">
-              <ui-select-match placeholder="Seleccionar opciones...">
-                <span ng-bind="$select.selected.name"></span>
+            <ui-select class="bg-white b-solid" ng-model="option.selected">
+              <ui-select-match placeholder="Seleccionar una opción...">
+                {{$select.selected.name}}
               </ui-select-match>
-              <ui-select-choices repeat="option in (modal.checklistOptions | filter: $select.search) track by option.id">
-                <span ng-bind="option.name"></span>
+              <ui-select-choices repeat="option in (modal.checklistOptions | propsFilter: {name: $select.search})">
+                <span ng-bind="option.name | highlight: $select.search"></span>
               </ui-select-choices>
             </ui-select>
           </td>
-          <td>
-            <input type="checkbox" class="" >
-          </td>
+          <!-- <td>
+            <input type="checkbox" class="" ng-model="option.required">
+          </td> -->
         </tr>
       </tbody>
     </table>
     <div class="text-right">
-      <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 5px 11px" ng-click="generateItem()"><strong>+</strong></button>
+      <button class="text-right bg-yellow-ps b-0 br-50-percent mt-10" style="padding: 5px 11px" ng-click="generateOption()"><strong>+</strong></button>
     </div>
     
   </div>
   <div class="modal-footer">
-    <button class="btn btn-danger btn-rounded-10 mb-10" type="button" ng-click="ok()">Aceptar</button>    
+    <button class="btn btn-danger btn-rounded-10 mb-10" type="button" ng-click="addChecklistOptions()">Aceptar</button>    
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>
 </script>

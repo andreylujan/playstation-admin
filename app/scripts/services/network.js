@@ -23,7 +23,7 @@ angular.module('minovateApp')
 })
 
 // Invitaciones
-.factory('Invitations', function($resource, Token) {
+.factory('Invitations', function($resource) {
 
 	return $resource(API_URL + '/invitations', {}, {
 		save: {
@@ -38,7 +38,7 @@ angular.module('minovateApp')
 })
 
 // InviteLink
-.factory('InviteLink', function($resource, Token, $state) {
+.factory('InviteLink', function($resource, $state) {
 
 	return $resource(API_URL + '/invitations/:id', {
 		id: '@id'
@@ -58,7 +58,7 @@ angular.module('minovateApp')
 })
 
 // USUARIOS
-.factory('Users', function($resource, Token) {
+.factory('Users', function($resource) {
 
 	return $resource(API_URL + '/users/:idUser', {
 		idUser: '@idUser'
@@ -114,7 +114,8 @@ angular.module('minovateApp')
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});
@@ -151,7 +152,7 @@ angular.module('minovateApp')
 })
 
 // ZONES
-.factory('Zones', function($resource, Token) {
+.factory('Zones', function($resource) {
 
 	return $resource(API_URL + '/zones/:zoneId', {
 		zoneId: '@zoneId'
@@ -184,7 +185,7 @@ angular.module('minovateApp')
 })
 
 // DEALERS
-.factory('Dealers', function($resource, Token) {
+.factory('Dealers', function($resource) {
 
 	return $resource(API_URL + '/dealers/:dealerId', {
 		dealerId: '@dealerId'
@@ -217,7 +218,7 @@ angular.module('minovateApp')
 })
 
 // STORES
-.factory('Stores', function($resource, Token) {
+.factory('Stores', function($resource) {
 
 	return $resource(API_URL + '/stores/:storeId', {
 		storeId: '@storeId'
@@ -227,30 +228,52 @@ angular.module('minovateApp')
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				include: '@include'
 			}
 		},
 		save: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {}
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// StoreTypes
+.factory('StoreTypes', function($resource) {
+
+	return $resource(API_URL + '/store-types', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
+			}
 		}
 	});
 
 })
 
 // PRODUCTS
-.factory('Products', function($resource, Token) {
+.factory('Products', function($resource) {
 
 	return $resource(API_URL + '/products/:idProduct', {
 		idProduct: '@idProduct'
@@ -289,7 +312,7 @@ angular.module('minovateApp')
 })
 
 // ROLES
-.factory('Roles', function($resource, Token) {
+.factory('Roles', function($resource) {
 
 	return $resource(API_URL + '/organizations/:idOrganization/roles', {
 		idOrganization: '@idOrganization'
@@ -306,7 +329,7 @@ angular.module('minovateApp')
 })
 
 // PROMOTIONS
-.factory('Promotions', function($resource, Token) {
+.factory('Promotions', function($resource) {
 
 	return $resource(API_URL + '/promotions/:idPromotion', {
 		idPromotion: '@idPromotion'
@@ -346,7 +369,7 @@ angular.module('minovateApp')
 })
 
 // PRODUCT TYPES
-.factory('ProductTypes', function($resource, Token) {
+.factory('ProductTypes', function($resource) {
 
 	return $resource(API_URL + '/product-types', {}, {
 		query: {
@@ -360,7 +383,7 @@ angular.module('minovateApp')
 })
 
 // PRODUCT DESTINATIONS
-.factory('ProductDestinations', function($resource, Token) {
+.factory('ProductClassifications', function($resource) {
 
 	return $resource(API_URL + '/product-classifications', {}, {
 		query: {
@@ -374,7 +397,7 @@ angular.module('minovateApp')
 })
 
 // PLATFORMS
-.factory('ReportTypes', function($resource, Token) {
+.factory('ReportTypes', function($resource) {
 
 	return $resource(API_URL + '/organizations/:idOrganization/report-types', {
 		idOrganization: ':idOrganization'
@@ -390,7 +413,7 @@ angular.module('minovateApp')
 })
 
 // REPORT TYPES
-.factory('Platforms', function($resource, Token) {
+.factory('Platforms', function($resource) {
 
 	return $resource(API_URL + '/platforms', {}, {
 		query: {
@@ -481,7 +504,8 @@ angular.module('minovateApp')
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});
@@ -504,7 +528,8 @@ angular.module('minovateApp')
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		delete: {
@@ -514,6 +539,47 @@ angular.module('minovateApp')
 				Accept: 'application/vnd.api+json'
 			}
 		},
+	});
+
+})
+
+// StockBreaks
+.factory('StockBreaks', function($resource) {
+
+	return $resource(API_URL + '/stock-breaks/:idStockBreak', {
+		idStockBreak: '@idStockBreak'
+	}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				included: '@included'
+			}
+		},
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		},
+		update: {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			}
+		}
 	});
 
 })

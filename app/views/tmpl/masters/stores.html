@@ -111,7 +111,7 @@
 <!-- /page content -->
 
 <script type="text/ng-template" id="createStore.html">
-  <div class="modal-header text-gray">
+  <div class="modal-header text-gray" id="topModalCreateStore">
     <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
   </div>
   <div class="modal-body text-gray">
@@ -153,6 +153,17 @@
             <label for="inputMonthlyGoalUsd" class="col-sm-3 control-label">Meta mensual (USD)</label>
             <div class="col-sm-8">
               <input type="text" class="form-control rounded" id="inputMonthlyGoalUsd" ng-model="modal.store.montlyGoalUsd.text" ng-disabled="modal.store.montlyGoalUsd.disabled" ng-change="removeAlert()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="selectMultiZone" class="col-sm-3 control-label">Tipo de tienda</label>
+            <div class="col-sm-8">
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.storeTypes.selectedStoreTypes" sortable="true" theme="bootstrap" ng-disabled="modal.storeTypes.disabled" reset-search-input="false" title="Selecciona un tipo de tienda" ng-change="removeAlert()">
+                <ui-select-match placeholder="tipo de tienda...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="zone in modal.storeTypes.storeTypes track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
             </div>
           </div>
           <div class="form-group">

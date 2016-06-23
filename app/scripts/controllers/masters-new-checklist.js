@@ -14,10 +14,16 @@ angular.module('minovateApp')
 	var idChecklist = $state.params.idChecklist;
 
 	$scope.page = {
-		title: ''
+		title: '',
+		buttons: {
+			oneMoreItem: {
+				disabled: false
+			}
+		}
 	};
 
 	$scope.checklist = {
+		id: idChecklist,
 		name: '',
 		items: [],
 		option: null
@@ -34,6 +40,8 @@ angular.module('minovateApp')
 
 	$scope.getInfoChecklist = function() {
 
+		$scope.checklist.items = [];
+
 		Checklists.query({
 			idChecklist: idChecklist
 		}, function(success) {
@@ -44,20 +52,16 @@ angular.module('minovateApp')
 				$scope.checklist.name = success.data.attributes.name;
 
 				for (i = 0; i < success.data.attributes.children.length; i++) {
-					for (j = 0; j < success.data.attributes.children[i].data.option_ids.length; j++) {
-						if (true) {}
-						$scope.checklist.items.push({
-							id: success.data.attributes.children[i].id,
-							name: success.data.attributes.children[i].name,
-							position: success.data.attributes.children[i].position,
-							options: [{
-								id: success.data.attributes.children[i].data.option_ids[j]
-							}],
-							option: null,
-							required: success.data.attributes.children[i].required
-						});
-					}
+					$scope.checklist.items.push({
+						id: success.data.attributes.children[i].id,
+						name: success.data.attributes.children[i].name,
+						position: parseInt(success.data.attributes.children[i].position),
+						options: success.data.attributes.children[i].data.option_ids,
+						option: null,
+						required: success.data.attributes.children[i].required
+					});
 				}
+
 				// $log.log($scope.checklist.items);
 				for (i = 0; i < $scope.checklistOptions.length; i++) {
 					for (j = 0; j < $scope.checklist.items.length; j++) {
@@ -84,11 +88,17 @@ angular.module('minovateApp')
 		$scope.checklist.items.push({
 			id: null,
 			name: '',
-			position: '0',
+			required: false,
+			position: 0,
+			data: {
+				option_ids: []
+			},
 			options: [],
 			option: null,
-			required: false
 		});
+
+		$scope.page.buttons.oneMoreItem.disabled = true;
+
 	};
 
 	var getChecklistOptions = function() {
@@ -123,19 +133,31 @@ angular.module('minovateApp')
 	};
 
 	var prepareChecklistToSend = function() {
+		children = [];
 
 		for (i = 0; i < $scope.checklist.items.length; i++) {
-
-			children.push({
-				name: $scope.checklist.items[i].name,
-				required: $scope.checklist.items[i].required,
-				position: $scope.checklist.items[i].position,
-				data: {
-					option_ids: [$scope.checklist.items[i].option.id]
-				}
-			});
-
+			if ($scope.checklist.items[i].id) {
+				children.push({
+					id: $scope.checklist.items[i].id,
+					name: $scope.checklist.items[i].name,
+					required: $scope.checklist.items[i].required,
+					position: $scope.checklist.items[i].position
+				});
+			} else {
+				children.push({
+					id: null,
+					name: $scope.checklist.items[i].name,
+					required: $scope.checklist.items[i].required,
+					position: $scope.checklist.items[i].position,
+					data: {
+						option_ids: []
+							// option_ids: [$scope.checklist.items[i].option.id]
+					}
+				});
+			}
 		}
+
+		$log.log(children);
 	};
 
 	$scope.createChecklist = function() {
@@ -176,67 +198,75 @@ angular.module('minovateApp')
 				idItem: function() {
 					return idItem;
 				},
-				idChecklist: function() {
-					return idChecklist;
+				infoChecklist: function() {
+					return $scope.checklist
 				}
 			}
 		});
 
-		modalInstance.result.then(function() {}, function() {});
+		modalInstance.result.then(function() {
+			$scope.getInfoChecklist();
+			$scope.page.buttons.oneMoreItem.disabled = false;
+		}, function() {
+			$scope.getInfoChecklist();
+		});
+	};
+
+	var updateChecklist = function() {
+		prepareChecklistToSend();
+
+		// $log.log(children);
+
+		ChecklistActions.update({
+			idChecklist: idChecklist,
+			data: {
+				type: 'checklists',
+				id: idChecklist,
+				attributes: {
+					name: $scope.checklist.name,
+					children: children
+				}
+			}
+		}, function(success) {
+			if (success.data) {
+				$log.log(success);
+				$state.go('app.masters.checklist');
+			} else {
+				$window.alert('Error al actualizar el checklist');
+				$log.error(success);
+			}
+		}, function(error) {
+			$window.alert('Error al actualizar el checklist');
+			$log.error(error);
+		});
+	};
+
+	$scope.updateOrCreateChecklist = function() {
+		if (idChecklist) {
+			updateChecklist();
+		} else {
+			createChecklist();
+		}
 	};
 
 	getChecklistOptions();
 
 })
 
-.controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, idChecklist, idItem, Checklists) {
+.controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, $window, idItem, Checklists, ChecklistActions, infoChecklist) {
+
+	$log.log(infoChecklist);
 
 	$scope.modal = {
 		checklistOptions: [],
-		selectedOption: {},
+		selectedOption: null,
 		options: []
 	};
 
 	var i = 0,
 		j = 0,
-		k = 0;
-
-	$scope.getInfoChecklist = function() {
-
-		Checklists.query({
-			idChecklist: idChecklist
-		}, function(success) {
-			if (success.data) {
-
-				for (i = 0; i < success.data.attributes.children.length; i++) {
-					for (j = 0; j < success.data.attributes.children[i].data.option_ids.length; j++) {
-						$scope.checklist.items.push({
-							options: [{
-								id: success.data.attributes.children[i].data.option_ids[j]
-							}]
-						});
-					}
-				}
-
-				for (i = 0; i < $scope.checklistOptions.length; i++) {
-					for (j = 0; j < $scope.checklist.items.length; j++) {
-						for (k = 0; k < $scope.checklist.items[j].options.length; k++) {
-							if (parseInt($scope.checklist.items[j].options[k].id) === parseInt($scope.checklistOptions[i].id)) {
-								$scope.checklist.items[j].option = $scope.checklistOptions[i];
-								break;
-							}
-						}
-					}
-				}
-
-			} else {
-				$log.error(success);
-			}
-
-		}, function(error) {
-			$log.error(error);
-		});
-	};
+		k = 0,
+		children = [];
 
 	var getChecklistOptions = function() {
 		Checklists.query({
@@ -250,6 +280,7 @@ angular.module('minovateApp')
 						name: success.data[i].attributes.name
 					});
 				}
+				$scope.getInfoChecklist();
 			} else {
 				$log.error(success);
 			}
@@ -258,12 +289,118 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.generateItem = function() {
-		$scope.modal.options.push({});
+	$scope.getInfoChecklist = function() {
+		if (infoChecklist.id) {
+			Checklists.query({
+				idChecklist: infoChecklist.id
+			}, function(success) {
+				if (success.data) {
+
+					for (i = 0; i < success.data.attributes.children.length; i++) {
+						if (success.data.attributes.children[i].id === idItem) {
+							for (j = 0; j < success.data.attributes.children[i].data.option_ids.length; j++) {
+								$scope.modal.options.push({
+									id: success.data.attributes.children[i].data.option_ids[j],
+									selected: null
+								});
+							}
+						}
+					}
+
+					for (i = 0; i < $scope.modal.checklistOptions.length; i++) {
+						for (j = 0; j < $scope.modal.options.length; j++) {
+							if (parseInt($scope.modal.checklistOptions[i].id) === parseInt($scope.modal.options[j].id)) {
+								$scope.modal.options[j].selected = $scope.modal.checklistOptions[i];
+								break;
+							}
+						}
+					}
+
+				} else {
+					$log.error(success);
+				}
+
+			}, function(error) {
+				$log.error(error);
+			});
+		}
+	};
+
+	$scope.generateOption = function() {
+		if ($scope.modal.checklistOptions[0]) {
+			$scope.modal.options.push({
+				id: $scope.modal.checklistOptions[0].id,
+				selected: $scope.modal.checklistOptions[0]
+			});
+		} else {
+			$scope.modal.options.push({
+				id: null,
+				selected: null
+			});
+		}
+	};
+
+	$scope.addChecklistOptions = function() {
+
+		children = [];
+
+		for (i = 0; i < infoChecklist.items.length; i++) {
+			children.push({
+				id: infoChecklist.items[i].id,
+				name: infoChecklist.items[i].name,
+				data: {
+					option_ids: infoChecklist.items[i].options
+				},
+				required:  infoChecklist.items[i].required
+			});
+		}
+
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].id && idItem) {
+				if (children[i].id === idItem) {
+					for (j = 0; j < $scope.modal.options.length; j++) {
+						children[i].data.option_ids.push(parseInt($scope.modal.options[j].selected.id));
+					}
+				}
+			} else {
+				for (j = 0; j < $scope.modal.options.length; j++) {
+					children[i].data.option_ids.push(parseInt($scope.modal.options[j].selected.id));
+				}
+			}
+			children[i].data.option_ids = _.uniq(children[i].data.option_ids);
+		}
+
+
+		ChecklistActions.update({
+			idChecklist: infoChecklist.id,
+			data: {
+				type: 'checklists',
+				id: infoChecklist.id,
+				attributes: {
+					name: infoChecklist.id.name,
+					children: children
+				}
+			}
+		}, function(success) {
+			if (success.data) {
+				$log.log(success);
+				$uibModalInstance.close();
+			} else {
+				$window.alert('Error al asiginar las opciones');
+				$log.error(success);
+			}
+		}, function(error) {
+			$window.alert('Error al asiginar las opciones');
+			$log.error(error);
+		});
 	};
 
 	$scope.ok = function() {
 		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss();
 	};
 
 	getChecklistOptions();
@@ -271,65 +408,7 @@ angular.module('minovateApp')
 	if (idItem) {
 
 	} else {
-		$scope.generateItem();
+		$scope.generateOption();
 	}
 
 });
-
-// .controller('MessageListChecklistModalInstance', function($scope, $log, $uibModalInstance, idChecklist, Checklists, Validators) {
-
-// 	$scope.modal = {
-// 		title: {
-// 			text: null
-// 		},
-// 		subtitle: {
-// 			text: null
-// 		},
-// 		alert: {
-// 			color: '',
-// 			show: false,
-// 			title: '',
-// 			text: null
-// 		},
-// 		buttons: {
-// 			delete: {
-// 				border: false,
-// 				show: true,
-// 				text: 'Eliminar'
-// 			}
-// 		}
-// 	};
-
-// 	$scope.deleteChecklist = function() {
-// 		Checklists.delete({
-// 			idChecklist: idChecklist
-// 		}, function(success) {
-// 			$log.log(success);
-// 			if (success.data) {
-// 				$uibModalInstance.close();
-// 			} else {
-// 				$log.error(success);
-// 			}
-// 		}, function(error) {
-// 			$log.error(error);
-// 		});
-
-// 	};
-
-// 	$scope.ok = function() {
-// 		// $uibModalInstance.close($scope.selected.item);
-// 		$uibModalInstance.close();
-// 	};
-
-// 	$scope.cancel = function() {
-// 		$uibModalInstance.dismiss('cancel');
-// 	};
-
-// 	$scope.removeAlert = function() {
-// 		$scope.modal.alert.color = '';
-// 		$scope.modal.alert.title = '';
-// 		$scope.modal.alert.text = '';
-// 		$scope.modal.alert.show = false;
-// 	};
-
-// });

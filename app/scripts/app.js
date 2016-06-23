@@ -271,6 +271,12 @@ angular
 				controller: 'NewChecklistCtrl',
 				templateUrl: 'views/tmpl/masters/new-checklist.html'
 			})
+			//masters/stock-break
+			.state('app.masters.stock-break', {
+				url: '/stock-break',
+				controller: 'StockBreakCtrl',
+				templateUrl: 'views/tmpl/masters/stock-break.html'
+			})
 			//promotions
 			.state('app.promotions', {
 				url: '/promotions',
