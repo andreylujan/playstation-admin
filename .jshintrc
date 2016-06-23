@@ -24,6 +24,7 @@
     "Rickshaw": false,
     "Gauge": false,
     "moment": false,
-    "google": false
+    "google": false,
+    "_": false
   }
 }

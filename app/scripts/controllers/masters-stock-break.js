@@ -201,7 +201,7 @@ angular.module('minovateApp')
 				}
 				getProductClassifications();
 			} else {
-				$log.error(error);
+				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
@@ -219,7 +219,7 @@ angular.module('minovateApp')
 				}
 				getDealers();
 			} else {
-				$log.error(error);
+				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
@@ -237,7 +237,7 @@ angular.module('minovateApp')
 				}
 				getInfoStockBreak();
 			} else {
-				$log.error(error);
+				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
@@ -282,7 +282,7 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.error(error);
-			})
+			});
 		} else {
 			$scope.modal.buttons.create.show = true;
 			$scope.modal.buttons.edit.show = false;
@@ -469,7 +469,6 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.error(error);
-				$log.error(success);
 				$scope.modal.alert.title = 'Error al editar';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.color = 'danger';
@@ -510,11 +509,12 @@ angular.module('minovateApp')
 	};
 
 	$scope.removeAlert = function() {
-		$scope.modal.alert.show = false
+		$scope.modal.alert.show = false;
 	};
+
 	$scope.cancel = function() {
 		$uibModalInstance.close();
-	}
+	};
 
 	var disableForm = function() {
 		$scope.modal.storeTypes.disabled = true;

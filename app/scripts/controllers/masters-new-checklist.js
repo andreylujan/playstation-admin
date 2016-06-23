@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, ngTableParams, Checklists, ChecklistActions) {
+.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, $window, ngTableParams, Checklists, ChecklistActions) {
 
 	var idChecklist = $state.params.idChecklist;
 
@@ -199,7 +199,7 @@ angular.module('minovateApp')
 					return idItem;
 				},
 				infoChecklist: function() {
-					return $scope.checklist
+					return $scope.checklist;
 				}
 			}
 		});
@@ -245,7 +245,7 @@ angular.module('minovateApp')
 		if (idChecklist) {
 			updateChecklist();
 		} else {
-			createChecklist();
+			$scope.createChecklist();
 		}
 	};
 
@@ -351,11 +351,11 @@ angular.module('minovateApp')
 				data: {
 					option_ids: infoChecklist.items[i].options
 				},
-				required:  infoChecklist.items[i].required
+				required: infoChecklist.items[i].required
 			});
 		}
 
-		for (var i = 0; i < children.length; i++) {
+		for (i = 0; i < children.length; i++) {
 			if (children[i].id && idItem) {
 				if (children[i].id === idItem) {
 					for (j = 0; j < $scope.modal.options.length; j++) {
