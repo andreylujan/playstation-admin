@@ -403,7 +403,7 @@ angular.module('minovateApp')
 		});
 
 		// se agrega al children los items que no estan siendo editados
-		for (var i = 0; i < infoChecklist.items.length; i++) {
+		for (i = 0; i < infoChecklist.items.length; i++) {
 			if (infoChecklist.items[i].id !== idItem) {
 				children.push({
 					id: infoChecklist.items[i].id,
@@ -417,7 +417,7 @@ angular.module('minovateApp')
 		}
 
 		// se ordenan los id's ascendiente
-		for (var i = 0; i < children.length; i++) {
+		for (i = 0; i < children.length; i++) {
 			ordererIds = _.sortBy(children[i].data.options, 'id');
 			children[i].data.options = ordererIds;
 		}
