@@ -97,6 +97,7 @@
                   <!-- <th>Tipo</th> -->
                   <!-- <th>Datos solicitados</th> -->
                   <th>Orden relativo</th>
+                  <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,14 +106,17 @@
                     <input class="form-control underline-input" type="text" ng-model="item.name" >
                   </td>
                   <td>
-                    <button class="btn bg-blue-ps br-15 b-0" ng-click="openModalAddOptions(item.id)">Agregar opciones</button>
+                    <button class="btn bg-blue-ps br-15 b-0" ng-click="openModalAddOptions(item.id, item.name, checklist.name)" ng-disabled="!item.name || !checklist.name">Agregar opciones</button>
                   </td>
                   <td>
                     <input class="form-control underline-input" type="number" ng-model="item.position" >
                   </td>
-                  <td>
-                    <input class="" type="checkbox" ng-model="item.required" >
+                  <td data-title="'Eliminar'" >
+                    <img ng-click="removeItem($index)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar item">
                   </td>
+                  <!-- <td>
+                    <input class="" type="checkbox" ng-model="item.required" >
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -149,35 +153,42 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Opción</th>
-          <!-- <th>Datos requeridos</th> -->
+          <th class="text-center">Opción</th>
+          <th class="text-center">Visibilidad App</th>
+          <th class="text-center">Pantalla detalle</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="option in modal.options">
+        <tr ng-repeat="option in modal.checklistOptions">
           <td>
-            <ui-select class="bg-white b-solid" ng-model="option.selected">
+            <!-- <input class="form-control underline-input" type="text" ng-model="option.name" > -->
+            <p class="form-control-static">{{option.name}}</p>
+
+            <!-- <ui-select class="bg-white b-solid" ng-model="option.selected">
               <ui-select-match placeholder="Seleccionar una opción...">
                 {{$select.selected.name}}
               </ui-select-match>
               <ui-select-choices repeat="option in (modal.checklistOptions | propsFilter: {name: $select.search})">
                 <span ng-bind="option.name | highlight: $select.search"></span>
               </ui-select-choices>
-            </ui-select>
+            </ui-select> -->
           </td>
-          <!-- <td>
-            <input type="checkbox" class="" ng-model="option.required">
-          </td> -->
+          <td>
+            <input type="checkbox" class="" ng-model="option.appVisibility">
+          </td>
+          <td>
+            <input type="checkbox" class="" ng-model="option.detail">
+          </td>
         </tr>
       </tbody>
     </table>
-    <div class="text-right">
+    <!-- <div class="text-right">
       <button class="text-right bg-yellow-ps b-0 br-50-percent mt-10" style="padding: 5px 11px" ng-click="generateOption()"><strong>+</strong></button>
-    </div>
+    </div> -->
     
   </div>
   <div class="modal-footer">
-    <button class="btn btn-danger btn-rounded-10 mb-10" type="button" ng-click="addChecklistOptions()">Aceptar</button>    
+    <button class="btn btn-success btn-rounded-10 mb-10" type="button" ng-click="createChecklistOrAssignItems()" ng-disabled="">Guardar</button>    
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>
 </script>

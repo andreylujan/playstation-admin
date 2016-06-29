@@ -21,6 +21,7 @@ angular.module('minovateApp')
 	var zones = [];
 	var dealers = [];
 	var users = [];
+	var dealersNames = '';
 
 	$scope.promotions = [];
 
@@ -49,10 +50,17 @@ angular.module('minovateApp')
 				}
 
 				for (i = 0; i < $scope.promotions.length; i++) {
+
+					dealersNames = '';
+
 					for (j = 0; j < $scope.promotions[i].zones.length; j++) {
 						for (k = 0; k < zones.length; k++) {
 							if (parseInt($scope.promotions[i].zones[j].id) === parseInt(zones[k].id)) {
-								$scope.promotions[i].zones[j].name = zones[k].name;
+								if (j === 0) {
+									$scope.promotions[i].zoneNames = zones[k].name;
+								} else {
+									$scope.promotions[i].zoneNames = $scope.promotions[i].zoneNames + '<br>' + zones[k].name;
+								}
 								break;
 							}
 						}
@@ -60,7 +68,11 @@ angular.module('minovateApp')
 					for (j = 0; j < $scope.promotions[i].dealers.length; j++) {
 						for (k = 0; k < dealers.length; k++) {
 							if (parseInt($scope.promotions[i].dealers[j].id) === parseInt(dealers[k].id)) {
-								$scope.promotions[i].dealers[j].name = dealers[k].name;
+								if (j === 0) {
+									$scope.promotions[i].dealerNames = dealers[k].name;
+								} else {
+									$scope.promotions[i].dealerNames = $scope.promotions[i].dealerNames + '<br>' + dealers[k].name;
+								}
 								break;
 							}
 						}
@@ -68,12 +80,18 @@ angular.module('minovateApp')
 					for (j = 0; j < $scope.promotions[i].users.length; j++) {
 						for (k = 0; k < users.length; k++) {
 							if (parseInt($scope.promotions[i].users[j].id) === parseInt(users[k].id)) {
-								$scope.promotions[i].users[j].fullName = users[k].fullName;
+								if (j === 0) {
+									$scope.promotions[i].userNames = users[k].fullName;
+								} else {
+									$scope.promotions[i].userNames = $scope.promotions[i].userNames + '<br>' + users[k].fullName;
+								}
+								// $scope.promotions[i].users[j].fullName = users[k].fullName;
 								break;
 							}
 						}
 					}
 				}
+				$log.log($scope.promotions);
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page

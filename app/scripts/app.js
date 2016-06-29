@@ -277,6 +277,12 @@ angular
 				controller: 'StockBreakCtrl',
 				templateUrl: 'views/tmpl/masters/stock-break.html'
 			})
+			//masters/monthly-goals
+			.state('app.masters.monthly-goals', {
+				url: '/monthly-goals',
+				controller: 'MonthlyGoalsCtrl',
+				templateUrl: 'views/tmpl/masters/monthly-goals.html'
+			})
 			//promotions
 			.state('app.promotions', {
 				url: '/promotions',

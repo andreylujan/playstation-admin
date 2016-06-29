@@ -12,8 +12,8 @@ angular.module('minovateApp')
 
 		$scope.page = {
 			user: {
-				username: 'pablo.lluch@gmail.com',
-				password: '11111111',
+				username: '',
+				password: '',
 				grant_type: 'password'
 			},
 			message: {
@@ -30,7 +30,7 @@ angular.module('minovateApp')
 					grant_type: "password"
 				})
 				.then(function(success) {
-					// $log.log(success);
+
 					Utils.setInStorage('logged', true);
 					Utils.setInStorage('refresh_t', success.data.data.attributes.refresh_token);
 					$auth.setToken(success.data.data.attributes.access_token);
@@ -49,7 +49,13 @@ angular.module('minovateApp')
 
 				})
 				.catch(function(error) {
-					$log.error('error al login');
+					if (error.status === 401) {
+						$scope.page.message.text = 'Usuario y/o contraseña incorrectos';
+						$scope.page.message.show = true;
+					} else {
+						$scope.page.message.text = 'Ha ocurrido un error al loguear, inténte nuevamente';
+						$scope.page.message.show = true;
+					}
 					$log.error(error);
 				});
 
