@@ -80,7 +80,7 @@
             <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateStore()">Nueva tienda</button>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="store in stores">
+              <tr ng-repeat="store in $data">
                 <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
                   {{store.name}}
                 </td>
@@ -146,10 +146,10 @@
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Supervisor</label>
             <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.storeTypes.selectedStoreTypes" sortable="true" theme="bootstrap" ng-disabled="modal.storeTypes.disabled" reset-search-input="false" title="Selecciona un tipo de tienda" ng-change="removeAlert()">
-                <ui-select-match placeholder="tipo de tienda...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="zone in modal.storeTypes.storeTypes track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersSupervisor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario supervisor" ng-change="removeAlert()">
+                <ui-select-match placeholder="usuario supervisor...">{{$select.selected.fullName}}</ui-select-match>
+                <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <div ng-bind-html="user.fullName | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
@@ -157,10 +157,10 @@
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Instructor</label>
             <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.storeTypes.selectedStoreTypes" sortable="true" theme="bootstrap" ng-disabled="modal.storeTypes.disabled" reset-search-input="false" title="Selecciona un tipo de tienda" ng-change="removeAlert()">
-                <ui-select-match placeholder="tipo de tienda...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="zone in modal.storeTypes.storeTypes track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersInstructor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario instructor" ng-change="removeAlert()">
+                <ui-select-match placeholder="usuario instructor...">{{$select.selected.fullName}}</ui-select-match>
+                <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <div ng-bind-html="user.fullName | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>

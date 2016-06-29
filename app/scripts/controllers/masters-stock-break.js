@@ -27,7 +27,7 @@ angular.module('minovateApp')
 		StockBreaks.query({
 			include: 'dealer,store_type,product_classification'
 		}, function(success) {
-			if (success.data) {
+			if (success.data && success.included) {
 
 				stockbreaksIncluded = success.included;
 

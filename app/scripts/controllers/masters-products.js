@@ -55,7 +55,7 @@ angular.module('minovateApp')
 						createdAt: success.data[i].attributes.created_at,
 						typeId: success.data[i].relationships.product_type.data.id,
 						typeName: '',
-						brand: success.data[i].attributes.brand,
+						// brand: success.data[i].attributes.brand,
 						minPrice: success.data[i].attributes.min_price,
 						maxPrice: success.data[i].attributes.max_price,
 						destinationId: success.data[i].relationships.product_classification.data.id,
@@ -175,10 +175,10 @@ angular.module('minovateApp')
 				text: '',
 				disabled: false
 			},
-			brand: {
-				text: '',
-				disabled: false
-			},
+			// brand: {
+			// 	text: '',
+			// 	disabled: false
+			// },
 			minPrice: {
 				text: '',
 				disabled: false
@@ -260,7 +260,7 @@ angular.module('minovateApp')
 			$scope.modal.product.description.text = success.data.attributes.description;
 			$scope.modal.product.sku.text = success.data.attributes.sku;
 			$scope.modal.product.plu.text = success.data.attributes.plu;
-			$scope.modal.product.brand.text = success.data.attributes.brand;
+			// $scope.modal.product.brand.text = success.data.attributes.brand;
 			$scope.modal.product.validityCode.text = success.data.attributes.validity_code;
 			$scope.modal.product.minPrice.text = success.data.attributes.min_price;
 			$scope.modal.product.maxPrice.text = success.data.attributes.max_price;
@@ -306,7 +306,7 @@ angular.module('minovateApp')
 		$scope.modal.product.description.disabled = state;
 		$scope.modal.product.sku.disabled = state;
 		$scope.modal.product.plu.disabled = state;
-		$scope.modal.product.brand.disabled = state;
+		// $scope.modal.product.brand.disabled = state;
 		$scope.modal.product.validityCode.disabled = state;
 		$scope.modal.product.minPrice.disabled = state;
 		$scope.modal.product.maxPrice.disabled = state;
@@ -582,7 +582,7 @@ angular.module('minovateApp')
 					sku: $scope.modal.product.sku.text,
 					plu: $scope.modal.product.plu.text,
 					validity_code: $scope.modal.product.validityCode.text,
-					brand: $scope.modal.product.brand.text,
+					// brand: $scope.modal.product.brand.text,
 					min_price: $scope.modal.product.minPrice.text,
 					max_price: $scope.modal.product.maxPrice.text,
 					// stock: $scope.modal.product.stock.text,
@@ -641,7 +641,7 @@ angular.module('minovateApp')
 						sku: $scope.modal.product.sku.text,
 						plu: $scope.modal.product.plu.text,
 						validity_code: $scope.modal.product.validityCode.text,
-						brand: $scope.modal.product.brand.text,
+						// brand: $scope.modal.product.brand.text,
 						min_price: $scope.modal.product.minPrice.text,
 						max_price: $scope.modal.product.maxPrice.text,
 						is_top: $scope.modal.product.isTop.value,

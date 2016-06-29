@@ -56,13 +56,17 @@ angular.module('minovateApp')
 						id: success.data.attributes.children[i].id,
 						name: success.data.attributes.children[i].name,
 						position: parseInt(success.data.attributes.children[i].position),
-						options: success.data.attributes.children[i].data.option_ids,
+						options: success.data.attributes.children[i].data.options,
 						option: null,
 						required: success.data.attributes.children[i].required
 					});
 				}
 
+				// $log.log('$scope.checklist.items');
 				// $log.log($scope.checklist.items);
+				// $log.log('$scope.checklistOptions');
+				// $log.log($scope.checklistOptions);
+
 				for (i = 0; i < $scope.checklistOptions.length; i++) {
 					for (j = 0; j < $scope.checklist.items.length; j++) {
 						for (k = 0; k < $scope.checklist.items[j].options.length; k++) {
@@ -91,7 +95,7 @@ angular.module('minovateApp')
 			required: false,
 			position: 0,
 			data: {
-				option_ids: []
+				options: []
 			},
 			options: [],
 			option: null
@@ -114,7 +118,6 @@ angular.module('minovateApp')
 						id: success.data[i].id,
 						name: success.data[i].attributes.name
 					});
-
 				}
 
 				if (idChecklist) {
@@ -122,7 +125,6 @@ angular.module('minovateApp')
 				} else {
 					$scope.generateItem();
 				}
-
 
 			} else {
 
@@ -150,14 +152,15 @@ angular.module('minovateApp')
 					required: $scope.checklist.items[i].required,
 					position: $scope.checklist.items[i].position,
 					data: {
-						option_ids: []
+						options: []
+							// option_ids: []
 							// option_ids: [$scope.checklist.items[i].option.id]
 					}
 				});
 			}
 		}
 
-		$log.log(children);
+		// $log.log(children);
 	};
 
 	$scope.createChecklist = function() {
@@ -273,6 +276,9 @@ angular.module('minovateApp')
 
 .controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, $window, idItem, itemName, checklistName, Checklists, ChecklistActions, infoChecklist) {
 
+	// $log.log('infoChecklist');
+	// $log.log(infoChecklist);
+
 	$scope.modal = {
 		checklistOptions: [],
 		selectedOption: null,
@@ -324,11 +330,13 @@ angular.module('minovateApp')
 							infoItem.data = success.data.attributes.children[i].data;
 						}
 					}
+
 					for (i = 0; i < success.data.attributes.children.length; i++) {
 						if (success.data.attributes.children[i].id === idItem) {
-							for (j = 0; j < success.data.attributes.children[i].data.option_ids.length; j++) {
+							for (j = 0; j < success.data.attributes.children[i].data.options.length; j++) {
 								$scope.modal.options.push({
-									id: success.data.attributes.children[i].data.option_ids[j],
+									id: success.data.attributes.children[i].data.options[j].id,
+									detail: success.data.attributes.children[i].data.options[j].has_detail,
 									selected: null
 								});
 							}
@@ -338,11 +346,13 @@ angular.module('minovateApp')
 
 					// $scope.modal.checklistOptions -> todas las opciones q existen y q salen en el modal
 					for (i = 0; i < $scope.modal.checklistOptions.length; i++) {
+						// $scope.modal.options -> todas las opciones disponibles
 						for (j = 0; j < $scope.modal.options.length; j++) {
 							if (parseInt($scope.modal.checklistOptions[i].id) === parseInt($scope.modal.options[j].id)) {
 								$scope.modal.checklistOptions[i].appVisibility = true;
-								$scope.modal.checklistOptions[i].detail = true;
-
+								if ($scope.modal.options[j].detail) {
+									$scope.modal.checklistOptions[i].detail = true;
+								}
 								// $scope.modal.options[j].selected = $scope.modal.checklistOptions[i];
 								break;
 							}
@@ -368,7 +378,17 @@ angular.module('minovateApp')
 		// Se al arreglo de ids sólo los id de items q tienen visibilidad
 		for (i = 0; i < $scope.modal.checklistOptions.length; i++) {
 			if ($scope.modal.checklistOptions[i].appVisibility) {
-				optionIds.push($scope.modal.checklistOptions[i].id);
+				if ($scope.modal.checklistOptions[i].detail) {
+					optionIds.push({
+						id: $scope.modal.checklistOptions[i].id,
+						has_detail: true
+					});
+				} else {
+					optionIds.push({
+						id: $scope.modal.checklistOptions[i].id,
+						has_detail: false
+					});
+				}
 			}
 		}
 
@@ -377,7 +397,8 @@ angular.module('minovateApp')
 			id: idItem,
 			name: itemName,
 			data: {
-				option_ids: optionIds
+				options: optionIds
+					// option_ids: optionIds
 			}
 		});
 
@@ -388,7 +409,8 @@ angular.module('minovateApp')
 					id: infoChecklist.items[i].id,
 					name: infoChecklist.items[i].name,
 					data: {
-						option_ids: infoChecklist.items[i].options
+						options: infoChecklist.items[i].options
+							// option_ids: infoChecklist.items[i].options
 					}
 				});
 			}
@@ -396,10 +418,12 @@ angular.module('minovateApp')
 
 		// se ordenan los id's ascendiente
 		for (var i = 0; i < children.length; i++) {
-			ordererIds = _.sortBy(children[i].data.option_ids);
-			children[i].data.option_ids = ordererIds;
+			ordererIds = _.sortBy(children[i].data.options, 'id');
+			children[i].data.options = ordererIds;
 		}
 
+		// $log.log('infoChecklist');
+		// $log.log(infoChecklist);
 		// $log.log('children');
 		// $log.log(children);
 

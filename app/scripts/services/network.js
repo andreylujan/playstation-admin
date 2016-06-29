@@ -172,18 +172,22 @@ angular.module('minovateApp')
 		save: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {}
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
 		}
 	});
 
@@ -205,18 +209,22 @@ angular.module('minovateApp')
 		save: {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		update: {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
 			}
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {}
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
 		}
 	});
 

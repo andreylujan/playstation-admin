@@ -81,9 +81,9 @@
 
           <table ng-table="tableParams" show-filter="true" class="table table-custom">
             <tr ng-repeat="product in $data" ng-dblclick="openModalCreateProduct(product.id)">
-              <td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }" style="width:20px">
+              <!-- <td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }" style="width:20px">
                 {{product.id | cut:true:4:'...'}}
-              </td>
+              </td> -->
               <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
                 {{product.name}}
               </td>
@@ -100,14 +100,14 @@
                 <span style="cursor:pointer">{{product.validityCode | cut:true:5:'...'}}</span>
               </td>
               <td data-title="'Creado el'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-                {{product.createdAt | date:'dd/mm/yyyy'}}
+                {{product.createdAt | date:'dd/mm/yy'}}
               </td>
               <td data-title="'Tipo'" sortable="'typeName'" filter="{ 'typeName': 'text' }">
                 {{product.typeName}}
               </td>
-              <td data-title="'Marca'" sortable="'brand'" filter="{ 'brand': 'text' }">
+              <!-- <td data-title="'Marca'" sortable="'brand'" filter="{ 'brand': 'text' }">
                 {{product.brand}}
-              </td>
+              </td> -->
               <td data-title="'Precio mínimo'" sortable="'minPrice'" filter="{ 'minPrice': 'text' }">
                 {{product.minPrice | currency:'$':0}}
               </td>
