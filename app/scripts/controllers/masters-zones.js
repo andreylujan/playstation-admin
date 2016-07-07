@@ -102,7 +102,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateZoneModalInstance', function($scope, $log, $uibModalInstance, idZone, Dealers, Zones, Validators) {
+.controller('CreateZoneModalInstance', function($scope, $log, $uibModalInstance, idZone, Dealers, Zones, Validators, Utils) {
 
 	$scope.modal = {
 		title: {

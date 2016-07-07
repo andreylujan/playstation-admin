@@ -116,7 +116,7 @@ angular.module('minovateApp')
 				}, function(error) {
 					$log.error(error);
 					if (error.status === 401) {
-						Utils.refreshToken(getMyreports);
+						Utils.refreshToken($scope.getMyreports);
 					}
 				});
 

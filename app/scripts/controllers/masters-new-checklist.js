@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, $window, ngTableParams, Checklists, ChecklistActions) {
+.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, $window, ngTableParams, Checklists, ChecklistActions, Utils) {
 
 	var idChecklist = $state.params.idChecklist;
 
@@ -319,7 +319,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, $window, idItem, itemName, checklistName, Checklists, ChecklistActions, infoChecklist) {
+.controller('addItemOptionsModalInstance', function($scope, $log, $uibModalInstance, $window, idItem, itemName, checklistName, Checklists, ChecklistActions, infoChecklist, Utils) {
 
 	// $log.log('infoChecklist');
 	// $log.log(infoChecklist);

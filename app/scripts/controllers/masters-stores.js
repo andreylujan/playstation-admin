@@ -18,6 +18,8 @@ angular.module('minovateApp')
 
 	$scope.stores = [];
 
+	var i, j = 0;
+
 	$scope.getStores = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);

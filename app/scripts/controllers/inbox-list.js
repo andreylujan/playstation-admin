@@ -289,7 +289,7 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.removeInbox = function() {
+	$scope.removeInbox = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;

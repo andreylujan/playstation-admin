@@ -160,20 +160,20 @@ angular.module('minovateApp')
 	};
 
 	$scope.uploadCsvProducts = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+		// if (!e.success) {
+		// 	$log.error(e.detail);
+		// 	return;
+		// }
 
-		Csv.upload(form).success(function(success) {
-			$log.log(success);
-			// openModalCsvProductChargeSummary(success);
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.uploadCsvProducts);
-			}
-		});
+		// Csv.upload(form).success(function(success) {
+		// 	$log.log(success);
+		// 	// openModalCsvProductChargeSummary(success);
+		// }, function(error) {
+		// 	$log.error(error);
+		// 	if (error.status === 401) {
+		// 		Utils.refreshToken($scope.uploadCsvProducts);
+		// 	}
+		// });
 
 	};
 

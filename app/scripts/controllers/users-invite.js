@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('UsersInviteCtrl', function($scope, $log, $window, Invitations, Roles) {
+.controller('UsersInviteCtrl', function($scope, $log, $window, Invitations, Roles, Utils) {
 
 	$scope.page = {
 		title: 'Invitar Usuarios',

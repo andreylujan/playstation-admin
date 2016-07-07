@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, ngTableParams, Checklists) {
+.controller('ChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, ngTableParams, Checklists, Utils) {
 
 	$scope.page = {
 		title: 'Checklists'
@@ -106,7 +106,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('MessageListChecklistModalInstance', function($scope, $log, $uibModalInstance, idChecklist, ChecklistActions, Validators) {
+.controller('MessageListChecklistModalInstance', function($scope, $log, $uibModalInstance, idChecklist, ChecklistActions, Validators, Utils) {
 
 	$scope.modal = {
 		title: {

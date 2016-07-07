@@ -22,7 +22,7 @@ angular.module('minovateApp')
 
 	var i = 0,
 		j = 0;
-	$scope.data = []
+	$scope.data = [];
 
 	$scope.getSaleGoalUploads = function(e) {
 		if (!e.success) {
