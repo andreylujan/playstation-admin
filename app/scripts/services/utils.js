@@ -10,7 +10,9 @@
 
 angular.module('minovateApp')
 
-.service('Utils', function($state, $log, $anchorScroll, $location, localStorageService) {
+.service('Utils', function($state, $log, $anchorScroll, $location, $window, $auth, localStorageService, RefreshToken) {
+
+
 
 	this.setInStorage = function(key, val) {
 		return localStorageService.set(key, val);
@@ -79,5 +81,44 @@ angular.module('minovateApp')
 		return rut;
 	};
 
+	this.refreshToken = function(functionToCall) {
+
+		if (!_.isFunction(functionToCall)) {
+
+			var detail = 'Parametro ' + functionToCall + ' no es función';
+
+			$log.log(detail);
+
+			return;
+		}
+
+		var that = this.setInStorage;
+		var that2 = this.getInStorage;
+
+		RefreshToken.save({
+			refresh_token: that2('refresh_t'),
+			grant_type: 'refresh_token'
+		}, function(success) {
+
+			$auth.setToken(success.data.attributes.access_token);
+			that('refresh_t', success.data.attributes.refresh_token);
+
+			functionToCall({
+				success: true,
+				detail: success,
+				functionName: functionToCall
+			});
+
+		}, function(error) {
+
+			functionToCall({
+				success: false,
+				detail: error
+			});
+
+			$log.error(error);
+			$state.go('core.login');
+		});
+	};
 
 });

@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('PromotionsListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Promotions, Zones, Dealers, Users) {
+.controller('PromotionsListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Promotions, Zones, Dealers, Users, Utils) {
 
 	$scope.page = {
 		title: 'Promociones'
@@ -25,7 +25,11 @@ angular.module('minovateApp')
 
 	$scope.promotions = [];
 
-	var getPromotions = function() {
+	var getPromotions = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.promotions = [];
 
@@ -43,8 +47,8 @@ angular.module('minovateApp')
 						startDate: success.data[i].attributes.start_date,
 						endDate: success.data[i].attributes.end_date,
 						zones: success.data[i].relationships.zones.data,
-						dealers: success.data[i].relationships.dealers.data,
-						users: success.data[i].relationships.users.data
+						dealers: success.data[i].relationships.dealers.data
+							// users: success.data[i].relationships.users.data
 					});
 
 				}
@@ -57,9 +61,9 @@ angular.module('minovateApp')
 						for (k = 0; k < zones.length; k++) {
 							if (parseInt($scope.promotions[i].zones[j].id) === parseInt(zones[k].id)) {
 								if (j === 0) {
-									$scope.promotions[i].zoneNames = zones[k].name;
+									$scope.promotions[i].zoneNames = $filter('capitalize')(zones[k].name, true);
 								} else {
-									$scope.promotions[i].zoneNames = $scope.promotions[i].zoneNames + '<br>' + zones[k].name;
+									$scope.promotions[i].zoneNames = $scope.promotions[i].zoneNames + '<br>' + $filter('capitalize')(zones[k].name, true);
 								}
 								break;
 							}
@@ -69,29 +73,28 @@ angular.module('minovateApp')
 						for (k = 0; k < dealers.length; k++) {
 							if (parseInt($scope.promotions[i].dealers[j].id) === parseInt(dealers[k].id)) {
 								if (j === 0) {
-									$scope.promotions[i].dealerNames = dealers[k].name;
+									$scope.promotions[i].dealerNames = $filter('capitalize')(dealers[k].name, true);
 								} else {
-									$scope.promotions[i].dealerNames = $scope.promotions[i].dealerNames + '<br>' + dealers[k].name;
+									$scope.promotions[i].dealerNames = $scope.promotions[i].dealerNames + '<br>' + $filter('capitalize')(dealers[k].name, true);
 								}
 								break;
 							}
 						}
 					}
-					for (j = 0; j < $scope.promotions[i].users.length; j++) {
-						for (k = 0; k < users.length; k++) {
-							if (parseInt($scope.promotions[i].users[j].id) === parseInt(users[k].id)) {
-								if (j === 0) {
-									$scope.promotions[i].userNames = users[k].fullName;
-								} else {
-									$scope.promotions[i].userNames = $scope.promotions[i].userNames + '<br>' + users[k].fullName;
-								}
-								// $scope.promotions[i].users[j].fullName = users[k].fullName;
-								break;
-							}
-						}
-					}
+					// for (j = 0; j < $scope.promotions[i].users.length; j++) {
+					// 	for (k = 0; k < users.length; k++) {
+					// 		if (parseInt($scope.promotions[i].users[j].id) === parseInt(users[k].id)) {
+					// 			if (j === 0) {
+					// 				$scope.promotions[i].userNames = users[k].fullName;
+					// 			} else {
+					// 				$scope.promotions[i].userNames = $scope.promotions[i].userNames + '<br>' + users[k].fullName;
+					// 			}
+					// 			// $scope.promotions[i].users[j].fullName = users[k].fullName;
+					// 			break;
+					// 		}
+					// 	}
+					// }
 				}
-				$log.log($scope.promotions);
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
@@ -117,37 +120,54 @@ angular.module('minovateApp')
 					}
 				});
 
-				// $log.log($scope.promotions);
-
 			} else {
 				$log.log(success);
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getPromotions);
+			}
 		});
-
 	};
 
-	var getZones = function() {
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		zones = [];
 
 		Zones.query({}, function(success) {
-			for (var i = 0; i < success.data.length; i++) {
-				zones.push({
-					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					zones.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].attributes.name
+					});
+				}
+				getDealers({
+					success: true,
+					detail: 'OK'
 				});
+			} else {
+				$log.error(success);
 			}
 
-			getDealers();
-
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
 		});
 	};
 
-	var getDealers = function() {
+	var getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		dealers = [];
 
@@ -159,13 +179,23 @@ angular.module('minovateApp')
 				});
 			}
 
-			getUsers();
+			getUsers({
+				success: true,
+				detail: 'OK'
+			});
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
 		});
 	};
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		users = [];
 
@@ -186,13 +216,19 @@ angular.module('minovateApp')
 						active: success.data[i].attributes.active
 					});
 				}
-				getPromotions();
+				getPromotions({
+					success: true,
+					detail: 'OK'
+				});
 
 			} else {
 				$log.log(success);
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
 
 	};
@@ -222,16 +258,22 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			getPromotions();
+			getPromotions({
+				success: true,
+				detail: 'OK'
+			});
 		}, function() {
 			// getPromotions();
 		});
 	};
 
-	getZones();
+	getZones({
+		success: true,
+		detail: 'OK'
+	});
 })
 
-.controller('RemoveModalInstance', function($scope, $filter, $log, $uibModalInstance, idPromotion, Promotions) {
+.controller('RemoveModalInstance', function($scope, $filter, $log, $uibModalInstance, idPromotion, Promotions, Utils) {
 
 	$scope.modal = {
 		promotion: {
@@ -239,7 +281,12 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getInfoPromotion = function() {
+	var getInfoPromotion = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Promotions.query({
 			idPromotion: idPromotion
 		}, function(success) {
@@ -251,10 +298,18 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getInfoPromotion);
+			}
 		});
 	};
 
-	$scope.removePromotion = function() {
+	$scope.removePromotion = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Promotions.delete({
 			idPromotion: idPromotion
 		}, function(success) {
@@ -266,6 +321,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.removePromotion);
+			}
 		});
 	};
 
@@ -273,6 +331,9 @@ angular.module('minovateApp')
 		$uibModalInstance.dismiss('cancel');
 	};
 
-	getInfoPromotion();
+	getInfoPromotion({
+		success: true,
+		detail: 'OK'
+	});
 
 });

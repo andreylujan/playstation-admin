@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="getStores({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -77,10 +77,16 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateStore()">Nueva tienda</button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateStore()" uib-tooltip="Ingresar nueva tienda"><i class="fa fa-pencil-square-o"></i></button>
+              </div>
+            </div>
 
-            <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="store in $data">
+            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateStore()">Nueva tienda</button> -->
+
+            <table ng-table="tableParams" show-filter="true" class="table table-custom" >
+              <tr ng-repeat="store in $data" ng-if="page.tableLoaded">
                 <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
                   {{store.name}}
                 </td>
@@ -192,7 +198,7 @@
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Zona</label>
             <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.zones.selectedZones" sortable="true" theme="bootstrap" ng-disabled="modal.zones.disabled" reset-search-input="false" title="Selecciona una zona" ng-change="removeAlert()">
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.zones.selectedZones" sortable="true" theme="bootstrap" ng-disabled="modal.zones.disabled" reset-search-input="false" title="Selecciona una zona" ng-change="removeAlert(); getDealers({success: true,detail: 'OK'});">
                 <ui-select-match placeholder="zona...">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="zone in modal.zones.zones track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
                   <div ng-bind-html="zone.name | highlight: $select.search"></div>
@@ -216,11 +222,11 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createStore()" >{{modal.buttons.create.text}}</button>
+    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createStore({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
     
-    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStore()" >{{modal.buttons.edit.text}}</button>
+    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStore({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
     
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStore()" >{{modal.buttons.delete.text}}</button>
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStore({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>
     
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>

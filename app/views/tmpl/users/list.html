@@ -93,7 +93,7 @@
                 </td>
                 <td data-title="'Activo'" sortable="'active'" filter="{ 'active': 'text' }" class="text-center">
                   <img  ng-if="user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/check.png" style="width:24px">
-                  <img  ng-if="!user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId)" tooltip="Reenviar invitación">
+                  <img  ng-if="!user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId, {success: true, detail: 'OK'})" tooltip="Reenviar invitación">
                 </td>
                 <td data-title="'Info'">
                   <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
@@ -101,21 +101,21 @@
               </tr>
             </table>
 
-        </div>
-        <!-- /tile body -->
+          </div>
+          <!-- /tile body -->
 
-      </section>
-      <!-- /tile -->
+        </section>
+        <!-- /tile -->
+
+      </div>
+      <!-- /col -->
+
 
     </div>
-    <!-- /col -->
-
+    <!-- /row -->
 
   </div>
-  <!-- /row -->
-
-</div>
-<!-- /page content -->
+  <!-- /page content -->
 
   <script type="text/ng-template" id="userDetails.html">
     <div class="modal-header text-gray">
@@ -172,19 +172,16 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-danger btn-rounded-10 {{elements.buttons.removeUser.border}} mb-10" type="button" ng-click="removeUser(user.id)" >{{elements.buttons.removeUser.text}}</button>
-      <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id)" >{{elements.buttons.editUser.text}}</button>
+      <button class="btn btn-danger btn-rounded-10 {{elements.buttons.removeUser.border}} mb-10" type="button" ng-click="removeUser(user.id, {success: true,detail: 'OK'})" >{{elements.buttons.removeUser.text}}</button>
+      <button class="btn btn-warning btn-rounded-10 {{elements.buttons.editUser.border}} mb-10" type="button" ng-click="editUser(user.id, {success: true, detail: 'OK'})" >{{elements.buttons.editUser.text}}</button>
       <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
     </div>
   </script>
 
   <script type="text/ng-template" id="sendInvitation.html">
-    <div class="modal-body text-gray">
-      <div class="row">
-        <div class="col-md-12">
-          <h4 class="text-center">La invitación a <strong>{{user.email}}</strong> ha sido reenviada</h4>
-        </div>
-      </div>
+    <div class="modal-body text-gray text-center ">
+      <img class="img-responsive center-block mt-10 mb-20" src="images/envelope.png" width="75" alt="envelope_img">
+      <h4>La invitación a <strong>{{user.email}}</strong> ha sido reenviada</h4>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default btn-rounded-10 " type="button" ng-click="ok()" >Cerrar</button>

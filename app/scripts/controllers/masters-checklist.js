@@ -17,7 +17,11 @@ angular.module('minovateApp')
 
 	$scope.checklists = [];
 
-	$scope.getChecklists = function() {
+	$scope.getChecklists = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.checklists = [];
 
@@ -59,6 +63,9 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getChecklists);
+			}
 		});
 
 	};
@@ -79,7 +86,10 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getChecklists();
+			$scope.getChecklists({
+				success: true,
+				detail: 'OK'
+			});
 		}, function() {});
 	};
 
@@ -89,7 +99,10 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.getChecklists();
+	$scope.getChecklists({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
@@ -117,14 +130,22 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.deleteChecklist = function() {
+	$scope.deleteChecklist = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		ChecklistActions.delete({
 			idChecklist: idChecklist
 		}, function(success) {
 			$log.log(success);
 			$uibModalInstance.close();
-		}, function(error){
+		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.deleteChecklist);
+			}
 		});
 
 	};

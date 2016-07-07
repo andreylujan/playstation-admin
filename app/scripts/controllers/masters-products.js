@@ -9,15 +9,17 @@
  */
 angular.module('minovateApp')
 
-.controller('ProductsCtrl', function($scope, $log, $filter, $window, $uibModal, ngTableParams, Products) {
-
+.controller('ProductsCtrl', function($scope, $log, $filter, $window, $uibModal, ngTableParams, Products, Csv, Utils) {
 
 	$scope.status = {
 		open: true
 	};
 
 	$scope.page = {
-		title: 'Productos'
+		title: 'Productos',
+		cvsProductsFile: {
+			value: null
+		}
 	};
 
 	var i = 0,
@@ -27,12 +29,16 @@ angular.module('minovateApp')
 
 	var productsIncluded = [];
 
-	$scope.getProducts = function() {
+	$scope.getProducts = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		data = [];
 
 		Products.query({
-			include: 'product_type,product_classification,platform,images'
+			include: 'product_type,product_classification,platform'
 		}, function(success) {
 
 			// $log.log(success);
@@ -40,28 +46,30 @@ angular.module('minovateApp')
 			if (success.errors) {
 				$log.error(success);
 				return;
-			} else if (success.data) {
+			} else if (success.data && success.included) {
 
 				productsIncluded = success.included;
 
 				for (i = 0; i < success.data.length; i++) {
 					data.push({
-						name: success.data[i].attributes.name,
 						id: success.data[i].id,
-						description: success.data[i].attributes.description,
 						sku: success.data[i].attributes.sku,
-						plu: success.data[i].attributes.plu,
-						validityCode: success.data[i].attributes.validity_code,
-						createdAt: success.data[i].attributes.created_at,
+						name: success.data[i].attributes.name,
 						typeId: success.data[i].relationships.product_type.data.id,
 						typeName: '',
-						// brand: success.data[i].attributes.brand,
-						minPrice: success.data[i].attributes.min_price,
-						maxPrice: success.data[i].attributes.max_price,
 						destinationId: success.data[i].relationships.product_classification.data.id,
 						destinationName: '',
-						isTop: success.data[i].attributes.is_top
-
+						platformId: success.data[i].relationships.platform.data.id,
+						platformName: '',
+						publisher: success.data[i].attributes.publisher
+							// description: success.data[i].attributes.description,
+							// plu: success.data[i].attributes.plu,
+							// validityCode: success.data[i].attributes.validity_code,
+							// createdAt: success.data[i].attributes.created_at,
+							// brand: success.data[i].attributes.brand,
+							// minPrice: success.data[i].attributes.min_price,
+							// maxPrice: success.data[i].attributes.max_price,
+							// isTop: success.data[i].attributes.is_top,
 					});
 
 					for (j = 0; j < productsIncluded.length; j++) {
@@ -76,6 +84,14 @@ angular.module('minovateApp')
 						if (productsIncluded[j].type === 'product_classifications') {
 							if (data[i].destinationId === productsIncluded[j].id) {
 								data[i].destinationName = productsIncluded[j].attributes.name;
+							}
+						}
+					}
+
+					for (j = 0; j < productsIncluded.length; j++) {
+						if (productsIncluded[j].type === 'platforms') {
+							if (data[i].platformId === productsIncluded[j].id) {
+								data[i].platformName = productsIncluded[j].attributes.name;
 							}
 						}
 					}
@@ -109,8 +125,10 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getProducts);
+			}
 		});
-
 	};
 
 	$scope.openModalCreateProduct = function(idProduct) {
@@ -127,15 +145,62 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getProducts();
+			$scope.getProducts({
+				success: true,
+				detail: 'OK'
+			});
 			// closed
 		}, function() {
 			// dismissed 
-			$scope.getProducts();
+			$scope.getProducts({
+				success: true,
+				detail: 'OK'
+			});
 		});
 	};
 
-	$scope.getProducts();
+	$scope.uploadCsvProducts = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		Csv.upload(form).success(function(success) {
+			$log.log(success);
+			// openModalCsvProductChargeSummary(success);
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.uploadCsvProducts);
+			}
+		});
+
+	};
+
+	var openModalCsvProductChargeSummary = function(result) {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'csvProductChargeSummary.html',
+			controller: 'CsvProductChargeSummaryModalInstance',
+			resolve: {
+				result: function() {
+					return result;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			// closed
+		}, function() {
+			// dismissed 
+		});
+	};
+
+	$scope.getProducts({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
@@ -250,7 +315,12 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getProductDetails = function() {
+	var getProductDetails = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Products.query({
 			idProduct: idProduct,
 			include: 'product_type,product_classification,platform,images'
@@ -298,6 +368,9 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getProductDetails);
+			}
 		});
 	};
 
@@ -320,7 +393,12 @@ angular.module('minovateApp')
 		$scope.modal.product.publisher.disabled = state;
 	};
 
-	var getProductTypes = function() {
+	var getProductTypes = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		ProductTypes.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
@@ -332,7 +410,10 @@ angular.module('minovateApp')
 					});
 				}
 
-				getProductDestinations();
+				getProductDestinations({
+					success: true,
+					detail: 'OK'
+				});
 
 			} else if (success.errors) {
 				$log.error(success);
@@ -340,10 +421,18 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getProductTypes);
+			}
 		});
 	};
 
-	var getProductDestinations = function() {
+	var getProductDestinations = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		ProductClassifications.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
@@ -353,17 +442,28 @@ angular.module('minovateApp')
 						name: success.data[i].attributes.name
 					});
 				}
-				getPlaforms();
+				getPlaforms({
+					success: true,
+					detail: 'OK'
+				});
 			} else if (success.errors) {
 				$log.error(success);
 				return;
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getProductDestinations);
+			}
 		});
 	};
 
-	var getPlaforms = function() {
+	var getPlaforms = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Platforms.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
@@ -375,7 +475,10 @@ angular.module('minovateApp')
 				}
 
 				if (idProduct) {
-					getProductDetails();
+					getProductDetails({
+						success: true,
+						detail: 'OK'
+					});
 				}
 
 			} else if (success.errors) {
@@ -384,6 +487,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getPlaforms);
+			}
 		});
 	};
 
@@ -422,9 +528,15 @@ angular.module('minovateApp')
 					if (imagesUploaded === ($scope.modal.product.images.src.length)) {
 						setAlertProperties(false, null, null, null);
 						if (idProduct) {
-							editProduct();
+							editProduct({
+								success: true,
+								detail: 'OK'
+							});
 						} else {
-							saveProduct();
+							saveProduct({
+								success: true,
+								detail: 'OK'
+							});
 						}
 					}
 				}, function(error) {
@@ -433,9 +545,15 @@ angular.module('minovateApp')
 					if (imagesUploaded === ($scope.modal.product.images.src.length)) {
 						setAlertProperties(false, null, null, null);
 						if (idProduct) {
-							editProduct();
+							editProduct({
+								success: true,
+								detail: 'OK'
+							});
 						} else {
-							saveProduct();
+							saveProduct({
+								success: true,
+								detail: 'OK'
+							});
 						}
 					}
 				});
@@ -444,9 +562,15 @@ angular.module('minovateApp')
 		} else {
 			setAlertProperties(true, 'info', 'Subiendo producto', 'Subiendo información del producto');
 			if (idProduct) {
-				editProduct();
+				editProduct({
+					success: true,
+					detail: 'OK'
+				});
 			} else {
-				saveProduct();
+				saveProduct({
+					success: true,
+					detail: 'OK'
+				});
 			}
 		}
 	};
@@ -456,7 +580,7 @@ angular.module('minovateApp')
 		if (idProduct) {
 			if (!$scope.modal.buttons.edit.border) {
 				$scope.modal.buttons.edit.border = true;
-				$scope.modal.buttons.edit.text = 'Guardar edición';
+				$scope.modal.buttons.edit.text = 'Guardar';
 				setDisabledStateForInputs(false);
 				$scope.modal.product.images.show = true;
 				Utils.gotoAnyPartOfPage('topModal');
@@ -533,7 +657,11 @@ angular.module('minovateApp')
 		}
 	};
 
-	var saveProduct = function() {
+	var saveProduct = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!Validators.validaRequiredField($scope.modal.product.name.text)) {
 			$scope.modal.alert.color = 'danger';
@@ -619,17 +747,25 @@ angular.module('minovateApp')
 			setAlertProperties(false, null, null, null);
 			$uibModalInstance.close();
 		}, function(error) {
-			$log.error(error);
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.show = true;
 			$scope.modal.alert.title = 'Error al agregar producto';
 			$scope.modal.alert.text = error.data.errors[0].detail;
 			Utils.gotoAnyPartOfPage('topModal');
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(saveProduct());
+			}
 			return;
 		});
 	};
 
-	var editProduct = function() {
+	var editProduct = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Products.update({
 				idProduct: idProduct,
 				data: {
@@ -678,15 +814,22 @@ angular.module('minovateApp')
 			},
 			function(error) {
 				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(editProduct);
+				}
 			});
 	};
 
-	$scope.deleteProduct = function() {
+	$scope.deleteProduct = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!$scope.modal.buttons.delete.border) {
 			$scope.modal.buttons.delete.border = true;
 			$scope.modal.buttons.delete.text = 'Si, eliminar';
-			setAlertProperties(true, 'danger', '¿Realmente desea borrar el produto?', 'Para hacerlo vuelva a presionar el boton eliminar');
+			setAlertProperties(true, 'danger', '¿Realmente desea eliminar el produto?', 'Para hacerlo vuelva a presionar el boton eliminar');
 			Utils.gotoAnyPartOfPage('topModal');
 		} else {
 
@@ -698,6 +841,9 @@ angular.module('minovateApp')
 				$uibModalInstance.close();
 			}, function(error) {
 				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteProduct);
+				}
 			});
 		}
 	};
@@ -736,7 +882,7 @@ angular.module('minovateApp')
 		$scope.modal.buttons.edit.show = true;
 		$scope.modal.buttons.edit.text = 'Editar';
 		$scope.modal.buttons.delete.show = true;
-		$scope.modal.buttons.delete.text = 'Borrar';
+		$scope.modal.buttons.delete.text = 'Eliminar';
 	} else {
 		$scope.modal.product.images.show = true;
 		$scope.modal.title.text = 'Nuevo producto';
@@ -745,14 +891,25 @@ angular.module('minovateApp')
 		$scope.modal.buttons.edit.show = false;
 		$scope.modal.buttons.edit.text = 'Editar';
 		$scope.modal.buttons.delete.show = false;
-		$scope.modal.buttons.delete.text = 'Borrar';
+		$scope.modal.buttons.delete.text = 'Eliminar';
 	}
 
-	getProductTypes();
+	getProductTypes({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
 .controller('ProductImagesModalInstance', function($scope, $log, $uibModalInstance, idProduct) {
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+})
+
+.controller('CsvProductChargeSummaryModalInstance', function($scope, $log, $uibModalInstance, idProduct) {
 
 	$scope.cancel = function() {
 		$uibModalInstance.dismiss('cancel');

@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('InboxListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Inbox, Zones, Dealers, Users) {
+.controller('InboxListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Inbox, Zones, Dealers, Users, Utils) {
 
 	$scope.page = {
 		title: 'Inbox'
@@ -28,7 +28,11 @@ angular.module('minovateApp')
 	var recipients = [];
 	var recipientsNames = null;
 
-	var getInboxes = function() {
+	var getInboxes = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		data = [];
 
@@ -110,11 +114,17 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getInboxes);
+			}
 		});
-
 	};
 
-	var getZones = function() {
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		zones = [];
 
@@ -126,14 +136,24 @@ angular.module('minovateApp')
 				});
 			}
 
-			getDealers();
+			getDealers({
+				success: true,
+				detail: 'OK'
+			});
 
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
 		});
 	};
 
-	var getDealers = function() {
+	var getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		dealers = [];
 
@@ -145,13 +165,24 @@ angular.module('minovateApp')
 				});
 			}
 
-			getUsers();
+			getUsers({
+				success: true,
+				detail: 'OK'
+			});
+
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
 		});
 	};
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		users = [];
 
@@ -172,15 +203,20 @@ angular.module('minovateApp')
 						active: success.data[i].attributes.active
 					});
 				}
-				getInboxes();
+				getInboxes({
+					success: true,
+					detail: 'OK'
+				});
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
-
 	};
 
 	$scope.openModalRemovePromotion = function(idInbox) {
@@ -196,12 +232,15 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			getInboxes();
+			getInboxes({
+				success: true,
+				detail: 'OK'
+			});
 		}, function() {
 			// getInboxes();
 		});
 	};
-	
+
 	$scope.gotoNewInbox = function(idInbox) {
 
 		if (idInbox) {
@@ -213,10 +252,13 @@ angular.module('minovateApp')
 		}
 	};
 
-	getZones();
+	getZones({
+		success: true,
+		detail: 'OK'
+	});
 })
 
-.controller('RemoveInboxModalInstance', function($scope, $filter, $log, $uibModalInstance, idInbox, Inbox) {
+.controller('RemoveInboxModalInstance', function($scope, $filter, $log, $uibModalInstance, idInbox, Inbox, Utils) {
 
 	$scope.modal = {
 		inbox: {
@@ -224,7 +266,12 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getInfoInbox = function() {
+	var getInfoInbox = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Inbox.query({
 			idInbox: idInbox
 		}, function(success) {
@@ -236,10 +283,18 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getInfoInbox);
+			}
 		});
 	};
 
 	$scope.removeInbox = function() {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Inbox.delete({
 			idInbox: idInbox
 		}, function(success) {
@@ -250,6 +305,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.removeInbox);
+			}
 		});
 	};
 
@@ -257,6 +315,9 @@ angular.module('minovateApp')
 		$uibModalInstance.dismiss('cancel');
 	};
 
-	getInfoInbox();
+	getInfoInbox({
+		success: true,
+		detail: 'OK'
+	});
 
 });

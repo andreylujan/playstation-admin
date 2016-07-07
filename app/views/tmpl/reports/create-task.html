@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="createTask({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -97,7 +97,7 @@
                 </div>
               </div> -->
               <div class="form-group">
-                <label class="col-sm-3 control-label">Fecha vencimiento</label>
+                <label class="col-sm-3 control-label">Fecha límite</label>
                 <div class="col-sm-8">
                   <div class="input-group">
                     <input type="text" class="form-control" uib-datepicker-popup="{{page.dateOptions.format}}" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.limitDate" is-open="page.dateOptions.datepickerOpened" datepicker-options="page.dateOptions" show-button-bar="false"/>
@@ -129,7 +129,7 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Zona</label>
                 <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.zones.selectedZone" sortable="true" ng-change="removeAlert()">
+                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null); getDealers({success: true,detail: 'OK'})" ng-model="page.newTask.zones.selectedZone" sortable="true" ng-change="removeAlert()">
                     <ui-select-match placeholder="Seleccionar tipo...">
                       <span ng-bind="$select.selected.name"></span>
                     </ui-select-match>
@@ -142,7 +142,7 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Dealer</label>
                 <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.dealers.selectedDealer" sortable="true"ng-change="removeAlert()">
+                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null); getStores({success: true,detail: 'OK'})" ng-model="page.newTask.dealers.selectedDealer" sortable="true">
                     <ui-select-match placeholder="Seleccionar dealer...">
                       <span ng-bind="$select.selected.name"></span>
                     </ui-select-match>
@@ -168,7 +168,7 @@
 
               <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-10">
-                  <button type="submit" class="btn btn-rounded btn-primary" ng-click="createTask()">Crear</button>
+                  <button type="submit" class="btn btn-rounded btn-primary" ng-click="createTask({success: true,detail: 'OK'})">Crear</button>
                 </div>
               </div>
             </form>

@@ -50,7 +50,7 @@
 										</a>
 									</li>
 									<li>
-										<a href ng-click="getPromotions()">
+										<a href ng-click="getPromotions({success: true,detail: 'OK'})">
 											<fa name="refresh"></fa> Refrescar
 										</a>
 									</li>
@@ -90,9 +90,9 @@
 								<td data-title="'Dealers'" sortable="'dealerNames'" filter="{ 'dealerNames': 'text' }">
 									<span ng-bind-html="promotion.dealerNames"></span>
 								</td>
-								<td data-title="'Usuarios'" sortable="'userNames'" filter="{ 'userNames': 'text' }">
+								<!-- <td data-title="'Usuarios'" sortable="'userNames'" filter="{ 'userNames': 'text' }">
 									<span ng-bind-html="promotion.userNames"></span>
-								</td>
+								</td> -->
 								<td data-title="'Info'">
 									<img ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info" ng-click="gotoNewPromotion(promotion.id)">
 								</td>
@@ -127,7 +127,7 @@
     </div>
   </div>
   <div class="modal-footer">
-  	<button class="btn btn-danger" ng-click="removePromotion()">Si, eliminar</button>
+  	<button class="btn btn-danger" ng-click="removePromotion({success: true,detail: 'OK'})">Si, eliminar</button>
   	<button class="btn btn-default" ng-click="cancel()">Cancelar</button>
   </div>
 </script>

@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Inbox, Users, Validators, MessageActions) {
+.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Inbox, Users, Validators, MessageActions, Utils) {
 
 	var i = 0,
 		j = 0;
@@ -52,7 +52,12 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.page.users = [];
 
 		Users.query({
@@ -73,33 +78,49 @@ angular.module('minovateApp')
 				}
 				$scope.page.user.selectedUser = $scope.page.users[0];
 
-				getMessageActions();
+				getMessageActions({
+					success: true,
+					detail: 'OK'
+				});
 
 			} else {
 				$log.log(success);
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
 	};
 
-	var getMessageActions = function() {
+	var getMessageActions = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.page.messageActions = [];
 
 		MessageActions.query({}, function(success) {
 
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
-					$scope.page.messageActions.push({
-						type: 'message_actions',
-						id: success.data[i].id,
-						name: success.data[i].attributes.name
-					});
+					if (success.data[i].id !== '4') {
+						$scope.page.messageActions.push({
+							type: 'message_actions',
+							id: success.data[i].id,
+							name: success.data[i].attributes.name
+						});
+					}
 				}
 				$scope.page.messageAction.selectedMessageAction = $scope.page.messageActions[0];
 
 				if ($stateParams.idInbox) {
-					getInfoInbox($stateParams.idInbox);
+					getInfoInbox($stateParams.idInbox, {
+						success: true,
+						detail: 'OK'
+					});
 					$scope.page.dateTimePicker.disabled = true;
 					$scope.page.checkSendImmediate.disabled = true;
 					$scope.page.checkSendToAll.disabled = true;
@@ -124,10 +145,18 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getMessageActions);
+			}
 		});
 	};
 
-	var getInfoInbox = function(idInbox) {
+	var getInfoInbox = function(idInbox, e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Inbox.query({
 			idInbox: idInbox,
 			include: 'message_action,recipients'
@@ -139,6 +168,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getInfoInbox);
+			}
 		});
 	};
 
@@ -180,7 +212,11 @@ angular.module('minovateApp')
 		$scope.page.html.value = data.attributes.html;
 	};
 
-	$scope.createInbox = function() {
+	$scope.createInbox = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		var users = [];
 
@@ -213,10 +249,7 @@ angular.module('minovateApp')
 			return;
 		}
 
-		if ($stateParams.idInbox) {
-
-		} else {
-
+		if (!$stateParams.idInbox) {
 			Inbox.save({
 				data: {
 					type: 'broadcasts',
@@ -244,9 +277,13 @@ angular.module('minovateApp')
 					}
 				}
 			}, function(success) {
-				$log.log(success);
+				openModalMessage('Se ha enviado el mensaje con éxito');
+				$state.go('app.inbox.list');
 			}, function(error) {
 				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.createInbox);
+				}
 			});
 		}
 	};
@@ -274,7 +311,10 @@ angular.module('minovateApp')
 		$scope.page.dateTimePicker.open = true;
 	};
 
-	getUsers();
+	getUsers({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 

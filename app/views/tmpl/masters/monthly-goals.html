@@ -22,6 +22,15 @@
 				</li>
 			</ul>
 
+			<!-- <div class="page-toolbar">
+        <p class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup="MM/yyyy" ng-model="page.dateSearch.value" is-open="asd" datepicker-options="{minMode: 'month', showButtonBar: false}" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="asd = !asd"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</p>
+      </div> -->
+
 		</div>
 
 	</div>
@@ -56,7 +65,7 @@
 										</a>
 									</li>
 									<li>
-										<a ng-href="" ng-click="getStockBreaks()">
+										<a ng-href="" ng-click="getStockBreaks({success: true,detail: 'OK'})">
 											<fa name="refresh"></fa> Refrescar
 										</a>
 									</li>
@@ -77,14 +86,52 @@
 					<!-- tile body -->
 					<div class="tile-body">
 
-						<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalNewMonthlyGoal()">Nueva meta</button>
+						<div class="row">
+							<div class="col-md-2">
+								<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalNewMonthlyGoal()" uib-tooltip="Cargar Metas"><i class="fa fa-cloud-upload"></i></button>
+							</div>
+						</div>
 
-						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-						 <!--  <tr ng-repeat="stockBreak in $data">
-								<td data-title="'Tipo tienda'" sortable="'storeTypeName'" filter="{ 'storeTypeName': 'text' }">
-									{{stockBreak.storeTypeName}}
+						<div class="row mt-15">
+							<div class="col-md-1">
+								<label class="text-strong">Ver cargas del mes: </label>
+							</div>
+							<div class="col-md-2">
+								<p class="input-group">
+									<input type="text" class="form-control" uib-datepicker-popup="MM/yyyy" ng-model="page.dateSearch.value" is-open="asd" datepicker-options="{minMode: 'month', showButtonBar: false}"  ng-change="getSaleGoalUploads({success: true,detail: 'OK'})"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="asd = !asd"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</p>
+							</div>
+						</div>
+						
+						<h3 class="text-orange-ps text-center" ng-show="!data.length">No hay cargas en el mes de <span>{{page.dateSearch.value | date:"MMMM" | uppercase}}</span> del año {{page.dateSearch.value | date:"yyyy"}}</h3>
+
+						<table ng-table="tableParams" show-filter="true" class="table table-custom" ng-show="data.length">
+						  <tr ng-repeat="charge in data" ng-if="flag">
+								<td class="text-center" data-title="'Mes'" sortable="'month'" filter="{ 'month': 'text' }">
+									{{charge.month}}
 								</td>
-							</tr> -->
+								<td class="text-center" data-title="'Año'" sortable="'year'" filter="{ 'year': 'text' }">
+									{{charge.year}}
+								</td>
+								<td class="text-center" data-title="'Fecha de carga'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
+									{{charge.createdAt | date: 'dd/MM/yyyy'}}
+								</td>
+								<td class="text-center" data-title="'Archivo subido'" sortable="'uploadedCsv'" filter="{ 'uploadedCsv': 'text' }">
+									<a class="text-yellow-ps text-lg" ng-href="{{charge.uploadedCsv}}" uib-tooltip="descargar archivo subido" target="_blank"><i class="fa fa-cloud-download"></i></a>
+								</td>
+								<td class="text-center" data-title="'Archivo resumen'" sortable="'resultCsv'" filter="{ 'resultCsv': 'text' }">
+									<a class="text-orange-ps text-lg" ng-href="{{charge.resultCsv}}" uib-tooltip="descargar archivo resumen" target="_blank"><i class="fa fa-cloud-download"></i></a>
+								</td>
+								<td class="text-center" data-title="'Filas ingresadas'" sortable="'rowsSuccesses'" filter="{ 'rowsSuccesses': 'text' }">
+									<span class="text-success">{{charge.rowsSuccesses}}</span>
+								</td>
+								<td class="text-center" data-title="'Filas con error'" sortable="'rowsErrors'" filter="{ 'rowsErrors': 'text' }">
+									<span class="text-danger">{{charge.rowsErrors}}</span>
+								</td>
+							</tr>
 						</table>
 
 					</div>
@@ -122,7 +169,7 @@
 							<label class="col-sm-3 control-label">Mes</label>
 							<div class="col-sm-8">
 								<p class="input-group">
-								<input type="text" class="form-control" uib-datepicker-popup="MM/yyyy" ng-model="modal.monthlyGoal.date.value" is-open="modal.datepicker.opened" datepicker-options="{minMode: 'month'}" />
+									<input type="text" class="form-control" uib-datepicker-popup="MM/yyyy" ng-model="modal.monthlyGoal.date.value" is-open="modal.datepicker.opened" datepicker-options="{minMode: 'month', showButtonBar: false}" />
 									<span class="input-group-btn">
 										<button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 									</span>
@@ -132,7 +179,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label">Archivo</label>
 							<div class="col-sm-8">
-								<input class="form-control" type="file" ng-model="modal.monthlyGoal.file.value" ng-disabled="" accept=".xls,.xlsx,.csv,.txt" base-sixty-four-input>
+								<input class="form-control" type="file" file-model="modal.monthlyGoal.file.value" ng-disabled="" accept=".xls,.xlsx,.csv,.txt">
 							</div>
 						</div>
 					</form>
@@ -140,11 +187,11 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createMonthlyGoal()" >{{modal.buttons.create.text}}</button>
+			<button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createMonthlyGoal({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
 
-			<button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStockBreak()" >{{modal.buttons.edit.text}}</button>
+			<button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStockBreak({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
 
-			<button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStockBreak()" >{{modal.buttons.delete.text}}</button>
+			<button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStockBreak({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>
 
 			<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
 		</div>
@@ -160,14 +207,45 @@
 			
 			<div class="row">
 				<div class="col-md-12">
-					
-				</div>
+
+					<h4 class="text-center text-success">Éxitos - <b> {{modal.successes.count}}</b> metas insertadas</h4>
+					<ul class="list-inline">
+						<!-- Si el elemento no es el último, se escribe con una coma al final -->
+						<li class="list-inline-item" ng-repeat="success in modal.successes.data" ng-if="!$last">{{success.storeCode}},</li>
+						<!-- Si el elemento es el ultimo, se escribe, sin una coma al final  -->
+						<li class="list-inline-item" ng-repeat="success in modal.successes.data" ng-if="$last">{{success.storeCode}}</li>
+					</ul>
+					<hr>
+
+					<h4 class="text-center text-danger">Errores - <b>{{modal.errors.count}}</b> metas con error</h4>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Fila</th>
+								<th>Campo</th>
+								<th>Descripción</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="error in modal.errors.data">
+							<tr>
+								<td>{{error.rowNumber}}</td>
+								<!-- Si hay un error de codigo de store, se muestra -->
+								<td ng-if="error.fields[0].name">{{error.fields[0].name}}</td>
+								<td ng-if="error.fields[0].detail">{{error.fields[0].detail}}</td>
+								
+								<!-- si no hay un error de codigo de store, se muestra el error de monto -->
+								<td ng-if="!error.fields[0].name">{{error.fields[1].name}}</td>
+								<td ng-if="!error.fields[0].detail">{{error.fields[1].detail}}</td>
+							</tr>
+						</tbody>
+					</table>
 			</div>
 		</div>
-		<div class="modal-footer">
-			
-			<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
-		</div>
-	</script>
+	</div>
+	<div class="modal-footer">
+
+		<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+	</div>
+</script>
 
 </div>

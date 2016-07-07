@@ -823,3 +823,19 @@ fieldset[disabled] .checkbox-custom input+i:before {
   border-color: $cyan;
   @include box-shadow(none);
 }
+
+label.custom-input-file input[type="file"] {
+  position: fixed;
+  top: -1000px;
+}
+
+.custom-input-file {
+  border-radius: 15px;
+  margin: 0;
+  background-color: $blue-ps !important;
+  display: inline-block;
+  border: 0px;
+  padding: 7px 12px;
+  color: white;
+  cursor: pointer;
+}

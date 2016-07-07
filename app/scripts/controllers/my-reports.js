@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('MyReportsCtrl', function($scope, $log, ngTableParams, $filter, Utils, Reports, Zones, Dealers, Stores) {
+	.controller('MyReportsCtrl', function($scope, $log, ngTableParams, $filter, $window, Utils, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
 			title: 'Mis Reportes',
@@ -33,9 +33,14 @@ angular.module('minovateApp')
 		var loggedUserId = Utils.getInStorage('userid');
 		var i, j;
 		$scope.currentPage = 0;
-		var pageSize = 4;
+		var pageSize = 25;
 
-		$scope.getMyreports = function(mode) {
+		$scope.getMyreports = function(mode, e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			$scope.reports = [];
 
@@ -109,9 +114,11 @@ angular.module('minovateApp')
 						}
 					}
 				}, function(error) {
-					$log.log(error);
+					$log.error(error);
+					if (error.status === 401) {
+						Utils.refreshToken(getMyreports);
+					}
 				});
-
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
@@ -140,7 +147,7 @@ angular.module('minovateApp')
 					'filter[assigned_user_id]': loggedUserId
 				}, function(success) {
 
-					$log.log(success);
+					// $log.log(success);
 
 					if (success.data) {
 
@@ -189,7 +196,7 @@ angular.module('minovateApp')
 						}
 					}
 				}, function(error) {
-					$log.log(error);
+					$log.error(error);
 				});
 
 
@@ -216,7 +223,13 @@ angular.module('minovateApp')
 
 		};
 
-		var getZones = function() {
+		var getZones = function(e) {
+
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			zones = [];
 
@@ -228,14 +241,25 @@ angular.module('minovateApp')
 					});
 				}
 
-				getDealers();
+				getDealers({
+					success: true,
+					detail: 'OK'
+				});
 
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getZones);
+				}
 			});
 		};
 
-		var getDealers = function() {
+		var getDealers = function(e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			dealers = [];
 
@@ -247,13 +271,25 @@ angular.module('minovateApp')
 					});
 				}
 
-				getStores();
+				getStores({
+					success: true,
+					detail: 'OK'
+				});
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getDealers);
+				}
+
 			});
 		};
 
-		var getStores = function() {
+		var getStores = function(e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			stores = [];
 
@@ -265,13 +301,29 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.getMyreports('next');
+				$scope.getMyreports('next', {
+					success: true,
+					detail: 'OK'
+				});
 
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				}
 			});
 		};
 
-		getZones();
+		$scope.downloadPdf = function() {
+			var pdf = angular.element(event.target).data('pdf');
+			if (pdf) {
+				$window.open(pdf, '_blank');
+			}
+		};
+
+		getZones({
+			success: true,
+			detail: 'OK'
+		});
 
 	});

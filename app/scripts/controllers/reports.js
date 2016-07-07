@@ -8,204 +8,304 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('ReportsCtrl', function($scope, $filter, $log, $window, ngTableParams, Reports, Zones, Dealers, Stores) {
 
-		$scope.page = {
-			title: 'Lista de reportes',
-			prevBtn: {
-				disabled: true
-			},
-			nextBtn: {
-				disabled: false
-			}
-		};
+.controller('ReportsCtrl', function($scope, $filter, $log, $window, ngTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+
+	$scope.page = {
+		title: 'Lista de reportes',
+		prevBtn: {
+			disabled: true
+		},
+		nextBtn: {
+			disabled: false
+		},
+		tableLoaded: false
+	};
+
+	$scope.reports = [];
+	var zones = [];
+	var dealers = [];
+	var stores = [];
+	var users = [];
+	var i, j;
+	$scope.currentPage = 0;
+	var pageSize = 30;
+
+	$scope.getReports = function(mode, e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.reports = [];
-		var zones = [];
-		var dealers = [];
-		var stores = [];
-		var i, j;
-		$scope.currentPage = 0;
-		var pageSize = 30;
 
-		$scope.getReports = function(mode) {
+		if ($scope.currentPage === 2) {
+			$scope.page.prevBtn.disabled = true;
+		}
 
-			$scope.reports = [];
-
-			if ($scope.currentPage === 2) {
-				$scope.page.prevBtn.disabled = true;
+		if (mode === 'prev') {
+			if ($scope.currentPage > 1) {
+				$scope.currentPage--;
 			}
-
-			if (mode === 'prev') {
-				if ($scope.currentPage > 1) {
-					$scope.currentPage--;
-				}
-			} else if (mode === 'next') {
-				$scope.currentPage++;
-				if ($scope.currentPage > 1) {
-					$scope.page.prevBtn.disabled = false;
-				}
+		} else if (mode === 'next') {
+			$scope.currentPage++;
+			if ($scope.currentPage > 1) {
+				$scope.page.prevBtn.disabled = false;
 			}
+		}
 
-			Reports.query({
-				all: true,
-				'page[number]': $scope.currentPage,
-				'page[size]': pageSize
-			}, function(success) {
+		Reports.query({
+			all: true,
+			'page[number]': $scope.currentPage,
+			'page[size]': pageSize
+		}, function(success) {
 
-				if (success.data) {
+			if (success.data) {
 
-					for (i = 0; i < success.data.length; i++) {
+				for (i = 0; i < success.data.length; i++) {
 
-						$scope.reports.push({
-							id: success.data[i].id,
-							reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
-							createdAt: success.data[i].attributes.created_at,
-							limitDate: success.data[i].attributes.limit_date,
-							zoneId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone),
-							zoneName: null,
-							dealerId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer),
-							dealerName: null,
-							storeId: parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store),
-							storeName: null,
-							creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded,
-							pdf: success.data[i].attributes.pdf
-						});
+					var zoneId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? zoneId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone) : zoneId = null;
+					var dealerId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? dealerId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer) : dealerId = null;
+					var storeId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? storeId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store) : dealerId = null;
 
-					}
-
-					for (i = 0; i < $scope.reports.length; i++) {
-						for (j = 0; j < zones.length; j++) {
-							if ($scope.reports[i].zoneId === zones[j].id) {
-								$scope.reports[i].zoneName = zones[j].name;
-								break;
-							}
-						}
-					}
-
-					for (i = 0; i < $scope.reports.length; i++) {
-						for (j = 0; j < dealers.length; j++) {
-							if ($scope.reports[i].dealerId === dealers[j].id) {
-								$scope.reports[i].dealerName = dealers[j].name;
-								break;
-							}
-						}
-					}
-
-					for (i = 0; i < $scope.reports.length; i++) {
-						for (j = 0; j < stores.length; j++) {
-							if ($scope.reports[i].storeId === stores[j].id) {
-								$scope.reports[i].storeName = stores[j].name;
-								break;
-							}
-						}
-					}
-
-					// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
-					if ($scope.reports.length < pageSize) {
-						$scope.page.nextBtn.disabled = true;
-					} else {
-						$scope.page.nextBtn.disabled = false;
-					}
-
-					$scope.tableParams = new ngTableParams({
-						page: 1, // show first page
-						count: $scope.reports.length, // count per page
-						filter: {
-							//name: 'M'       // initial filter
-						},
-						sorting: {
-							'report.id': 'asc' // initial sorting
-						}
-					}, {
-						counts: [],
-						total: $scope.reports.length, // length of $scope.reports
-						getData: function($defer, params) {
-							var filteredData = params.filter() ?
-								$filter('filter')($scope.reports, params.filter()) :
-								$scope.reports;
-							var orderedData = params.sorting() ?
-								$filter('orderBy')(filteredData, params.orderBy()) :
-								$scope.reports;
-
-							params.total(orderedData.length); // set total for recalc pagination
-							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-						}
+					$scope.reports.push({
+						id: success.data[i].id,
+						reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
+						createdAt: success.data[i].attributes.created_at,
+						limitDate: success.data[i].attributes.limit_date,
+						zoneId: zoneId,
+						zoneName: '-',
+						dealerId: dealerId,
+						dealerName: '-',
+						storeId: storeId,
+						storeName: '-',
+						creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+						pdfUploaded: success.data[i].attributes.pdf_uploaded,
+						pdf: success.data[i].attributes.pdf,
+						assigned_user_id: success.data[i].attributes.assigned_user_id,
+						assignedUserName: '-'
 					});
 
+				}
+
+				for (i = 0; i < $scope.reports.length; i++) {
+					for (j = 0; j < zones.length; j++) {
+						if ($scope.reports[i].zoneId === zones[j].id) {
+							$scope.reports[i].zoneName = zones[j].name;
+							break;
+						}
+					}
+				}
+
+				for (i = 0; i < $scope.reports.length; i++) {
+					for (j = 0; j < dealers.length; j++) {
+						if ($scope.reports[i].dealerId === dealers[j].id) {
+							$scope.reports[i].dealerName = dealers[j].name;
+							break;
+						}
+					}
+				}
+
+				for (i = 0; i < $scope.reports.length; i++) {
+					for (j = 0; j < stores.length; j++) {
+						if ($scope.reports[i].storeId === stores[j].id) {
+							$scope.reports[i].storeName = stores[j].name;
+							break;
+						}
+					}
+				}
+
+				for (i = 0; i < $scope.reports.length; i++) {
+					for (j = 0; j < users.length; j++) {
+						if ($scope.reports[i].storeId === users[j].id) {
+							$scope.reports[i].assignedUserName = users[j].fullName;
+							break;
+						}
+					}
+				}
+
+				// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
+				if ($scope.reports.length < pageSize) {
+					$scope.page.nextBtn.disabled = true;
 				} else {
-					$log.log(success);
-				}
-			}, function(error) {
-				$log.log(error);
-			});
-
-		};
-
-		var getZones = function() {
-
-			zones = [];
-
-			Zones.query({}, function(success) {
-				for (var i = 0; i < success.data.length; i++) {
-					zones.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
+					$scope.page.nextBtn.disabled = false;
 				}
 
-				getDealers();
+				$scope.tableParams = new ngTableParams({
+					page: 1, // show first page
+					count: $scope.reports.length, // count per page
+					filter: {
+						//name: 'M'       // initial filter
+					},
+					sorting: {
+						'reportTypeName': 'desc' // initial sorting
+					}
+				}, {
+					counts: [],
+					total: $scope.reports.length, // length of $scope.reports
+					getData: function($defer, params) {
+						var filteredData = params.filter() ?
+							$filter('filter')($scope.reports, params.filter()) :
+							$scope.reports;
+						var orderedData = params.sorting() ?
+							$filter('orderBy')(filteredData, params.orderBy()) :
+							$scope.reports;
 
-			}, function(error) {
-				$log.log(error);
+						params.total(orderedData.length); // set total for recalc pagination
+						$defer.resolve(orderedData);
+					}
+				});
+				$scope.page.tableLoaded = true;
+
+			} else {
+				$log.log(success);
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getReports);
+			}
+		});
+	};
+
+	var getZones = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		zones = [];
+
+		Zones.query({}, function(success) {
+			for (var i = 0; i < success.data.length; i++) {
+				zones.push({
+					id: parseInt(success.data[i].id),
+					name: success.data[i].attributes.name
+				});
+			}
+
+			getDealers({
+				success: true,
+				detail: 'OK'
 			});
-		};
 
-		var getDealers = function() {
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
+		});
+	};
 
-			dealers = [];
+	var getDealers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
-			Dealers.query({}, function(success) {
-				for (var i = 0; i < success.data.length; i++) {
-					dealers.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
-				}
+		dealers = [];
 
-				getStores();
-			}, function(error) {
-				$log.log(error);
+		Dealers.query({}, function(success) {
+			for (var i = 0; i < success.data.length; i++) {
+				dealers.push({
+					id: parseInt(success.data[i].id),
+					name: success.data[i].attributes.name
+				});
+			}
+
+			getStores({
+				success: true,
+				detail: 'OK'
 			});
-		};
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
+		});
+	};
 
-		var getStores = function() {
+	var getStores = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
-			stores = [];
+		stores = [];
 
-			Stores.query({}, function(success) {
+		Stores.query({}, function(success) {
+			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
 					stores.push({
 						id: parseInt(success.data[i].id),
 						name: success.data[i].attributes.name
 					});
 				}
-
-				$scope.getReports('next');
-
-			}, function(error) {
-				$log.log(error);
-			});
-		};
-
-		getZones();
-
-		$scope.downloadPdf = function() {
-			var pdf = angular.element(event.target).data('pdf');
-			if (pdf) {
-				$window.open(pdf, '_blank');
+				getUsers({
+					success: true,
+					detail: 'OK'
+				});
+			} else {
+				$log.error(success);
 			}
-		};
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getStores);
+			}
+		});
+	};
 
+	var getUsers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		users = [];
+
+		Users.query({}, function(success) {
+			if (success.data) {
+				for (i = 0; i < success.data.length; i++) {
+					if (success.data[i].attributes.active) {
+						users.push({
+							id: parseInt(success.data[i].id),
+							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
+						});
+					}
+				}
+
+				$scope.getReports('next', {
+					success: true,
+					detail: 'OK'
+				});
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
+		});
+	};
+
+	getZones({
+		success: true,
+		detail: 'OK'
 	});
+
+	$scope.downloadPdf = function() {
+		var pdf = angular.element(event.target).data('pdf');
+		if (pdf) {
+			$window.open(pdf, '_blank');
+		}
+	};
+
+});

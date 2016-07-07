@@ -9,15 +9,20 @@
  */
 angular.module('minovateApp')
 
-.controller('StoresCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Stores) {
+.controller('StoresCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Stores, Utils) {
 
 	$scope.page = {
-		title: 'Tiendas'
+		title: 'Tiendas',
+		tableLoaded: false
 	};
 
-	// var stores = [];
+	$scope.stores = [];
 
-	$scope.getStores = function() {
+	$scope.getStores = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.stores = [];
 
@@ -55,15 +60,17 @@ angular.module('minovateApp')
 					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 				}
 			});
+			$scope.page.tableLoaded = true;
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getUsers);
+			}
 		});
 	};
 
 	$scope.openModalCreateStore = function(idStore) {
-
-		// var idStore = idStore;
 
 		var modalInstance = $uibModal.open({
 			animation: true,
@@ -76,12 +83,42 @@ angular.module('minovateApp')
 			}
 		});
 
-		modalInstance.result.then(function() {
-			$scope.getStores();
+		modalInstance.result.then(function(data) {
+			if (data) {
+				if (data.action === 'save') {
+					$log.log('agrego el');
+					$log.log(data);
+					$scope.stores.unshift({
+						id: data.id,
+						name: data.name
+					});
+				}
+				if (data.action === 'edit') {
+					for (i = 0; i < $scope.stores.length; i++) {
+						if (parseInt($scope.stores[i].id) === parseInt(data.id)) {
+							$scope.stores[i].name = data.name;
+							break;
+						}
+					}
+				}
+				if (data.action === 'delete') {
+					for (i = 0; i < $scope.stores.length; i++) {
+						if (parseInt($scope.stores[i].id) === parseInt(data.id)) {
+							$scope.stores.splice(i, 1);
+							break;
+						}
+					}
+				}
+				$scope.tableParams.reload();
+			}
+
 		}, function() {});
 	};
 
-	$scope.getStores();
+	$scope.getStores({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
@@ -139,7 +176,7 @@ angular.module('minovateApp')
 			disabled: true
 		},
 		zones: {
-			selectedZones: [],
+			selectedZones: {},
 			zones: [],
 			disabled: true
 		},
@@ -175,7 +212,12 @@ angular.module('minovateApp')
 	var i = 0,
 		j = 0;
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Users.query({}, function(success) {
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
@@ -191,64 +233,28 @@ angular.module('minovateApp')
 					}
 				}
 
-				getZones();
+				getStoreTypes({
+					success: true,
+					detail: 'OK'
+				});
 
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.log(error);
-		});
-	};
-
-	var getZones = function() {
-
-		Zones.query({}, function(success) {
-			// $log.log(success);
-
-			if (success.data) {
-
-				for (i = 0; i < success.data.length; i++) {
-					$scope.modal.zones.zones.push({
-						id: success.data[i].id,
-						name: success.data[i].attributes.name,
-						type: 'zones'
-					});
-				}
-
-				getDealers();
-
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
 			}
-			// $log.log(success);
-		}, function(error) {
-			$log.log(error);
 		});
 	};
 
-	var getDealers = function() {
+	var getStoreTypes = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
-		Dealers.query({}, function(success) {
-			// $log.log(success);
-
-			if (success.data) {
-
-				for (i = 0; i < success.data.length; i++) {
-					$scope.modal.dealers.dealers.push({
-						id: success.data[i].id,
-						name: success.data[i].attributes.name,
-						type: 'dealers'
-					});
-				}
-				getStoreTypes();
-
-			}
-			// $log.log(success);
-		}, function(error) {
-			$log.log(error);
-		});
-	};
-
-	var getStoreTypes = function() {
 		StoreTypes.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
@@ -259,18 +265,105 @@ angular.module('minovateApp')
 						type: 'store_types'
 					});
 				}
-				if (idStore) {
-					getStoreDetails(idStore);
-				}
+				getZones({
+					success: true,
+					detail: 'OK'
+				});
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getStoreTypes);
+			}
 		});
 	};
 
-	var getStoreDetails = function(idStore) {
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		Zones.query({}, function(success) {
+			if (success.data) {
+				$scope.modal.zones.zones = [];
+
+				for (i = 0; i < success.data.length; i++) {
+					$scope.modal.zones.zones.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name,
+						dealersIds: success.data[i].attributes.dealer_ids,
+						type: 'zones'
+					});
+				}
+
+				if (idStore) {
+					getStoreDetails({
+						success: true,
+						detail: 'OK'
+					});
+				}
+
+			} else {
+				$log.error(success);
+			}
+
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
+		});
+	};
+
+	// Carga todos los deales pertenecientes a la zona seleccionada
+	$scope.getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		Dealers.query({}, function(success) {
+			// $log.log(success);
+
+			if (success.data) {
+				$scope.modal.dealers.dealers = [];
+				$scope.modal.dealers.selectedDealers = {};
+
+				for (j = 0; j < $scope.modal.zones.selectedZones.dealersIds.length; j++) {
+					for (i = 0; i < success.data.length; i++) {
+						if ($scope.modal.zones.selectedZones.dealersIds[j] === parseInt(success.data[i].id)) {
+							$scope.modal.dealers.dealers.push({
+								id: success.data[i].id,
+								name: success.data[i].attributes.name,
+								type: 'dealers'
+							});
+							break;
+						}
+					}
+				}
+				// Luego de que se cargaron todos los dealers pertenecientes a la zona seleccionada
+				// Si hay un idStore (se esta editando una tienda) se selecciona el dealer de la lista
+				if (idStore) {
+					selectDealers();
+				}
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getUsers);
+			}
+		});
+	};
+
+	var getStoreDetails = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		var storeTypeId = null;
 
 		Stores.query({
@@ -293,10 +386,11 @@ angular.module('minovateApp')
 				// $scope.modal.store.montlyGoalClp.text = success.data.attributes.monthly_goal_clp;
 				// $scope.modal.store.montlyGoalUsd.text = success.data.attributes.monthly_goal_usd;
 
+				// Se seleccionan los datos de la tienda a editar
 				selectUsersInstructor();
 				selectUsersSupervisor();
 				selectZones();
-				selectDealers();
+				// selectDealers();
 				selectStoreTypes();
 			} else {
 				$scope.modal.alert.color = 'danger';
@@ -311,6 +405,9 @@ angular.module('minovateApp')
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getStoreDetails);
+			}
 		});
 	};
 
@@ -342,9 +439,15 @@ angular.module('minovateApp')
 				$scope.modal.zones.selectedZones.id = $scope.modal.zones.zones[i].id;
 				$scope.modal.zones.selectedZones.name = $scope.modal.zones.zones[i].name;
 				$scope.modal.zones.selectedZones.type = $scope.modal.zones.zones[i].type;
+				$scope.modal.zones.selectedZones.dealersIds = $scope.modal.zones.zones[i].dealersIds;
 				break;
 			}
 		}
+		// Cuando se selecciona la zona a la cual pertenece la tienda, se cargan los dealers pertenecientes a esa zona
+		$scope.getDealers({
+			success: true,
+			detail: 'OK'
+		});
 	};
 
 	var selectDealers = function() {
@@ -371,7 +474,11 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.createStore = function() {
+	$scope.createStore = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 			$scope.modal.alert.color = 'danger';
@@ -481,23 +588,35 @@ angular.module('minovateApp')
 				}
 			}
 		}, function(success) {
-			$uibModalInstance.close();
-		}, function(error) {
-			$log.error(error);
 
+			var newStoreInfo = {
+				id: success.data.id,
+				name: success.data.attributes.name,
+				action: 'save'
+			};
+			$uibModalInstance.close(newStoreInfo);
+		}, function(error) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'No se ha podido crear la tienda, intente nuevamente';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.createStore);
+			}
 		});
 	};
 
-	$scope.editStore = function() {
+	$scope.editStore = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 		// var monthlyGoalClp = $scope.modal.store.montlyGoalClp.text ? $scope.modal.store.montlyGoalClp.text : '0';
 		// var monthlyGoalUsd = $scope.modal.store.montlyGoalUsd.text ? $scope.modal.store.montlyGoalUsd.text : '0';
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
-			$scope.modal.buttons.edit.text = 'Si, Editar';
+			$scope.modal.buttons.edit.text = 'Guardar';
 			$scope.modal.buttons.edit.border = false;
 			$scope.modal.store.name.disabled = false;
 			$scope.modal.store.contact.disabled = false;
@@ -511,7 +630,7 @@ angular.module('minovateApp')
 			$scope.modal.storeTypes.disabled = false;
 
 			$scope.modal.alert.color = 'warning';
-			$scope.modal.alert.title = 'Para efectuar la edición, presione nuevamente el botón';
+			$scope.modal.alert.title = 'Para efectuar la edición, presione el botón Guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 		} else {
@@ -631,21 +750,31 @@ angular.module('minovateApp')
 					}
 				}
 			}, function(success) {
-				// $log.log(success);
-				$uibModalInstance.close();
+				var storeEditedInfo = {
+					id: success.data.id,
+					name: success.data.attributes.name,
+					action: 'edit'
+				};
+				$uibModalInstance.close(storeEditedInfo);
 			}, function(error) {
-
-				$log.log(error);
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'No se ha podido editar la tienda, intente nuevamente';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.show = true;
 				Utils.gotoAnyPartOfPage('topModalCreateStore');
+				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.editStore);
+				}
 			});
 		}
 	};
 
-	$scope.deleteStore = function() {
+	$scope.deleteStore = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.delete.text === 'Eliminar') {
 			$scope.modal.buttons.delete.text = 'Si, Eliminar';
@@ -661,15 +790,21 @@ angular.module('minovateApp')
 			Stores.delete({
 				storeId: idStore
 			}, function(success) {
-				$uibModalInstance.close();
+				var storeDeletedInfo = {
+					id: idStore,
+					name: '',
+					action: 'delete'
+				};
+				$uibModalInstance.close(storeDeletedInfo);
 			}, function(error) {
-
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'No se ha podido borrar la tienda';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.show = true;
-
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteStore);
+				}
 			});
 		}
 	};
@@ -690,7 +825,10 @@ angular.module('minovateApp')
 		$scope.modal.alert.show = false;
 	};
 
-	getUsers();
+	getUsers({
+		success: true,
+		detail: 'OK'
+	});
 
 	if (idStore) {
 		$scope.modal.title.text = 'Información tienda';

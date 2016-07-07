@@ -50,7 +50,7 @@
 										</a>
 									</li>
 									<li>
-										<a href ng-click="getPromotions()">
+										<a href ng-click="getPromotions({success: true,detail: 'OK'})">
 											<fa name="refresh"></fa> Refrescar
 										</a>
 									</li>
@@ -118,7 +118,7 @@
     </div>
   </div>
   <div class="modal-footer">
-  	<button class="btn btn-danger" ng-click="removePromotion()">Si, eliminar</button>
+  	<button class="btn btn-danger" ng-click="removePromotion({success: true,detail: 'OK'})">Si, eliminar</button>
   	<button class="btn btn-default" ng-click="cancel()">Cancelar</button>
   </div>
 </script>

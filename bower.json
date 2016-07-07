@@ -63,7 +63,8 @@
     "uiswitch": "~1.0.1",
     "angular-base64-upload": "~0.1.19",
     "bootstrap-ui-datetime-picker": "~2.4.0",
-    "ng-droplet": "~0.5.16"
+    "ng-droplet": "~0.5.16",
+    "angularjs-dropdown-multiselect": "~1.5.2"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

@@ -15,10 +15,10 @@
           <a ui-sref="app.dashboard"> {{main.title}}</a>
         </li>
         <li>
-          <a href="javascript:;">Usuarios</a>
+          <a href="javascript:;">Reportes</a>
         </li>
         <li>
-          <a ui-sref="app.users.list">{{page.title}}</a>
+          <a ui-sref="app.playStation.reports">{{page.title}}</a>
         </li>
       </ul>
 
@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href ng-click="getMyreports()">
+                    <a href ng-click="getMyreports('next', {success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -77,30 +77,30 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <select class="bg-orange-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" name="selMyRepMyTasks" ng-model="option" ng-change="getMyreports()" ng-options="option.name for option in page.myReportsMysTasksSel track by option.id"></select>
+            <select class="bg-orange-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" name="selMyRepMyTasks" ng-model="option" ng-change="getMyreports('prev',{success: true,detail: 'OK'})" ng-options="option.name for option in page.myReportsMysTasksSel track by option.id"></select>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="user in reports">
+              <tr ng-repeat="report in reports">
                 <td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
-                  {{user.reportTypeName}}
+                  {{report.reportTypeName}}
                 </td>
                 <td data-title="'Fecha Creacion'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-                  {{user.createdAt | date: 'dd/MM/yyyy'}}
+                  {{report.createdAt | date: 'dd/MM/yyyy'}}
                 </td>
-                <td data-title="'Fecha de vencimiento'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
-                  {{user.limitDate | date: 'dd/MM/yyyy'}}
+                <td data-title="'Fecha de límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
+                  {{report.limitDate | date: 'dd/MM/yyyy'}}
                 </td>
                 <td data-title="'Zona'" sortable="'zone'" filter="{ 'zone': 'text' }">
-                  {{user.zoneName}}
+                  {{report.zoneName}}
                 </td>
                 <td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-                  {{user.dealerName}}
+                  {{report.dealerName}}
                 </td>
                 <td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-                  {{user.storeName}}
+                  {{report.storeName}}
                 </td>
                 <td data-title="'Creador reporte'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-                  {{user.creatorName}}
+                  {{report.creatorName}}
                 </td>
                 <td data-title="'PDF'" >
                   <input ng-if="report.pdfUploaded" class="text-center" type="image" src="images/pdf-icon.png" tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
@@ -110,9 +110,9 @@
             </table>
 
             <div class="text-center">
-              <button type="button" class="btn btn-default" ng-click="getMyreports('prev')" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
+              <button type="button" class="btn btn-default" ng-click="getMyreports('prev', {success: true,detail: 'OK'})" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
               <span class="ml-5 mr-5">{{currentPage}}</span>
-              <button type="button" class="btn btn-default" ng-click="getMyreports('next')">Siguiente &gt; </button>
+              <button type="button" class="btn btn-default" ng-click="getMyreports('next', {success: true,detail: 'OK'})">Siguiente &gt; </button>
             </div>
 
         </div>

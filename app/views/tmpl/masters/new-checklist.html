@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="getChecklistOptions({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -76,9 +76,14 @@
 
           <!-- tile body -->
           <div class="tile-body">
-            <!-- <h4><strong>Título: </strong><input class="form-control b-0" type="text" ng-model="checklist.name" ></h4> -->
+            
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-orange-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="updateOrCreateChecklist()" uib-tooltip="Guardar checklist"><i class="fa fa-floppy-o"></i></button>
+              </div>
+            </div>
 
-            <button class="bg-orange-ps b-0 br-15 pt-7 pb-7 pr-12 pl-12" ng-click="updateOrCreateChecklist()">Guardar</button>
+            <!-- <button class="bg-orange-ps b-0 br-15 pt-7 pb-7 pr-12 pl-12" ng-click="updateOrCreateChecklist()">Guardar</button> -->
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
@@ -121,7 +126,7 @@
               </tbody>
             </table>
             <div class="text-right">
-              <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 10px 17px" ng-click="generateItem()" ng-disabled="page.buttons.oneMoreItem.disabled"><strong>+</strong></button>
+              <button class="text-right bg-yellow-ps b-0 br-50-percent" style="padding: 7px 14px" ng-click="generateItem()" ng-disabled="page.buttons.oneMoreItem.disabled"><strong>+</strong></button>
             </div>
             
           </div>
@@ -137,19 +142,11 @@
     </div>
     <!-- /row -->
 
-
-
-
-
   </div>
   <!-- /page content -->
 
   <script type="text/ng-template" id="addItemOptionsModal.html">
-  <!-- <div class="modal-header text-gray">
-    <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
-  </div> -->
   <div class="modal-body text-center text-gray">
-
     <table class="table">
       <thead>
         <tr>
@@ -161,17 +158,7 @@
       <tbody>
         <tr ng-repeat="option in modal.checklistOptions">
           <td>
-            <!-- <input class="form-control underline-input" type="text" ng-model="option.name" > -->
             <p class="form-control-static">{{option.name}}</p>
-
-            <!-- <ui-select class="bg-white b-solid" ng-model="option.selected">
-              <ui-select-match placeholder="Seleccionar una opción...">
-                {{$select.selected.name}}
-              </ui-select-match>
-              <ui-select-choices repeat="option in (modal.checklistOptions | propsFilter: {name: $select.search})">
-                <span ng-bind="option.name | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select> -->
           </td>
           <td>
             <input type="checkbox" class="" ng-model="option.appVisibility">
@@ -181,11 +168,7 @@
           </td>
         </tr>
       </tbody>
-    </table>
-    <!-- <div class="text-right">
-      <button class="text-right bg-yellow-ps b-0 br-50-percent mt-10" style="padding: 5px 11px" ng-click="generateOption()"><strong>+</strong></button>
-    </div> -->
-    
+    </table>    
   </div>
   <div class="modal-footer">
     <button class="btn btn-success btn-rounded-10 mb-10" type="button" ng-click="createChecklistOrAssignItems()" ng-disabled="">Guardar</button>    

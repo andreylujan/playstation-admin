@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ZonesCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Zones) {
+.controller('ZonesCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Zones, Utils) {
 
 	$scope.page = {
 		title: 'Zonas'
@@ -17,7 +17,11 @@ angular.module('minovateApp')
 
 	$scope.zones = [];
 
-	$scope.getZones = function() {
+	$scope.getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.zones = [];
 
@@ -34,7 +38,7 @@ angular.module('minovateApp')
 
 				$scope.tableParams = new ngTableParams({
 					page: 1, // show first page
-					count: 10, // count per page
+					count: 25, // count per page
 					filter: {
 						//name: 'M'       // initial filter
 					},
@@ -61,13 +65,13 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getZones);
+			}
 		});
-
 	};
 
 	$scope.openModalCreateZone = function(idZone) {
-
-		// var idZone = idZone;
 
 		var modalInstance = $uibModal.open({
 			animation: true,
@@ -81,11 +85,20 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getZones();
-		}, function() {});
+			// al close
+			$scope.getZones({
+				success: true,
+				detail: 'OK'
+			});
+		}, function() {
+			// al dismiss
+		});
 	};
 
-	$scope.getZones();
+	$scope.getZones({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
@@ -136,7 +149,11 @@ angular.module('minovateApp')
 	var i = 0,
 		j = 0;
 
-	var getDealers = function() {
+	var getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		Dealers.query({}, function(success) {
 
@@ -151,18 +168,30 @@ angular.module('minovateApp')
 				}
 
 				if (idZone) {
-					getZoneDetails(idZone);
+					getZoneDetails(idZone, {
+						success: true,
+						detail: 'OK'
+					});
 				}
 
+			} else {
+				$log.error(success);
 			}
-			// $log.log(success);
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
 		});
 
 	};
 
-	var getZoneDetails = function(idZone) {
+	var getZoneDetails = function(idZone, e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Zones.query({
 			zoneId: idZone
 		}, function(success) {
@@ -183,6 +212,9 @@ angular.module('minovateApp')
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZoneDetails);
+			}
 		});
 	};
 
@@ -200,7 +232,11 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.createZone = function() {
+	$scope.createZone = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!Validators.validaRequiredField($scope.modal.zone.name)) {
 			$scope.modal.alert.color = 'danger';
@@ -252,20 +288,26 @@ angular.module('minovateApp')
 			$scope.modal.alert.show = true;
 
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.createZone);
+			}
 		});
-
 	};
 
-	$scope.editZone = function() {
+	$scope.editZone = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
-			$scope.modal.buttons.edit.text = 'Si, Editar';
+			$scope.modal.buttons.edit.text = 'Guardar';
 			$scope.modal.buttons.edit.border = false;
 			$scope.modal.zone.disabled = false;
 			$scope.modal.dealers.disabled = false;
 
 			$scope.modal.alert.color = 'warning';
-			$scope.modal.alert.title = 'Para efectuar la edición, presione nuevamente el botón';
+			$scope.modal.alert.title = 'Para efectuar la edición, presione el botón guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 		} else {
@@ -326,6 +368,9 @@ angular.module('minovateApp')
 				$scope.modal.alert.show = true;
 
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.editZone);
+				}
 			});
 		}
 
@@ -337,10 +382,13 @@ angular.module('minovateApp')
 
 			return;
 		}
-
 	};
 
-	$scope.deleteZone = function() {
+	$scope.deleteZone = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.delete.text === 'Eliminar') {
 			$scope.modal.buttons.delete.text = 'Si, Eliminar';
@@ -365,9 +413,11 @@ angular.module('minovateApp')
 				$scope.modal.alert.show = true;
 
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteZone);
+				}
 			});
 		}
-
 	};
 
 	$scope.ok = function() {
@@ -386,7 +436,10 @@ angular.module('minovateApp')
 		$scope.modal.alert.show = false;
 	};
 
-	getDealers();
+	getDealers({
+		success: true,
+		detail: 'OK'
+	});
 
 	if (idZone) {
 		$scope.modal.title.text = 'Información zona';

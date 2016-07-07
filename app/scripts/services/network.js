@@ -1,9 +1,7 @@
 'use strict';
 
-var ONLY_URL = 'http://52.201.182.66';
 var API_URL = 'http://52.201.182.66/api/v1';
-// var API_URL = 'http://54.164.4.220/api/v1';
-// var API_URL = 'http://10.100.3.24:3000/api/v1'; // Servidor Pablo
+var URL_SERVER = 'http://52.201.182.66';
 
 angular.module('minovateApp')
 
@@ -20,6 +18,18 @@ angular.module('minovateApp')
 		}
 	};
 
+})
+
+.factory('RefreshToken', function($resource) {
+	return $resource(URL_SERVER + '/oauth/token', {}, {
+		save: {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
 })
 
 // Invitaciones
@@ -58,6 +68,7 @@ angular.module('minovateApp')
 	});
 
 })
+
 
 // USUARIOS
 .factory('Users', function($resource) {
@@ -167,6 +178,9 @@ angular.module('minovateApp')
 			headers: {
 				// 'Content-Type': 'application/vnd.api+json',
 				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				include: '@include'
 			}
 		},
 		save: {
@@ -204,6 +218,9 @@ angular.module('minovateApp')
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
 				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				include: '@include'
 			}
 		},
 		save: {
@@ -598,7 +615,7 @@ angular.module('minovateApp')
 })
 
 // FILES
-.factory('Files', function($resource, Token) {
+.factory('Files', function($resource) {
 
 	return $resource(API_URL + '/images', {}, {
 		save: {
@@ -610,4 +627,47 @@ angular.module('minovateApp')
 		}
 	});
 
+})
+
+// SUBIDAS DE METAS MENSUALES
+.factory('SaleGoalUploads', function($resource) {
+
+	return $resource(API_URL + '/sale-goal-uploads', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				year: '@year',
+				month: '@month'
+			}
+		}
+	});
+
+})
+
+// CSV
+.service('Csv', function($http) {
+
+	// this.uploadFileToUrl = function(form) {
+
+	var fd = new FormData();
+
+	return {
+		upload: function(form) {
+
+			for (var i = 0; i < form.length; i++) {
+				fd.append(form[i].field, form[i].value);
+			}
+
+			return $http.post(API_URL + '/sale_goals/csv', fd, {
+				transformRequest: angular.identity,
+				headers: {
+					'Content-Type': undefined
+				}
+			});
+		}
+	};
 });

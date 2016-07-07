@@ -56,21 +56,27 @@ angular.module('minovateApp')
 	};
 
 	var i, j;
-	var currentPage = 0;
-	var pageSize = 30;
+	var currentPage = 0,
+		pageSize = 30,
+		storesIncluded = [];
 
 	$scope.openDatepicker = function() {
 		$scope.page.dateOptions.datepickerOpened = true;
 	};
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.page.newTask.users.list = [];
 
 		Users.query({}, function(success) {
 			// $log.log(success);
 			if (success.data) {
-				getReportTypes();
+
 				for (var i = 0; i < success.data.length; i++) {
 					if (success.data[i].attributes.active) {
 						$scope.page.newTask.users.list.push({
@@ -80,15 +86,29 @@ angular.module('minovateApp')
 					}
 				}
 				$scope.page.newTask.users.selectedUser = $scope.page.newTask.users.list[0];
+
+				getReportTypes({
+					success: true,
+					detail: 'OK'
+				});
+
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
 	};
 
-	var getReportTypes = function() {
+	var getReportTypes = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.page.newTask.reportTypes.list = [];
 
@@ -97,86 +117,152 @@ angular.module('minovateApp')
 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
-				getZones();
+
 				for (var i = 0; i < success.data.length; i++) {
-					$scope.page.newTask.reportTypes.list.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
+					if (success.data[i].id !== '2') {
+						$scope.page.newTask.reportTypes.list.push({
+							id: parseInt(success.data[i].id),
+							name: success.data[i].attributes.name
+						});
+					}
 				}
 				$scope.page.newTask.reportTypes.selectedReportType = $scope.page.newTask.reportTypes.list[0];
+
+				getZones({
+					success: true,
+					detail: 'OK'
+				});
+
 			} else {
 				$log.success(success);
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getReportTypes);
+			}
 		});
 	};
 
-	var getZones = function() {
+	var getZones = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.page.newTask.zones.list = [];
 
 		Zones.query({}, function(success) {
 			if (success.data) {
 				// $log.log(success);
-				getDealers();
+
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.page.newTask.zones.list.push({
 						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
+						name: success.data[i].attributes.name,
+						dealersIds: success.data[i].attributes.dealer_ids
 					});
 				}
 				$scope.page.newTask.zones.selectedZone = $scope.page.newTask.zones.list[0];
+
+				$scope.getDealers({
+					success: true,
+					detail: 'OK'
+				});
+
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
 		});
 	};
 
-	var getDealers = function() {
+	$scope.getDealers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.page.newTask.dealers.list = [];
 
-		Dealers.query({}, function(success) {
-			if (success.data) {
-				// $log.log(success);
-				getStores();
-				for (var i = 0; i < success.data.length; i++) {
-					$scope.page.newTask.dealers.list.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
+		Dealers.query({
+			include: 'stores'
+		}, function(success) {
+			if (success.data && success.included) {
+
+				storesIncluded = success.included;
+
+				for (j = 0; j < $scope.page.newTask.zones.selectedZone.dealersIds.length; j++) {
+					for (var i = 0; i < success.data.length; i++) {
+						if ($scope.page.newTask.zones.selectedZone.dealersIds[j] === parseInt(success.data[i].id)) {
+							$scope.page.newTask.dealers.list.push({
+								id: parseInt(success.data[i].id),
+								name: success.data[i].attributes.name,
+								storesIds: success.data[i].relationships.stores.data
+							});
+							break;
+						}
+					}
 				}
+
 				$scope.page.newTask.dealers.selectedDealer = $scope.page.newTask.dealers.list[0];
+
+				$scope.getStores({
+					success: true,
+					detail: 'OK'
+				});
+
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDealers);
+			}
 		});
 	};
 
-	var getStores = function() {
+	$scope.getStores = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.page.newTask.stores.list = [];
 
 		Stores.query({}, function(success) {
 			if (success.data) {
-				for (var i = 0; i < success.data.length; i++) {
-					$scope.page.newTask.stores.list.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
+
+				for (i = 0; i < storesIncluded.length; i++) {
+					for (j = 0; j < $scope.page.newTask.dealers.selectedDealer.storesIds.length; j++) {
+						if (parseInt($scope.page.newTask.dealers.selectedDealer.storesIds[j].id) === parseInt(success.data[i].id)) {
+							$scope.page.newTask.stores.list.push({
+								id: parseInt(success.data[i].id),
+								name: success.data[i].attributes.name
+							});
+							break;
+						}
+					}
 				}
+
 				$scope.page.newTask.stores.selectedStore = $scope.page.newTask.stores.list[0];
+
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getStores);
+			}
 		});
 	};
 
@@ -215,7 +301,12 @@ angular.module('minovateApp')
 		return true;
 	};
 
-	$scope.createTask = function() {
+	$scope.createTask = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!validateForm()) {
 			Utils.gotoAnyPartOfPage('topPageCreateTask');
@@ -252,8 +343,17 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.createTask);
+			} else if (error.status === 400) {
+				$scope.setAlertProperties(true, 'danger', 'Error al crear la tarea', error.data.errors[0].detail);
+				Utils.gotoAnyPartOfPage('topPageCreateTask');
+			}
 		});
 	};
 
-	getUsers();
+	getUsers({
+		success: true,
+		detail: 'OK'
+	});
 });

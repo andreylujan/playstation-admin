@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="getChecklists({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -77,7 +77,13 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewChecklist()">Nuevo checklist</button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="gotoNewChecklist()" uib-tooltip="Crear nuevo checklist"><i class="fa fa-pencil-square-o"></i></button>
+              </div>
+            </div>
+
+            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewChecklist()">Nuevo checklist</button> -->
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
               <tr ng-repeat="checklist in checklists">
@@ -114,17 +120,13 @@
 <!-- /page content -->
 
 <script type="text/ng-template" id="messageListChecklist.html">
-  <!-- <div class="modal-header text-gray">
-    <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
-  </div> -->
-  <div class="modal-body text-center text-gray">
+  <div class="modal-body text-gray text-center">
     <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
     <h3>¿Seguro que deseas eliminar este checklist?</h3>
     <p>Al eliminar un checklist, se perderá toda la información contenida en éste. Verifica si quieres eliminar este checklist</p>
-    
   </div>
   <div class="modal-footer">
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteChecklist()" >{{modal.buttons.delete.text}}</button>    
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteChecklist({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>    
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>
 </script>

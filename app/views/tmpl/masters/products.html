@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href tile-control-refresh ng-click="ajaxFaker()">
+                    <a href ng-click="getProducts({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -77,50 +77,68 @@
           <!-- tile body -->
           <div class="tile-body">
 
-          <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateProduct()">Nuevo producto</button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateProduct()" uib-tooltip="Ingresar nuevo producto"><i class="fa fa-pencil-square-o"></i></button>
+              </div>
+            </div>
 
-          <table ng-table="tableParams" show-filter="true" class="table table-custom">
-            <tr ng-repeat="product in $data" ng-dblclick="openModalCreateProduct(product.id)">
+            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateProduct()" uib-tooltip="Carga manual">Nuevo producto</button> -->
+
+            <!-- <label class="custom-input-file ml-10" uib-tooltip="Cargar por archivo">
+              <input type="file" ng-model="page.cvsProductsFile.value"/>
+              <span>Cargar productos</span>
+            </label>
+            <i class="fa fa-upload ml-5" style="color: #3f5b71" uib-tooltip="Subir archivo"></i> -->
+
+            <table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
+              <tr ng-repeat="product in $data" ng-dblclick="openModalCreateProduct(product.id)">
               <!-- <td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }" style="width:20px">
                 {{product.id | cut:true:4:'...'}}
               </td> -->
-              <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
-                {{product.name}}
-              </td>
-              <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" uib-popover="{{product.description}}">
-                <span style="cursor:pointer">{{product.description | cut:true:5:'...'}}</span>
-              </td>
               <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" uib-popover="{{product.sku}}">
-                <span style="cursor:pointer">{{product.sku | cut:true:5:'...'}}</span>
+                <span>{{product.sku}}</span>
               </td>
-              <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" uib-popover="{{product.plu}}">
+              <td data-title="'Descripción'" sortable="'name'" filter="{ 'name': 'text' }">
+                {{product.name | capitalize:true}}
+              </td>
+              <td data-title="'Clasificación'" sortable="'destinationName'" filter="{ 'destinationName': 'text' }">
+                {{product.destinationName | capitalize}}
+              </td>
+              <td data-title="'Categoría'" sortable="'typeName'" filter="{ 'typeName': 'text' }">
+                {{product.typeName | capitalize}}
+              </td>
+              <td data-title="'Plataforma'" sortable="'platformName'" filter="{ 'platformName': 'text' }">
+                {{product.platformName | capitalize}}
+              </td>
+              <td data-title="'Publisher'" sortable="'publisher'" filter="{ 'publisher': 'text' }">
+                {{product.publisher | capitalize}}
+              </td>
+              <!-- <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" uib-popover="{{product.description}}">
+                <span style="cursor:pointer">{{product.description | cut:true:5:'...'}}</span>
+              </td> -->
+              <!-- <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" uib-popover="{{product.plu}}">
                 <span style="cursor:pointer">{{product.plu | cut:true:5:'...'}}</span>
-              </td>
-              <td data-title="'ID Vigencia'" sortable="'validityCode'" filter="{ 'validityCode': 'text' }" uib-popover="{{product.validityCode}}">
+              </td> -->
+              <!-- <td data-title="'ID Vigencia'" sortable="'validityCode'" filter="{ 'validityCode': 'text' }" uib-popover="{{product.validityCode}}">
                 <span style="cursor:pointer">{{product.validityCode | cut:true:5:'...'}}</span>
-              </td>
-              <td data-title="'Creado el'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
+              </td> -->
+              <!-- <td data-title="'Creado el'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
                 {{product.createdAt | date:'dd/mm/yy'}}
-              </td>
-              <td data-title="'Tipo'" sortable="'typeName'" filter="{ 'typeName': 'text' }">
-                {{product.typeName}}
-              </td>
+              </td> -->
               <!-- <td data-title="'Marca'" sortable="'brand'" filter="{ 'brand': 'text' }">
                 {{product.brand}}
               </td> -->
-              <td data-title="'Precio mínimo'" sortable="'minPrice'" filter="{ 'minPrice': 'text' }">
+              <!-- <td data-title="'Precio mínimo'" sortable="'minPrice'" filter="{ 'minPrice': 'text' }">
                 {{product.minPrice | currency:'$':0}}
-              </td>
-              <td data-title="'Precio máximo'" sortable="'maxPrice'" filter="{ 'maxPrice': 'text' }">
+              </td> -->
+              <!-- <td data-title="'Precio máximo'" sortable="'maxPrice'" filter="{ 'maxPrice': 'text' }">
                 {{product.maxPrice | currency:'$':0}}
-              </td>
-              <td data-title="'Destino'" sortable="'destinationName'" filter="{ 'destinationName': 'text' }">
-                {{product.destinationName}}
-              </td>
-              <td data-title="'Top'" sortable="'isTop'" filter="{ 'isTop': 'text' }" ng-switch="{{product.isTop}}">
+              </td> -->
+              <!-- <td data-title="'Top'" sortable="'isTop'" filter="{ 'isTop': 'text' }" ng-switch="{{product.isTop}}">
                 <fa class="text-greensea" name="check" ng-switch-when="true"></fa>
                 <fa class="text-danger" name="times" ng-switch-when="false"></fa>
-              </td>
+              </td> -->
             </tr>
           </table>
 
@@ -136,10 +154,6 @@
 
   </div>
   <!-- /row -->
-
-
-
-
 
 </div>
 <!-- /page content -->
@@ -214,12 +228,12 @@
               <input type="number" class="form-control rounded" ng-model="modal.product.stock.text" ng-disabled="modal.product.stock.disabled" ng-change="removeAlert()">
             </div>
           </div> -->
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="col-sm-3 control-label">Top</label>
             <div class="col-sm-8">
               <input type="checkbox" class="uiswitch custom" ng-model="modal.product.isTop.value" ng-disabled="modal.product.isTop.disabled">
             </div>
-          </div>
+          </div> -->
           <div class="form-group">
             <label class="col-sm-3 control-label">Visibilidad en APP</label>
             <div class="col-sm-8">
@@ -227,10 +241,23 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="selectMultiZone" class="col-sm-3 control-label">Tipo</label>
+            <label class="col-sm-3 control-label">Clasificación</label>
+            <div class="col-sm-8">
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.product.destination" ng-disabled="modal.product.destination.disabled" ng-change="removeAlert()">
+                <ui-select-match placeholder="Seleccionar clasificación...">
+                  <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="destination in (modal.destinations | filter: $select.search) track by destination.id">
+                  <span ng-bind="destination.name"></span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="selectMultiZone" class="col-sm-3 control-label">Categoría</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.product.type" sortable="true" ng-disabled="modal.product.type.disabled" ng-change="removeAlert()">
-                <ui-select-match placeholder="Seleccionar tipo...">
+                <ui-select-match placeholder="Seleccionar categoría...">
                   <span ng-bind="$select.selected.name"></span>
                 </ui-select-match>
                 <ui-select-choices repeat="type in (modal.productTypes | filter: $select.search) track by type.id">
@@ -239,19 +266,6 @@
               </ui-select>
             </div>
             <!-- {{modal.product.type}} -->
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Destino</label>
-            <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.product.destination" ng-disabled="modal.product.destination.disabled" ng-change="removeAlert()">
-                <ui-select-match placeholder="Seleccionar destino...">
-                  <span ng-bind="$select.selected.name"></span>
-                </ui-select-match>
-                <ui-select-choices repeat="destination in (modal.destinations | filter: $select.search) track by destination.id">
-                  <span ng-bind="destination.name"></span>
-                </ui-select-choices>
-              </ui-select>
-            </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">Plataforma</label>
@@ -282,7 +296,7 @@
     
     <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="validateForm()" ng-disabled="modal.buttons.edit.disabled">{{modal.buttons.edit.text}}</button>
     
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteProduct()" ng-disabled="modal.buttons.delete.disabled">{{modal.buttons.delete.text}}</button>
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteProduct({success: true,detail: 'OK'})" ng-disabled="modal.buttons.delete.disabled">{{modal.buttons.delete.text}}</button>
     
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>
@@ -292,55 +306,63 @@
   <div class="modal-body"  slimscroll="{height: '100%'}">
     <div class="row">
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
         </div>
       </div>
       <div class="col-md-4">
-      <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
           <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>
+
+<script type="text/ng-template" id="csvProductChargeSummary.html">
+  <div class="modal-body"  slimscroll="{height: '100%'}">
   </div>
   <div class="modal-footer">
     <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>

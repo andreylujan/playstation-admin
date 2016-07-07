@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li>
-                    <a ng-href="" ng-click="getStockBreaks()">
+                    <a ng-href="" ng-click="getStockBreaks({success: true,detail: 'OK'})">
                       <fa name="refresh"></fa> Refrescar
                     </a>
                   </li>
@@ -77,18 +77,24 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo quiebre de stock</button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateDealer()" uib-tooltip="Ingresar quiebre de stock"><i class="fa fa-pencil-square-o"></i></button>
+              </div>
+            </div>
 
-            <table ng-table="tableParams" show-filter="true" class="table table-custom">
+            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo quiebre de stock</button> -->
+
+            <table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
               <tr ng-repeat="stockBreak in $data">
                 <td data-title="'Tipo tienda'" sortable="'storeTypeName'" filter="{ 'storeTypeName': 'text' }">
                   {{stockBreak.storeTypeName}}
                 </td>
                 <td data-title="'Tipo producto'" sortable="'productClassificationName'" filter="{ 'productClassificationName': 'text' }">
-                  {{stockBreak.productClassificationName}}
+                  {{stockBreak.productClassificationName | capitalize}}
                 </td>
                 <td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-                  {{stockBreak.dealerName}}
+                  {{stockBreak.dealerName | capitalize}}
                 </td>
                 <td data-title="'Quiebre stock'" sortable="'stockbreak'" filter="{ 'stockbreak': 'text' }">
                   {{stockBreak.stockbreak}}
@@ -172,11 +178,11 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="saveStockBreak()" >{{modal.buttons.create.text}}</button>
+      <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="saveStockBreak({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
 
-      <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStockBreak()" >{{modal.buttons.edit.text}}</button>
+      <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStockBreak({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
 
-      <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStockBreak()" >{{modal.buttons.delete.text}}</button>
+      <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStockBreak({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>
 
       <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
     </div>

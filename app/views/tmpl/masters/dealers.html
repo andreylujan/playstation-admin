@@ -77,10 +77,16 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo dealer</button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateDealer()" uib-tooltip="Ingresar nuevo dealer"><i class="fa fa-pencil-square-o"></i></button>
+              </div>
+            </div>
+
+            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo dealer</button> -->
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="dealer in $data">
+              <tr ng-repeat="dealer in dealers">
                 <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
                   {{dealer.name}}
                 </td>
@@ -159,11 +165,11 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createDealer()" >{{modal.buttons.create.text}}</button>
+    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createDealer({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
     
-    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editDealer()" >{{modal.buttons.edit.text}}</button>
+    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editDealer({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
     
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteDealer()" >{{modal.buttons.delete.text}}</button>
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteDealer({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>
     
     <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
   </div>

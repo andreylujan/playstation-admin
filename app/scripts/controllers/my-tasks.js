@@ -26,7 +26,12 @@ angular.module('minovateApp')
 		var currentPage = 0;
 		var pageSize = 30;
 
-		$scope.getMyTasks = function(mode) {
+		$scope.getMyTasks = function(mode, e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			$scope.reports = [];
 
@@ -101,8 +106,10 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.getUsers);
+				}
 			});
-
 
 			$scope.tableParams = new ngTableParams({
 				page: 1, // show first page
@@ -125,7 +132,12 @@ angular.module('minovateApp')
 
 		};
 
-		var getZones = function() {
+		var getZones = function(e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			zones = [];
 
@@ -141,10 +153,18 @@ angular.module('minovateApp')
 
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getZones);
+				}
 			});
 		};
 
-		var getDealers = function() {
+		var getDealers = function(e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			dealers = [];
 
@@ -159,10 +179,18 @@ angular.module('minovateApp')
 				getStores();
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getDealers);
+				}
 			});
 		};
 
-		var getStores = function() {
+		var getStores = function(e) {
+			// Valida si el parametro e.success se seteó true para el refresh token
+			if (!e.success) {
+				$log.error(e.detail);
+				return;
+			}
 
 			stores = [];
 
@@ -174,13 +202,22 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.getMyTasks('next');
+				$scope.getMyTasks('next', {
+					success: true,
+					detail: 'OK'
+				});
 
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				}
 			});
 		};
 
-		getZones();
+	getZones({
+		success: true,
+		detail: 'OK'
+	});
 
 	});

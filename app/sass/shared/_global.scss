@@ -762,17 +762,28 @@ body {
   color: $transparent-black-5!important;
 }
 
-
 .text-white {
   color: white;
 }
 
-.text-orange-ps {
-  color: $orange-ps;
-}
-
 .text-gray {
   color: #969696;
+}
+
+.text-red-ps {
+  color: $red-ps;
+}
+
+.text-blue-ps {
+  color: $blue-ps;
+}
+
+.text-yellow-ps {
+  color: $yellow-ps;
+}
+
+.text-orange-ps {
+  color: $orange-ps;
 }
 
 // text sizes
@@ -1399,4 +1410,17 @@ input[type="file"].custom-input-file {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+}
+
+.red-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $red-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.orange-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $orange-ps;
+  color:white;
+  border-radius: 15px;
+  border: 0;
 }

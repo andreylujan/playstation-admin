@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('StockBreakCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, StockBreaks) {
+.controller('StockBreakCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, StockBreaks, Utils) {
 
 	$scope.page = {
 		title: 'Quiebre de stock'
@@ -20,7 +20,11 @@ angular.module('minovateApp')
 	var i = 0,
 		j = 0;
 
-	$scope.getStockBreaks = function() {
+	$scope.getStockBreaks = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		data = [];
 
@@ -83,6 +87,9 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getStockBreaks);
+			}
 		});
 
 	};
@@ -118,13 +125,22 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getStockBreaks();
+			$scope.getStockBreaks({
+				success: true,
+				detail: 'OK'
+			});
 		}, function() {
-			$scope.getStockBreaks();
+			$scope.getStockBreaks({
+				success: true,
+				detail: 'OK'
+			});
 		});
 	};
 
-	$scope.getStockBreaks();
+	$scope.getStockBreaks({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
@@ -190,7 +206,12 @@ angular.module('minovateApp')
 		$scope.modal.title.text = 'Nuevo quiebre de stock';
 	}
 
-	var getStoreTypes = function() {
+	var getStoreTypes = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		StoreTypes.query({}, function(success) {
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
@@ -199,16 +220,27 @@ angular.module('minovateApp')
 						name: success.data[i].attributes.name
 					});
 				}
-				getProductClassifications();
+				getProductClassifications({
+					success: true,
+					detail: 'OK'
+				});
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
+			if (error.status === 401) {
+				Utils.refreshToken(getStoreTypes);
+			}
 		});
 	};
 
-	var getProductClassifications = function() {
+	var getProductClassifications = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		ProductClassifications.query({}, function(success) {
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
@@ -217,16 +249,27 @@ angular.module('minovateApp')
 						name: success.data[i].attributes.name
 					});
 				}
-				getDealers();
+				getDealers({
+					success: true,
+					detail: 'OK'
+				});
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
+			if (error.status === 401) {
+				Utils.refreshToken(getProductClassifications);
+			}
 		});
 	};
 
-	var getDealers = function() {
+	var getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Dealers.query({}, function(success) {
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
@@ -235,16 +278,27 @@ angular.module('minovateApp')
 						name: success.data[i].attributes.name
 					});
 				}
-				getInfoStockBreak();
+				getInfoStockBreak({
+					success: true,
+					detail: 'OK'
+				});
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
 			$log.error();
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
 		});
 	};
 
-	var getInfoStockBreak = function() {
+	var getInfoStockBreak = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		if (idStockBreak) {
 
 			disableForm();
@@ -282,6 +336,9 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getInfoStockBreak);
+				}
 			});
 		} else {
 			$scope.modal.buttons.create.show = true;
@@ -290,7 +347,11 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.saveStockBreak = function() {
+	$scope.saveStockBreak = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!Validators.validaRequiredField($scope.modal.productClassifications.selected)) {
 			$scope.modal.alert.title = 'Faltan campos por rellenar';
@@ -367,6 +428,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.saveStockBreak);
+			}
 			$scope.modal.alert.title = 'Error al Guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.color = 'danger';
@@ -376,13 +440,17 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.editStockBreak = function() {
+	$scope.editStockBreak = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
 			$scope.modal.buttons.edit.border = true;
-			$scope.modal.buttons.edit.text = 'Si, Editar';
+			$scope.modal.buttons.edit.text = 'Guardar';
 			$scope.modal.alert.color = 'warning';
-			$scope.modal.alert.title = 'Para efectuar la edición, presione nuevamente el botón';
+			$scope.modal.alert.title = 'Para efectuar la edición presione el botón guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			enableForm();
@@ -468,18 +536,25 @@ angular.module('minovateApp')
 					return;
 				}
 			}, function(error) {
-				$log.error(error);
 				$scope.modal.alert.title = 'Error al editar';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.show = true;
 				Utils.gotoAnyPartOfPage('topModalCreateStockBreak');
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.editStockBreak);
+				}
 				return;
 			});
 		}
 	};
 
-	$scope.deleteStockBreak = function() {
+	$scope.deleteStockBreak = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.delete.text === 'Eliminar') {
 			$scope.modal.buttons.delete.border = true;
@@ -497,12 +572,15 @@ angular.module('minovateApp')
 				$log.log(success);
 				$uibModalInstance.close();
 			}, function(error) {
-				$log.error(error);
 				$scope.modal.alert.title = 'Error al Eliminar';
 				$scope.modal.alert.text = '';
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.show = true;
 				Utils.gotoAnyPartOfPage('topModalCreateStockBreak');
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteStockBreak);
+				}
 				return;
 			});
 		}
@@ -530,7 +608,10 @@ angular.module('minovateApp')
 		$scope.modal.stockBreak.disabled = false;
 	};
 
-	getStoreTypes();
+	getStoreTypes({
+		success: true,
+		detail: 'OK'
+	});
 
 
 });

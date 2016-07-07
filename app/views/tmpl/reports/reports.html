@@ -41,9 +41,9 @@
 					<div class="tile-header dvd dvd-btm">
 						<h1 class="custom-font"></h1>
 						<ul class="controls">
-							<li class="dropdown" dropdown on-toggle="toggled(open)">
+							<li class="dropdown" uib-dropdown on-toggle="toggled(open)">
 
-								<a href dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
+								<a href uib-dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
 
 								<ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
 									<li>
@@ -53,7 +53,7 @@
 										</a>
 									</li>
 									<li>
-										<a href ng-click="getReports()">
+										<a href ng-click="getReports('prev',{success: true,detail: 'OK'})">
 											<fa name="refresh"></fa> Refrescar
 										</a>
 									</li>
@@ -75,30 +75,33 @@
 					<div class="tile-body">
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in reports">
-								<td data-title="'ID'" sortable="'report.id'" filter="{ 'report.id': 'text' }">
+							<tr ng-repeat="report in reports" ng-if="page.tableLoaded">
+								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
-								<td data-title="'Tipo de reporte'" sortable="'report.reportTypeName'" filter="{ 'report.reportTypeName': 'text' }">
+								<td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
 									{{report.reportTypeName}}
 								</td>
-								<td data-title="'Fecha Creacion'" sortable="'report.createdAt'" filter="{ 'report.createdAt': 'text' }">
+								<td data-title="'Fecha Creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
 									{{report.createdAt | date: 'dd/MM/yyyy'}}
 								</td>
-								<td data-title="'Fecha de vencimiento'" sortable="'report.limitDate'" filter="{ 'report.limitDate': 'text' }">
+								<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
 									{{report.limitDate | date: 'dd/MM/yyyy'}}
 								</td>
-								<td data-title="'Zona'" sortable="'report.zoneName'" filter="{ 'report.zoneName': 'text' }">
+								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
 									{{report.zoneName}}
 								</td>
-								<td data-title="'Dealer'" sortable="'report.dealerName'" filter="{ 'report.dealerName': 'text' }">
+								<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
 									{{report.dealerName}}
 								</td>
-								<td data-title="'Tienda'" sortable="'report.storeName'" filter="{ 'report.storeName': 'text' }">
+								<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
 									{{report.storeName}}
 								</td>
-								<td data-title="'Creador reporte'" sortable="'report.creatorName'" filter="{ 'report.creatorName': 'text' }">
+								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{report.creatorName}}
+								</td>
+								<td data-title="'Asignado a'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
+									{{report.assignedUserName}}
 								</td>
 								<td data-title="'PDF'" >
 									<input ng-if="report.pdfUploaded" class="text-center" type="image" src="images/pdf-icon.png" tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
@@ -108,9 +111,9 @@
 						</table>
 
 						<div class="text-center">
-							<button type="button" class="btn btn-default" ng-click="getReports('prev')" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
+							<button type="button" class="btn btn-default" ng-click="getReports('prev', {success: true,detail: 'OK'})" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
 							<span class="ml-5 mr-5">{{currentPage}}</span>
-							<button type="button" class="btn btn-default" ng-click="getReports('next')" ng-disabled="page.nextBtn.disabled">Siguiente &gt; </button>
+							<button type="button" class="btn btn-default" ng-click="getReports('next', {success: true,detail: 'OK'})" ng-disabled="page.nextBtn.disabled">Siguiente &gt; </button>
 						</div>
 
 				</div>

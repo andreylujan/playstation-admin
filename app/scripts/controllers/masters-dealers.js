@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DealersCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Dealers) {
+.controller('DealersCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Dealers, Utils) {
 
 	$scope.page = {
 		title: 'Dealers'
@@ -17,7 +17,11 @@ angular.module('minovateApp')
 
 	$scope.dealers = [];
 
-	$scope.getDealers = function() {
+	$scope.getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.dealers = [];
 
@@ -57,6 +61,9 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDealers);
+			}
 		});
 
 	};
@@ -77,15 +84,21 @@ angular.module('minovateApp')
 		});
 
 		modalInstance.result.then(function() {
-			$scope.getDealers();
+			$scope.getDealers({
+				success: true,
+				detail: 'OK'
+			});
 		}, function() {});
 	};
 
-	$scope.getDealers();
+	$scope.getDealers({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 
-.controller('CreateDealerModalInstance', function($scope, $log, $uibModalInstance, idDealer, Dealers, Zones, Validators) {
+.controller('CreateDealerModalInstance', function($scope, $log, $uibModalInstance, idDealer, Dealers, Zones, Validators, Utils) {
 
 	$scope.modal = {
 		title: {
@@ -147,7 +160,11 @@ angular.module('minovateApp')
 	var i = 0,
 		j = 0;
 
-	var getZones = function() {
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		Zones.query({}, function(success) {
 			// $log.log(success);
@@ -163,18 +180,29 @@ angular.module('minovateApp')
 				}
 
 				if (idDealer) {
-					getDealerDetails(idDealer);
+					getDealerDetails(idDealer, {
+						success: true,
+						detail: 'OK'
+					});
 				}
 
 			}
 			// $log.log(success);
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
 		});
 
 	};
 
-	var getDealerDetails = function(idDealer) {
+	var getDealerDetails = function(idDealer, e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		Dealers.query({
 			dealerId: idDealer
 		}, function(success) {
@@ -200,6 +228,9 @@ angular.module('minovateApp')
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealerDetails);
+			}
 		});
 	};
 
@@ -217,7 +248,11 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.createDealer = function() {
+	$scope.createDealer = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if (!Validators.validaRequiredField($scope.modal.dealer.name.text)) {
 			$scope.modal.alert.color = 'danger';
@@ -298,14 +333,21 @@ angular.module('minovateApp')
 			$scope.modal.alert.show = true;
 
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.createDealer);
+			}
 		});
 
 	};
 
-	$scope.editDealer = function() {
+	$scope.editDealer = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
-			$scope.modal.buttons.edit.text = 'Si, Editar';
+			$scope.modal.buttons.edit.text = 'Guardar';
 			$scope.modal.buttons.edit.border = false;
 			$scope.modal.dealer.name.disabled = false;
 			$scope.modal.dealer.contact.disabled = false;
@@ -314,7 +356,7 @@ angular.module('minovateApp')
 			$scope.modal.zones.disabled = false;
 
 			$scope.modal.alert.color = 'warning';
-			$scope.modal.alert.title = 'Para efectuar la edición, presione nuevamente el botón';
+			$scope.modal.alert.title = 'Para efectuar la edición presione el botón Guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 		} else {
@@ -380,6 +422,7 @@ angular.module('minovateApp')
 				$scope.modal.alert.show = true;
 
 				$log.log(error);
+				if (error.status === 401) {Utils.refreshToken($scope.getUsers);}
 			});
 		}
 
@@ -440,7 +483,10 @@ angular.module('minovateApp')
 		$scope.modal.alert.show = false;
 	};
 
-	getZones();
+	getZones({
+		success: true,
+		detail: 'OK'
+	});
 
 	if (idDealer) {
 		$scope.modal.title.text = 'Información dealer';

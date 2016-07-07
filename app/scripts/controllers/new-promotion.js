@@ -9,10 +9,47 @@
  */
 angular.module('minovateApp')
 
-.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Inbox, Validators, Promotions) {
+.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Inbox, Validators, Promotions, Utils) {
 
 	var i = 0;
 	var j = 0;
+
+	$scope.dropdownMultiselect = {
+		settings: {
+			enableSearch: true,
+			displayProp: 'name'
+		},
+		zones: {
+			texts: {
+				checkAll: 'Seleccionar todas',
+				uncheckAll: 'Deseleccionar todas',
+				searchPlaceholder: 'Buscar',
+				buttonDefaultText: 'Seleccionar zonas',
+				dynamicButtonTextSuffix: 'zonas seleccionadas'
+			},
+			settings: {
+				enableSearch: true,
+				displayProp: 'name',
+				scrollable: true,
+				scrollableHeight: 400
+			}
+		},
+		dealers: {
+			texts: {
+				checkAll: 'Seleccionar todos',
+				uncheckAll: 'Deseleccionar todos',
+				searchPlaceholder: 'Buscar',
+				buttonDefaultText: 'Seleccionar dealers',
+				dynamicButtonTextSuffix: 'dealers seleccionados'
+			},
+			settings: {
+				enableSearch: true,
+				displayProp: 'name',
+				scrollable: true,
+				scrollableHeight: 400
+			}
+		}
+	};
 
 	$scope.page = {
 		title: 'Nuevo mensaje',
@@ -81,10 +118,14 @@ angular.module('minovateApp')
 		$scope.page.endDate = $moment(data.attributes.end_date).format("MMM D, YYYY");
 		$scope.page.subject = data.attributes.title;
 		$scope.page.html = data.attributes.html;
-
 	};
 
-	var getInfoPromotion = function(idPromotion) {
+	var getInfoPromotion = function(idPromotion, e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		if (idPromotion) {
 			Promotions.query({
 				idPromotion: idPromotion,
@@ -97,11 +138,19 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getInfoPromotion);
+				}
 			});
 		}
 	};
 
-	var getZones = function() {
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.page.zones = [];
 
 		Zones.query({}, function(success) {
@@ -109,7 +158,7 @@ angular.module('minovateApp')
 				$scope.page.zones.push({
 					type: 'zones',
 					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
+					name: $filter('capitalize')(success.data[i].attributes.name, true)
 				});
 			}
 
@@ -117,14 +166,26 @@ angular.module('minovateApp')
 				$scope.page.zone.selectedZone.push($scope.page.zones[i]);
 			}
 
-			getDealers();
+			getDealers({
+				success: true,
+				detail: 'OK'
+			});
 
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
+
 		});
 	};
 
-	var getDealers = function() {
+	var getDealers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.page.dealers = [];
 
 		Dealers.query({}, function(success) {
@@ -132,20 +193,31 @@ angular.module('minovateApp')
 				$scope.page.dealers.push({
 					type: 'dealers',
 					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
+					name: $filter('capitalize')(success.data[i].attributes.name, true)
 				});
 			}
 			for (i = 0; i < $scope.page.dealers.length; i++) {
 				$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
 			}
-			getUsers();
+			getUsers({
+				success: true,
+				detail: 'OK'
+			});
 
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
 		});
 	};
 
-	var getUsers = function() {
+	var getUsers = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.page.users = [];
 
 		Users.query({
@@ -163,18 +235,27 @@ angular.module('minovateApp')
 					});
 				}
 
-				getInfoPromotion($stateParams.idPromotion);
+				getInfoPromotion($stateParams.idPromotion, {
+					success: true,
+					detail: 'OK'
+				});
 
 			} else {
 				$log.log(success);
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
-
 	};
 
-	$scope.createPromotion = function() {
+	$scope.createPromotion = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		var zones = [];
 		var dealers = [];
@@ -207,10 +288,10 @@ angular.module('minovateApp')
 			openModalMessage('Debe indicar al menos un dealer');
 			return;
 		}
-		if (users.length === 0) {
-			openModalMessage('Debe indicar al menos un usuario');
-			return;
-		}
+		// if (users.length === 0) {
+		// 	openModalMessage('Debe indicar al menos un usuario');
+		// 	return;
+		// }
 		if (!Validators.validaRequiredField($scope.page.startDate)) {
 			openModalMessage('Debe indicar la fecha de inicio de la promoción');
 			return;
@@ -234,30 +315,33 @@ angular.module('minovateApp')
 		if ($stateParams.idPromotion) {
 			Promotions.update({
 				idPromotion: $stateParams.idPromotion,
-				"data": {
-					"id" : $stateParams.idPromotion,
-					"type": "promotions",
-					"attributes": {
-						"title": $scope.page.subject,
-						"start_date": startDate,
-						"end_date": endDate,
-						"html": $scope.page.html
+				'data': {
+					'id': $stateParams.idPromotion,
+					'type': 'promotions',
+					'attributes': {
+						'title': $scope.page.subject,
+						'start_date': startDate,
+						'end_date': endDate,
+						'html': $scope.page.html
 					},
-					"relationships": {
-						// "checklist": {
-						// 	"data": {
-						// 		"type": "checklists",
-						// 		"id": "1"
+					'relationships': {
+						// 'checklist': {
+						// 	'data': {
+						// 		'type': 'checklists',
+						// 		'id': '1'
 						// 	}
 						// },
-						"zones": {
-							"data": zones
+						'zones': {
+							'data': zones
 						},
-						"dealers": {
-							"data": dealers
+						'dealers': {
+							'data': dealers
 						},
-						"users": {
-							"data": users
+						// 'users': {
+						// 	'data': users
+						// },
+						'users': {
+							'data': []
 						}
 					}
 				}
@@ -269,33 +353,30 @@ angular.module('minovateApp')
 					$log.log(success);
 				}
 			}, function(error) {
-				$log.log(error);
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.createPromotion);
+				}
 			});
 		} else {
 			Promotions.save({
-				"data": {
-					"type": "promotions",
-					"attributes": {
-						"title": $scope.page.subject,
-						"start_date": startDate,
-						"end_date": endDate,
-						"html": '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html + '</html>'
+				data: {
+					type: 'promotions',
+					attributes: {
+						title: $scope.page.subject,
+						start_date: startDate,
+						end_date: endDate,
+						html: '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html + '</html>'
 					},
-					"relationships": {
-						// "checklist": {
-						// 	"data": {
-						// 		"type": "checklists",
-						// 		"id": "1"
-						// 	}
-						// },
-						"zones": {
-							"data": zones
+					relationships: {
+						zones: {
+							data: zones
 						},
-						"dealers": {
-							"data": dealers
+						dealers: {
+							data: dealers
 						},
-						"users": {
-							"data": users
+						users: {
+							data: users
 						}
 					}
 				}
@@ -307,11 +388,12 @@ angular.module('minovateApp')
 					$log.log(success);
 				}
 			}, function(error) {
-				$log.log(error);
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.createPromotion);
+				}
 			});
 		}
-
-
 	};
 
 	var openModalMessage = function(title) {
@@ -333,7 +415,10 @@ angular.module('minovateApp')
 		});
 	};
 
-	getZones();
+	getZones({
+		success: true,
+		detail: 'OK'
+	});
 
 })
 

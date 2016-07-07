@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, ngTableParams, Users, Invitations) {
+.controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, ngTableParams, Users, Invitations, RefreshToken, $auth, Utils) {
 
 	$scope.page = {
 		title: 'Lista de usuarios'
@@ -17,7 +17,13 @@ angular.module('minovateApp')
 
 	$scope.users = [];
 
-	$scope.getUsers = function() {
+	$scope.getUsers = function(e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		$scope.users = [];
 
@@ -64,15 +70,19 @@ angular.module('minovateApp')
 				});
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getUsers);
+			}
 		});
-
 	};
 
-	$scope.getUsers();
+	$scope.getUsers({
+		success: true,
+		detail: 'OK'
+	});
 
 	$scope.openModalUserDetails = function(idUser) {
 
@@ -110,7 +120,13 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.resendInvitation = function(email, roleId) {
+	$scope.resendInvitation = function(email, roleId, e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		Invitations.save({
 			"data": {
@@ -128,6 +144,9 @@ angular.module('minovateApp')
 			}
 
 		}, function(error) {
+			if (error.status === 401) {
+				Utils.refreshToken($scope.resendInvitation);
+			}
 			$log.log(error);
 
 		});
@@ -196,7 +215,13 @@ angular.module('minovateApp')
 		$uibModalInstance.dismiss('cancel');
 	};
 
-	$scope.getUserDetails = function(idUser) {
+	$scope.getUserDetails = function(idUser, e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		Users.query({
 			idUser: idUser
@@ -225,13 +250,25 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getUserDetails);
+			}
 		});
-
 	};
 
-	$scope.getUserDetails(idUser);
+	$scope.getUserDetails(idUser, {
+		success: true,
+		detail: 'OK'
+	});
 
-	var getRoles = function() {
+	var getRoles = function(e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
 		$scope.roles = [];
 
 		Roles.query({
@@ -250,12 +287,24 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getRoles);
+			}
 		});
 	};
 
-	getRoles();
+	getRoles({
+		success: true,
+		detail: 'OK'
+	});
 
-	$scope.editUser = function(idUser) {
+	$scope.editUser = function(idUser, e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.elements.buttons.editUser.text === 'Editar') {
 			$scope.elements.buttons.editUser.text = 'Guardar';
@@ -314,20 +363,33 @@ angular.module('minovateApp')
 
 					disableFormInputs();
 
-					$scope.getUserDetails(idUser);
+					$scope.getUserDetails(idUser, {
+						success: true,
+						detail: 'OK'
+					});
+
+					$uibModalInstance.close();
 
 				} else {
 					$log.log(success);
 				}
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.editUser);
+				}
 			});
 
 		}
-
 	};
 
-	$scope.removeUser = function(idUser) {
+	$scope.removeUser = function(idUser, e) {
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
 		if ($scope.elements.buttons.removeUser.text === 'Eliminar') {
 			$scope.elements.buttons.removeUser.text = 'Si, eliminar';
@@ -353,12 +415,14 @@ angular.module('minovateApp')
 				}
 			}, function(error) {
 				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.removeUser);
+				}
 			});
 
 			$scope.ok();
 
 		}
-
 	};
 
 	$scope.formatRut = function(rut) {
@@ -366,7 +430,6 @@ angular.module('minovateApp')
 		if (Validators.validateRutCheckDigit(rut)) {
 			$scope.user.rut.text = Utils.formatRut(rut);
 		}
-
 	};
 
 	var enableFormInputs = function() {

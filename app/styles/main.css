@@ -3760,6 +3760,20 @@ fieldset[disabled] .checkbox-custom input + i:before {
   -webkit-box-shadow: none;
   box-shadow: none; }
 
+label.custom-input-file input[type="file"] {
+  position: fixed;
+  top: -1000px; }
+
+.custom-input-file {
+  border-radius: 15px;
+  margin: 0;
+  background-color: #3f5b71 !important;
+  display: inline-block;
+  border: 0px;
+  padding: 7px 12px;
+  color: white;
+  cursor: pointer; }
+
 .badge,
 .label {
   font-size: 10px;
@@ -10255,11 +10269,20 @@ body {
 .text-white {
   color: white; }
 
-.text-orange-ps {
-  color: #f19122; }
-
 .text-gray {
   color: #969696; }
+
+.text-red-ps {
+  color: #f15f4c; }
+
+.text-blue-ps {
+  color: #3f5b71; }
+
+.text-yellow-ps {
+  color: #fcc111; }
+
+.text-orange-ps {
+  color: #f19122; }
 
 .text-xs {
   font-size: 10px !important; }
@@ -10717,6 +10740,18 @@ input[type="file"].custom-input-file {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer; }
+
+.red-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: #f15f4c;
+  color: white;
+  border-radius: 15px;
+  border: 0; }
+
+.orange-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: #f19122;
+  color: white;
+  border-radius: 15px;
+  border: 0; }
 
 .color-schemes a.scheme-black {
   background-color: #1c2b36; }

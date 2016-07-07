@@ -75,7 +75,7 @@
 						<label class="col-sm-1 control-label text-left text-orange-ps" ng-show="formGroup.showIcon"><fa name="{{formGroup.faIcon}}" style="cursor:pointer" ng-click="addFormGroup($index)"></fa></label>
 					</div>
 
-					<button class="btn btn-orange-ps br-20 text-md pl-20 pr-20" type="submit" ng-disabled="form.$invalid" ng-click="sendInvitations()">Enviar</button>
+					<button class="btn btn-orange-ps br-20 text-md pl-20 pr-20" type="submit" ng-disabled="form.$invalid" ng-click="sendInvitations({success: true,detail: 'OK'})">Enviar</button>
 					
 				</form>
 

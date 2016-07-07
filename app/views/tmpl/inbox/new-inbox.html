@@ -4,7 +4,7 @@
 	<div class="pageheader">
 
 		<h2>{{page.title}} <span></span></h2>
-		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createInbox()" ng-show="page.buttons.sendInbox.show">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
+		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createInbox({success: true,detail: 'OK'})" ng-show="page.buttons.sendInbox.show">Enviar mensaje &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
 
 		<div class="page-bar">
 
@@ -54,7 +54,7 @@
 										</a>
 									</li>
 									<li>
-										<a href ng-click="getPromotions()">
+										<a href>
 											<fa name="refresh"></fa> Refrescar
 										</a>
 									</li>
