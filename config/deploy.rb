@@ -69,17 +69,11 @@ set :rbenv_custom_path, '/home/ubuntu/.rbenv/bin/rbenv'
 
 
 set :passenger_restart_with_sudo, true
+set :grunt_tasks, 'build --force'
 
 namespace :deploy do
 
-  before :updated, :grunt_build do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-        within release_path do
-        execute :bundle, 'exec grunt build --verbose --force'
-    end
-    end
-  end
-
+  before 'deploy:updated', 'grunt'
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
