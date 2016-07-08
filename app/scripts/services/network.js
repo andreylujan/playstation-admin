@@ -98,7 +98,9 @@ angular.module('minovateApp')
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {},
+			headers: {
+				Accept: 'application/vnd.api+json'
+			},
 		},
 		sendEmailWithToken: {
 			method: 'POST',
