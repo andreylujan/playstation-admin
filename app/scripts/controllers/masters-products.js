@@ -240,10 +240,10 @@ angular.module('minovateApp')
 				text: '',
 				disabled: false
 			},
-			// brand: {
-			// 	text: '',
-			// 	disabled: false
-			// },
+			brand: {
+				text: '',
+				disabled: false
+			},
 			minPrice: {
 				text: '',
 				disabled: false
@@ -379,7 +379,7 @@ angular.module('minovateApp')
 		$scope.modal.product.description.disabled = state;
 		$scope.modal.product.sku.disabled = state;
 		$scope.modal.product.plu.disabled = state;
-		// $scope.modal.product.brand.disabled = state;
+		$scope.modal.product.brand.disabled = state;
 		$scope.modal.product.validityCode.disabled = state;
 		$scope.modal.product.minPrice.disabled = state;
 		$scope.modal.product.maxPrice.disabled = state;

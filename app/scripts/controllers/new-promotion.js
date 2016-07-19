@@ -52,7 +52,12 @@ angular.module('minovateApp')
 	};
 
 	$scope.page = {
-		title: 'Nuevo mensaje',
+		title: '',
+		buttons: {
+			sendInvitation: {
+				show: true
+			}
+		},
 		html: '',
 		subject: '',
 		zones: [],
@@ -74,6 +79,14 @@ angular.module('minovateApp')
 		startDate: '',
 		endDate: ''
 	};
+
+	if ($stateParams.idPromotion) {
+		$scope.page.title = 'Ver promoción';
+		$scope.page.buttons.sendInvitation.show = false;
+	} else {
+		$scope.page.title = 'Nueva promoción';
+		$scope.page.buttons.sendInvitation.show = true;
+	}
 
 	$scope.rangeOptions = {
 		minDate: $moment()
@@ -158,7 +171,8 @@ angular.module('minovateApp')
 				$scope.page.zones.push({
 					type: 'zones',
 					id: parseInt(success.data[i].id),
-					name: $filter('capitalize')(success.data[i].attributes.name, true)
+					name: $filter('capitalize')(success.data[i].attributes.name, true),
+					dealersIds: success.data[i].attributes.dealer_ids
 				});
 			}
 
@@ -166,7 +180,7 @@ angular.module('minovateApp')
 				$scope.page.zone.selectedZone.push($scope.page.zones[i]);
 			}
 
-			getDealers({
+			$scope.getDealers({
 				success: true,
 				detail: 'OK'
 			});
@@ -180,36 +194,169 @@ angular.module('minovateApp')
 		});
 	};
 
-	var getDealers = function(e) {
+	$scope.getDealers = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
 
+		var dealersIdsSelected = [];
 		$scope.page.dealers = [];
+		$scope.page.dealer.selectedDealer = [];
 
 		Dealers.query({}, function(success) {
-			for (i = 0; i < success.data.length; i++) {
-				$scope.page.dealers.push({
-					type: 'dealers',
-					id: parseInt(success.data[i].id),
-					name: $filter('capitalize')(success.data[i].attributes.name, true)
-				});
+			dealersIdsSelected = [];
+			$scope.page.dealers = [];
+			$scope.page.dealer.selectedDealer = [];
+
+			for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
+				for (j = 0; j < $scope.page.zone.selectedZone[i].dealersIds.length; j++) {
+					dealersIdsSelected.push($scope.page.zone.selectedZone[i].dealersIds[j]);
+				}
 			}
+			dealersIdsSelected = _.uniq(dealersIdsSelected);
+
+			// $log.log('dealersIdsSelected');
+			// $log.log(dealersIdsSelected);
+
+			for (i = 0; i < dealersIdsSelected.length; i++) {
+				for (j = 0; j < success.data.length; j++) {
+					if (parseInt(dealersIdsSelected[i]) === parseInt(success.data[j].id)) {
+						$scope.page.dealers.push({
+							type: 'dealers',
+							id: parseInt(success.data[i].id),
+							name: $filter('capitalize')(success.data[i].attributes.name, true)
+						});
+						break;
+					}
+				}
+			}
+
+			// $log.log('$scope.page.dealers');
+			// $log.log($scope.page.dealers);
+
 			for (i = 0; i < $scope.page.dealers.length; i++) {
 				$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
 			}
-			getUsers({
-				success: true,
-				detail: 'OK'
-			});
 
 		}, function(error) {
 			$log.log(error);
 			if (error.status === 401) {
-				Utils.refreshToken(getDealers);
+				Utils.refreshToken($scope.getDealers);
 			}
 		});
+	};
+
+	$scope.zoneMultiselectEvents = {
+		// Cuando se selecciona una zona:
+		onItemSelect: function(item) {
+			$log.log(item);
+			// se recorre el arreglo q contiene TODAS la zonas
+			for (i = 0; i < $scope.page.zones.length; i++) {
+				// Si la zona q se seleccionó es la misma q la q se se está recorriedo
+				if ($scope.page.zones[i].id === item.id) {
+					// se agrega al arreglo de zonas seleccionada, con toda su info (name, dealersIds, etc)
+					$scope.page.zone.selectedZone.push({
+						type: 'zones',
+						id: parseInt(item.id),
+						name: $filter('capitalize')($scope.page.zones[i].name, true),
+						dealersIds: $scope.page.zones[i].dealersIds
+					});
+					break;
+				}
+			}
+			// cómo por defecto se agrega al arreglo de las zonas seleccionadas un obj con sólo el id de la zona seleccionada...
+			// se borra ese elemento q solo tiene el id
+			for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
+				if (!$scope.page.zone.selectedZone[i].dealersIds) {
+					$scope.page.zone.selectedZone.splice(i, 1);
+				}
+			}
+		},
+		// cada vez q se selecciona o deselecciona un elemento, se cargan sus dealers
+		onChange: function() {
+			// $log.log('$scope.page.zone.selectedZone');
+			// $log.log($scope.page.zone.selectedZone);
+
+			var dealersIdsSelected = [];
+			$scope.page.dealers = [];
+			$scope.page.dealer.selectedDealer = [];
+
+			Dealers.query({}, function(success) {
+				dealersIdsSelected = [];
+				$scope.page.dealers = [];
+				$scope.page.dealer.selectedDealer = [];
+
+				for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
+					for (j = 0; j < $scope.page.zone.selectedZone[i].dealersIds.length; j++) {
+						dealersIdsSelected.push($scope.page.zone.selectedZone[i].dealersIds[j]);
+					}
+				}
+				dealersIdsSelected = _.uniq(dealersIdsSelected);
+
+				// $log.log('dealersIdsSelected');
+				// $log.log(dealersIdsSelected);
+
+				for (i = 0; i < dealersIdsSelected.length; i++) {
+					for (j = 0; j < success.data.length; j++) {
+						if (parseInt(dealersIdsSelected[i]) === parseInt(success.data[j].id)) {
+							$scope.page.dealers.push({
+								type: 'dealers',
+								id: parseInt(success.data[i].id),
+								name: $filter('capitalize')(success.data[i].attributes.name, true)
+							});
+							break;
+						}
+					}
+				}
+
+				$log.log('$scope.page.dealers');
+				$log.log($scope.page.dealers);
+
+				for (i = 0; i < $scope.page.dealers.length; i++) {
+					$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
+				}
+
+			}, function(error) {
+				$log.log(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.getDealers);
+				}
+			});
+		},
+		// onChange: $scope.getDealers({
+		// 	success: true,
+		// 	detail: 'OK'
+		// })
+	};
+
+	$scope.dealerMultiselectEvents = {
+		onItemSelect: function(item) {
+			// $log.log(item);
+			// se recorre el arreglo q contiene TODOS los dealers
+			for (i = 0; i < $scope.page.dealers.length; i++) {
+				// Si el dealer q se seleccionó es el misma q el q se se está recorriedo
+				$log.log('comparo ' + $scope.page.dealers[i].id + ' con ' + item.id);
+				if (parseInt($scope.page.dealers[i].id) === parseInt(item.id)) {
+					// se agrega al arreglo de dealers seleccionada, con toda su info (name, dealersIds, etc)
+					$scope.page.dealer.selectedDealer.push({
+						type: 'dealers',
+						id: parseInt(item.id),
+						name: $filter('capitalize')($scope.page.dealers[i].name, true)
+					});
+					break;
+				}
+			}
+			// cómo por defecto se agrega al arreglo de las dealers seleccionadas un obj con sólo el id de el dealer seleccionada...
+			// se borra ese elemento q no tiene el attr name
+			for (i = 0; i < $scope.page.dealer.selectedDealer.length; i++) {
+				if (!$scope.page.dealer.selectedDealer[i].name) {
+					$scope.page.dealer.selectedDealer.splice(i, 1);
+				}
+			}
+			// $log.log('$scope.page.dealer.selectedDealer');
+			// $log.log($scope.page.dealer.selectedDealer);
+		},
 	};
 
 	var getUsers = function(e) {

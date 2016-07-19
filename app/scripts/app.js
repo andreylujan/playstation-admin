@@ -54,8 +54,8 @@ angular
 		'satellizer',
 		'naif.base64',
 		'ui.bootstrap.datetimepicker',
-		'ngDroplet',
-		'angularjs-dropdown-multiselect'
+		'ngDroplet'
+		// 'angularjs-dropdown-multiselect'
 	])
 	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',
 		function($rootScope, $state, $stateParams, $log, Utils) {
@@ -325,6 +325,17 @@ angular
 				url: '/new-inbox?idInbox',
 				controller: 'NewInboxCtrl',
 				templateUrl: 'views/tmpl/inbox/new-inbox.html'
+			})
+			//images
+			.state('app.images', {
+				url: '/images',
+				template: '<div ui-view></div>'
+			})
+			//images
+			.state('app.images.list', {
+				url: '/images',
+				controller: 'ImagesListCtrl',
+				templateUrl: 'views/tmpl/images/images-list.html'
 			})
 			//app core pages (errors, login,signup)
 			.state('core', {

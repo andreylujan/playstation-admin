@@ -15,7 +15,7 @@ angular.module('minovateApp')
 		j = 0;
 
 	$scope.page = {
-		title: 'Nuevo mensaje',
+		title: '',
 		html: {
 			value: '',
 			disabled: false
@@ -51,6 +51,12 @@ angular.module('minovateApp')
 			}
 		}
 	};
+
+	if ($stateParams.idInbox) {
+		$scope.page.title = 'Ver mensaje';
+	} else {
+		$scope.page.title = 'Nuevo mensaje';
+	}
 
 	var getUsers = function(e) {
 		if (!e.success) {
@@ -129,6 +135,8 @@ angular.module('minovateApp')
 					$scope.page.subject.disabled = true;
 					$scope.page.html.disabled = true;
 					$scope.page.buttons.sendInbox.show = false;
+					$scope.checkSentToAll = false;
+					$scope.checkSendImmediate = false;
 				} else {
 					$scope.page.dateTimePicker.disabled = false;
 					$scope.page.checkSendImmediate.disabled = false;
@@ -138,6 +146,8 @@ angular.module('minovateApp')
 					$scope.page.subject.disabled = false;
 					$scope.page.html.disabled = false;
 					$scope.page.buttons.sendInbox.show = true;
+					$scope.checkSentToAll = true;
+					$scope.checkSendImmediate = true;
 				}
 
 			} else {

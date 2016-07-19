@@ -4,7 +4,7 @@
 	<div class="pageheader">
 
 		<h2>{{page.title}} <span></span></h2>
-		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion({success: true,detail: 'OK'})">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
+		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion({success: true,detail: 'OK'})" ng-show="page.buttons.sendInvitation.show">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
 
 		<div class="page-bar">
 
@@ -104,14 +104,15 @@
 							<div class="col-md-4 mb-5">
 								<label for="selZone" class="col-md-3 control-label" >Zonas</label>
 								<div class="col-md-8">
-									<div ng-dropdown-multiselect="" class="orange-ps" options="page.zones" selected-model="page.zone.selectedZone" extra-settings="dropdownMultiselect.zones.settings" translation-texts="dropdownMultiselect.zones.texts"></div>
+									<div ng-dropdown-multiselect="" class="orange-ps" options="page.zones" selected-model="page.zone.selectedZone" extra-settings="dropdownMultiselect.zones.settings" translation-texts="dropdownMultiselect.zones.texts" events="zoneMultiselectEvents"></div>
+									 <!-- events="{onItemSelect: asd(), onItemDeselect: asd()}" -->
 								</div>
 							</div>
 
 							<div class="col-md-4 mb-5">
 								<label for="selZone" class="col-md-3 control-label" >Dealers</label>
 								<div class="col-md-8">
-									<div ng-dropdown-multiselect="" class="red-ps" options="page.dealers" selected-model="page.dealer.selectedDealer" extra-settings="dropdownMultiselect.dealers.settings" translation-texts="dropdownMultiselect.dealers.texts"></div>
+									<div ng-dropdown-multiselect="" class="red-ps" options="page.dealers" selected-model="page.dealer.selectedDealer" extra-settings="dropdownMultiselect.dealers.settings" translation-texts="dropdownMultiselect.dealers.texts" events="dealerMultiselectEvents"></div>
 								</div>
 							</div>
 						</div>
