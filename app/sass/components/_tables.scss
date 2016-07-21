@@ -678,6 +678,10 @@ input[type="text"].ui-grid-filter-input {
           transform: rotate(180deg); } }
 }
 
+.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+  border: none;
+}
+
 
 @media screen and (max-width: 1360px) {
   .table-responsive-wide {

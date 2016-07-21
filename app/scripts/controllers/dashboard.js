@@ -8,22 +8,17 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-  .controller('DashboardCtrl', function($scope,$http){
+  .controller('DashboardCtrl', function($scope){
+
     $scope.page = {
       title: 'Dashboard',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
-    $scope.getUsers = function(){
-      $scope.data=[];
-      var url = 'http://www.filltext.com/?rows=10&fname={firstName}&lname={lastName}&delay=3&callback=JSON_CALLBACK';
+  })
 
-      $http.jsonp(url).success(function(data){
-          $scope.data=data;
-      });
-    };
+  .controller('DaterangepickerCtrl', function($scope) {
 
-    $scope.getUsers();
   })
 
   .controller('StatisticsChartCtrl', function ($scope) {

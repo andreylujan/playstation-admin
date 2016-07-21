@@ -650,6 +650,28 @@ angular.module('minovateApp')
 
 })
 
+//DASHBOARD
+.factory('DashboardSales', function($resource) {
+	return $resource(API_URL + '/dashboard/sales', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				month: '@month',
+				year: '@year',
+				instructor_id: '@instructor_id',
+				supervisor_id: '@supervisor_id',
+				zone_id: '@zone_id',
+				dealer_id: '@dealer_id',
+				store_id: '@store_id'
+			}
+		}
+	});
+})
+
 // CSV
 .service('Csv', function($http) {
 

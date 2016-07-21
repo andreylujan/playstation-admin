@@ -7,7 +7,16 @@
         <!-- Navigation <i class="fa" ng-class="{'fa-angle-up': status.isFirstOpen, 'fa-angle-down': !status.isFirstOpen}"></i> -->
       </uib-accordion-heading>
       <ul id="navigation" ripple>
-        <!-- <li ui-sref-active="active" ng-show="nav.dashboard.show"><a ui-sref="app.dashboard"><fa name="dashboard"></fa> <span>Dashboard</span></a></li> -->
+
+        <li ui-sref-active="active" ng-class="{'open':$state.includes('app.dashboard')}" ng-show="nav.dashboard.show">
+          <a ui-sref="app.dashboard"><fa name="dashboard"></fa> <span>Dashboard</span></a>
+          <ul>
+            <li ui-sref-active="active"><a ui-sref="app.dashboard.sale"><fa name="caret-right"></fa> Venta</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.users.invite"><fa name="caret-right"></fa> Stock</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.users.invite"><fa name="caret-right"></fa> Promotores y actividades</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.users.invite"><fa name="caret-right"></fa> Metas y comparativos</a></li>
+          </ul>
+        </li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.users')}" ng-show="nav.users.show">
           <a ui-sref="app.users"><fa name="user"></fa> <span>Usuarios</span></a>
           <ul>

@@ -1,0 +1,442 @@
+<div class="page page-dashboard">
+
+  <div class="pageheader">
+
+    <h2>{{page.title}}</h2>
+
+    <div class="row">
+      <div class="col-md-12">
+        <button class="bg-greensea btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Descargar resumen (.xls)"><i class="fa fa-file-excel-o"></i> </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2 mt-5">
+        <ui-select class="red-ps br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'});getDashboardInfo({success:true,detail:'OK'})">
+          <ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name  | capitalize:true"></span></ui-select-match>
+          <ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
+            <div ng-bind-html="zone.name | highlight: $select.search | capitalize:true"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-md-2 mt-5">
+        <ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'});getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled">
+          <ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+          <ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
+            <div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-md-2 mt-5">
+        <ui-select class="yellow-ps br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})">
+          <ui-select-match placeholder="Seleccionar tienda..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+          <ui-select-choices repeat="store in page.filters.store.list | propsFilter: {name: $select.search}">
+            <div ng-bind-html="store.name | highlight: $select.search | capitalize:true"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-md-2 mt-5">
+        <ui-select class="blue-ps br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})">
+          <ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
+          <ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
+            <div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-md-2 mt-5">
+        <ui-select class="blue-ps br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})">
+          <ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
+          <ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
+            <div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="col-md-2 mt-5">
+        <div class="input-group">
+          <input type="text" class="form-control bg-red-ps br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="{minMode: 'month'}" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default bg-red-ps br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-6">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Sell Out </strong>Ventas</h1>
+        </div>
+
+        <div class="tile-widget">
+          <highchart config="chartConfigSales"></highchart>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-6">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+        <div class="tile-widget pt-74 pb-74">
+          <table class="table mt-10">
+            <thead>
+              <tr>
+                <th>Consola</th>
+                <th>Hardware</th>
+                <th>Accesorios</th>
+                <th>Juegos</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr class="text-orange-ps text-bold">
+                <td>Total</td>
+                <td>300</td>
+                <td>300</td>
+                <td>300</td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr ng-repeat="category in categories">
+                <td>{{category}}</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+              </tr>
+              <!-- <tr>
+                <td>PlayStation</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>XBox</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td>Nintendo</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+              </tr> -->
+            </tbody>
+          </table>
+          <a ng-href="/#/app/playStation/reports" class=""><p class="text-orange-ps mt-10 mb-10 text-right">Ver reportes ></p></a>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <section class="tile" >
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Share de ventas </strong>Venta entre consolas</h1>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <highchart config="chartConfigSalesBetweenConsoles"></highchart>
+        </div>
+
+      </section>
+    </div>
+    <div class="col-md-4">
+      <section class="tile" >
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Share de ventas </strong>Valores venta</h1>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Norte</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="mt-5 mb-5">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Oriente</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="mt-5 mb-5">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Sur</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <a ng-click="openModalViewAllSalesValues()" style="cursor:pointer"><p class="text-orange-ps mt-10 mb-10 text-right">Ver todos ></p></a>
+        </div>
+
+      </section>
+    </div>
+    <div class="col-md-3">
+      <section class="tile">
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h2 class="custom-font"><strong>Share de ventas </strong>Ventas global</h2>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <div morris-donut-chart donut-data='donutData' style="height: 400px"></div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- tile -->
+      <section class="tile" >
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <highchart config="chartConfigPriceAndAmount"></highchart>
+        </div>
+
+      </section>
+      <!-- /tile -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- tile -->
+      <section class="tile" >
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <table class="table table-condensed mt-10">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Juego</th>
+                <th>Juego</th>
+                <th>Juego</th>
+                <th>Juego</th>
+                <th>Juego</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monto</td>
+                <td>$ 100</td>
+                <td>$ 100</td>
+                <td>$ 100</td>
+                <td>$ 100</td>
+                <td>$ 100</td>
+              </tr>
+              <tr>
+                <td>Cantidad</td>
+                <td>400</td>
+                <td>400</td>
+                <td>400</td>
+                <td>400</td>
+                <td>400</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+      <!-- /tile -->
+    </div>
+    
+  </div>
+
+
+  <script type="text/ng-template" id="viewAllSalesValuesModal.html">
+    <!-- <div class="modal-header text-gray">
+      <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
+    </div> -->
+    <div class="modal-body text-gray">
+
+      <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Norte</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="mt-5 mb-5">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Oriente</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="mt-5 mb-5">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Sur</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr class="mt-5 mb-5">
+          <table class="table table-borderless table-condensed mt-10">
+            <thead>
+              <tr>
+                <th>Zona..</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Nintendo</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>2. XBox</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+              <tr>
+                <td>3. PlayStation</td>
+                <td class="text-orange-ps">$ 100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
+
+
+</div>

@@ -54,7 +54,8 @@ angular
 		'satellizer',
 		'naif.base64',
 		'ui.bootstrap.datetimepicker',
-		'ngDroplet'
+		'ngDroplet',
+		'highcharts-ng'
 		// 'angularjs-dropdown-multiselect'
 	])
 	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',
@@ -179,19 +180,30 @@ angular
 				templateUrl: 'views/tmpl/app.html'
 			})
 			//dashboard
+			// .state('app.dashboard', {
+			// 	url: '/dashboard',
+			// 	controller: 'DashboardCtrl',
+			// 	templateUrl: 'views/tmpl/dashboard.html',
+			// 	resolve: {
+			// 		plugins: ['$ocLazyLoad',
+			// 			function($ocLazyLoad) {
+			// 				return $ocLazyLoad.load([
+			// 					'scripts/vendor/datatables/datatables.bootstrap.min.css'
+			// 				]);
+			// 			}
+			// 		]
+			// 	}
+			// })
+			//Dashboard
 			.state('app.dashboard', {
 				url: '/dashboard',
-				controller: 'DashboardCtrl',
-				templateUrl: 'views/tmpl/dashboard.html',
-				resolve: {
-					plugins: ['$ocLazyLoad',
-						function($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								'scripts/vendor/datatables/datatables.bootstrap.min.css'
-							]);
-						}
-					]
-				}
+				template: '<div ui-view></div>'
+			})
+			//Dashboard/sale
+			.state('app.dashboard.sale', {
+				url: '/sale',
+				controller: 'DashboardSaleCtrl',
+				templateUrl: 'views/tmpl/dashboard/sale.html'
 			})
 			//users
 			.state('app.users', {

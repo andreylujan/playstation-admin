@@ -1500,6 +1500,23 @@ button {
     }
   }
 
+  &.btn-blue-ps {
+    background-color: $blue-ps;
+    color: white;
+    border-color: $darken-blue-ps;
+
+    &:hover,&:active,&.active {
+      background-color: $darken-blue-ps;
+      border-color: $darker-blue-ps;
+      color: white;
+    }
+
+    &:active,&.active {
+      background-color: $darker-blue-ps;
+      border-color: $darkest-blue-ps;
+    }
+  }
+
   &.btn-border {
     background-color: transparent;
     border-width: 2px;

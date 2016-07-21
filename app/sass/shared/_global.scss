@@ -833,6 +833,10 @@ body {
   text-align: left!important;
 }
 
+.text-bold {
+  font-weight: bold!important;
+}
+
 .wrap-reset {
   margin: -15px;
   padding: 15px;
@@ -980,6 +984,10 @@ body {
   padding: 0!important;
 }
 
+.pb-74 {
+  padding-bottom: 74px!important;
+}
+
 .pb-30 {
   padding-bottom: 30px!important;
 }
@@ -1002,6 +1010,10 @@ body {
 
 .pb-0 {
   padding-bottom: 0px!important;
+}
+
+.pt-74 {
+  padding-top: 74px!important;
 }
 
 .pt-30 {
@@ -1425,6 +1437,20 @@ input[type="file"].custom-input-file {
   border: 0;
 }
 
+.blue-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $blue-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.orange-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $orange-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
 .yellow-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
   background-color: $yellow-ps;
   color: white;
@@ -1432,8 +1458,43 @@ input[type="file"].custom-input-file {
   border: 0;
 }
 
-.yellow-ps > input{
+.red-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $red-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.yellow-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
   background-color: $yellow-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.red-ps > .ui-select-search {
+  background-color: $red-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.yellow-ps > .ui-select-search {
+  background-color: $yellow-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.orange-ps > .ui-select-search {
+  background-color: $orange-ps;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+
+.blue-ps > .ui-select-search {
+  background-color: $blue-ps;
   color: white;
   border-radius: 15px;
   border: 0;
@@ -1443,3 +1504,6 @@ input[type="file"].custom-input-file {
   min-height: 31px;
 }
 
+.ui-select-placeholder {
+  color: white;
+}

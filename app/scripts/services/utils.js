@@ -12,8 +12,6 @@ angular.module('minovateApp')
 
 .service('Utils', function($state, $log, $anchorScroll, $location, $window, $auth, localStorageService, RefreshToken) {
 
-
-
 	this.setInStorage = function(key, val) {
 		return localStorageService.set(key, val);
 	};
@@ -84,11 +82,8 @@ angular.module('minovateApp')
 	this.refreshToken = function(functionToCall) {
 
 		if (!_.isFunction(functionToCall)) {
-
 			var detail = 'Parametro ' + functionToCall + ' no es función';
-
 			$log.log(detail);
-
 			return;
 		}
 
@@ -119,6 +114,51 @@ angular.module('minovateApp')
 			$log.error(error);
 			$state.go('core.login');
 		});
+	};
+
+	this.setChartConfig = function(type, height, plotOptions, stackLabels, xAxisData, series) {
+		if (!type) {
+			type = 'column';
+		}
+		if (!height) {
+			height = 250;
+		}
+		return {
+			options: {
+				title: {
+					text: null
+				},
+				navigation: {
+					buttonOptions: {
+						enabled: false
+					}
+				},
+				colors: ['#3f5b71', '#f15f4c', '#fcc111', '#f19122'],
+				tooltip: {
+					style: {
+						padding: 10,
+						fontWeight: 'bold'
+					}
+				},
+				chart: {
+					type: type,
+					height: height
+				},
+				plotOptions: plotOptions,
+				credits: {
+					enabled: false
+				}
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: null
+				},
+				stackLabels: stackLabels
+			},
+			xAxis: xAxisData,
+			series: series
+		};
 	};
 
 });
