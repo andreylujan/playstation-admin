@@ -301,6 +301,7 @@ angular.module('minovateApp')
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
 
+		var categories = [];
 		$scope.categories = [];
 		var hardwareSales = [];
 		var accesoriesSales = [];
@@ -328,14 +329,16 @@ angular.module('minovateApp')
 
 				// Rescato los nombres de las plataformas
 				angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
-					$scope.categories.push(value.name);
-					$scope.categories.push({
-						name: value.name,
-						hardware: value.sales_by_type.hardware
-					});
+					categories.push(value.name);
 					hardwareSales.push(value.sales_by_type.hardware);
 					accesoriesSales.push(value.sales_by_type.accessories);
 					gamesSales.push(value.sales_by_type.games);
+					$scope.categories.push({
+						name: value.name,
+						hardware: value.sales_by_type.hardware,
+						accessories: value.sales_by_type.accessories,
+						games: value.sales_by_type.games
+					});
 				});
 
 				// $log.log($scope.categories);
@@ -362,7 +365,7 @@ angular.module('minovateApp')
 						color: 'gray'
 					}
 				}, {
-					categories: $scope.categories,
+					categories: categories,
 					title: {
 						text: 'Plataformas'
 					}
