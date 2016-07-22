@@ -651,8 +651,10 @@ angular.module('minovateApp')
 })
 
 //DASHBOARD
-.factory('DashboardSales', function($resource) {
-	return $resource(API_URL + '/dashboard/sales', {}, {
+.factory('Dashboard', function($resource) {
+	return $resource(API_URL + '/dashboard/:category', {
+		category: '@category'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {

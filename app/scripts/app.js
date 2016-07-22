@@ -205,6 +205,12 @@ angular
 				controller: 'DashboardSaleCtrl',
 				templateUrl: 'views/tmpl/dashboard/sale.html'
 			})
+			//Dashboard/sale
+			.state('app.dashboard.promotersAndActivities', {
+				url: '/promoters-and-activities',
+				controller: 'DashboardPromotersAndActivitiesCtrl',
+				templateUrl: 'views/tmpl/dashboard/promoters-and-activities.html'
+			})
 			//users
 			.state('app.users', {
 				url: '/users',

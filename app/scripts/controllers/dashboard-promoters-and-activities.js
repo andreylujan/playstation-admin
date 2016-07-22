@@ -2,174 +2,17 @@
 
 /**
  * @ngdoc function
- * @name minovateApp.controller:DashboardSaleCtrl
+ * @name minovateApp.controller:DashboardPromotersAndActivitiesCtrl
  * @description
- * # DashboardSaleCtrl
+ * # DashboardPromotersAndActivitiesCtrl
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
 
-.controller('Filters', function($scope, $log, Zones, Dealers, Stores, Users, Utils, Asd) {
-
-	var getZones = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		$scope.page.filters.zone.list = [];
-
-		Zones.query({}, function(success) {
-			if (success.data) {
-				angular.forEach(success.data, function(value, key) {
-					Asd.zones.push({
-						id: parseInt(value.id),
-						name: value.attributes.name,
-						dealersIds: value.attributes.dealer_ids
-					});
-					Asd.success = true;
-				});
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getZones);
-			}
-		});
-	};
-
-	getZones({
-		success: true,
-		detail: 'OK'
-	});
-
-	$scope.getDealers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		$scope.page.filters.dealer.disabled = true;
-		$scope.page.filters.dealer.list = [];
-		storesIncluded = [];
-
-		Dealers.query({
-			include: 'stores'
-		}, function(success) {
-			if (success.data && success.included) {
-
-				storesIncluded = success.included;
-
-				angular.forEach($scope.page.filters.zone.selected.dealersIds, function(dealer, key) {
-					angular.forEach(success.data, function(data, key) {
-						if (dealer === parseInt(data.id)) {
-							$scope.page.filters.dealer.list.push({
-								id: parseInt(data.id),
-								name: data.attributes.name,
-								storesIds: data.relationships.stores.data
-							});
-						}
-					});
-				});
-				$scope.page.filters.dealer.disabled = false;
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getDealers);
-			}
-		});
-	};
-
-	$scope.getStores = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		$scope.page.filters.store.disabled = true;
-		$scope.page.filters.store.list = [];
-
-		Stores.query({}, function(success) {
-			if (success.data) {
-				for (i = 0; i < storesIncluded.length; i++) {
-					for (j = 0; j < $scope.page.filters.dealer.selected.storesIds.length; j++) {
-						if (parseInt($scope.page.filters.dealer.selected.storesIds[j].id) === parseInt(success.data[i].id)) {
-							$scope.page.filters.store.list.push({
-								id: parseInt(success.data[i].id),
-								name: success.data[i].attributes.name
-							});
-							break;
-						}
-					}
-				}
-				$scope.page.filters.store.disabled = false;
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getStores);
-			}
-		});
-	};
-
-	var getUsers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		$scope.page.filters.supervisor.disabled = true;
-		$scope.page.filters.instructor.disabled = true;
-		$scope.page.filters.instructor.list = [];
-		$scope.page.filters.supervisor.list = [];
-
-		Users.query({}, function(success) {
-			// $log.log(success);
-			if (success.data) {
-
-				for (var i = 0; i < success.data.length; i++) {
-					if (success.data[i].attributes.active) {
-						$scope.page.filters.instructor.list.push({
-							id: parseInt(success.data[i].id),
-							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-						});
-						$scope.page.filters.supervisor.list.push({
-							id: parseInt(success.data[i].id),
-							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-						});
-					}
-				}
-
-				$scope.page.filters.instructor.disabled = false;
-				$scope.page.filters.supervisor.disabled = false;
-
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.log(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getUsers);
-			}
-		});
-	};
-
-})
-
-.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
+.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
 
 	$scope.page = {
-		title: 'Venta',
+		title: 'Promotores y Actividades',
 		filters: {
 			zone: {
 				list: [],
@@ -265,7 +108,7 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {
+	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 600, {}, {
 		enabled: true,
 		style: {
 			fontWeight: 'normal',
@@ -276,82 +119,9 @@ angular.module('minovateApp')
 		title: {
 			text: ''
 		}
-	}, []);
-
-	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 400, {
-		column: {
-			stacking: 'normal',
-			dataLabels: {
-				enabled: true,
-				color: 'white',
-				style: {
-					textShadow: '0 0 3px black',
-					fontWeight: 'normal'
-				}
-			}
-		}
-	}, {
-		enabled: true,
-		style: {
-			fontWeight: 'normal',
-			color: 'gray'
-		}
-	}, {
-		categories: ['Norte', 'Oriente', 'Sur', 'Poniente', 'X'],
-		title: {
-			text: 'Plataformas'
-		}
 	}, [{
-		name: 'Playstation',
-		data: [5, 3, 4, 2, 1]
-	}, {
-		name: 'Xbox',
-		data: [2, 2, 3, 2, 1]
-	}, {
-		name: 'Nintendo',
-		data: [3, 4, 4, 2, 1]
-	}]);
-
-	$scope.openModalViewAllSalesValues = function() {
-
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'viewAllSalesValuesModal.html',
-			controller: 'ViewAllSalesValuesModalInstance',
-			size: 'md',
-			resolve: {
-
-			}
-		});
-
-		modalInstance.result.then(function() {}, function() {});
-	};
-
-	$scope.donutData = [{
-		label: 'PlayStation',
-		value: 25,
-		color: '#3f5b71'
-	}, {
-		label: 'XBox',
-		value: 20,
-		color: '#f19122'
-	}, {
-		label: 'Nintendo',
-		value: 15,
-		color: '#fcc111'
-	}];
-
-	$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {
-		categories: ['Juego', 'Juego', 'Juego', 'Juego', 'Juego'],
-		title: {
-			text: 'Juegos'
-		}
-	}, [{
-		name: 'Cantidad',
-		data: [5, 3, 4, 3, 7]
-	}, {
-		name: 'Monto',
-		data: [2, 2, 3, 3, 7]
+		name: 'Reportes',
+		data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
 	}]);
 
 	$scope.getDashboardInfo = function(e) {
@@ -360,7 +130,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$log.log('se ejecuta getDashboardInfo()');
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';

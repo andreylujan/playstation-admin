@@ -117,9 +117,9 @@ angular.module('minovateApp')
 	};
 
 	this.setChartConfig = function(type, height, plotOptions, stackLabels, xAxisData, series) {
-		if (!type) {
-			type = 'column';
-		}
+		// if (!type) {
+		// 	type = 'column';
+		// }
 		if (!height) {
 			height = 250;
 		}
