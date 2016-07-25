@@ -10836,6 +10836,9 @@ input[type="file"].custom-input-file {
 .ui-select-placeholder {
   color: white; }
 
+.disabled {
+  cursor: not-allowed; }
+
 .color-schemes a.scheme-black {
   background-color: #1c2b36; }
 .color-schemes a.scheme-drank {

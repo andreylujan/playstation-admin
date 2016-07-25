@@ -10,7 +10,7 @@
 angular.module('minovateApp')
 
 .controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
-
+	$scope.asd = true;
 	$scope.page = {
 		title: 'Promotores y Actividades',
 		filters: {
@@ -41,6 +41,20 @@ angular.module('minovateApp')
 			month: {
 				value: new Date(),
 				isOpen: false
+			}
+		},
+		promotors: {
+			storeVisits: {
+				countTotalReports: 0,
+				countReportsToday: 0,
+				countReportsYesterday: 0
+			},
+			mothlyReportsPerDay: {
+				latest15: [],
+				all: [],
+				seeAll: {
+					disabled: true
+				}
 			}
 		}
 	};
@@ -108,21 +122,83 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 600, {}, {
-		enabled: true,
-		style: {
-			fontWeight: 'normal',
-			color: 'gray'
+	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {}, {}, []);
+
+	$scope.accomplishmentToday = {
+		percent: 67,
+		options: {
+			animate: {
+				duration: 3000,
+				enabled: true
+			},
+			barColor: '#fcc111',
+			scaleColor: false,
+			lineCap: 'round',
+			size: 140,
+			lineWidth: 4
 		}
-	}, {
+	};
+
+	$scope.accomplishmentYesterday = {
+		percent: 67,
+		options: {
+			animate: {
+				duration: 3000,
+				enabled: true
+			},
+			barColor: '#3f5b71',
+			scaleColor: false,
+			lineCap: 'round',
+			size: 140,
+			lineWidth: 4
+		}
+	};
+
+	$scope.pricesAnnouncementsDay = Utils.setChartConfig('column', 455, {}, [{
+		min: 0,
+		title: {
+			text: null
+		},
+		stackLabels: {}
+	}, { // Secondary yAxis
+		title: {
+			text: '',
+			style: {}
+		},
+		labels: {
+			style: {}
+		}
+	}], {
 		categories: [],
 		title: {
 			text: ''
 		}
 	}, [{
-		name: 'Reportes',
+		name: 'Reportes creados',
 		data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+	}, {
+		name: 'Reportes que cumplen',
+		type: 'spline',
+		data: [6.0, 6.9, 1.5, 5.5, 7.2, 21.5, 25.2, 26.5, 22.3, 18.3, 11.9, 1.6]
 	}]);
+
+	$scope.openModalMonthlyReportsPerDay = function(arrMonthlyReportsPerDay) {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'viewAllMonthlyReportsPerDay.html',
+			controller: 'ViewAllReportsPerDayModalInstance',
+			size: 'md',
+			resolve: {
+				monthlyReports: function() {
+					return arrMonthlyReportsPerDay;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+
+	};
 
 	$scope.getDashboardInfo = function(e) {
 		if (!e.success) {
@@ -138,12 +214,6 @@ angular.module('minovateApp')
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
 
-		var categories = [];
-		$scope.categories = [];
-		var hardwareSales = [];
-		var accesoriesSales = [];
-		var gamesSales = [];
-
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
 		// $log.log(storeIdSelected);
@@ -153,7 +223,7 @@ angular.module('minovateApp')
 		// $log.log(yearSelected);
 
 		Dashboard.query({
-			category: 'sales',
+			category: 'promoter_activity',
 			zone_id: zoneIdSelected,
 			dealer_id: dealerIdSelected,
 			store_id: storeIdSelected,
@@ -164,79 +234,73 @@ angular.module('minovateApp')
 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
-				var hardwareTotal = 0,
-					accessoriesTotal = 0,
-					gamesTotal = 0;
 
-				// Rescato los nombres de las plataformas
-				angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
-					categories.push(value.name);
-					hardwareSales.push(value.sales_by_type.hardware);
-					accesoriesSales.push(value.sales_by_type.accessories);
-					gamesSales.push(value.sales_by_type.games);
-					$scope.categories.push({
-						name: value.name,
-						hardware: value.sales_by_type.hardware,
-						accessories: value.sales_by_type.accessories,
-						games: value.sales_by_type.games
-					});
-				});
-				// Suma acumulada de hardware
-				angular.forEach(hardwareSales, function(value, key) {
-					hardwareTotal = value + hardwareTotal;
-				});
-				// Suma acumulada de accesorios
-				angular.forEach(accesoriesSales, function(value, key) {
-					accessoriesTotal = value + accessoriesTotal;
-				});
-				// Suma acumulada de juegos
-				angular.forEach(gamesSales, function(value, key) {
-					gamesTotal = value + gamesTotal;
-				});
-				$scope.totalsSale = [{
-					title: 'Total',
-					hardwareTotal: hardwareTotal,
-					accessoriesTotal: accessoriesTotal,
-					gamesTotal: gamesTotal
-				}];
+				$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 1][1];
+				// $scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
+				// $scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
 
-				// $log.log($scope.categories);
-				// $log.log(hardwareSales);
-				// $log.log(accesoriesSales);
-				// $log.log(gamesSales);
-
-				$scope.chartConfigSales = Utils.setChartConfig('column', 300, {
-					column: {
-						stacking: 'normal',
-						dataLabels: {
-							enabled: true,
-							color: 'white',
-							style: {
-								textShadow: '0 0 3px black',
-								fontWeight: 'normal'
+				if (success.data.attributes.reports_by_day[0] === -1) {
+					$scope.page.promotors.storeVisits.countReportsToday = 0;
+					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
+				} else if (success.data.attributes.reports_by_day[1] === -1) {
+					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
+				} else {
+					var keepGoing = true;
+					angular.forEach(success.data.attributes.reports_by_day, function(value, key) {
+						if (keepGoing) {
+							if (value.amount === -1) {
+								$scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.reports_by_day[key - 1].amount;
+								$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.reports_by_day[key - 2].amount;
+								keepGoing = false;
 							}
 						}
+					});
+				}
+
+				var categories = [],
+					values = [],
+					c = 0;
+
+				angular.forEach(success.data.attributes.accumulated, function(value, key) {
+					categories.push(value[0]);
+					values.push(value[1]);
+				});
+
+				for (i = success.data.attributes.reports_by_day.length - 1; i >= 0; i--) {
+					if (success.data.attributes.reports_by_day[i].amount !== -1) {
+						$scope.page.promotors.mothlyReportsPerDay.all.push({
+							weekDay: success.data.attributes.reports_by_day[i].week_day,
+							monthDay: success.data.attributes.reports_by_day[i].month_day,
+							amount: success.data.attributes.reports_by_day[i].amount
+						});
+						if (c < 15) {
+							$scope.page.promotors.mothlyReportsPerDay.latest15.push({
+								weekDay: success.data.attributes.reports_by_day[i].week_day,
+								monthDay: success.data.attributes.reports_by_day[i].month_day,
+								amount: success.data.attributes.reports_by_day[i].amount
+							});
+							c++;
+						}
 					}
-				}, {
-					enabled: true,
-					style: {
-						fontWeight: 'normal',
-						color: 'gray'
-					}
+				}
+				$scope.page.promotors.mothlyReportsPerDay.seeAll.disabled = false;
+				$scope.page.promotors.mothlyReportsPerDay.latest15 = $scope.page.promotors.mothlyReportsPerDay.latest15.reverse();
+				$scope.page.promotors.mothlyReportsPerDay.all = $scope.page.promotors.mothlyReportsPerDay.all.reverse();
+				
+				$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {}
 				}, {
 					categories: categories,
 					title: {
-						text: 'Plataformas'
+						text: ''
 					}
 				}, [{
-					name: 'Hardware',
-					data: hardwareSales
-				}, {
-					name: 'Accesorios',
-					data: accesoriesSales
-				}, {
-					name: 'Juegos',
-					data: gamesSales
+					name: 'Reportes',
+					data: values
 				}]);
 			}
 		}, function(error) {
@@ -255,7 +319,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('ViewAllSalesValuesModalInstance', function($scope, $uibModalInstance) {
+.controller('ViewAllSalesValuesModalInstance', function($scope, $log, $uibModalInstance) {
 
 	$scope.modal = {
 		title: {
@@ -277,5 +341,20 @@ angular.module('minovateApp')
 	$scope.cancel = function() {
 		$uibModalInstance.close();
 	};
+
+})
+
+.controller('ViewAllReportsPerDayModalInstance', function($scope, $log, $uibModalInstance, monthlyReports) {
+
+	$scope.modal = {
+		alert: {
+			color: '',
+			show: '',
+			title: '',
+			text: ''
+		},
+		mothlyReportsPerDay: monthlyReports
+	};
+	$log.log(monthlyReports);
 
 });

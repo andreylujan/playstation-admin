@@ -76,10 +76,12 @@
         </div>
 
         <div class="tile-widget">
-          <div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: 999</div>
-          <div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: 10</div>
-          <div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: 20</div>
-          <highchart class="mt-20" config="chartConfigStoreVisits"></highchart>
+          <div class="mt-10">
+            <div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.storeVisits.countTotalReports}}</div>
+            <div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.storeVisits.countReportsToday}}</div>
+            <div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.storeVisits.countReportsYesterday}}</div>
+          </div>
+          <highchart class="mt-40" config="chartConfigStoreVisits"></highchart>
         </div>
 
       </section>
@@ -93,67 +95,23 @@
       <!-- tile -->
       <section class="tile" fullscreen="isFullscreen01">
         <div class="tile-widget">
-          <table class="table table-condensed mt-10">
+          <table class="table table-condensed table-hover mt-10">
             <thead>
               <tr>
                 <th>Día semana</th>
-                <th>Día</th>
-                <th>Canridad reportes</th>
+                <th class="text-center">Día</th>
+                <th class="text-center">Cantidad reportes</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Lunes</td>
-                <td>1</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Martes</td>
-                <td>2</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Miercoles</td>
-                <td>3</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Jueves</td>
-                <td>4</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Viernes</td>
-                <td>5</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Sábado</td>
-                <td>6</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Domingo</td>
-                <td>7</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Lunes</td>
-                <td>8</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Martes</td>
-                <td>9</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>Miercoles</td>
-                <td>10</td>
-                <td>10</td>
+              <tr ng-repeat="report in page.promotors.mothlyReportsPerDay.latest15">
+                <td>{{report.weekDay}}</td>
+                <td class="text-center">{{report.monthDay}}</td>
+                <td class="text-red-ps text-center">{{report.amount}}</td>
               </tr>
             </tbody>
           </table>
+          <a ng-click="openModalMonthlyReportsPerDay(page.promotors.mothlyReportsPerDay.all)" ng-class="{disabled:page.promotors.mothlyReportsPerDay.seeAll.disabled}"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
         </div>
       </section>
       <!-- /tile -->
@@ -174,10 +132,12 @@
         </div>
 
         <div class="tile-widget">
-          <div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: 999</div>
-          <div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: 10</div>
-          <div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: 20</div>
-          <highchart class="mt-20" config="chartConfigStoreVisits"></highchart>
+          <div class="mt-10">
+            <div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: 999</div>
+            <div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: 10</div>
+            <div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: 20</div>
+          </div>
+          <highchart class="mt-40" config="chartConfigStoreVisits"></highchart>
         </div>
 
       </section>
@@ -191,64 +151,429 @@
       <!-- tile -->
       <section class="tile" fullscreen="isFullscreen01">
         <div class="tile-widget">
-          <table class="table table-condensed mt-10">
+          <table class="table table-condensed table-hover mt-10">
             <thead>
               <tr>
                 <th>Día semana</th>
-                <th>Día</th>
-                <th>Canridad reportes</th>
+                <th class="text-center">Día</th>
+                <th class="text-center">Cantidad reportes</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Lunes</td>
-                <td>1</td>
-                <td>10</td>
+                <td class="text-center">1</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Martes</td>
-                <td>2</td>
-                <td>10</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Miercoles</td>
-                <td>3</td>
-                <td>10</td>
+                <td class="text-center">3</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Jueves</td>
-                <td>4</td>
-                <td>10</td>
+                <td class="text-center">4</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Viernes</td>
-                <td>5</td>
-                <td>10</td>
+                <td class="text-center">5</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Sábado</td>
-                <td>6</td>
-                <td>10</td>
+                <td class="text-center">6</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Domingo</td>
-                <td>7</td>
-                <td>10</td>
+                <td class="text-center">7</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Lunes</td>
-                <td>8</td>
-                <td>10</td>
+                <td class="text-center">8</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Martes</td>
-                <td>9</td>
-                <td>10</td>
+                <td class="text-center">9</td>
+                <td class="text-center text-orange-ps">10</td>
               </tr>
               <tr>
                 <td>Miercoles</td>
-                <td>10</td>
-                <td>10</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-orange-ps">10</td>
+              </tr>
+            </tbody>
+          </table>
+          <a ng-href="/#/app/playStation/reports" class=""><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-7">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Registro de promotores </strong>Entrada y salida</h1>
+        </div>
+
+        <div class="tile-widget">
+          <div class="mt-10">
+            <div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: 999</div>
+            <div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: 10</div>
+            <div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: 20</div>
+          </div>
+          <highchart class="mt-40" config="chartConfigStoreVisits"></highchart>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-5">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th>Día semana</th>
+                <th class="text-center">Día</th>
+                <th class="text-center">Cantidad reportes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Martes</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">3</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Jueves</td>
+                <td class="text-center">4</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Viernes</td>
+                <td class="text-center">5</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Sábado</td>
+                <td class="text-center">6</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Domingo</td>
+                <td class="text-center">7</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">8</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Martes</td>
+                <td class="text-center">9</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+              <tr>
+                <td>Miercoles</td>
+                <td class="text-center">10</td>
+                <td class="text-center text-yellow-ps">10</td>
+              </tr>
+            </tbody>
+          </table>
+          <a ng-href="/#/app/playStation/reports" class=""><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-6">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>HC a la fecha </strong>Dealer</h1>
+        </div>
+
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th ROWSPAN="2">Dealer</th>
+                <th class="text-center" colspan="2">PlayStation</th>
+                <th class="text-center" colspan="2">Nintendo</th>
+                <th class="text-center" colspan="2">XBox</th>
+              </tr>
+              <tr>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+              <tr>
+                <td>Dealer</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-6">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>HC a la fecha </strong>Tienda</h1>
+        </div>
+
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th ROWSPAN="2">Tienda</th>
+                <th class="text-center" colspan="2">PlayStation</th>
+                <th class="text-center" colspan="2">Nintendo</th>
+                <th class="text-center" colspan="2">XBox</th>
+              </tr>
+              <tr>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+                <th class="text-center text-orange-ps">Full</th>
+                <th class="text-center">PT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tienda</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
+                <td class="text-center text-orange-ps">2</td>
+                <td class="text-center">2</td>
               </tr>
             </tbody>
           </table>
@@ -259,5 +584,312 @@
     </div>
   </div>
 
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-4">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Precios comunicados</strong></h1>
+        </div>
+
+        <div class="tile-widget">
+          <p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
+          <div easypiechart options="accomplishmentToday.options" percent="accomplishmentToday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+            <i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
+          </div>
+          <p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps">67 %</strong></p>
+
+          <hr>
+
+          <p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
+          <div easypiechart options="accomplishmentYesterday.options" percent="accomplishmentYesterday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+            <i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
+          </div>
+          <p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps">67 %</strong></p>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-8">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen</h1>
+        </div>
+
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th>Zona</th>
+                <th>Dealer</th>
+                <th>Tienda</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Oriente</td>
+                <td class="text-center text-orange-ps">Falabella</td>
+                <td class="text-center">Parque Arauco</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-7">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Precios comunicados</strong> Al día</h1>
+        </div>
+
+        <div class="tile-widget">
+          <highchart class="mt-40" config="pricesAnnouncementsDay"></highchart>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-5">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen</h1>
+        </div>
+
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th>Día semana</th>
+                <th>Día</th>
+                <th>R. Cumplen</th>
+                <th>R. Creados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+              <tr>
+                <td>Lunes</td>
+                <td class="text-center">1</td>
+                <td class="text-center">18</td>
+                <td class="text-center text-yellow-ps">30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- col -->
+    <div class="col-md-4">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Promociones destacadas</strong></h1>
+        </div>
+
+        <div class="tile-widget">
+          <p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
+          <div easypiechart options="accomplishmentToday.options" percent="accomplishmentToday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+            <i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
+          </div>
+          <p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps">67 %</strong></p>
+
+          <hr>
+
+          <p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
+          <div easypiechart options="accomplishmentYesterday.options" percent="accomplishmentYesterday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+            <i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
+          </div>
+          <p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps">67 %</strong></p>
+        </div>
+
+      </section>
+      <!-- /tile -->
+
+    </div>
+    <!-- /col -->
+
+    <div class="col-md-8">
+
+      <!-- tile -->
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Promociones destacadas </strong>Tiendas que no cumplen</h1>
+        </div>
+
+        <div class="tile-widget">
+          <table class="table table-condensed table-hover mt-10">
+            <thead>
+              <tr>
+                <th>Zona</th>
+                <th>Dealer</th>
+                <th>Tienda</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Oriente</td>
+                <td class="text-center text-orange-ps">Falabella</td>
+                <td class="text-center">Parque Arauco</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- /tile -->
+
+    </div>
+  </div>
 
 </div>
+
+
+<script type="text/ng-template" id="viewAllMonthlyReportsPerDay.html">
+  <div class="modal-body text-gray">
+
+    <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <table class="table table-condensed table-hover mt-10">
+          <thead>
+            <tr>
+              <th>Día semana</th>
+              <th class="text-center">Día</th>
+              <th class="text-center">Cantidad reportes</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="report in modal.mothlyReportsPerDay">
+              <td>{{report.weekDay}}</td>
+              <td class="text-center">{{report.monthDay}}</td>
+              <td class="text-red-ps text-center">{{report.amount}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>

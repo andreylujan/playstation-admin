@@ -9,162 +9,162 @@
  */
 angular.module('minovateApp')
 
-.controller('Filters', function($scope, $log, Zones, Dealers, Stores, Users, Utils, Asd) {
+// .controller('Filters', function($scope, $log, Zones, Dealers, Stores, Users, Utils, Asd) {
 
-	var getZones = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+// 	var getZones = function(e) {
+// 		if (!e.success) {
+// 			$log.error(e.detail);
+// 			return;
+// 		}
 
-		$scope.page.filters.zone.list = [];
+// 		$scope.page.filters.zone.list = [];
 
-		Zones.query({}, function(success) {
-			if (success.data) {
-				angular.forEach(success.data, function(value, key) {
-					Asd.zones.push({
-						id: parseInt(value.id),
-						name: value.attributes.name,
-						dealersIds: value.attributes.dealer_ids
-					});
-					Asd.success = true;
-				});
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getZones);
-			}
-		});
-	};
+// 		Zones.query({}, function(success) {
+// 			if (success.data) {
+// 				angular.forEach(success.data, function(value, key) {
+// 					Asd.zones.push({
+// 						id: parseInt(value.id),
+// 						name: value.attributes.name,
+// 						dealersIds: value.attributes.dealer_ids
+// 					});
+// 					Asd.success = true;
+// 				});
+// 			} else {
+// 				$log.error(success);
+// 			}
+// 		}, function(error) {
+// 			$log.error(error);
+// 			if (error.status === 401) {
+// 				Utils.refreshToken(getZones);
+// 			}
+// 		});
+// 	};
 
-	getZones({
-		success: true,
-		detail: 'OK'
-	});
+// 	getZones({
+// 		success: true,
+// 		detail: 'OK'
+// 	});
 
-	$scope.getDealers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+// 	$scope.getDealers = function(e) {
+// 		// Valida si el parametro e.success se seteó true para el refresh token
+// 		if (!e.success) {
+// 			$log.error(e.detail);
+// 			return;
+// 		}
 
-		$scope.page.filters.dealer.disabled = true;
-		$scope.page.filters.dealer.list = [];
-		storesIncluded = [];
+// 		$scope.page.filters.dealer.disabled = true;
+// 		$scope.page.filters.dealer.list = [];
+// 		storesIncluded = [];
 
-		Dealers.query({
-			include: 'stores'
-		}, function(success) {
-			if (success.data && success.included) {
+// 		Dealers.query({
+// 			include: 'stores'
+// 		}, function(success) {
+// 			if (success.data && success.included) {
 
-				storesIncluded = success.included;
+// 				storesIncluded = success.included;
 
-				angular.forEach($scope.page.filters.zone.selected.dealersIds, function(dealer, key) {
-					angular.forEach(success.data, function(data, key) {
-						if (dealer === parseInt(data.id)) {
-							$scope.page.filters.dealer.list.push({
-								id: parseInt(data.id),
-								name: data.attributes.name,
-								storesIds: data.relationships.stores.data
-							});
-						}
-					});
-				});
-				$scope.page.filters.dealer.disabled = false;
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getDealers);
-			}
-		});
-	};
+// 				angular.forEach($scope.page.filters.zone.selected.dealersIds, function(dealer, key) {
+// 					angular.forEach(success.data, function(data, key) {
+// 						if (dealer === parseInt(data.id)) {
+// 							$scope.page.filters.dealer.list.push({
+// 								id: parseInt(data.id),
+// 								name: data.attributes.name,
+// 								storesIds: data.relationships.stores.data
+// 							});
+// 						}
+// 					});
+// 				});
+// 				$scope.page.filters.dealer.disabled = false;
+// 			} else {
+// 				$log.error(success);
+// 			}
+// 		}, function(error) {
+// 			$log.error(error);
+// 			if (error.status === 401) {
+// 				Utils.refreshToken($scope.getDealers);
+// 			}
+// 		});
+// 	};
 
-	$scope.getStores = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+// 	$scope.getStores = function(e) {
+// 		// Valida si el parametro e.success se seteó true para el refresh token
+// 		if (!e.success) {
+// 			$log.error(e.detail);
+// 			return;
+// 		}
 
-		$scope.page.filters.store.disabled = true;
-		$scope.page.filters.store.list = [];
+// 		$scope.page.filters.store.disabled = true;
+// 		$scope.page.filters.store.list = [];
 
-		Stores.query({}, function(success) {
-			if (success.data) {
-				for (i = 0; i < storesIncluded.length; i++) {
-					for (j = 0; j < $scope.page.filters.dealer.selected.storesIds.length; j++) {
-						if (parseInt($scope.page.filters.dealer.selected.storesIds[j].id) === parseInt(success.data[i].id)) {
-							$scope.page.filters.store.list.push({
-								id: parseInt(success.data[i].id),
-								name: success.data[i].attributes.name
-							});
-							break;
-						}
-					}
-				}
-				$scope.page.filters.store.disabled = false;
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getStores);
-			}
-		});
-	};
+// 		Stores.query({}, function(success) {
+// 			if (success.data) {
+// 				for (i = 0; i < storesIncluded.length; i++) {
+// 					for (j = 0; j < $scope.page.filters.dealer.selected.storesIds.length; j++) {
+// 						if (parseInt($scope.page.filters.dealer.selected.storesIds[j].id) === parseInt(success.data[i].id)) {
+// 							$scope.page.filters.store.list.push({
+// 								id: parseInt(success.data[i].id),
+// 								name: success.data[i].attributes.name
+// 							});
+// 							break;
+// 						}
+// 					}
+// 				}
+// 				$scope.page.filters.store.disabled = false;
+// 			} else {
+// 				$log.error(success);
+// 			}
+// 		}, function(error) {
+// 			$log.error(error);
+// 			if (error.status === 401) {
+// 				Utils.refreshToken($scope.getStores);
+// 			}
+// 		});
+// 	};
 
-	var getUsers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+// 	var getUsers = function(e) {
+// 		// Valida si el parametro e.success se seteó true para el refresh token
+// 		if (!e.success) {
+// 			$log.error(e.detail);
+// 			return;
+// 		}
 
-		$scope.page.filters.supervisor.disabled = true;
-		$scope.page.filters.instructor.disabled = true;
-		$scope.page.filters.instructor.list = [];
-		$scope.page.filters.supervisor.list = [];
+// 		$scope.page.filters.supervisor.disabled = true;
+// 		$scope.page.filters.instructor.disabled = true;
+// 		$scope.page.filters.instructor.list = [];
+// 		$scope.page.filters.supervisor.list = [];
 
-		Users.query({}, function(success) {
-			// $log.log(success);
-			if (success.data) {
+// 		Users.query({}, function(success) {
+// 			// $log.log(success);
+// 			if (success.data) {
 
-				for (var i = 0; i < success.data.length; i++) {
-					if (success.data[i].attributes.active) {
-						$scope.page.filters.instructor.list.push({
-							id: parseInt(success.data[i].id),
-							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-						});
-						$scope.page.filters.supervisor.list.push({
-							id: parseInt(success.data[i].id),
-							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-						});
-					}
-				}
+// 				for (var i = 0; i < success.data.length; i++) {
+// 					if (success.data[i].attributes.active) {
+// 						$scope.page.filters.instructor.list.push({
+// 							id: parseInt(success.data[i].id),
+// 							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
+// 						});
+// 						$scope.page.filters.supervisor.list.push({
+// 							id: parseInt(success.data[i].id),
+// 							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
+// 						});
+// 					}
+// 				}
 
-				$scope.page.filters.instructor.disabled = false;
-				$scope.page.filters.supervisor.disabled = false;
+// 				$scope.page.filters.instructor.disabled = false;
+// 				$scope.page.filters.supervisor.disabled = false;
 
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.log(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getUsers);
-			}
-		});
-	};
+// 			} else {
+// 				$log.error(success);
+// 			}
+// 		}, function(error) {
+// 			$log.log(error);
+// 			if (error.status === 401) {
+// 				Utils.refreshToken(getUsers);
+// 			}
+// 		});
+// 	};
 
-})
+// })
 
 .controller('DashboardSaleCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
 
@@ -266,10 +266,16 @@ angular.module('minovateApp')
 	};
 
 	$scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {
-		enabled: true,
-		style: {
-			fontWeight: 'normal',
-			color: 'gray'
+		min: 0,
+		title: {
+			text: null
+		},
+		stackLabels: {
+			enabled: true,
+			style: {
+				fontWeight: 'normal',
+				color: 'gray'
+			}
 		}
 	}, {
 		categories: [],
@@ -278,7 +284,7 @@ angular.module('minovateApp')
 		}
 	}, []);
 
-	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 400, {
+	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {
 		column: {
 			stacking: 'normal',
 			dataLabels: {
@@ -291,10 +297,16 @@ angular.module('minovateApp')
 			}
 		}
 	}, {
-		enabled: true,
-		style: {
-			fontWeight: 'normal',
-			color: 'gray'
+		min: 0,
+		title: {
+			text: null
+		},
+		stackLabels: {
+			enabled: true,
+			style: {
+				fontWeight: 'normal',
+				color: 'gray'
+			}
 		}
 	}, {
 		categories: ['Norte', 'Oriente', 'Sur', 'Poniente', 'X'],
@@ -449,10 +461,16 @@ angular.module('minovateApp')
 						}
 					}
 				}, {
-					enabled: true,
-					style: {
-						fontWeight: 'normal',
-						color: 'gray'
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {
+						enabled: true,
+						style: {
+							fontWeight: 'normal',
+							color: 'gray'
+						}
 					}
 				}, {
 					categories: categories,

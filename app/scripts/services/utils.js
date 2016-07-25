@@ -116,7 +116,7 @@ angular.module('minovateApp')
 		});
 	};
 
-	this.setChartConfig = function(type, height, plotOptions, stackLabels, xAxisData, series) {
+	this.setChartConfig = function(type, height, plotOptions, yAxisData, xAxisData, series) {
 		// if (!type) {
 		// 	type = 'column';
 		// }
@@ -149,13 +149,14 @@ angular.module('minovateApp')
 					enabled: false
 				}
 			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: null
-				},
-				stackLabels: stackLabels
-			},
+			yAxis: yAxisData,
+			// yAxis: {
+			// 	min: 0,
+			// 	title: {
+			// 		text: null
+			// 	},
+			// 	stackLabels: stackLabels
+			// },
 			xAxis: xAxisData,
 			series: series
 		};

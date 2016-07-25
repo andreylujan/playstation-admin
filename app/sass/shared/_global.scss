@@ -1507,3 +1507,7 @@ input[type="file"].custom-input-file {
 .ui-select-placeholder {
   color: white;
 }
+
+.disabled {
+  cursor: not-allowed;
+}
