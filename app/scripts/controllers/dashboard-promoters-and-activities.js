@@ -235,7 +235,7 @@ angular.module('minovateApp')
 			// $log.log(success);
 			if (success.data) {
 
-				$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 1][1];
+				$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1];
 				// $scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
 				// $scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
 
@@ -261,10 +261,13 @@ angular.module('minovateApp')
 					values = [],
 					c = 0;
 
-				angular.forEach(success.data.attributes.accumulated, function(value, key) {
+				angular.forEach(success.data.attributes.accumulated_reports, function(value, key) {
 					categories.push(value[0]);
 					values.push(value[1]);
 				});
+
+				$scope.page.promotors.mothlyReportsPerDay.all = [];
+				$scope.page.promotors.mothlyReportsPerDay.latest15 = [];
 
 				for (i = success.data.attributes.reports_by_day.length - 1; i >= 0; i--) {
 					if (success.data.attributes.reports_by_day[i].amount !== -1) {
@@ -286,7 +289,7 @@ angular.module('minovateApp')
 				$scope.page.promotors.mothlyReportsPerDay.seeAll.disabled = false;
 				$scope.page.promotors.mothlyReportsPerDay.latest15 = $scope.page.promotors.mothlyReportsPerDay.latest15.reverse();
 				$scope.page.promotors.mothlyReportsPerDay.all = $scope.page.promotors.mothlyReportsPerDay.all.reverse();
-				
+
 				$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {
 					min: 0,
 					title: {
@@ -344,7 +347,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('ViewAllReportsPerDayModalInstance', function($scope, $log, $uibModalInstance, monthlyReports) {
+.controller('ViewAllReportsPerDayModalInstance', function($scope, $log, $uibModalInstance, monthlyReports, Utils) {
 
 	$scope.modal = {
 		alert: {
@@ -355,6 +358,9 @@ angular.module('minovateApp')
 		},
 		mothlyReportsPerDay: monthlyReports
 	};
-	$log.log(monthlyReports);
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
 
 });

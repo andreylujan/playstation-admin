@@ -26,7 +26,7 @@ angular.module('minovateApp')
 			if (success.data) {
 				zones.push({
 					id: '',
-					name: 'Todas',
+					name: 'Todas las Zonas',
 					dealersIds: []
 				});
 				angular.forEach(success.data, function(value, key) {
@@ -86,7 +86,7 @@ angular.module('minovateApp')
 
 				dealers.push({
 					id: '',
-					name: 'Todos',
+					name: 'Todos los Dealers',
 					storesIds: []
 				});
 
@@ -146,7 +146,7 @@ angular.module('minovateApp')
 
 				stores.push({
 					id: '',
-					name: 'Todas'
+					name: 'Todas las Tiendas'
 				});
 
 				for (i = 0; i < storesIncluded.length; i++) {

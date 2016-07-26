@@ -166,7 +166,7 @@ angular.module('minovateApp')
 
 // })
 
-.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
+.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $filter, Utils, Dashboard, DataPlayStation) {
 
 	$scope.page = {
 		title: 'Venta',
@@ -204,7 +204,8 @@ angular.module('minovateApp')
 
 	var storesIncluded = [],
 		i = 0,
-		j = 0;
+		j = 0,
+		k = 0;
 
 	var getZones = function() {
 		DataPlayStation.getZones({
@@ -265,106 +266,31 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {
-		min: 0,
-		title: {
-			text: null
-		},
-		stackLabels: {
-			enabled: true,
-			style: {
-				fontWeight: 'normal',
-				color: 'gray'
-			}
-		}
-	}, {
-		categories: [],
-		title: {
-			text: ''
-		}
-	}, []);
+	$scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
-	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {
-		column: {
-			stacking: 'normal',
-			dataLabels: {
-				enabled: true,
-				color: 'white',
-				style: {
-					textShadow: '0 0 3px black',
-					fontWeight: 'normal'
-				}
-			}
-		}
-	}, {
-		min: 0,
-		title: {
-			text: null
-		},
-		stackLabels: {
-			enabled: true,
-			style: {
-				fontWeight: 'normal',
-				color: 'gray'
-			}
-		}
-	}, {
-		categories: ['Norte', 'Oriente', 'Sur', 'Poniente', 'X'],
-		title: {
-			text: 'Plataformas'
-		}
-	}, [{
-		name: 'Playstation',
-		data: [5, 3, 4, 2, 1]
-	}, {
-		name: 'Xbox',
-		data: [2, 2, 3, 2, 1]
-	}, {
-		name: 'Nintendo',
-		data: [3, 4, 4, 2, 1]
-	}]);
+	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {}, {}, {}, []);
 
-	$scope.openModalViewAllSalesValues = function() {
+	$scope.openModalViewAllSalesValues = function(data) {
+		$log.log(data);
 
 		var modalInstance = $uibModal.open({
 			animation: true,
-			templateUrl: 'viewAllSalesValuesModal.html',
-			controller: 'ViewAllSalesValuesModalInstance',
+			templateUrl: 'viewAllShareOfSalesModal.html',
+			controller: 'ViewAllShareOfSalesModalInstance',
 			size: 'md',
 			resolve: {
-
+				tableShareOfSalesAll: function() {
+					return data;
+				}
 			}
 		});
 
 		modalInstance.result.then(function() {}, function() {});
 	};
 
-	$scope.donutData = [{
-		label: 'PlayStation',
-		value: 25,
-		color: '#3f5b71'
-	}, {
-		label: 'XBox',
-		value: 20,
-		color: '#f19122'
-	}, {
-		label: 'Nintendo',
-		value: 15,
-		color: '#fcc111'
-	}];
+	// $scope.donutData = [];
 
-	$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {
-		categories: ['Juego', 'Juego', 'Juego', 'Juego', 'Juego'],
-		title: {
-			text: 'Juegos'
-		}
-	}, [{
-		name: 'Cantidad',
-		data: [5, 3, 4, 3, 7]
-	}, {
-		name: 'Monto',
-		data: [2, 2, 3, 3, 7]
-	}]);
+	$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
 	$scope.getDashboardInfo = function(e) {
 		if (!e.success) {
@@ -409,7 +335,9 @@ angular.module('minovateApp')
 			if (success.data) {
 				var hardwareTotal = 0,
 					accessoriesTotal = 0,
-					gamesTotal = 0;
+					gamesTotal = 0,
+					namesZones = [],
+					seriesSalesBetweenConsoles = [];
 
 				// Rescato los nombres de las plataformas
 				angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
@@ -442,11 +370,6 @@ angular.module('minovateApp')
 					accessoriesTotal: accessoriesTotal,
 					gamesTotal: gamesTotal
 				}];
-
-				// $log.log($scope.categories);
-				// $log.log(hardwareSales);
-				// $log.log(accesoriesSales);
-				// $log.log(gamesSales);
 
 				$scope.chartConfigSales = Utils.setChartConfig('column', 300, {
 					column: {
@@ -487,6 +410,113 @@ angular.module('minovateApp')
 					name: 'Juegos',
 					data: gamesSales
 				}]);
+
+				angular.forEach(success.data.attributes.sales_by_zone, function(value, key) {
+					namesZones.push($filter('capitalize')(value.name, true));
+					if (key === 0) {
+						angular.forEach(value.sales_by_company, function(valueSaleByCompany, key) {
+							seriesSalesBetweenConsoles.push({
+								name: valueSaleByCompany.name,
+								data: []
+							});
+						});
+					}
+				});
+
+				// recorro sales_by_zone
+				for (i = 0; i < success.data.attributes.sales_by_zone.length; i++) {
+					// dentro de ese arreglo, recorro sales_by_company
+					for (j = 0; j < success.data.attributes.sales_by_zone[i].sales_by_company.length; j++) {
+						// recorro el arreglo donde anteriormente guardo las companies y agrego loa valores
+						for (k = 0; k < seriesSalesBetweenConsoles.length; k++) {
+							if (seriesSalesBetweenConsoles[k].name === success.data.attributes.sales_by_zone[i].sales_by_company[j].name) {
+								seriesSalesBetweenConsoles[k].data.push(success.data.attributes.sales_by_zone[i].sales_by_company[j].sales_amount);
+							}
+						}
+					}
+				}
+
+				$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 513, {
+					column: {
+						stacking: 'normal',
+						dataLabels: {
+							enabled: true,
+							color: 'white',
+							style: {
+								textShadow: '0 0 3px black',
+								fontWeight: 'normal'
+							}
+						}
+					}
+				}, {
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {
+						enabled: true,
+						style: {
+							fontWeight: 'normal',
+							color: 'gray'
+						}
+					}
+				}, {
+					categories: namesZones,
+					title: {
+						text: 'Plataformas'
+					}
+				}, seriesSalesBetweenConsoles);
+
+				$scope.tableShareOfSalesAll = success.data.attributes.sales_by_zone;
+
+				var donutData = [],
+					donutColors = ['#3f5b71', '#f15f4c', '#f19122', '#fcc111'];
+				angular.forEach(success.data.attributes.share_percentages, function(value, key) {
+					donutData.push({
+						label: value.name,
+						value: Math.round(value.share_percentage * 10000) / 100,
+						color: donutColors[key]
+					});
+				});
+
+				$scope.donutData = donutData;
+
+				// INICIO para gráfica - Productos más vendidos Precio y Cantidad
+				var topProducts = {
+					names: [],
+					quantities: [],
+					salesAmounts: []
+				};
+				angular.forEach(success.data.attributes.top_products, function(value, key) {
+					topProducts.names.push(
+						$filter('capitalize')(value.name, true)
+					);
+					topProducts.quantities.push(
+						value.quantity
+					);
+					topProducts.salesAmounts.push(
+						value.sales_amount
+					);
+				});
+
+				$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {
+					min: 0,
+					title: {
+						text: null
+					}
+				}, {
+					categories: topProducts.names,
+					title: {
+						text: 'Juegos'
+					}
+				}, [{
+					name: 'Cantidad',
+					data: topProducts.quantities
+				}, {
+					name: 'Monto',
+					data: topProducts.salesMount
+				}]);
+				// FIN para gráfica - Productos más vendidos Precio y Cantidad
 			}
 		}, function(error) {
 			$log.error(error);
@@ -504,7 +534,8 @@ angular.module('minovateApp')
 
 })
 
-.controller('ViewAllSalesValuesModalInstance', function($scope, $uibModalInstance) {
+.controller('ViewAllShareOfSalesModalInstance', function($scope, $log, $uibModalInstance, tableShareOfSalesAll) {
+	$log.log(tableShareOfSalesAll);
 
 	$scope.modal = {
 		title: {
@@ -520,7 +551,8 @@ angular.module('minovateApp')
 			color: null,
 			text: null,
 			title: null
-		}
+		},
+		tableShareOfSalesAll: tableShareOfSalesAll
 	};
 
 	$scope.cancel = function() {

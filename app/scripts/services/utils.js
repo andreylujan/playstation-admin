@@ -41,7 +41,7 @@ angular.module('minovateApp')
 	this.replaceAll = function(str, find, replace) {
 		return str.replace(new RegExp(this.escapeRegExp(find), 'g'), replace);
 	};
-
+	
 	this.formatRut = function(rut) {
 
 		if (rut.indexOf('.') !== -1 || rut.indexOf('-') !== -1 || rut.indexOf(',') !== -1) {
