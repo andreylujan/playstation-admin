@@ -322,8 +322,11 @@ angular.module('minovateApp')
 					}, {
 						zone_location: {
 							zone: $scope.page.newTask.zones.selectedZone.id,
+							name_zone: $scope.page.newTask.zones.selectedZone.name,
 							dealer: $scope.page.newTask.dealers.selectedDealer.id,
-							store: $scope.page.newTask.stores.selectedStore.id
+							name_dealer: $scope.page.newTask.dealers.selectedDealer.name,
+							store: $scope.page.newTask.stores.selectedStore.id,
+							name_store: $scope.page.newTask.stores.selectedStore.name
 						}
 					}, {
 						address_location: {}
