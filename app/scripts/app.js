@@ -55,7 +55,8 @@ angular
 		'naif.base64',
 		'ui.bootstrap.datetimepicker',
 		'ngDroplet',
-		'highcharts-ng'
+		'highcharts-ng',
+		'slick'
 		// 'angularjs-dropdown-multiselect'
 	])
 	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',

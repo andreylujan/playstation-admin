@@ -9821,6 +9821,18 @@ input[type="text"].ui-grid-filter-input {
 .mfp-arrow-left:before {
   display: none !important; }
 
+.slick-slide {
+  margin: 0 10px; }
+
+/* the parent */
+.slick-list {
+  margin: 0 -10px; }
+
+.slick-prev:before, .slick-next:before {
+  color: #f19122;
+  opacity: 1;
+  font-size: 25px; }
+
 body {
   font-family: "Lato", "Arial", sans-serif;
   font-size: 14px;

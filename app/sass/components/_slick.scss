@@ -1,0 +1,12 @@
+.slick-slide {
+    margin: 0 10px;
+}
+/* the parent */
+.slick-list {
+    margin: 0 -10px;
+}
+.slick-prev:before, .slick-next:before{
+	color: $orange-ps;
+	opacity: 1;
+	font-size: 25px;
+}

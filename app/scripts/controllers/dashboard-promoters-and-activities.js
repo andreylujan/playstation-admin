@@ -10,7 +10,7 @@
 angular.module('minovateApp')
 
 .controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal, Utils, Dashboard, DataPlayStation) {
-	$scope.asd = true;
+
 	$scope.page = {
 		title: 'Promotores y Actividades',
 		filters: {
@@ -40,7 +40,11 @@ angular.module('minovateApp')
 			},
 			month: {
 				value: new Date(),
-				isOpen: false
+				isOpen: false,
+				options: {
+					minMode: 'month',
+					maxDate: new Date()
+				}
 			}
 		},
 		promotors: {
@@ -55,6 +59,40 @@ angular.module('minovateApp')
 				seeAll: {
 					disabled: true
 				}
+			},
+			registry: {
+				entranceAndExit: {
+					countTotalExits: 0,
+					countExitsToday: 0,
+					countExitsYesterday: 0
+				},
+				mothlyExitsPerDay: {
+					latest15: [],
+					all: [],
+					seeAll: {
+						disabled: true
+					}
+				},
+				hours: {
+					countTotalHours: 0,
+					countHoursToday: 0,
+					countHoursYesterday: 0
+				},
+				mothlyHoursPerDay: {
+					latest15: [],
+					all: [],
+					seeAll: {
+						disabled: true
+					}
+				},
+			},
+			headCounts: {
+				byDealer: [],
+				byStore: []
+			},
+			bestPractices: {
+				loaded: false,
+				list: []
 			}
 		}
 	};
@@ -182,16 +220,16 @@ angular.module('minovateApp')
 		data: [6.0, 6.9, 1.5, 5.5, 7.2, 21.5, 25.2, 26.5, 22.3, 18.3, 11.9, 1.6]
 	}]);
 
-	$scope.openModalMonthlyReportsPerDay = function(arrMonthlyReportsPerDay) {
+	$scope.openModalMonthlyReportsPerDay = function(data) {
 
 		var modalInstance = $uibModal.open({
 			animation: true,
-			templateUrl: 'viewAllMonthlyReportsPerDay.html',
-			controller: 'ViewAllReportsPerDayModalInstance',
+			templateUrl: 'viewAllDataTable.html',
+			controller: 'ViewAllDataTableModalInstance',
 			size: 'md',
 			resolve: {
-				monthlyReports: function() {
-					return arrMonthlyReportsPerDay;
+				data: function() {
+					return data;
 				}
 			}
 		});
@@ -214,6 +252,8 @@ angular.module('minovateApp')
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
 
+		$scope.page.promotors.bestPractices.loaded = false;
+
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
 		// $log.log(storeIdSelected);
@@ -235,20 +275,20 @@ angular.module('minovateApp')
 			// $log.log(success);
 			if (success.data) {
 
-				$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1];
-				// $scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
-				// $scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.accumulated[(success.data.attributes.accumulated.length) - 2][1];
+				if (success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1] !== -1) {
+					$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1];
+				}
 
-				if (success.data.attributes.reports_by_day[0] === -1) {
+				if (success.data.attributes.reports_by_day[0].amount === -1) {
 					$scope.page.promotors.storeVisits.countReportsToday = 0;
 					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
-				} else if (success.data.attributes.reports_by_day[1] === -1) {
+				} else if (success.data.attributes.reports_by_day[1].amount === -1) {
 					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
 				} else {
 					var keepGoing = true;
 					angular.forEach(success.data.attributes.reports_by_day, function(value, key) {
 						if (keepGoing) {
-							if (value.amount === -1) {
+							if (success.data.attributes.reports_by_day[key - 1] && success.data.attributes.reports_by_day[key - 2] && value.amount === -1) {
 								$scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.reports_by_day[key - 1].amount;
 								$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.reports_by_day[key - 2].amount;
 								keepGoing = false;
@@ -265,6 +305,22 @@ angular.module('minovateApp')
 					categories.push(value[0]);
 					values.push(value[1]);
 				});
+
+				$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {}
+				}, {
+					categories: categories,
+					title: {
+						text: ''
+					}
+				}, [{
+					name: 'Reportes',
+					data: values
+				}]);
 
 				$scope.page.promotors.mothlyReportsPerDay.all = [];
 				$scope.page.promotors.mothlyReportsPerDay.latest15 = [];
@@ -286,25 +342,229 @@ angular.module('minovateApp')
 						}
 					}
 				}
+
 				$scope.page.promotors.mothlyReportsPerDay.seeAll.disabled = false;
 				$scope.page.promotors.mothlyReportsPerDay.latest15 = $scope.page.promotors.mothlyReportsPerDay.latest15.reverse();
 				$scope.page.promotors.mothlyReportsPerDay.all = $scope.page.promotors.mothlyReportsPerDay.all.reverse();
 
-				$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {
+				// INI Registro promotores - entrada y salida
+
+				var categoriesAccumulatedCheckins = [],
+					valuesAccumulatedCheckins = [],
+					totalExits = 0;
+				c = 0;
+
+				angular.forEach(success.data.attributes.accumulated_checkins, function(value, key) {
+					// solo se suman al contador si los valores son distintos q -1 (-1 representa q no hay data)
+					if (value[1] !== -1) {
+						totalExits += value[1];
+					}
+					categoriesAccumulatedCheckins.push(value[0]);
+					valuesAccumulatedCheckins.push(value[1]);
+				});
+
+				$scope.page.promotors.registry.entranceAndExit.countTotalExits = totalExits;
+
+				$scope.page.promotors.registry.entranceAndExit.countExitsToday = 0;
+				$scope.page.promotors.registry.entranceAndExit.countExitsYesterday = 0;
+				if (success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 1][1] !== -1) {
+					$scope.page.promotors.registry.entranceAndExit.countExitsToday = success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 1][1];
+				}
+				if (success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 2][1] !== -1) {
+					$scope.page.promotors.registry.entranceAndExit.countExitsYesterday = success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 2][1];
+				}
+
+				$scope.chartConfigAccumulatedCheckins = Utils.setChartConfig('', 409, {}, {
 					min: 0,
 					title: {
 						text: null
 					},
 					stackLabels: {}
 				}, {
-					categories: categories,
+					categories: categoriesAccumulatedCheckins,
 					title: {
 						text: ''
 					}
 				}, [{
-					name: 'Reportes',
-					data: values
+					name: 'Salidas',
+					data: valuesAccumulatedCheckins
 				}]);
+
+				$scope.page.promotors.registry.mothlyExitsPerDay.latest15 = [];
+				$scope.page.promotors.registry.mothlyExitsPerDay.all = [];
+				// $scope.page.promotors.registry.mothlyExitsPerDay.seeAll;
+				c = 0;
+				for (i = success.data.attributes.checkins_by_day.length - 1; i >= 0; i--) {
+					if (success.data.attributes.checkins_by_day[i].amount !== -1) {
+						$scope.page.promotors.registry.mothlyExitsPerDay.all.push({
+							weekDay: success.data.attributes.checkins_by_day[i].week_day,
+							monthDay: success.data.attributes.checkins_by_day[i].month_day,
+							amount: success.data.attributes.checkins_by_day[i].amount
+						});
+						if (c < 15) {
+							$scope.page.promotors.registry.mothlyExitsPerDay.latest15.push({
+								weekDay: success.data.attributes.checkins_by_day[i].week_day,
+								monthDay: success.data.attributes.checkins_by_day[i].month_day,
+								amount: success.data.attributes.checkins_by_day[i].amount
+							});
+							c++;
+						}
+					}
+				}
+				$scope.page.promotors.registry.mothlyExitsPerDay.seeAll.disabled = false;
+				$scope.page.promotors.registry.mothlyExitsPerDay.latest15 = $scope.page.promotors.registry.mothlyExitsPerDay.latest15.reverse();
+				$scope.page.promotors.registry.mothlyExitsPerDay.all = $scope.page.promotors.registry.mothlyExitsPerDay.all.reverse();
+
+				// FIN Registro promotores - entrada y salida
+
+				//  INI Registro de promotores - Horas trabajadas
+
+				var categoriesHours = [],
+					valuesHours = [],
+					totalHours = 0;
+				c = 0;
+
+				angular.forEach(success.data.attributes.accumulated_hours, function(value, key) {
+					totalHours += value[1];
+					categoriesHours.push(value[0]);
+					valuesHours.push(value[1]);
+				});
+				$scope.page.promotors.registry.hours.countTotalHours = totalHours;
+				$scope.page.promotors.registry.hours.countHoursToday = success.data.attributes.accumulated_hours[(success.data.attributes.accumulated_hours.length) - 1][1];
+				$scope.page.promotors.registry.hours.countHoursYesterday = success.data.attributes.accumulated_hours[(success.data.attributes.accumulated_hours.length) - 2][1];
+
+				$scope.chartConfigHours = Utils.setChartConfig('', 409, {}, {
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {}
+				}, {
+					categories: categoriesHours,
+					title: {
+						text: ''
+					}
+				}, [{
+					name: 'Horas',
+					data: valuesHours
+				}]);
+
+				$scope.page.promotors.registry.mothlyHoursPerDay.latest15 = [];
+				$scope.page.promotors.registry.mothlyHoursPerDay.all = [];
+				// $scope.page.promotors.registry.mothlyHoursPerDay.seeAll;
+				c = 0;
+				for (i = success.data.attributes.hours_by_day.length - 1; i >= 0; i--) {
+					if (success.data.attributes.hours_by_day[i].amount !== -1) {
+						$scope.page.promotors.registry.mothlyHoursPerDay.all.push({
+							weekDay: success.data.attributes.hours_by_day[i].week_day,
+							monthDay: success.data.attributes.hours_by_day[i].month_day,
+							amount: success.data.attributes.hours_by_day[i].amount
+						});
+						if (c < 15) {
+							$scope.page.promotors.registry.mothlyHoursPerDay.latest15.push({
+								weekDay: success.data.attributes.hours_by_day[i].week_day,
+								monthDay: success.data.attributes.hours_by_day[i].month_day,
+								amount: success.data.attributes.hours_by_day[i].amount
+							});
+							c++;
+						}
+					}
+				}
+				$scope.page.promotors.registry.mothlyHoursPerDay.seeAll.disabled = false;
+				$scope.page.promotors.registry.mothlyHoursPerDay.latest15 = $scope.page.promotors.registry.mothlyHoursPerDay.latest15.reverse();
+				$scope.page.promotors.registry.mothlyHoursPerDay.all = $scope.page.promotors.registry.mothlyHoursPerDay.all.reverse();
+
+				//  FIN Registro de promotores - Horas trabajadas
+
+				// INI HC a la fecha Dealer
+				$scope.page.promotors.headCounts.byDealer = [];
+				angular.forEach(success.data.attributes.head_counts, function(dealer, keyDealer) {
+
+					$scope.page.promotors.headCounts.byDealer.push({
+						name: dealer.name,
+						playstation: {
+							full: 0,
+							part: 0
+						},
+						nintendo: {
+							full: 0,
+							part: 0
+						},
+						xbox: {
+							full: 0,
+							part: 0
+						}
+					});
+
+					angular.forEach(dealer.brands, function(brand, keyBrand) {
+						if (brand.name === 'PlayStation') {
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].playstation.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].playstation.part = brand.num_part_time;
+						}
+						if (brand.name === 'Nintendo') {
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].nintendo.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].nintendo.part = brand.num_part_time;
+						}
+						if (brand.name === 'Xbox') {
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].xbox.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].xbox.part = brand.num_part_time;
+						}
+					});
+				});
+				// FIN HC a la fecha Dealer
+
+				// INI HC a la fecha - Tienda
+				$scope.page.promotors.headCounts.byStore = [];
+				angular.forEach(success.data.attributes.head_counts_by_store, function(dealer, keyDealer) {
+
+					$scope.page.promotors.headCounts.byStore.push({
+						name: dealer.name,
+						playstation: {
+							full: 0,
+							part: 0
+						},
+						nintendo: {
+							full: 0,
+							part: 0
+						},
+						xbox: {
+							full: 0,
+							part: 0
+						}
+					});
+
+					angular.forEach(dealer.brands, function(brand, keyBrand) {
+						if (brand.name === 'PlayStation') {
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].playstation.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].playstation.part = brand.num_part_time;
+						}
+						if (brand.name === 'Nintendo') {
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].nintendo.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].nintendo.part = brand.num_part_time;
+						}
+						if (brand.name === 'Xbox') {
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].xbox.full = brand.num_full_time;
+							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].xbox.part = brand.num_part_time;
+						}
+					});
+				});
+				// FIN HC a la fecha - Tienda
+
+				// INI Best Practices
+				var bestPractices = [];
+
+
+
+				angular.forEach(success.data.attributes.best_practices, function(value, key) {
+					bestPractices.push({
+						src: value
+					});
+				});
+
+				$scope.page.promotors.bestPractices.list = bestPractices;
+				$scope.page.promotors.bestPractices.loaded = true;
+
+				// FIN Best Practices
 			}
 		}, function(error) {
 			$log.error(error);
@@ -347,7 +607,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('ViewAllReportsPerDayModalInstance', function($scope, $log, $uibModalInstance, monthlyReports, Utils) {
+.controller('ViewAllDataTableModalInstance', function($scope, $log, $uibModalInstance, data, Utils) {
 
 	$scope.modal = {
 		alert: {
@@ -356,7 +616,7 @@ angular.module('minovateApp')
 			title: '',
 			text: ''
 		},
-		mothlyReportsPerDay: monthlyReports
+		dataTable: data
 	};
 
 	$scope.cancel = function() {
