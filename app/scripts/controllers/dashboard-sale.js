@@ -199,6 +199,12 @@ angular.module('minovateApp')
 				value: new Date(),
 				isOpen: false
 			}
+		},
+		sales: {
+			bestPractices: {
+				loaded: false,
+				list: []
+			}
 		}
 	};
 
@@ -233,12 +239,12 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.getStores = function(e, dealerSelected) {
+	$scope.getStores = function(e, zoneSelected, dealerSelected) {
 		$scope.page.filters.store.disabled = true;
 		DataPlayStation.getStores({
 			success: true,
 			detail: 'OK'
-		}, dealerSelected).then(function(data) {
+		}, zoneSelected, dealerSelected).then(function(data) {
 			$log.log(data);
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
@@ -312,6 +318,8 @@ angular.module('minovateApp')
 		var hardwareSales = [];
 		var accesoriesSales = [];
 		var gamesSales = [];
+
+		$scope.page.sales.bestPractices.loaded = false;
 
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
@@ -517,6 +525,20 @@ angular.module('minovateApp')
 					data: topProducts.salesMount
 				}]);
 				// FIN para gráfica - Productos más vendidos Precio y Cantidad
+				
+				// INI Best Practices
+				var bestPractices = [];
+
+				angular.forEach(success.data.attributes.best_practices, function(value, key) {
+					bestPractices.push({
+						src: value
+					});
+				});
+
+				$scope.page.sales.bestPractices.list = bestPractices;
+				$scope.page.sales.bestPractices.loaded = true;
+
+				// FIN Best Practices
 			}
 		}, function(error) {
 			$log.error(error);

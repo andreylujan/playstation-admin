@@ -262,7 +262,9 @@ angular.module('minovateApp')
 				Accept: 'application/vnd.api+json'
 			},
 			params: {
-				include: '@include'
+				include: '@include',
+				'filter[zone_id]': '@zone_id',
+				'filter[dealer_id]': '@dealer_id'
 			}
 		},
 		save: {

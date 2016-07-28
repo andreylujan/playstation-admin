@@ -20,7 +20,7 @@
         </ui-select>
       </div>
       <div class="col-md-2 mt-5">
-        <ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+        <ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
           <ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
           <ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
             <div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
@@ -183,103 +183,130 @@
 
         <div class="tile-widget">
           <div morris-donut-chart donut-data='donutData' style="height: 513px" data-formatter="$"></div>
-      </div>
+        </div>
 
-    </section>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <!-- tile -->
-    <section class="tile" >
-
-      <!-- tile header -->
-      <div class="tile-header dvd dvd-btm">
-        <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
-      </div>
-      <!-- /tile header -->
-
-      <div class="tile-widget">
-        <highchart config="chartConfigPriceAndAmount"></highchart>
-      </div>
-
-    </section>
-    <!-- /tile -->
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <!-- tile -->
-    <section class="tile" >
-
-      <!-- tile header -->
-      <div class="tile-header dvd dvd-btm">
-        <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
-      </div>
-      <!-- /tile header -->
-
-      <div class="tile-widget">
-      <!-- {{chartConfigPriceAndAmount | json}} -->
-        <table class="table table-condensed mt-10">
-          <thead>
-            <tr>
-              <th></th>
-              <th ng-repeat="productName in chartConfigPriceAndAmount.xAxis.categories">{{productName}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Monto</td>
-              <td ng-repeat="productQuiantity in chartConfigPriceAndAmount.series[0].data track by $index">{{productQuiantity | currency:'$ ':0}}</td>
-            </tr>
-            <tr>
-              <td>Cantidad</td>
-              <td ng-repeat="productAmount in chartConfigPriceAndAmount.series[1].data track by $index">{{productAmount | currency:'$ ':0}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </section>
-    <!-- /tile -->
+      </section>
+    </div>
   </div>
 
-</div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- tile -->
+      <section class="tile" >
 
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+        </div>
+        <!-- /tile header -->
 
-<script type="text/ng-template" id="viewAllShareOfSalesModal.html">
-  <div class="modal-body text-gray">
+        <div class="tile-widget">
+          <highchart config="chartConfigPriceAndAmount"></highchart>
+        </div>
 
-    <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+      </section>
+      <!-- /tile -->
+    </div>
+  </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <div ng-repeat="zone in modal.tableShareOfSalesAll">
-          <table class="table table-borderless table-condensed mt-10" >
+  <div class="row">
+    <div class="col-md-12">
+      <!-- tile -->
+      <section class="tile" >
+
+        <!-- tile header -->
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+        </div>
+        <!-- /tile header -->
+
+        <div class="tile-widget">
+          <!-- {{chartConfigPriceAndAmount | json}} -->
+          <table class="table table-condensed mt-10">
             <thead>
               <tr>
-                <th style="width:50%">{{zone.name | capitalize:true}}</th>
                 <th></th>
+                <th ng-repeat="productName in chartConfigPriceAndAmount.xAxis.categories">{{productName}}</th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="company in zone.sales_by_company">
-                <td>{{company.name}}</td>
-                <td class="text-orange-ps">{{company.sales_amount | currency:'$ ':0}}</td>
+              <tr>
+                <td>Monto</td>
+                <td ng-repeat="productQuiantity in chartConfigPriceAndAmount.series[0].data track by $index">{{productQuiantity | currency:'$ ':0}}</td>
+              </tr>
+              <tr>
+                <td>Cantidad</td>
+                <td ng-repeat="productAmount in chartConfigPriceAndAmount.series[1].data track by $index">{{productAmount | currency:'$ ':0}}</td>
               </tr>
             </tbody>
           </table>
-          <hr>
+        </div>
+
+      </section>
+      <!-- /tile -->
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="tile" fullscreen="isFullscreen01">
+
+        <div class="tile-header dvd dvd-btm">
+          <h1 class="custom-font"><strong>Best practice semanales </strong>Venta entre consolas (pendiente)</h1>
+        </div>
+
+        <div class="tile-widget">
+          <div style="width:95%;margin:0 auto">
+            <slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1" ng-if="page.sales.bestPractices.loaded" ng-show="page.sales.bestPractices.list.length">
+              <div ng-repeat="image in page.sales.bestPractices.list">
+                <div class="" ng-include="'imagesTmpl.html'"></div>
+              </div>
+            </slick>
+          </div>
+          <h3 class="text-orange-ps" ng-show="!page.sales.bestPractices.list.length">No se registraron fotos de best practices</h3>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="imagesTmpl.html">
+    <img src="{{image.src}}" alt="pic" style="width:100%">
+  </script>
+
+  <script type="text/ng-template" id="viewAllShareOfSalesModal.html">
+    <div class="modal-body text-gray">
+
+      <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-repeat="zone in modal.tableShareOfSalesAll">
+            <table class="table table-borderless table-condensed mt-10" >
+              <thead>
+                <tr>
+                  <th style="width:50%">{{zone.name | capitalize:true}}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="company in zone.sales_by_company">
+                  <td>{{company.name}}</td>
+                  <td class="text-orange-ps">{{company.sales_amount | currency:'$ ':0}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
-  </div>
-</script>
+    <div class="modal-footer">
+      <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
 
 
 </div>

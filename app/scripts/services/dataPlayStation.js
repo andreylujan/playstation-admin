@@ -126,7 +126,7 @@ angular.module('minovateApp')
 		});
 		return promise;
 	};
-	var getStores = function(e, dealerSelected) {
+	var getStores = function(e, zoneSelected, dealerSelected) {
 
 		var defered = $q.defer();
 		var promise = defered.promise;
@@ -141,7 +141,10 @@ angular.module('minovateApp')
 			return;
 		}
 
-		Stores.query({}, function(success) {
+		Stores.query({
+			'filter[zone_id]': zoneSelected.id,
+			'filter[dealer_id]': dealerSelected.id
+		}, function(success) {
 			if (success.data) {
 
 				stores.push({
@@ -149,17 +152,13 @@ angular.module('minovateApp')
 					name: 'Todas las Tiendas'
 				});
 
-				for (i = 0; i < storesIncluded.length; i++) {
-					for (j = 0; j < dealerSelected.storesIds.length; j++) {
-						if (parseInt(dealerSelected.storesIds[j].id) === parseInt(success.data[i].id)) {
-							stores.push({
-								id: parseInt(success.data[i].id),
-								name: success.data[i].attributes.name
-							});
-							break;
-						}
-					}
+				for (var i = 0; i < success.data.length; i++) {
+					stores.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].attributes.name
+					});
 				}
+				
 				defered.resolve({
 					success: false,
 					detail: 'OK',

@@ -20,7 +20,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+				<ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
@@ -422,23 +422,33 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Precios comunicados (pendiente)</strong></h1>
+					<h1 class="custom-font"><strong>Precios comunicados</strong></h1>
 				</div>
 
 				<div class="tile-widget">
 					<p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
-					<div easypiechart options="accomplishmentToday.options" percent="accomplishmentToday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+					<div easypiechart options="page.promotors.pricesCommunicated.percenToday.options" percent="page.promotors.pricesCommunicated.percenToday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.pricesCommunicated.percenToday.show">
 						<i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
 					</div>
-					<p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps">67 %</strong></p>
+					<p class="text-elg text-center mt-20 mb-0" ng-show="page.promotors.pricesCommunicated.percenToday.show">
+						<strong class="text-yellow-ps">{{page.promotors.pricesCommunicated.percenToday.value}} %</strong>
+					</p>
+					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.pricesCommunicated.percenToday.show">
+						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+					</p>
 
 					<hr>
 
 					<p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
-					<div easypiechart options="accomplishmentYesterday.options" percent="accomplishmentYesterday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+					<div easypiechart options="page.promotors.pricesCommunicated.percentYesterday.options" percent="page.promotors.pricesCommunicated.percentYesterday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.pricesCommunicated.percentYesterday.show">
 						<i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
 					</div>
-					<p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps">67 %</strong></p>
+					<p class="text-elg text-center mt-20 mb-0" ng-show="page.promotors.pricesCommunicated.percentYesterday.show">
+						<strong class="text-blue-ps">{{page.promotors.pricesCommunicated.percentYesterday.value}} %</strong>
+					</p>
+					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.pricesCommunicated.percentYesterday.show">
+						<strong class="text-orange-ps">No se registraron reportes ayer</strong>
+					</p>
 				</div>
 
 			</section>
@@ -453,11 +463,11 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen (pendiente)</h1>
+					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen</h1>
 				</div>
 
 				<div class="tile-widget">
-					<table class="table table-condensed table-hover mt-10">
+					<table class="table table-condensed table-hover mt-10" ng-show="page.promotors.pricesCommunicated.byStore.list.length">
 						<thead>
 							<tr>
 								<th>Zona</th>
@@ -466,13 +476,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Oriente</td>
-								<td class="text-center text-orange-ps">Falabella</td>
-								<td class="text-center">Parque Arauco</td>
+							<tr ng-repeat="communicatedPrice in page.promotors.pricesCommunicated.byStore.list">
+								<td>{{communicatedPrice.zoneName}}</td>
+								<td class="text-center text-orange-ps">{{communicatedPrice.dealerName}}</td>
+								<td class="text-center">{{communicatedPrice.dealerName}}</td>
 							</tr>
 						</tbody>
 					</table>
+					<h3 ng-show="!page.promotors.pricesCommunicated.byStore.list.length" class="text-orange-ps text-center">No hay datos</h3>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -630,23 +641,29 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Promociones destacadas (pendiente)</strong></h1>
+					<h1 class="custom-font"><strong>Promociones comunicadas</strong></h1>
 				</div>
 
 				<div class="tile-widget">
 					<p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
-					<div easypiechart options="accomplishmentToday.options" percent="accomplishmentToday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+					<div easypiechart options="accomplishmentToday.options" percent="page.promotors.promotionsCommunicated.percenToday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.promotionsCommunicated.percenToday.show">
 						<i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
 					</div>
-					<p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps">67 %</strong></p>
+					<p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps" ng-show="page.promotors.promotionsCommunicated.percenToday.show">{{page.promotors.promotionsCommunicated.percenToday.value}} %</strong></p>
+					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.promotionsCommunicated.percenToday.show">
+						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+					</p>
 
 					<hr>
 
 					<p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
-					<div easypiechart options="accomplishmentYesterday.options" percent="accomplishmentYesterday.percent" class="easypiechart block" style="width: 140px; height: 140px;">
+					<div easypiechart options="accomplishmentYesterday.options" percent="page.promotors.promotionsCommunicated.percentYesterday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.promotionsCommunicated.percentYesterday.show">
 						<i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
 					</div>
-					<p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps">67 %</strong></p>
+					<p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps" ng-show="page.promotors.promotionsCommunicated.percentYesterday.show">{{page.promotors.promotionsCommunicated.percentYesterday.value}} %</strong></p>
+					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.promotionsCommunicated.percentYesterday.show">
+						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+					</p>
 				</div>
 
 			</section>
@@ -661,11 +678,11 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Promociones destacadas </strong>Tiendas que no cumplen (pendiente)</h1>
+					<h1 class="custom-font"><strong>Promociones comunicadas </strong>Tiendas que no cumplen</h1>
 				</div>
 
 				<div class="tile-widget">
-					<table class="table table-condensed table-hover mt-10">
+					<table class="table table-condensed table-hover mt-10" ng-show="page.promotors.promotionsCommunicated.byStore.list.length">
 						<thead>
 							<tr>
 								<th>Zona</th>
@@ -674,13 +691,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Oriente</td>
-								<td class="text-center text-orange-ps">Falabella</td>
-								<td class="text-center">Parque Arauco</td>
+							<tr ng-repeat="communicatedPromotion in page.promotors.promotionsCommunicated.byStore.list">
+								<td>{{communicatedPromotion.zoneName}}</td>
+								<td class="text-center text-orange-ps">{{communicatedPromotion.dealerName}}</td>
+								<td class="text-center">{{communicatedPromotion.dealerName}}</td>
 							</tr>
 						</tbody>
 					</table>
+					<h3 ng-show="!page.promotors.promotionsCommunicated.byStore.list.length" class="text-orange-ps text-center">No hay datos</h3>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -746,7 +764,7 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col-md-12">
 			<section class="tile" fullscreen="isFullscreen01">
 
@@ -762,17 +780,17 @@
 							</div>
 						</slick>
 					</div>
-					<h3 class="text-orange-ps" ng-show="!page.promotors.bestPractices.list.length">No se registraron fotos best practices</h3>
+					<h3 class="text-orange-ps" ng-show="!page.promotors.bestPractices.list.length">No se registraron fotos de best practices</h3>
 				</div>
 
 			</section>
 
 		</div>
-	</div>
+	</div> -->
 
-	<script type="text/ng-template" id="imagesTmpl.html">
+	<!-- <script type="text/ng-template" id="imagesTmpl.html">
 		<img src="{{image.src}}" alt="pic" style="width:100%">
-	</script>
+	</script> -->
 
 	<script type="text/ng-template" id="viewAllDataTable.html">
 		<div class="modal-body text-gray">

@@ -90,10 +90,82 @@ angular.module('minovateApp')
 				byDealer: [],
 				byStore: []
 			},
-			bestPractices: {
-				loaded: false,
-				list: []
+			pricesCommunicated: {
+				percenToday: {
+					value: 0,
+					show: true,
+					options: {
+						animate: {
+							duration: 3000,
+							enabled: true
+						},
+						barColor: '#fcc111',
+						scaleColor: false,
+						lineCap: 'round',
+						size: 140,
+						lineWidth: 4
+					}
+				},
+				percentYesterday: {
+					value: 0,
+					show: true,
+					options: {
+						animate: {
+							duration: 3000,
+							enabled: true
+						},
+						barColor: '#fcc111',
+						scaleColor: false,
+						lineCap: 'round',
+						size: 140,
+						lineWidth: 4
+					}
+				},
+				byStore: {
+					show: true,
+					list: []
+				}
+			},
+			promotionsCommunicated: {
+				percenToday: {
+					value: 0,
+					show: true,
+					options: {
+						animate: {
+							duration: 3000,
+							enabled: true
+						},
+						barColor: '#fcc111',
+						scaleColor: false,
+						lineCap: 'round',
+						size: 140,
+						lineWidth: 4
+					}
+				},
+				percentYesterday: {
+					value: 0,
+					show: true,
+					options: {
+						animate: {
+							duration: 3000,
+							enabled: true
+						},
+						barColor: '#fcc111',
+						scaleColor: false,
+						lineCap: 'round',
+						size: 140,
+						lineWidth: 4
+					}
+				},
+				byStore: {
+					show: true,
+					list: []
+				}
 			}
+			// bestPractices: {
+			// 	loaded: false,
+			// 	list: []
+			// }
 		}
 	};
 
@@ -114,6 +186,7 @@ angular.module('minovateApp')
 	};
 
 	$scope.getDealers = function(e, zoneSelected) {
+
 		$scope.page.filters.dealer.disabled = true;
 		DataPlayStation.getDealers({
 			success: true,
@@ -125,14 +198,19 @@ angular.module('minovateApp')
 		}).catch(function(error) {
 			$log.error(error);
 		});
+
+		// Cada vez que se cargan los dealers, se limpia la lista de tiendas y se deselecciona la tienda anteriormente seleccionada
+		$scope.page.filters.store.list = [];
+		$scope.page.filters.store.selected = null;
 	};
 
-	$scope.getStores = function(e, dealerSelected) {
+	$scope.getStores = function(e, zoneSelected, dealerSelected) {
+
 		$scope.page.filters.store.disabled = true;
 		DataPlayStation.getStores({
 			success: true,
 			detail: 'OK'
-		}, dealerSelected).then(function(data) {
+		}, zoneSelected, dealerSelected).then(function(data) {
 			$log.log(data);
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
@@ -252,7 +330,7 @@ angular.module('minovateApp')
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
 
-		$scope.page.promotors.bestPractices.loaded = false;
+		// $scope.page.promotors.bestPractices.loaded = false;
 
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
@@ -278,24 +356,26 @@ angular.module('minovateApp')
 				if (success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1] !== -1) {
 					$scope.page.promotors.storeVisits.countTotalReports = success.data.attributes.accumulated_reports[(success.data.attributes.accumulated_reports.length) - 1][1];
 				}
+				$scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.num_reports_today;
+				$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.num_reports_yesterday;
 
-				if (success.data.attributes.reports_by_day[0].amount === -1) {
-					$scope.page.promotors.storeVisits.countReportsToday = 0;
-					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
-				} else if (success.data.attributes.reports_by_day[1].amount === -1) {
-					$scope.page.promotors.storeVisits.countReportsYesterday = 0;
-				} else {
-					var keepGoing = true;
-					angular.forEach(success.data.attributes.reports_by_day, function(value, key) {
-						if (keepGoing) {
-							if (success.data.attributes.reports_by_day[key - 1] && success.data.attributes.reports_by_day[key - 2] && value.amount === -1) {
-								$scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.reports_by_day[key - 1].amount;
-								$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.reports_by_day[key - 2].amount;
-								keepGoing = false;
-							}
-						}
-					});
-				}
+				// if (success.data.attributes.reports_by_day[0].amount === -1) {
+				// 	// $scope.page.promotors.storeVisits.countReportsToday = 0;
+				// 	// $scope.page.promotors.storeVisits.countReportsYesterday = 0;
+				// } else if (success.data.attributes.reports_by_day[1].amount === -1) {
+				// 	// $scope.page.promotors.storeVisits.countReportsYesterday = 0;
+				// } else {
+				// 	var keepGoing = true;
+				// 	angular.forEach(success.data.attributes.reports_by_day, function(value, key) {
+				// 		if (keepGoing) {
+				// 			if (success.data.attributes.reports_by_day[key - 1] && success.data.attributes.reports_by_day[key - 2] && value.amount === -1) {
+				// 				// $scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.reports_by_day[key - 1].amount;
+				// 				// $scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.reports_by_day[key - 2].amount;
+				// 				keepGoing = false;
+				// 			}
+				// 		}
+				// 	});
+				// }
 
 				var categories = [],
 					values = [],
@@ -364,15 +444,8 @@ angular.module('minovateApp')
 				});
 
 				$scope.page.promotors.registry.entranceAndExit.countTotalExits = totalExits;
-
-				$scope.page.promotors.registry.entranceAndExit.countExitsToday = 0;
-				$scope.page.promotors.registry.entranceAndExit.countExitsYesterday = 0;
-				if (success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 1][1] !== -1) {
-					$scope.page.promotors.registry.entranceAndExit.countExitsToday = success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 1][1];
-				}
-				if (success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 2][1] !== -1) {
-					$scope.page.promotors.registry.entranceAndExit.countExitsYesterday = success.data.attributes.accumulated_checkins[(success.data.attributes.accumulated_checkins.length) - 2][1];
-				}
+				$scope.page.promotors.registry.entranceAndExit.countExitsToday = success.data.attributes.num_checkins_today;
+				$scope.page.promotors.registry.entranceAndExit.countExitsYesterday = success.data.attributes.num_checkins_yesterday;
 
 				$scope.chartConfigAccumulatedCheckins = Utils.setChartConfig('', 409, {}, {
 					min: 0,
@@ -429,9 +502,11 @@ angular.module('minovateApp')
 					categoriesHours.push(value[0]);
 					valuesHours.push(value[1]);
 				});
+
+
 				$scope.page.promotors.registry.hours.countTotalHours = totalHours;
-				$scope.page.promotors.registry.hours.countHoursToday = success.data.attributes.accumulated_hours[(success.data.attributes.accumulated_hours.length) - 1][1];
-				$scope.page.promotors.registry.hours.countHoursYesterday = success.data.attributes.accumulated_hours[(success.data.attributes.accumulated_hours.length) - 2][1];
+				$scope.page.promotors.registry.hours.countHoursToday = success.data.attributes.num_hours_today;
+				$scope.page.promotors.registry.hours.countHoursYesterday = success.data.attributes.num_hours_yesterday;
 
 				$scope.chartConfigHours = Utils.setChartConfig('', 409, {}, {
 					min: 0,
@@ -548,21 +623,70 @@ angular.module('minovateApp')
 						}
 					});
 				});
-				// FIN HC a la fecha - Tienda
 
-				// INI Best Practices
-				var bestPractices = [];
+				// INI Precios comunicados porcentajes
 
+				// el servicio trae -1 si no hay reportes hoy, si pasa eso, no se muestra el grafico
+				if (success.data.attributes.percent_prices_communicated_today === -1) {
+					$scope.page.promotors.pricesCommunicated.percenToday.show = false;
+				}
+				// el servicio trae -1 si no hay reportes ayer, si pasa eso, no se muestra el grafico
+				if (success.data.attributes.percent_prices_communicated_yesterday === -1) {
+					$scope.page.promotors.pricesCommunicated.percentYesterday.show = false;
+				}
+				$scope.page.promotors.pricesCommunicated.percenToday.value = success.data.attributes.percent_prices_communicated_today * 100;
+				$scope.page.promotors.pricesCommunicated.percentYesterday.value = success.data.attributes.percent_prices_communicated_yesterday * 100;
+				// FIN Precios comunicados porcentajes
 
-
-				angular.forEach(success.data.attributes.best_practices, function(value, key) {
-					bestPractices.push({
-						src: value
+				// INI Precios comunicados Tiendas que no cumplen
+				angular.forEach(success.data.attributes.communicated_prices_by_store, function(value, key) {
+					$scope.page.promotors.pricesCommunicated.byStore.list.push({
+						zoneName: value.zone_name,
+						dealerName: value.dealer_name,
+						storeName: value.store_name
 					});
 				});
 
-				$scope.page.promotors.bestPractices.list = bestPractices;
-				$scope.page.promotors.bestPractices.loaded = true;
+				// FIN Precios comunicados Tiendas que no cumplen
+
+				// INI Promociones comunicadas
+
+				// el servicio trae -1 si no hay reportes hoy, si pasa eso, no se muestra el grafico
+				if (success.data.attributes.percent_promotions_communicated_today === -1) {
+					$scope.page.promotors.promotionsCommunicated.percenToday.show = false;
+				}
+				// el servicio trae -1 si no hay reportes ayer, si pasa eso, no se muestra el grafico
+				if (success.data.attributes.percent_promotions_communicated_yesterday === -1) {
+					$scope.page.promotors.promotionsCommunicated.percentYesterday.show = false;
+				}
+				$scope.page.promotors.promotionsCommunicated.percenToday.value = success.data.attributes.percent_prices_communicated_today * 100;
+				$scope.page.promotors.promotionsCommunicated.percentYesterday.value = success.data.attributes.percent_prices_communicated_yesterday * 100;
+				// FIN Promociones comunicadas
+
+				// INI Promociones comunicadas Tiendas que no cumplen
+				angular.forEach(success.data.attributes.communicated_promotions_by_store, function(value, key) {
+					$scope.page.promotors.promotionsCommunicated.byStore.list.push({
+						zoneName: value.zone_name,
+						dealerName: value.dealer_name,
+						storeName: value.store_name
+					});
+				});
+
+				// FIN Promociones comunicadas Tiendas que no cumplen
+
+				// FIN HC a la fecha - Tienda
+
+				// INI Best Practices
+				// var bestPractices = [];
+
+				// angular.forEach(success.data.attributes.best_practices, function(value, key) {
+				// 	bestPractices.push({
+				// 		src: value
+				// 	});
+				// });
+
+				// $scope.page.promotors.bestPractices.list = bestPractices;
+				// $scope.page.promotors.bestPractices.loaded = true;
 
 				// FIN Best Practices
 			}
