@@ -12,9 +12,9 @@
           <a ui-sref="app.dashboard"><fa name="dashboard"></fa> <span>Dashboard</span></a>
           <ul>
             <li ui-sref-active="active"><a ui-sref="app.dashboard.sale"><fa name="caret-right"></fa> Venta</a></li>
-            <li ui-sref-active="active"><a ui-sref="app.users.invite"><fa name="caret-right"></fa> Stock</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.dashboard.stock"><fa name="caret-right"></fa> Stock</a></li>
             <li ui-sref-active="active"><a ui-sref="app.dashboard.promotersAndActivities"><fa name="caret-right"></fa> Promotores y actividades</a></li>
-            <li ui-sref-active="active"><a ui-sref="app.users.invite"><fa name="caret-right"></fa> Metas y comparativos</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.dashboard.goals"><fa name="caret-right"></fa> Metas y comparativos</a></li>
           </ul>
         </li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.users')}" ng-show="nav.users.show">

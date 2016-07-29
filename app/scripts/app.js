@@ -212,6 +212,18 @@ angular
 				controller: 'DashboardPromotersAndActivitiesCtrl',
 				templateUrl: 'views/tmpl/dashboard/promoters-and-activities.html'
 			})
+			//Dashboard/sale
+			.state('app.dashboard.stock', {
+				url: '/stock',
+				controller: 'DashboardStockCtrl',
+				templateUrl: 'views/tmpl/dashboard/stock.html'
+			})
+			//Dashboard/goals
+			.state('app.dashboard.goals', {
+				url: '/goals',
+				controller: 'DashboardGoalsCtrl',
+				templateUrl: 'views/tmpl/dashboard/goals.html'
+			})
 			//users
 			.state('app.users', {
 				url: '/users',

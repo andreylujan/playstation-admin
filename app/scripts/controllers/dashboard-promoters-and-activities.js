@@ -114,7 +114,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#fcc111',
+						barColor: '#3f5b71',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,
@@ -124,6 +124,11 @@ angular.module('minovateApp')
 				byStore: {
 					show: true,
 					list: []
+				},
+				byDay: {
+					show: true,
+					all: [],
+					latest15: []
 				}
 			},
 			promotionsCommunicated: {
@@ -150,7 +155,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#fcc111',
+						barColor: '#3f5b71',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,
@@ -160,6 +165,11 @@ angular.module('minovateApp')
 				byStore: {
 					show: true,
 					list: []
+				},
+				byDay: {
+					show: true,
+					all: [],
+					latest15: []
 				}
 			}
 			// bestPractices: {
@@ -240,70 +250,30 @@ angular.module('minovateApp')
 
 	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {}, {}, []);
 
-	$scope.accomplishmentToday = {
-		percent: 67,
-		options: {
-			animate: {
-				duration: 3000,
-				enabled: true
-			},
-			barColor: '#fcc111',
-			scaleColor: false,
-			lineCap: 'round',
-			size: 140,
-			lineWidth: 4
-		}
-	};
-
-	$scope.accomplishmentYesterday = {
-		percent: 67,
-		options: {
-			animate: {
-				duration: 3000,
-				enabled: true
-			},
-			barColor: '#3f5b71',
-			scaleColor: false,
-			lineCap: 'round',
-			size: 140,
-			lineWidth: 4
-		}
-	};
-
-	$scope.pricesAnnouncementsDay = Utils.setChartConfig('column', 455, {}, [{
-		min: 0,
-		title: {
-			text: null
-		},
-		stackLabels: {}
-	}, { // Secondary yAxis
-		title: {
-			text: '',
-			style: {}
-		},
-		labels: {
-			style: {}
-		}
-	}], {
-		categories: [],
-		title: {
-			text: ''
-		}
-	}, [{
-		name: 'Reportes creados',
-		data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-	}, {
-		name: 'Reportes que cumplen',
-		type: 'spline',
-		data: [6.0, 6.9, 1.5, 5.5, 7.2, 21.5, 25.2, 26.5, 22.3, 18.3, 11.9, 1.6]
-	}]);
-
 	$scope.openModalMonthlyReportsPerDay = function(data) {
 
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'viewAllDataTable.html',
 			controller: 'ViewAllDataTableModalInstance',
+			size: 'md',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+
+	};
+
+	$scope.openModalAllDataTableCommunicatedPricesByDay = function(data) {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'allDataTableCommunicatedPricesByDay.html',
+			controller: 'allDataTableCommunicatedPricesByDayModalInstance',
 			size: 'md',
 			resolve: {
 				data: function() {
@@ -358,24 +328,6 @@ angular.module('minovateApp')
 				}
 				$scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.num_reports_today;
 				$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.num_reports_yesterday;
-
-				// if (success.data.attributes.reports_by_day[0].amount === -1) {
-				// 	// $scope.page.promotors.storeVisits.countReportsToday = 0;
-				// 	// $scope.page.promotors.storeVisits.countReportsYesterday = 0;
-				// } else if (success.data.attributes.reports_by_day[1].amount === -1) {
-				// 	// $scope.page.promotors.storeVisits.countReportsYesterday = 0;
-				// } else {
-				// 	var keepGoing = true;
-				// 	angular.forEach(success.data.attributes.reports_by_day, function(value, key) {
-				// 		if (keepGoing) {
-				// 			if (success.data.attributes.reports_by_day[key - 1] && success.data.attributes.reports_by_day[key - 2] && value.amount === -1) {
-				// 				// $scope.page.promotors.storeVisits.countReportsToday = success.data.attributes.reports_by_day[key - 1].amount;
-				// 				// $scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.reports_by_day[key - 2].amount;
-				// 				keepGoing = false;
-				// 			}
-				// 		}
-				// 	});
-				// }
 
 				var categories = [],
 					values = [],
@@ -465,7 +417,7 @@ angular.module('minovateApp')
 
 				$scope.page.promotors.registry.mothlyExitsPerDay.latest15 = [];
 				$scope.page.promotors.registry.mothlyExitsPerDay.all = [];
-				// $scope.page.promotors.registry.mothlyExitsPerDay.seeAll;
+
 				c = 0;
 				for (i = success.data.attributes.checkins_by_day.length - 1; i >= 0; i--) {
 					if (success.data.attributes.checkins_by_day[i].amount !== -1) {
@@ -526,7 +478,7 @@ angular.module('minovateApp')
 
 				$scope.page.promotors.registry.mothlyHoursPerDay.latest15 = [];
 				$scope.page.promotors.registry.mothlyHoursPerDay.all = [];
-				// $scope.page.promotors.registry.mothlyHoursPerDay.seeAll;
+
 				c = 0;
 				for (i = success.data.attributes.hours_by_day.length - 1; i >= 0; i--) {
 					if (success.data.attributes.hours_by_day[i].amount !== -1) {
@@ -608,6 +560,9 @@ angular.module('minovateApp')
 						}
 					});
 
+					$log.log('$scope.page.promotors.headCounts.byStore');
+					$log.log($scope.page.promotors.headCounts.byStore);
+
 					angular.forEach(dealer.brands, function(brand, keyBrand) {
 						if (brand.name === 'PlayStation') {
 							$scope.page.promotors.headCounts.byStore[$scope.page.promotors.headCounts.byStore.length - 1].playstation.full = brand.num_full_time;
@@ -629,10 +584,14 @@ angular.module('minovateApp')
 				// el servicio trae -1 si no hay reportes hoy, si pasa eso, no se muestra el grafico
 				if (success.data.attributes.percent_prices_communicated_today === -1) {
 					$scope.page.promotors.pricesCommunicated.percenToday.show = false;
+				} else {
+					$scope.page.promotors.pricesCommunicated.percenToday.show = true;
 				}
 				// el servicio trae -1 si no hay reportes ayer, si pasa eso, no se muestra el grafico
 				if (success.data.attributes.percent_prices_communicated_yesterday === -1) {
 					$scope.page.promotors.pricesCommunicated.percentYesterday.show = false;
+				} else {
+					$scope.page.promotors.pricesCommunicated.percentYesterday.show = true;
 				}
 				$scope.page.promotors.pricesCommunicated.percenToday.value = success.data.attributes.percent_prices_communicated_today * 100;
 				$scope.page.promotors.pricesCommunicated.percentYesterday.value = success.data.attributes.percent_prices_communicated_yesterday * 100;
@@ -649,15 +608,88 @@ angular.module('minovateApp')
 
 				// FIN Precios comunicados Tiendas que no cumplen
 
+				// INI Precios comunicados Al día
+				var accuulatedPricesCategories = [],
+					accumulatedPricesCreatedReports = [],
+					accumulatedPricesReportsThatMeet = [];
+
+				angular.forEach(success.data.attributes.accumulated_prices, function(value, key) {
+					accuulatedPricesCategories.push(value[0]);
+					accumulatedPricesReportsThatMeet.push(value[1]);
+					accumulatedPricesCreatedReports.push(value[2]);
+				});
+
+				$scope.pricesAnnouncementsDay = Utils.setChartConfig('column', 455, {}, [{
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {}
+				}, { // Secondary yAxis
+					title: {
+						text: '',
+						style: {}
+					},
+					labels: {
+						style: {}
+					}
+				}], {
+					categories: accuulatedPricesCategories,
+					title: {
+						text: ''
+					}
+				}, [{
+					name: 'Reportes creados',
+					data: accumulatedPricesCreatedReports
+				}, {
+					name: 'Reportes que cumplen',
+					type: 'spline',
+					data: accumulatedPricesReportsThatMeet
+				}]);
+
+
+				$scope.page.promotors.pricesCommunicated.byDay.all = [];
+				$scope.page.promotors.pricesCommunicated.byDay.latest15 = [];
+				c = 0;
+
+				for (i = success.data.attributes.prices_by_day.length - 1; i >= 0; i--) {
+					if (success.data.attributes.prices_by_day[i].num_total !== -1) {
+						$scope.page.promotors.pricesCommunicated.byDay.all.push({
+							weekDay: success.data.attributes.prices_by_day[i].week_day,
+							monthDay: success.data.attributes.prices_by_day[i].month_day,
+							numFulfilled: success.data.attributes.prices_by_day[i].num_fulfilled,
+							numTotal: success.data.attributes.prices_by_day[i].num_total
+						});
+						if (c < 15) {
+							$scope.page.promotors.pricesCommunicated.byDay.latest15.push({
+								weekDay: success.data.attributes.prices_by_day[i].week_day,
+								monthDay: success.data.attributes.prices_by_day[i].month_day,
+								numFulfilled: success.data.attributes.prices_by_day[i].num_fulfilled,
+								numTotal: success.data.attributes.prices_by_day[i].num_total
+							});
+							c++;
+						}
+					}
+				}
+
+				$scope.page.promotors.pricesCommunicated.byDay.latest15 = $scope.page.promotors.pricesCommunicated.byDay.latest15.reverse();
+				$scope.page.promotors.pricesCommunicated.byDay.all = $scope.page.promotors.pricesCommunicated.byDay.all.reverse();
+
+				// FIN Precios comunicados Al día
+
 				// INI Promociones comunicadas
 
 				// el servicio trae -1 si no hay reportes hoy, si pasa eso, no se muestra el grafico
 				if (success.data.attributes.percent_promotions_communicated_today === -1) {
 					$scope.page.promotors.promotionsCommunicated.percenToday.show = false;
+				} else {
+					$scope.page.promotors.promotionsCommunicated.percenToday.show = true;
 				}
 				// el servicio trae -1 si no hay reportes ayer, si pasa eso, no se muestra el grafico
 				if (success.data.attributes.percent_promotions_communicated_yesterday === -1) {
 					$scope.page.promotors.promotionsCommunicated.percentYesterday.show = false;
+				} else {
+					$scope.page.promotors.promotionsCommunicated.percentYesterday.show = true;
 				}
 				$scope.page.promotors.promotionsCommunicated.percenToday.value = success.data.attributes.percent_prices_communicated_today * 100;
 				$scope.page.promotors.promotionsCommunicated.percentYesterday.value = success.data.attributes.percent_prices_communicated_yesterday * 100;
@@ -672,23 +704,75 @@ angular.module('minovateApp')
 					});
 				});
 
-				// FIN Promociones comunicadas Tiendas que no cumplen
+				// INI Promociones destacadas  - Al día
+				var accumulatedPromotionsCategories = [],
+					accumulatedPromotionsCreatedReports = [],
+					accumulatedPromotionsReportsThatMeet = [];
 
-				// FIN HC a la fecha - Tienda
+				angular.forEach(success.data.attributes.accumulated_promotions, function(value, key) {
+					accumulatedPromotionsCategories.push(value[0]);
+					accumulatedPromotionsReportsThatMeet.push(value[1]);
+					accumulatedPromotionsCreatedReports.push(value[2]);
+				});
 
-				// INI Best Practices
-				// var bestPractices = [];
+				$scope.promotions = Utils.setChartConfig('column', 455, {}, [{
+					min: 0,
+					title: {
+						text: null
+					},
+					stackLabels: {}
+				}, { // Secondary yAxis
+					title: {
+						text: '',
+						style: {}
+					},
+					labels: {
+						style: {}
+					}
+				}], {
+					categories: accumulatedPromotionsCategories,
+					title: {
+						text: ''
+					}
+				}, [{
+					name: 'Reportes creados',
+					data: accumulatedPromotionsCreatedReports
+				}, {
+					name: 'Reportes que cumplen',
+					type: 'spline',
+					data: accumulatedPromotionsReportsThatMeet
+				}]);
 
-				// angular.forEach(success.data.attributes.best_practices, function(value, key) {
-				// 	bestPractices.push({
-				// 		src: value
-				// 	});
-				// });
 
-				// $scope.page.promotors.bestPractices.list = bestPractices;
-				// $scope.page.promotors.bestPractices.loaded = true;
+				$scope.page.promotors.promotionsCommunicated.byDay.all = [];
+				$scope.page.promotors.promotionsCommunicated.byDay.latest15 = [];
+				c = 0;
 
-				// FIN Best Practices
+				for (i = success.data.attributes.promotions_by_day.length - 1; i >= 0; i--) {
+					if (success.data.attributes.promotions_by_day[i].num_total !== -1) {
+						$scope.page.promotors.promotionsCommunicated.byDay.all.push({
+							weekDay: success.data.attributes.promotions_by_day[i].week_day,
+							monthDay: success.data.attributes.promotions_by_day[i].month_day,
+							numFulfilled: success.data.attributes.promotions_by_day[i].num_fulfilled,
+							numTotal: success.data.attributes.promotions_by_day[i].num_total
+						});
+						if (c < 15) {
+							$scope.page.promotors.promotionsCommunicated.byDay.latest15.push({
+								weekDay: success.data.attributes.promotions_by_day[i].week_day,
+								monthDay: success.data.attributes.promotions_by_day[i].month_day,
+								numFulfilled: success.data.attributes.promotions_by_day[i].num_fulfilled,
+								numTotal: success.data.attributes.promotions_by_day[i].num_total
+							});
+							c++;
+						}
+					}
+				}
+
+				$scope.page.promotors.promotionsCommunicated.byDay.latest15 = $scope.page.promotors.promotionsCommunicated.byDay.latest15.reverse();
+				$scope.page.promotors.promotionsCommunicated.byDay.all = $scope.page.promotors.promotionsCommunicated.byDay.all.reverse();
+
+				// FIN Promociones destacadas  - Al día
+
 			}
 		}, function(error) {
 			$log.error(error);
@@ -732,6 +816,24 @@ angular.module('minovateApp')
 })
 
 .controller('ViewAllDataTableModalInstance', function($scope, $log, $uibModalInstance, data, Utils) {
+
+	$scope.modal = {
+		alert: {
+			color: '',
+			show: '',
+			title: '',
+			text: ''
+		},
+		dataTable: data
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+})
+
+.controller('allDataTableCommunicatedPricesByDayModalInstance', function($scope, $log, $uibModalInstance, data, Utils) {
 
 	$scope.modal = {
 		alert: {

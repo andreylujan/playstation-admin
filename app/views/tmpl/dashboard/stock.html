@@ -1,0 +1,155 @@
+<div class="page page-dashboard">
+
+	<div class="pageheader">
+
+		<h2>{{page.title}}</h2>
+
+		<div class="row">
+			<div class="col-md-12">
+				<button class="bg-greensea btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Descargar resumen (.xls)"><i class="fa fa-file-excel-o"></i> </button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-2 mt-5">
+				<ui-select class="red-ps br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
+					<ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name  | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="zone.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-2 mt-5">
+				<ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-2 mt-5">
+				<ui-select class="yellow-ps br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Tiendas">
+					<ui-select-match placeholder="Seleccionar tienda..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="store in page.filters.store.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="store.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-2 mt-5">
+				<ui-select class="blue-ps br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
+					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
+						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-2 mt-5">
+				<ui-select class="blue-ps br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
+						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-2 mt-5">
+				<div class="input-group">
+					<input type="text" class="form-control bg-red-ps br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default bg-red-ps br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+
+		<!-- col -->
+		<div class="col-md-12">
+
+			<!-- tile -->
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Stock </strong>Tiendas con quiebre</h1>
+				</div>
+				<!-- {{page.stock.stockBreaks.tableParams.data}} -->
+
+				<div class="tile-widget">
+					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom">
+            <tr ng-repeat="stockBreak in $data">
+              <td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
+                {{stockBreak.storeName | capitalize:true}}
+              </td>
+              <td data-title="'Dealer'" sortable="'dealerName'" filter="{'dealerName': 'text'}">
+                {{stockBreak.dealerName | capitalize:true}}
+              </td>
+              <td data-title="'Producto'" sortable="'productName'" filter="{'product_name': 'text'}">
+                {{stockBreak.productName | capitalize:true}}
+              </td>
+              <td data-title="'Unidades'" sortable="'units'" filter="{'units': 'text'}">
+                {{stockBreak.units | currency:'':0}}
+              </td>
+              <td data-title="'Identificador'" sortable="'identifier'" filter="{'identifier': 'text'}">
+                {{stockBreak.identifier}}
+              </td>
+            </tr>
+          </table>
+				</div>
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+		<!-- /col -->
+	</div>
+
+	<div class="row">
+
+		<!-- col -->
+		<div class="col-md-12">
+
+			<!-- tile -->
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Productos más vendidos </strong>Todos</h1>
+				</div>
+<!-- {{page.stock.topProducts.tableParams.data}} -->
+				<div class="tile-widget">
+					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom">
+            <tr ng-repeat="topProduct in page.stock.topProducts.tableParams.data">
+              <td data-title="'EAN'" sortable="'ean'" filter="{'ean':'text'}">
+                {{topProduct.ean}}
+              </td>
+              <td data-title="'Descripción'" sortable="'description'" filter="{'description': 'text'}">
+                {{topProduct.description | capitalize:true}}
+              </td>
+              <td data-title="'Clasificación'" sortable="'classification'" filter="{'classification': 'text'}">
+                {{topProduct.classification | capitalize:true}}
+              </td>
+              <td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
+                {{topProduct.platform | capitalize:true}}
+              </td>
+              <td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
+                {{topProduct.publisher | capitalize:true}}
+              </td>
+              <td data-title="'Unidades'" sortable="'units'" filter="{'units': 'text'}">
+                {{topProduct.units | currency:'':0}}
+              </td>
+              <td data-title="'Monto'" sortable="'salesAmount'" filter="{'salesAmount': 'text'}">
+                {{topProduct.salesAmount | currency:' $':0}}
+              </td>
+            </tr>
+          </table>
+				</div>
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+		<!-- /col -->
+	</div>
+
+</div>
