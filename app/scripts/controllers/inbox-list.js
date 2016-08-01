@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('InboxListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Inbox, Zones, Dealers, Users, Utils) {
+.controller('InboxListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, NgTableParams, Inbox, Zones, Dealers, Users, Utils) {
 
 	$scope.page = {
 		title: 'Inbox'
@@ -83,7 +83,7 @@ angular.module('minovateApp')
 
 				}
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
 					count: 50,
 					filter: {
@@ -94,17 +94,7 @@ angular.module('minovateApp')
 					}
 				}, {
 					total: data.length, // length of data
-					getData: function($defer, params) {
-						var filteredData = params.filter() ?
-							$filter('filter')(data, params.filter()) :
-							data;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							data;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					dataset: data
 				});
 
 				// $log.log(data);

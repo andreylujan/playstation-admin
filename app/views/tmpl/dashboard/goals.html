@@ -75,40 +75,38 @@
 					<h1 class="custom-font"><strong>Metas </strong>Metas v/s Ventas</h1>
 				</div>
 				<div class="tile-widget">
-          <highchart config="page.goals.monthlySalesVsGoals.chartConfig"></highchart>
 
-          <hr>
+          <highchart config="page.goals.monthlySalesVsGoals.chartConfig" ng-show="page.goals.monthlySalesVsGoals.chartConfig.xAxis.categories.length"></highchart>
 
-          <table class="table" style="width: 100%">
-          	<thead>
-          		<tr>
-          			<th></th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          		</tr>
-          	</thead>
-          	<tbody>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          	</tbody>
-          </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.goals.monthlySalesVsGoals.chartConfig.xAxis.categories.length">No se encontraron datos</h3>
+
+          <div ng-show="page.goals.monthlySalesVsGoals.table.headers.length">
+            <hr>
+            <table class="table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th ng-repeat="header in page.goals.monthlySalesVsGoals.table.headers track by $index">{{header}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-bold">Meta</td>
+                  <td ng-repeat="data in page.goals.monthlySalesVsGoals.table.row1 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Venta</td>
+                  <td ng-repeat="data in page.goals.monthlySalesVsGoals.table.row2 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Cumpl. L</td>
+                  <td ng-repeat="data in page.goals.monthlySalesVsGoals.table.row3 track by $index" class="text-red-ps">{{data * 100 | number:1}} %</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <h3></h3>
 				</div>
 
 			</section>
@@ -130,40 +128,44 @@
 					<h1 class="custom-font"><strong>Comparación semanal </strong>W-pasada y W-actual</h1>
 				</div>
 				<div class="tile-widget">
-          <highchart config="page.goals.lastWeekComparison.chartConfig"></highchart>
 
-          <hr>
+          <highchart config="page.goals.lastWeekComparison.chartConfig" ng-show="page.goals.lastWeekComparison.chartConfig.xAxis.categories.length"></highchart>
 
-          <table class="table" style="width: 100%">
-          	<thead>
-          		<tr>
-          			<th></th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          		</tr>
-          	</thead>
-          	<tbody>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          	</tbody>
-          </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.goals.lastWeekComparison.chartConfig.xAxis.categories.length">No se encontraron datos</h3>
+
+          
+          <div ng-show="page.goals.lastWeekComparison.table.headers.length">
+            <hr>
+            <table class="table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="text-center" ng-repeat="header in page.goals.lastWeekComparison.table.headers track by $index">{{header}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-bold">{{page.goals.lastWeekComparison.table.lastWeekOfYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.lastWeekComparison.table.row1 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr >
+                  <td class="text-bold">{{page.goals.lastWeekComparison.table.currentWeekOfYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.lastWeekComparison.table.row2 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Growth</td>
+                  <td class="text-center" ng-repeat="data in page.goals.lastWeekComparison.table.row3 track by $index" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}">{{data * 100 | number:1}} %</td>
+                </tr>
+                <tr>
+                  <td style="border-top:0"></td>
+                  <td class="text-center" style="border-top:0" ng-repeat="data in page.goals.lastWeekComparison.table.row3">
+                    <i class="fa fa-circle" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
 				</div>
 
 			</section>
@@ -185,40 +187,44 @@
 					<h1 class="custom-font"><strong>Comparativos de venta </strong>Semanal</h1>
 				</div>
 				<div class="tile-widget">
-          <highchart config="page.goals.weeklySalesComparison.chartConfig"></highchart>
 
-          <hr>
+          <highchart config="page.goals.weeklySalesComparison.chartConfig" ng-show="page.goals.weeklySalesComparison.chartConfig.xAxis.categories.length"></highchart>
 
-          <table class="table" style="width: 100%">
-          	<thead>
-          		<tr>
-          			<th></th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          		</tr>
-          	</thead>
-          	<tbody>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          	</tbody>
-          </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.goals.weeklySalesComparison.chartConfig.xAxis.categories.length">No se encontraron datos</h3>
+
+          <div ng-show="page.goals.weeklySalesComparison.table.headers.length">
+            <hr>
+            <table class="table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="text-center" ng-repeat="header in page.goals.weeklySalesComparison.table.headers track by $index">{{header}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-bold">{{page.goals.weeklySalesComparison.table.lastYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.weeklySalesComparison.table.row1 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr >
+                  <td class="text-bold">{{page.goals.weeklySalesComparison.table.currentYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.weeklySalesComparison.table.row2 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Growth</td>
+                  <td class="text-center" ng-repeat="data in page.goals.weeklySalesComparison.table.row3 track by $index" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}">{{data * 100 | number:1}} %</td>
+                </tr>
+                <tr>
+                  <td style="border-top:0"></td>
+                  <td class="text-center" style="border-top:0" ng-repeat="data in page.goals.weeklySalesComparison.table.row3  track by $index">
+                    <i class="fa fa-circle" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          
 				</div>
 
 			</section>
@@ -240,40 +246,44 @@
 					<h1 class="custom-font"><strong>Comparativos de venta </strong>Mensual</h1>
 				</div>
 				<div class="tile-widget">
-          <highchart config="page.goals.monthlySalesComparison.chartConfig"></highchart>
 
-          <hr>
+          <highchart config="page.goals.monthlySalesComparison.chartConfig" ng-show="page.goals.monthlySalesComparison.chartConfig.xAxis.categories.length"></highchart>
 
-          <table class="table" style="width: 100%">
-          	<thead>
-          		<tr>
-          			<th></th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          			<th>Dealer</th>
-          		</tr>
-          	</thead>
-          	<tbody>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          		<tr>
-          			<td>Meta</td>
-          			<td>$ 800</td>
-          			<td>$ 800</td>
-          			<td>30%</td>
-          		</tr>
-          	</tbody>
-          </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.goals.monthlySalesComparison.chartConfig.xAxis.categories.length">No se encontraron datos</h3>
+
+          
+
+          <div ng-show="page.goals.monthlySalesComparison.table.headers.length">
+            <hr>
+            <table class="table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="text-center" ng-repeat="header in page.goals.monthlySalesComparison.table.headers track by $index">{{header}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-bold">{{page.goals.monthlySalesComparison.table.lastYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.monthlySalesComparison.table.row1 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr >
+                  <td class="text-bold">{{page.goals.monthlySalesComparison.table.currentYearName}}</td>
+                  <td class="text-center" ng-repeat="data in page.goals.monthlySalesComparison.table.row2 track by $index">{{data | currency:'$ ':0}}</td>
+                </tr>
+                <tr>
+                  <td class="text-bold">Growth</td>
+                  <td class="text-center" ng-repeat="data in page.goals.monthlySalesComparison.table.row3 track by $index" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}">{{data * 100 | number:1}} %</td>
+                </tr>
+                <tr>
+                  <td style="border-top:0"></td>
+                  <td class="text-center" style="border-top:0" ng-repeat="data in page.goals.monthlySalesComparison.table.row3  track by $index">
+                    <i class="fa fa-circle" ng-class="{'text-red-ps': data<=0,'text-yellow-ps':data>0 && data<0.30,'text-greensea':data>=0.30}"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 				</div>
 
 			</section>

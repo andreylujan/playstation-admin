@@ -86,9 +86,9 @@
             <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateDealer()">Nuevo dealer</button> -->
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="dealer in dealers">
+              <tr ng-repeat="dealer in $data">
                 <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
-                  {{dealer.name}}
+                  {{dealer.name | capitalize:true}}
                 </td>
                 <td data-title="'Info'" >
                   <img ng-click="openModalCreateDealer(dealer.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">

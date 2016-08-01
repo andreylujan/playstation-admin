@@ -74,10 +74,10 @@
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Stock </strong>Tiendas con quiebre</h1>
 				</div>
-				<!-- {{page.stock.stockBreaks.tableParams.data}} -->
+				<!-- {{page.stock.stockBreaks.tableParams.data.length}} -->
 
 				<div class="tile-widget">
-					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom">
+					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom" ng-show="page.stock.stockBreaks.tableParams.data.length">
             <tr ng-repeat="stockBreak in $data">
               <td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
                 {{stockBreak.storeName | capitalize:true}}
@@ -96,6 +96,7 @@
               </td>
             </tr>
           </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.stock.stockBreaks.tableParams.data.length">No se encontraron datos</h3>
 				</div>
 
 			</section>
@@ -116,9 +117,8 @@
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Productos más vendidos </strong>Todos</h1>
 				</div>
-<!-- {{page.stock.topProducts.tableParams.data}} -->
 				<div class="tile-widget">
-					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom">
+					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom" ng-show="page.stock.stockBreaks.tableParams.data.length">
             <tr ng-repeat="topProduct in page.stock.topProducts.tableParams.data">
               <td data-title="'EAN'" sortable="'ean'" filter="{'ean':'text'}">
                 {{topProduct.ean}}
@@ -143,6 +143,7 @@
               </td>
             </tr>
           </table>
+          <h3 class="text-orange-ps text-center" ng-show="!page.stock.stockBreaks.tableParams.data.length">No se encontraron datos</h3>
 				</div>
 
 			</section>

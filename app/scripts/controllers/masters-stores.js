@@ -9,14 +9,14 @@
  */
 angular.module('minovateApp')
 
-.controller('StoresCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Stores, Utils) {
+.controller('StoresCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, Stores, Utils) {
 
 	$scope.page = {
 		title: 'Tiendas',
 		tableLoaded: false
 	};
 
-	$scope.stores = [];
+	var stores = [];
 
 	var i, j = 0;
 
@@ -26,41 +26,26 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.stores = [];
+		stores = [];
 
 		Stores.query({}, function(success) {
-
-			// $log.log(success);
-
+			
 			for (var i = 0; i < success.data.length; i++) {
-				$scope.stores.push({
+				stores.push({
 					id: success.data[i].id,
 					name: success.data[i].attributes.name
 				});
 			}
 
-			// $log.log($scope.stores);
-
-			$scope.tableParams = new ngTableParams({
+			$scope.tableParams = new NgTableParams({
 				page: 1, // show first page
 				count: 25, // count per page
 				sorting: {
 					name: 'asc' // initial sorting
 				}
 			}, {
-				total: $scope.stores.length, // length of $scope.stores
-				getData: function($defer, params) {
-					// use build-in angular filter
-					var filteredData = params.filter() ?
-						$filter('filter')($scope.stores, params.filter()) :
-						$scope.stores;
-					var orderedData = params.sorting() ?
-						$filter('orderBy')(filteredData, params.orderBy()) :
-						$scope.stores;
-
-					params.total(orderedData.length); // set total for recalc pagination
-					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				}
+				total: stores.length, // length of stores
+				dataset: stores
 			});
 			$scope.page.tableLoaded = true;
 
@@ -90,23 +75,23 @@ angular.module('minovateApp')
 				if (data.action === 'save') {
 					$log.log('agrego el');
 					$log.log(data);
-					$scope.stores.unshift({
+					stores.unshift({
 						id: data.id,
 						name: data.name
 					});
 				}
 				if (data.action === 'edit') {
-					for (i = 0; i < $scope.stores.length; i++) {
-						if (parseInt($scope.stores[i].id) === parseInt(data.id)) {
-							$scope.stores[i].name = data.name;
+					for (i = 0; i < stores.length; i++) {
+						if (parseInt(stores[i].id) === parseInt(data.id)) {
+							stores[i].name = data.name;
 							break;
 						}
 					}
 				}
 				if (data.action === 'delete') {
-					for (i = 0; i < $scope.stores.length; i++) {
-						if (parseInt($scope.stores[i].id) === parseInt(data.id)) {
-							$scope.stores.splice(i, 1);
+					for (i = 0; i < stores.length; i++) {
+						if (parseInt(stores[i].id) === parseInt(data.id)) {
+							stores.splice(i, 1);
 							break;
 						}
 					}

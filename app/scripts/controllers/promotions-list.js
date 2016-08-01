@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('PromotionsListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, ngTableParams, Promotions, Zones, Dealers, Users, Utils) {
+.controller('PromotionsListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, NgTableParams, Promotions, Zones, Dealers, Users, Utils) {
 
 	$scope.page = {
 		title: 'Promociones'
@@ -23,7 +23,7 @@ angular.module('minovateApp')
 	var users = [];
 	var dealersNames = '';
 
-	$scope.promotions = [];
+	var promotions = [];
 
 	var getPromotions = function(e) {
 		if (!e.success) {
@@ -31,7 +31,7 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.promotions = [];
+		promotions = [];
 
 		Promotions.query({
 			include: 'checklist,users,zones,dealers'
@@ -41,7 +41,7 @@ angular.module('minovateApp')
 
 				for (i = 0; i < success.data.length; i++) {
 
-					$scope.promotions.push({
+					promotions.push({
 						id: success.data[i].id,
 						title: success.data[i].attributes.title,
 						startDate: success.data[i].attributes.start_date,
@@ -53,71 +53,46 @@ angular.module('minovateApp')
 
 				}
 
-				for (i = 0; i < $scope.promotions.length; i++) {
+				for (i = 0; i < promotions.length; i++) {
 
 					dealersNames = '';
 
-					for (j = 0; j < $scope.promotions[i].zones.length; j++) {
+					for (j = 0; j < promotions[i].zones.length; j++) {
 						for (k = 0; k < zones.length; k++) {
-							if (parseInt($scope.promotions[i].zones[j].id) === parseInt(zones[k].id)) {
+							if (parseInt(promotions[i].zones[j].id) === parseInt(zones[k].id)) {
 								if (j === 0) {
-									$scope.promotions[i].zoneNames = $filter('capitalize')(zones[k].name, true);
+									promotions[i].zoneNames = $filter('capitalize')(zones[k].name, true);
 								} else {
-									$scope.promotions[i].zoneNames = $scope.promotions[i].zoneNames + '<br>' + $filter('capitalize')(zones[k].name, true);
+									promotions[i].zoneNames = promotions[i].zoneNames + '<br>' + $filter('capitalize')(zones[k].name, true);
 								}
 								break;
 							}
 						}
 					}
-					for (j = 0; j < $scope.promotions[i].dealers.length; j++) {
+					for (j = 0; j < promotions[i].dealers.length; j++) {
 						for (k = 0; k < dealers.length; k++) {
-							if (parseInt($scope.promotions[i].dealers[j].id) === parseInt(dealers[k].id)) {
+							if (parseInt(promotions[i].dealers[j].id) === parseInt(dealers[k].id)) {
 								if (j === 0) {
-									$scope.promotions[i].dealerNames = $filter('capitalize')(dealers[k].name, true);
+									promotions[i].dealerNames = $filter('capitalize')(dealers[k].name, true);
 								} else {
-									$scope.promotions[i].dealerNames = $scope.promotions[i].dealerNames + '<br>' + $filter('capitalize')(dealers[k].name, true);
+									promotions[i].dealerNames = promotions[i].dealerNames + '<br>' + $filter('capitalize')(dealers[k].name, true);
 								}
 								break;
 							}
 						}
 					}
-					// for (j = 0; j < $scope.promotions[i].users.length; j++) {
-					// 	for (k = 0; k < users.length; k++) {
-					// 		if (parseInt($scope.promotions[i].users[j].id) === parseInt(users[k].id)) {
-					// 			if (j === 0) {
-					// 				$scope.promotions[i].userNames = users[k].fullName;
-					// 			} else {
-					// 				$scope.promotions[i].userNames = $scope.promotions[i].userNames + '<br>' + users[k].fullName;
-					// 			}
-					// 			// $scope.promotions[i].users[j].fullName = users[k].fullName;
-					// 			break;
-					// 		}
-					// 	}
-					// }
+
 				}
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
-					count: 50,
-					filter: {
-						//name: 'M'       // initial filter
-					},
+					count: 25,
 					sorting: {
 						title: 'asc' // initial sorting
 					}
 				}, {
-					total: $scope.promotions.length, // length of $scope.promotions
-					getData: function($defer, params) {
-						var filteredData = params.filter() ?
-							$filter('filter')($scope.promotions, params.filter()) :
-							$scope.promotions;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							$scope.promotions;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					// total: promotions.length, // length of promotions
+					dataset: promotions
 				});
 
 			} else {

@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, $window, ngTableParams, Checklists, ChecklistActions, Utils) {
+.controller('NewChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, $window, Checklists, ChecklistActions, Utils) {
 
 	var idChecklist = $state.params.idChecklist;
 

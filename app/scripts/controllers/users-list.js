@@ -9,13 +9,13 @@
  */
 angular.module('minovateApp')
 
-.controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, ngTableParams, Users, Invitations, RefreshToken, $auth, Utils) {
+.controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, NgTableParams, Users, Invitations, RefreshToken, $auth, Utils) {
 
 	$scope.page = {
 		title: 'Lista de usuarios'
 	};
 
-	$scope.users = [];
+	var users = [];
 
 	$scope.getUsers = function(e) {
 
@@ -25,7 +25,7 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.users = [];
+		users = [];
 
 		Users.query({
 			idUser: ''
@@ -34,7 +34,7 @@ angular.module('minovateApp')
 			// $log.log(success);
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
-					$scope.users.push({
+					users.push({
 						id: success.data[i].id,
 						firstName: success.data[i].attributes.first_name,
 						lastName: success.data[i].attributes.last_name,
@@ -45,7 +45,7 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
 					count: 50, // count per page
 					filter: {
@@ -55,18 +55,8 @@ angular.module('minovateApp')
 						active: 'desc' // initial sorting
 					}
 				}, {
-					total: $scope.users.length, // length of $scope.users
-					getData: function($defer, params) {
-						var filteredData = params.filter() ?
-							$filter('filter')($scope.users, params.filter()) :
-							$scope.users;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							$scope.users;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					total: users.length, // length of users
+					dataset: users
 				});
 
 			} else {

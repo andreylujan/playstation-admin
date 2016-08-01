@@ -86,9 +86,9 @@
             <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateZone()">Nueva zona</button> -->
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
-              <tr ng-repeat="zone in zones">
+              <tr ng-repeat="zone in $data">
                 <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
-                  {{zone.name}}
+                  {{zone.name | capitalize:true}}
                 </td>
                 <td data-title="'Info'" >
                   <img ng-click="openModalCreateZone(zone.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">

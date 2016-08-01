@@ -80,7 +80,7 @@
             <select class="bg-orange-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" name="selMyRepMyTasks" ng-model="option" ng-change="getMyreports('prev',{success: true,detail: 'OK'})" ng-options="option.name for option in page.myReportsMysTasksSel track by option.id"></select>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="report in reports">
+              <tr ng-repeat="report in $data">
                 <td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
                   {{report.reportTypeName}}
                 </td>

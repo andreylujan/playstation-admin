@@ -145,8 +145,7 @@ angular.module('minovateApp')
 
 		var stockBreaks = [],
 			topProducts = [];
-
-
+			
 		Dashboard.query({
 			category: 'stock',
 			zone_id: zoneIdSelected,

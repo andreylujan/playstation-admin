@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ReportsCtrl', function($scope, $filter, $log, $window, ngTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
 		title: 'Lista de reportes',
@@ -22,7 +22,7 @@ angular.module('minovateApp')
 		tableLoaded: false
 	};
 
-	$scope.reports = [];
+	var reports = [];
 	var zones = [];
 	var dealers = [];
 	var stores = [];
@@ -38,7 +38,7 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.reports = [];
+		reports = [];
 
 		if ($scope.currentPage === 2) {
 			$scope.page.prevBtn.disabled = true;
@@ -55,6 +55,8 @@ angular.module('minovateApp')
 			}
 		}
 
+		reports = [];
+
 		Reports.query({
 			all: true,
 			'page[number]': $scope.currentPage,
@@ -69,7 +71,7 @@ angular.module('minovateApp')
 					var dealerId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? dealerId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer) : dealerId = null;
 					var storeId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? storeId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store) : dealerId = null;
 
-					$scope.reports.push({
+					reports.push({
 						id: success.data[i].id,
 						reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
 						createdAt: success.data[i].attributes.created_at,
@@ -89,72 +91,58 @@ angular.module('minovateApp')
 
 				}
 
-				for (i = 0; i < $scope.reports.length; i++) {
+				for (i = 0; i < reports.length; i++) {
 					for (j = 0; j < zones.length; j++) {
-						if ($scope.reports[i].zoneId === zones[j].id) {
-							$scope.reports[i].zoneName = zones[j].name;
+						if (reports[i].zoneId === zones[j].id) {
+							reports[i].zoneName = zones[j].name;
 							break;
 						}
 					}
 				}
 
-				for (i = 0; i < $scope.reports.length; i++) {
+				for (i = 0; i < reports.length; i++) {
 					for (j = 0; j < dealers.length; j++) {
-						if ($scope.reports[i].dealerId === dealers[j].id) {
-							$scope.reports[i].dealerName = dealers[j].name;
+						if (reports[i].dealerId === dealers[j].id) {
+							reports[i].dealerName = dealers[j].name;
 							break;
 						}
 					}
 				}
 
-				for (i = 0; i < $scope.reports.length; i++) {
+				for (i = 0; i < reports.length; i++) {
 					for (j = 0; j < stores.length; j++) {
-						if ($scope.reports[i].storeId === stores[j].id) {
-							$scope.reports[i].storeName = stores[j].name;
+						if (reports[i].storeId === stores[j].id) {
+							reports[i].storeName = stores[j].name;
 							break;
 						}
 					}
 				}
 
-				for (i = 0; i < $scope.reports.length; i++) {
+				for (i = 0; i < reports.length; i++) {
 					for (j = 0; j < users.length; j++) {
-						if ($scope.reports[i].storeId === users[j].id) {
-							$scope.reports[i].assignedUserName = users[j].fullName;
+						if (reports[i].storeId === users[j].id) {
+							reports[i].assignedUserName = users[j].fullName;
 							break;
 						}
 					}
 				}
 
 				// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
-				if ($scope.reports.length < pageSize) {
+				if (reports.length < pageSize) {
 					$scope.page.nextBtn.disabled = true;
 				} else {
 					$scope.page.nextBtn.disabled = false;
 				}
 
-				$scope.tableParams = new ngTableParams({
-					page: 1, // show first page
-					count: $scope.reports.length, // count per page
-					filter: {
-						//name: 'M'       // initial filter
-					},
+				$scope.tableParams = new NgTableParams({
+					count: reports.length, // count per page
 					sorting: {
 						'reportTypeName': 'desc' // initial sorting
 					}
 				}, {
+					dataset: reports,
 					counts: [],
-					total: $scope.reports.length, // length of $scope.reports
-					getData: function($defer, params) {
-						var filteredData = params.filter() ?
-							$filter('filter')($scope.reports, params.filter()) :
-							$scope.reports;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							$scope.reports;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData);
-					}
+					total: reports.length, // length of reports
 				});
 				$scope.page.tableLoaded = true;
 

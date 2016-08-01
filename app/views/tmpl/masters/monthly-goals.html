@@ -109,7 +109,7 @@
 						<h3 class="text-orange-ps text-center" ng-show="!data.length">No hay cargas en el mes de <span>{{page.dateSearch.value | date:"MMMM" | uppercase}}</span> del año {{page.dateSearch.value | date:"yyyy"}}</h3>
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom" ng-show="data.length">
-						  <tr ng-repeat="charge in data" ng-if="flag">
+						  <tr ng-repeat="charge in $data" ng-if="flag">
 								<td class="text-center" data-title="'Mes'" sortable="'month'" filter="{ 'month': 'text' }">
 									{{charge.month}}
 								</td>

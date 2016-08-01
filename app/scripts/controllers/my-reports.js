@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('MyReportsCtrl', function($scope, $log, ngTableParams, $filter, $window, Utils, Reports, Zones, Dealers, Stores) {
+	.controller('MyReportsCtrl', function($scope, $log, NgTableParams, $filter, $window, Utils, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
 			title: 'Mis Reportes',
@@ -26,7 +26,7 @@ angular.module('minovateApp')
 
 		$scope.option = $scope.page.myReportsMysTasksSel[0];
 
-		$scope.reports = [];
+		var reports = [];
 		var zones = [];
 		var dealers = [];
 		var stores = [];
@@ -42,7 +42,7 @@ angular.module('minovateApp')
 				return;
 			}
 
-			$scope.reports = [];
+			reports = [];
 
 			if ($scope.currentPage === 2) {
 				$scope.page.prevBtn.disabled = true;
@@ -70,7 +70,7 @@ angular.module('minovateApp')
 					if (success.data) {
 
 						for (i = 0; i < success.data.length; i++) {
-							$scope.reports.push({
+							reports.push({
 								reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
 								createdAt: success.data[i].attributes.created_at,
 								limitDate: success.data[i].attributes.limit_date,
@@ -86,28 +86,28 @@ angular.module('minovateApp')
 							});
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < zones.length; j++) {
-								if ($scope.reports[i].zoneId === zones[j].id) {
-									$scope.reports[i].zoneName = zones[j].name;
+								if (reports[i].zoneId === zones[j].id) {
+									reports[i].zoneName = zones[j].name;
 									break;
 								}
 							}
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < dealers.length; j++) {
-								if ($scope.reports[i].dealerId === dealers[j].id) {
-									$scope.reports[i].dealerName = dealers[j].name;
+								if (reports[i].dealerId === dealers[j].id) {
+									reports[i].dealerName = dealers[j].name;
 									break;
 								}
 							}
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < stores.length; j++) {
-								if ($scope.reports[i].storeId === stores[j].id) {
-									$scope.reports[i].storeName = stores[j].name;
+								if (reports[i].storeId === stores[j].id) {
+									reports[i].storeName = stores[j].name;
 									break;
 								}
 							}
@@ -120,23 +120,16 @@ angular.module('minovateApp')
 					}
 				});
 
-				$scope.tableParams = new ngTableParams({
-					page: 1, // show first page
-					count: $scope.reports.length, // count per page
+				$scope.tableParams = new NgTableParams({
+					// page: 1, // show first page
+					count: reports.length, // count per page
 					sorting: {
 						name: 'asc' // initial sorting
 					}
 				}, {
+					dataset: reports,
 					counts: [],
-					total: $scope.reports.length, // length of reports
-					getData: function($defer, params) {
-						// use build-in angular filter
-						var orderedData = params.sorting() ?
-							$filter('orderBy')($scope.reports, params.orderBy()) :
-							$scope.reports;
-
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					total: reports.length // length of reports
 				});
 
 			} else if ($scope.option.id === 2) {
@@ -152,7 +145,7 @@ angular.module('minovateApp')
 					if (success.data) {
 
 						for (i = 0; i < success.data.length; i++) {
-							$scope.reports.push({
+							reports.push({
 								reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
 								createdAt: success.data[i].attributes.created_at,
 								limitDate: success.data[i].attributes.limit_date,
@@ -168,28 +161,28 @@ angular.module('minovateApp')
 							});
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < zones.length; j++) {
-								if ($scope.reports[i].zoneId === zones[j].id) {
-									$scope.reports[i].zoneName = zones[j].name;
+								if (reports[i].zoneId === zones[j].id) {
+									reports[i].zoneName = zones[j].name;
 									break;
 								}
 							}
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < dealers.length; j++) {
-								if ($scope.reports[i].dealerId === dealers[j].id) {
-									$scope.reports[i].dealerName = dealers[j].name;
+								if (reports[i].dealerId === dealers[j].id) {
+									reports[i].dealerName = dealers[j].name;
 									break;
 								}
 							}
 						}
 
-						for (i = 0; i < $scope.reports.length; i++) {
+						for (i = 0; i < reports.length; i++) {
 							for (j = 0; j < stores.length; j++) {
-								if ($scope.reports[i].storeId === stores[j].id) {
-									$scope.reports[i].storeName = stores[j].name;
+								if (reports[i].storeId === stores[j].id) {
+									reports[i].storeName = stores[j].name;
 									break;
 								}
 							}
@@ -200,23 +193,16 @@ angular.module('minovateApp')
 				});
 
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
-					count: $scope.reports.length, // count per page
+					count: reports.length, // count per page
 					sorting: {
 						name: 'asc' // initial sorting
 					}
 				}, {
+					dataset: reports,
 					counts: [],
-					total: $scope.reports.length, // length of reports
-					getData: function($defer, params) {
-						// use build-in angular filter
-						var orderedData = params.sorting() ?
-							$filter('orderBy')($scope.reports, params.orderBy()) :
-							$scope.reports;
-
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					total: reports.length // length of reports
 				});
 
 			}

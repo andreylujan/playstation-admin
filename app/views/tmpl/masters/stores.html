@@ -88,7 +88,7 @@
             <table ng-table="tableParams" show-filter="true" class="table table-custom" >
               <tr ng-repeat="store in $data" ng-if="page.tableLoaded">
                 <td data-title="'Nombre'" sortable="'name'" filter="{ 'name': 'text' }">
-                  {{store.name}}
+                  {{store.name | capitalize:true}}
                 </td>
                 <td data-title="'Info'" >
                   <img ng-click="openModalCreateStore(store.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">

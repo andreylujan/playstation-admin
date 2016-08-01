@@ -9101,6 +9101,9 @@ input[type="text"].ui-grid-filter-input {
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 0; } }
+tr .no-border td {
+  border: 0; }
+
 /*********************************/
 /************* CARDS *************/
 /*********************************/

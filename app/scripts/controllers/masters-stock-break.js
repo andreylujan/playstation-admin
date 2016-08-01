@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('StockBreakCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, StockBreaks, Utils) {
+.controller('StockBreakCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, StockBreaks, Utils) {
 
 	$scope.page = {
 		title: 'Quiebre de stock'
@@ -95,20 +95,9 @@ angular.module('minovateApp')
 	};
 
 	var setTableParams = function(data, params) {
-		$scope.tableParams = new ngTableParams(params, {
+		$scope.tableParams = new NgTableParams(params, {
 			total: data.length, // length of data
-			getData: function($defer, params) {
-				// use build-in angular filter
-				var filteredData = params.filter() ?
-					$filter('filter')(data, params.filter()) :
-					data;
-				var orderedData = params.sorting() ?
-					$filter('orderBy')(filteredData, params.orderBy()) :
-					data;
-
-				params.total(orderedData.length); // set total for recalc pagination
-				$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			}
+			dataset: data
 		});
 	};
 

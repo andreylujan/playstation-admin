@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ProductsCtrl', function($scope, $log, $filter, $window, $uibModal, ngTableParams, Products, Csv, Utils) {
+.controller('ProductsCtrl', function($scope, $log, $filter, $window, $uibModal, NgTableParams, Products, Csv, Utils) {
 
 	$scope.status = {
 		open: true
@@ -98,7 +98,7 @@ angular.module('minovateApp')
 
 				}
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
 					count: 25, // count per page
 					filter: {
@@ -109,18 +109,7 @@ angular.module('minovateApp')
 					}
 				}, {
 					total: data.length, // length of data
-					getData: function($defer, params) {
-						// use build-in angular filter
-						var filteredData = params.filter() ?
-							$filter('filter')(data, params.filter()) :
-							data;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							data;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					dataset: data
 				});
 			}
 		}, function(error) {

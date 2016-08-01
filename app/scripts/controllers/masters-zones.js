@@ -9,13 +9,13 @@
  */
 angular.module('minovateApp')
 
-.controller('ZonesCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, Zones, Utils) {
+.controller('ZonesCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, Zones, Utils) {
 
 	$scope.page = {
 		title: 'Zonas'
 	};
 
-	$scope.zones = [];
+	var zones = [];
 
 	$scope.getZones = function(e) {
 		if (!e.success) {
@@ -23,41 +23,28 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.zones = [];
+		zones = [];
 
 		Zones.query({
 
 		}, function(success) {
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
-					$scope.zones.push({
+					zones.push({
 						id: success.data[i].id,
 						name: success.data[i].attributes.name
 					});
 				}
 
-				$scope.tableParams = new ngTableParams({
+				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
 					count: 25, // count per page
-					filter: {
-						//name: 'M'       // initial filter
-					},
 					sorting: {
 						name: 'asc' // initial sorting
 					}
 				}, {
-					total: $scope.zones.length, // length of zones
-					getData: function($defer, params) {
-						var filteredData = params.filter() ?
-							$filter('filter')($scope.zones, params.filter()) :
-							$scope.zones;
-						var orderedData = params.sorting() ?
-							$filter('orderBy')(filteredData, params.orderBy()) :
-							$scope.zones;
-
-						params.total(orderedData.length); // set total for recalc pagination
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					total: zones.length, // length of zones
+					dataset: zones
 				});
 			} else {
 				$log.log(success);

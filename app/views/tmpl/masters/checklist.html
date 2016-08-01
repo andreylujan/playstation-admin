@@ -86,7 +86,7 @@
             <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewChecklist()">Nuevo checklist</button> -->
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
-              <tr ng-repeat="checklist in checklists">
+              <tr ng-repeat="checklist in $data">
                 <td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">
                   {{checklist.name}}
                 </td>

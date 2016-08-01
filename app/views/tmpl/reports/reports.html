@@ -75,7 +75,7 @@
 					<div class="tile-body">
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in reports" ng-if="page.tableLoaded">
+							<tr ng-repeat="report in $data" ng-if="page.tableLoaded">
 								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>

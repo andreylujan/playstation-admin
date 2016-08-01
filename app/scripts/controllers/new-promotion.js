@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, ngTableParams, Zones, Dealers, Users, Inbox, Validators, Promotions, Utils) {
+.controller('NewPromotionCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Zones, Dealers, Users, Inbox, Validators, Promotions, Utils) {
 
 	var i = 0;
 	var j = 0;

@@ -9,13 +9,13 @@
  */
 angular.module('minovateApp')
 
-.controller('ChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, ngTableParams, Checklists, Utils) {
+.controller('ChecklistCtrl', function($scope, $log, $uibModal, $filter, $state, NgTableParams, Checklists, Utils) {
 
 	$scope.page = {
 		title: 'Checklists'
 	};
 
-	$scope.checklists = [];
+	var checklists = [];
 
 	$scope.getChecklists = function(e) {
 		if (!e.success) {
@@ -23,42 +23,28 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$scope.checklists = [];
+		checklists = [];
 
 		Checklists.query({
 			'filter[type]': 'Checklist'
 		}, function(success) {
 
 			for (var i = 0; i < success.data.length; i++) {
-				$scope.checklists.push({
+				checklists.push({
 					id: success.data[i].id,
 					name: success.data[i].attributes.name
 				});
 			}
 
-			$scope.tableParams = new ngTableParams({
+			$scope.tableParams = new NgTableParams({
 				page: 1, // show first page
 				count: 25, // count per page
-				filter: {
-					//name: 'M'       // initial filter
-				},
 				sorting: {
 					name: 'desc' // initial sorting
 				}
 			}, {
-				total: $scope.checklists.length, // length of $scope.checklists
-				getData: function($defer, params) {
-					// use build-in angular filter
-					var filteredData = params.filter() ?
-						$filter('filter')($scope.checklists, params.filter()) :
-						$scope.checklists;
-					var orderedData = params.sorting() ?
-						$filter('orderBy')(filteredData, params.orderBy()) :
-						$scope.checklists;
-
-					params.total(orderedData.length); // set total for recalc pagination
-					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				}
+				total: checklists.length, // length of checklists
+				dataset: checklists
 			});
 
 		}, function(error) {

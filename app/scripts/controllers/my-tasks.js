@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-	.controller('MyTasksCtrl', function($scope, $log, ngTableParams, $filter, Utils, Reports, Zones, Dealers, Stores) {
+	.controller('MyTasksCtrl', function($scope, $log, NgTableParams, $filter, Utils, Reports, Zones, Dealers, Stores) {
 
 		$scope.page = {
 			title: 'Mis tareas',
@@ -111,7 +111,7 @@ angular.module('minovateApp')
 				}
 			});
 
-			$scope.tableParams = new ngTableParams({
+			$scope.tableParams = new NgTableParams({
 				page: 1, // show first page
 				count: $scope.reports.length, // count per page
 				sorting: {

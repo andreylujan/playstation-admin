@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('MonthlyGoalsCtrl', function($scope, $log, $uibModal, $filter, ngTableParams, SaleGoalUploads, Utils) {
+.controller('MonthlyGoalsCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, SaleGoalUploads, Utils) {
 
 	$scope.page = {
 		title: 'Metas mensuales',
@@ -21,8 +21,8 @@ angular.module('minovateApp')
 	$scope.flag = false;
 
 	var i = 0,
-		j = 0;
-	$scope.data = [];
+		j = 0,
+		data = [];
 
 	$scope.getSaleGoalUploads = function(e) {
 		if (!e.success) {
@@ -32,7 +32,7 @@ angular.module('minovateApp')
 
 		$scope.flag = false;
 
-		$scope.data = [];
+		data = [];
 
 		SaleGoalUploads.query({
 			year: $scope.page.dateSearch.value.getFullYear(),
@@ -43,7 +43,7 @@ angular.module('minovateApp')
 			if (success.data) {
 
 				for (i = 0; i < success.data.length; i++) {
-					$scope.data.push({
+					data.push({
 						month: success.data[i].attributes.month,
 						year: success.data[i].attributes.year,
 						createdAt: success.data[i].attributes.created_at,
@@ -57,16 +57,13 @@ angular.module('minovateApp')
 				var params = {
 					page: 1,
 					count: 25,
-					filter: {
-						//name: 'M'       
-					},
 					sorting: {
 						year: 'asc',
 						month: 'asc'
 					}
 				};
 
-				setTableParams($scope.data, params);
+				setTableParams(data, params);
 
 			} else {
 				$log.error(success);
@@ -81,20 +78,9 @@ angular.module('minovateApp')
 
 	var setTableParams = function(data, params) {
 
-		$scope.tableParams = new ngTableParams(params, {
+		$scope.tableParams = new NgTableParams(params, {
 			total: data.length, // length of data
-			getData: function($defer, params) {
-				// use build-in angular filter
-				var filteredData = params.filter() ?
-					$filter('filter')(data, params.filter()) :
-					data;
-				var orderedData = params.sorting() ?
-					$filter('orderBy')(filteredData, params.orderBy()) :
-					data;
-
-				params.total(orderedData.length); // set total for recalc pagination
-				$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			}
+			dataset: data
 		});
 
 		$scope.flag = true;
@@ -192,7 +178,10 @@ angular.module('minovateApp')
 	$scope.createMonthlyGoal = function() {
 
 		if ($scope.modal.monthlyGoal.file.value) {
-			uploadCsvMonthlyGoals({success: true,detail: 'OK'});
+			uploadCsvMonthlyGoals({
+				success: true,
+				detail: 'OK'
+			});
 		} else {
 
 		}
