@@ -7,7 +7,16 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
+server '52.201.182.66', port: 22, user: 'ubuntu', roles: [:web, :app, :db]
 
+set :ssh_options, {
+ keys: ["./keys/ubuntu.pem" ],
+ forward_agent: false,
+ auth_methods: ["publickey"]
+}
+
+# Default deploy_to directory is /var/www/my_app
+set :deploy_to, '/srv/http/www/echeckit/admin'
 
 # role-based syntax
 # ==================

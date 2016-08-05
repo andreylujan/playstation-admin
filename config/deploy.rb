@@ -5,14 +5,7 @@ set :application, 'admin'
 set :repo_url, 'git@github.com:andreylujan/playstation-admin.git'
 set :branch, 'master'
 
-set :ssh_options, {
- keys: ["./keys/ubuntu.pem" ],
- forward_agent: false,
- auth_methods: ["publickey"]
-}
 
-# Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/srv/http/www/echeckit/admin'
 
 # Default value for :scm is :git
 set :scm, :git
