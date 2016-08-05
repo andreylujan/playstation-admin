@@ -121,7 +121,7 @@ angular
 .config(['$authProvider',
 	function($authProvider) {
 		// Parametros de configuración
-		$authProvider.loginUrl = 'http://52.201.182.66/oauth/token';
+		$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token';
 		$authProvider.tokenName = 'access_token';
 	}
 ])

@@ -1,7 +1,7 @@
 'use strict';
 
-var API_URL = 'http://52.201.182.66/api/v1';
-var URL_SERVER = 'http://52.201.182.66';
+var API_URL = 'http://50.16.161.152/eretail/api/v1';
+var URL_SERVER = 'http://50.16.161.152/eretail';
 
 angular.module('minovateApp')
 
