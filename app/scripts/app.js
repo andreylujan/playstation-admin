@@ -48,7 +48,6 @@ angular
 		'angular-flot',
 		'angular-rickshaw',
 		'easypiechart',
-		'uiGmapgoogle-maps',
 		'ui.calendar',
 		'LocalStorageModule',
 		'satellizer',
