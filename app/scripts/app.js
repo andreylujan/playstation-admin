@@ -47,7 +47,7 @@ angular
 		'smart-table',
 		'angular-flot',
 		'angular-rickshaw',
-		'easypiechart',
+		// 'easypiechart',
 		'ui.calendar',
 		'LocalStorageModule',
 		'satellizer',
