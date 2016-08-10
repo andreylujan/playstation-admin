@@ -48,7 +48,7 @@ angular
 		'angular-flot',
 		'angular-rickshaw',
 		// 'easypiechart',
-		'ui.calendar',
+		// 'ui.calendar',
 		'LocalStorageModule',
 		'satellizer',
 		'naif.base64',
