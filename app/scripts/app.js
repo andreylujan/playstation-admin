@@ -9,129 +9,99 @@
  * Main module of the application.
  */
 angular
-	.module('minovateApp', [
-		'ngAnimate',
-		'ngCookies',
-		'ngResource',
-		'ngSanitize',
-		'ngTouch',
-		'picardy.fontawesome',
-		'ui.bootstrap',
-		'ui.router',
-		'ui.utils',
-		'angular-loading-bar',
-		'angular-momentjs',
-		'FBAngular',
-		'lazyModel',
-		'toastr',
-		'angularBootstrapNavTree',
-		'oc.lazyLoad',
-		'ui.select',
-		'ui.tree',
-		'textAngular',
-		'colorpicker.module',
-		'angularFileUpload',
-		'ngImgCrop',
-		'datatables',
-		'datatables.bootstrap',
-		'datatables.colreorder',
-		'datatables.colvis',
-		'datatables.tabletools',
-		'datatables.scroller',
-		'datatables.columnfilter',
-		'ui.grid',
-		'ui.grid.resizeColumns',
-		'ui.grid.edit',
-		'ui.grid.moveColumns',
-		'ngTable',
-		'smart-table',
-		'angular-flot',
-		'angular-rickshaw',
-		// 'easypiechart',
-		// 'ui.calendar',
-		'LocalStorageModule',
-		'satellizer',
-		'naif.base64',
-		'ui.bootstrap.datetimepicker',
-		'ngDroplet',
-		'highcharts-ng',
-		'slick'
-		// 'angularjs-dropdown-multiselect'
-	])
-	.run(['$rootScope', '$state', '$stateParams', '$log', 'Utils',
-		function($rootScope, $state, $stateParams, $log, Utils) {
+.module('minovateApp', [
+	'ngAnimate',
+	'ngCookies',
+	'ngResource',
+	'ngSanitize',
+	'ngTouch',
+	'picardy.fontawesome',
+	'ui.bootstrap',
+	'ui.router',
+	'ui.utils',
+	'angular-loading-bar',
+	'angular-momentjs',
+	'FBAngular',
+	'lazyModel',
+	'angularBootstrapNavTree',
+	'oc.lazyLoad',
+	'ui.select',
+	'ui.tree',
+	'textAngular',
+	'colorpicker.module',
+	'angularFileUpload',
+	'ngImgCrop',
+	'datatables',
+	'datatables.bootstrap',
+	'datatables.colreorder',
+	'datatables.colvis',
+	'datatables.tabletools',
+	'datatables.scroller',
+	'datatables.columnfilter',
+	'ngTable',
+	'angular-flot',
+	'LocalStorageModule',
+	'satellizer',
+	'naif.base64',
+	'ui.bootstrap.datetimepicker',
+	'highcharts-ng',
+	'slick'
+])
 
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
+.run(['$rootScope', '$state', '$stateParams', 'Utils',
+	function($rootScope, $state, $stateParams, Utils) {
 
-			$rootScope.$on('$stateChangeSuccess', function(event, toState) {
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
 
-				event.targetScope.$watch('$viewContentLoaded', function() {
+		$rootScope.$on('$stateChangeSuccess', function(event, toState) {
 
-					angular.element('html, body, #content').animate({
-						scrollTop: 0
-					}, 200);
+			event.targetScope.$watch('$viewContentLoaded', function() {
 
-					setTimeout(function() {
-						angular.element('#wrap').css('visibility', 'visible');
+				angular.element('html, body, #content').animate({
+					scrollTop: 0
+				}, 200);
 
-						if (!angular.element('.dropdown').hasClass('open')) {
-							angular.element('.dropdown').find('>ul').slideUp();
-						}
-					}, 200);
-				});
-				$rootScope.containerClass = toState.containerClass;
+				setTimeout(function() {
+					angular.element('#wrap').css('visibility', 'visible');
+
+					if (!angular.element('.dropdown').hasClass('open')) {
+						angular.element('.dropdown').find('>ul').slideUp();
+					}
+				}, 200);
 			});
+			$rootScope.containerClass = toState.containerClass;
+		});
 
-			// Listener que se ejecuta cuando se carga una pagina
-			$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+		// Listener que se ejecuta cuando se carga una pagina
+		$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 
-				var isLogin = toState.name === 'core.login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup' || toState.name === 'core.page404';
+			var isLogin = toState.name === 'core.login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup' || toState.name === 'core.page404';
 
-				// $log.log('is in Login or forgotpass or resetpass or signup... ' + isLogin);
-				// $log.log('loggedIn storage... ' + Utils.getInStorage('loggedIn'));
+			// $log.log('is in Login or forgotpass or resetpass or signup... ' + isLogin);
+			// $log.log('loggedIn storage... ' + Utils.getInStorage('loggedIn'));
 
-				if (isLogin) {
-					return;
-				}
+			if (isLogin) {
+				return;
+			}
 
-				if (Utils.getInStorage('loggedIn') === false || Utils.getInStorage('loggedIn') === null) {
-					e.preventDefault(); // stop current execution
-					$state.go('core.login'); // go to login
-				}
+			if (Utils.getInStorage('loggedIn') === false || Utils.getInStorage('loggedIn') === null) {
+				e.preventDefault(); // stop current execution
+				$state.go('core.login'); // go to login
+			}
 
-			});
-		}
-	])
+		});
+	}
+])
 
-.config(['uiSelectConfig',
-	function(uiSelectConfig) {
+.config(['uiSelectConfig', 'localStorageServiceProvider', '$authProvider',
+	function(uiSelectConfig, localStorageServiceProvider, $authProvider) {
 		uiSelectConfig.theme = 'bootstrap';
-	}
-])
-
-.config(['localStorageServiceProvider',
-	function(localStorageServiceProvider) {
-		localStorageServiceProvider
-			.setStorageType('localStorage');
-	}
-])
-
-.config(['$authProvider',
-	function($authProvider) {
-		// Parametros de configuración
+		localStorageServiceProvider.setStorageType('localStorage');
 		$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token';
 		$authProvider.tokenName = 'access_token';
 	}
 ])
-
-// .config(['datepickerConfig', 'datepickerPopupConfig',
-// 	function(datepickerConfig, datepickerPopupConfig) {
-// 		// datepickerConfig.showWeeks = false;
-// 		// datepickerPopupConfig.toggleWeeksText = null;
-// 		datepickerPopupConfig.showButtonBar = false;
-// 	}
-// ])
 
 .config(['$provide', function($provide) {
 	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', '$log', function(taRegisterTool, taOptions, $uibModal, $log) {
@@ -167,8 +137,7 @@ angular
 	}]);
 }])
 
-.config(['$stateProvider', '$urlRouterProvider',
-	function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
 		$urlRouterProvider.otherwise('/core/login');
 
@@ -179,21 +148,6 @@ angular
 				url: '/app',
 				templateUrl: 'views/tmpl/app.html'
 			})
-			//dashboard
-			// .state('app.dashboard', {
-			// 	url: '/dashboard',
-			// 	controller: 'DashboardCtrl',
-			// 	templateUrl: 'views/tmpl/dashboard.html',
-			// 	resolve: {
-			// 		plugins: ['$ocLazyLoad',
-			// 			function($ocLazyLoad) {
-			// 				return $ocLazyLoad.load([
-			// 					'scripts/vendor/datatables/datatables.bootstrap.min.css'
-			// 				]);
-			// 			}
-			// 		]
-			// 	}
-			// })
 			//Dashboard
 			.state('app.dashboard', {
 				url: '/dashboard',
