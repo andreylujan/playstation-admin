@@ -6887,7 +6887,7 @@ blockquote p {
       top: 70%;
       left: 50%;
       color: transparent;
-      content: 'ÔÇó';
+      content: '•';
       text-shadow: 0 0 transparent;
       font-size: 1.2em;
       -webkit-transition: text-shadow 0.3s, color 0.3s;

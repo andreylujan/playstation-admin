@@ -289,7 +289,7 @@ angular.module('minovateApp')
 		detail: 'OK'
 	});
 
-	$scope.downloadPdf = function() {
+	$scope.downloadPdf = function(event) {
 		var pdf = angular.element(event.target).data('pdf');
 		if (pdf) {
 			$window.open(pdf, '_blank');
