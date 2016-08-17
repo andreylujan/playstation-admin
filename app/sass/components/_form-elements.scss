@@ -243,8 +243,8 @@ label {
 
     &:checked {
       +i {
-        border-color: $blue-ps;
-        background-color: $blue-ps;
+        border-color: $blue-ps-2;
+        background-color: $blue-ps-1;
 
         &:before {
           top: 3px;
@@ -769,7 +769,7 @@ fieldset[disabled] .checkbox-custom input+i:before {
 
     &.active {
       >a {
-        background: $blue-ps;
+        background: $blue-ps-2;
       }
     }
   }
@@ -832,7 +832,7 @@ label.custom-input-file input[type="file"] {
 .custom-input-file {
   border-radius: 15px;
   margin: 0;
-  background-color: $blue-ps !important;
+  background-color: $blue-ps-2 !important;
   display: inline-block;
   border: 0px;
   padding: 7px 12px;

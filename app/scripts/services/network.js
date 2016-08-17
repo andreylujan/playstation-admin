@@ -676,6 +676,28 @@ angular.module('minovateApp')
 	});
 })
 
+//weekly_business_sales
+.factory('WeeklyBusinessSales', function($http) {
+	var fd = new FormData();
+
+	return {
+		upload: function(form) {
+
+			for (var i = 0; i < form.length; i++) {
+				fd.append(form[i].field, form[i].value);
+			}
+
+			return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
+				transformRequest: angular.identity,
+				headers: {
+					'Content-Type': undefined,
+					Accept: 'application/vnd.api+json'
+				}
+			});
+		}
+	};
+})
+
 // CSV
 .service('Csv', function($http) {
 

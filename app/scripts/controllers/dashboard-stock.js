@@ -71,6 +71,10 @@ angular.module('minovateApp')
 		}).then(function(data) {
 			$scope.page.filters.zone.list = data.data;
 			$scope.page.filters.zone.selected = data.data[0];
+			$scope.getDealers({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected);
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -86,6 +90,10 @@ angular.module('minovateApp')
 			$scope.page.filters.dealer.list = data.data;
 			$scope.page.filters.dealer.selected = data.data[0];
 			$scope.page.filters.dealer.disabled = false;
+			$scope.getStores({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -102,7 +110,6 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, zoneSelected, dealerSelected).then(function(data) {
-			$log.log(data);
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
@@ -145,7 +152,7 @@ angular.module('minovateApp')
 
 		var stockBreaks = [],
 			topProducts = [];
-			
+
 		Dashboard.query({
 			category: 'stock',
 			zone_id: zoneIdSelected,

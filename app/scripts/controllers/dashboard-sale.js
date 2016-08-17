@@ -9,163 +9,6 @@
  */
 angular.module('minovateApp')
 
-// .controller('Filters', function($scope, $log, Zones, Dealers, Stores, Users, Utils, Asd) {
-
-// 	var getZones = function(e) {
-// 		if (!e.success) {
-// 			$log.error(e.detail);
-// 			return;
-// 		}
-
-// 		$scope.page.filters.zone.list = [];
-
-// 		Zones.query({}, function(success) {
-// 			if (success.data) {
-// 				angular.forEach(success.data, function(value, key) {
-// 					Asd.zones.push({
-// 						id: parseInt(value.id),
-// 						name: value.attributes.name,
-// 						dealersIds: value.attributes.dealer_ids
-// 					});
-// 					Asd.success = true;
-// 				});
-// 			} else {
-// 				$log.error(success);
-// 			}
-// 		}, function(error) {
-// 			$log.error(error);
-// 			if (error.status === 401) {
-// 				Utils.refreshToken(getZones);
-// 			}
-// 		});
-// 	};
-
-// 	getZones({
-// 		success: true,
-// 		detail: 'OK'
-// 	});
-
-// 	$scope.getDealers = function(e) {
-// 		// Valida si el parametro e.success se seteó true para el refresh token
-// 		if (!e.success) {
-// 			$log.error(e.detail);
-// 			return;
-// 		}
-
-// 		$scope.page.filters.dealer.disabled = true;
-// 		$scope.page.filters.dealer.list = [];
-// 		storesIncluded = [];
-
-// 		Dealers.query({
-// 			include: 'stores'
-// 		}, function(success) {
-// 			if (success.data && success.included) {
-
-// 				storesIncluded = success.included;
-
-// 				angular.forEach($scope.page.filters.zone.selected.dealersIds, function(dealer, key) {
-// 					angular.forEach(success.data, function(data, key) {
-// 						if (dealer === parseInt(data.id)) {
-// 							$scope.page.filters.dealer.list.push({
-// 								id: parseInt(data.id),
-// 								name: data.attributes.name,
-// 								storesIds: data.relationships.stores.data
-// 							});
-// 						}
-// 					});
-// 				});
-// 				$scope.page.filters.dealer.disabled = false;
-// 			} else {
-// 				$log.error(success);
-// 			}
-// 		}, function(error) {
-// 			$log.error(error);
-// 			if (error.status === 401) {
-// 				Utils.refreshToken($scope.getDealers);
-// 			}
-// 		});
-// 	};
-
-// 	$scope.getStores = function(e) {
-// 		// Valida si el parametro e.success se seteó true para el refresh token
-// 		if (!e.success) {
-// 			$log.error(e.detail);
-// 			return;
-// 		}
-
-// 		$scope.page.filters.store.disabled = true;
-// 		$scope.page.filters.store.list = [];
-
-// 		Stores.query({}, function(success) {
-// 			if (success.data) {
-// 				for (i = 0; i < storesIncluded.length; i++) {
-// 					for (j = 0; j < $scope.page.filters.dealer.selected.storesIds.length; j++) {
-// 						if (parseInt($scope.page.filters.dealer.selected.storesIds[j].id) === parseInt(success.data[i].id)) {
-// 							$scope.page.filters.store.list.push({
-// 								id: parseInt(success.data[i].id),
-// 								name: success.data[i].attributes.name
-// 							});
-// 							break;
-// 						}
-// 					}
-// 				}
-// 				$scope.page.filters.store.disabled = false;
-// 			} else {
-// 				$log.error(success);
-// 			}
-// 		}, function(error) {
-// 			$log.error(error);
-// 			if (error.status === 401) {
-// 				Utils.refreshToken($scope.getStores);
-// 			}
-// 		});
-// 	};
-
-// 	var getUsers = function(e) {
-// 		// Valida si el parametro e.success se seteó true para el refresh token
-// 		if (!e.success) {
-// 			$log.error(e.detail);
-// 			return;
-// 		}
-
-// 		$scope.page.filters.supervisor.disabled = true;
-// 		$scope.page.filters.instructor.disabled = true;
-// 		$scope.page.filters.instructor.list = [];
-// 		$scope.page.filters.supervisor.list = [];
-
-// 		Users.query({}, function(success) {
-// 			// $log.log(success);
-// 			if (success.data) {
-
-// 				for (var i = 0; i < success.data.length; i++) {
-// 					if (success.data[i].attributes.active) {
-// 						$scope.page.filters.instructor.list.push({
-// 							id: parseInt(success.data[i].id),
-// 							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-// 						});
-// 						$scope.page.filters.supervisor.list.push({
-// 							id: parseInt(success.data[i].id),
-// 							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-// 						});
-// 					}
-// 				}
-
-// 				$scope.page.filters.instructor.disabled = false;
-// 				$scope.page.filters.supervisor.disabled = false;
-
-// 			} else {
-// 				$log.error(success);
-// 			}
-// 		}, function(error) {
-// 			$log.log(error);
-// 			if (error.status === 401) {
-// 				Utils.refreshToken(getUsers);
-// 			}
-// 		});
-// 	};
-
-// })
-
 .controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $filter, Utils, Dashboard, DataPlayStation) {
 
 	$scope.page = {
@@ -220,6 +63,10 @@ angular.module('minovateApp')
 		}).then(function(data) {
 			$scope.page.filters.zone.list = data.data;
 			$scope.page.filters.zone.selected = data.data[0];
+			$scope.getDealers({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected);
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -234,6 +81,10 @@ angular.module('minovateApp')
 			$scope.page.filters.dealer.list = data.data;
 			$scope.page.filters.dealer.selected = data.data[0];
 			$scope.page.filters.dealer.disabled = false;
+			$scope.getStores({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -245,7 +96,6 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, zoneSelected, dealerSelected).then(function(data) {
-			$log.log(data);
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
@@ -277,7 +127,6 @@ angular.module('minovateApp')
 	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {}, {}, {}, []);
 
 	$scope.openModalViewAllSalesValues = function(data) {
-		$log.log(data);
 
 		var modalInstance = $uibModal.open({
 			animation: true,
@@ -304,7 +153,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$log.log('se ejecuta getDashboardInfo()');
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
@@ -525,7 +373,7 @@ angular.module('minovateApp')
 					data: topProducts.salesMount
 				}]);
 				// FIN para gráfica - Productos más vendidos Precio y Cantidad
-				
+
 				// INI Best Practices
 				var bestPractices = [];
 
@@ -557,7 +405,6 @@ angular.module('minovateApp')
 })
 
 .controller('ViewAllShareOfSalesModalInstance', function($scope, $log, $uibModalInstance, tableShareOfSalesAll) {
-	$log.log(tableShareOfSalesAll);
 
 	$scope.modal = {
 		title: {

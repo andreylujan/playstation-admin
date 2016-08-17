@@ -37,7 +37,7 @@
 #sidebar {
   width: 250px;
   padding: 0;
-  background-color: $blue-ps;
+  background-color: $blue-ps-2;
   z-index: 21;
   -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: -blackberry-touch;
@@ -166,7 +166,7 @@
   -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: -blackberry-touch;
   list-style: none;
-  background-color: $blue-ps;
+  background-color: $blue-ps-2;
 
   >li>a>i {
     display: inline-block;
@@ -197,7 +197,7 @@
     &.active {
       >a {
         background-color: $active-el;
-        color: $blue-ps;
+        color: $blue-ps-2;
       }
       >i {
         color: black;

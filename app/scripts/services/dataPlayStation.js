@@ -61,6 +61,7 @@ angular.module('minovateApp')
 		});
 		return promise;
 	};
+
 	var getDealers = function(e, zoneSelected) {
 
 		var defered = $q.defer();
@@ -90,22 +91,41 @@ angular.module('minovateApp')
 					storesIds: []
 				});
 
-				angular.forEach(zoneSelected.dealersIds, function(dealer, key) {
-					angular.forEach(success.data, function(data, key) {
-						if (dealer === parseInt(data.id)) {
-							dealers.push({
-								id: parseInt(data.id),
-								name: data.attributes.name,
-								storesIds: data.relationships.stores.data
-							});
-						}
+				if (zoneSelected.id === '') {
+
+					angular.forEach(success.data, function(dealer, key) {
+						dealers.push({
+							id: parseInt(dealer.id),
+							name: dealer.attributes.name,
+							storesIds: dealer.relationships.stores.data
+						});
 					});
-				});
-				defered.resolve({
-					success: true,
-					detail: 'OK',
-					data: dealers
-				});
+
+					defered.resolve({
+						success: true,
+						detail: 'OK',
+						data: dealers
+					});
+
+				} else {
+					angular.forEach(zoneSelected.dealersIds, function(dealer, key) {
+						angular.forEach(success.data, function(data, key) {
+							if (dealer === parseInt(data.id)) {
+								dealers.push({
+									id: parseInt(data.id),
+									name: data.attributes.name,
+									storesIds: data.relationships.stores.data
+								});
+							}
+						});
+					});
+					defered.resolve({
+						success: true,
+						detail: 'OK',
+						data: dealers
+					});
+				}
+
 			} else {
 				defered.reject({
 					success: false,
@@ -126,6 +146,7 @@ angular.module('minovateApp')
 		});
 		return promise;
 	};
+
 	var getStores = function(e, zoneSelected, dealerSelected) {
 
 		var defered = $q.defer();
@@ -141,48 +162,176 @@ angular.module('minovateApp')
 			return;
 		}
 
-		Stores.query({
-			'filter[zone_id]': zoneSelected.id,
-			'filter[dealer_id]': dealerSelected.id
-		}, function(success) {
-			if (success.data) {
 
-				stores.push({
-					id: '',
-					name: 'Todas las Tiendas'
-				});
+		if (zoneSelected.id === '' && dealerSelected.id === '') {
+			Stores.query({}, function(success) {
+				if (success.data) {
 
-				for (var i = 0; i < success.data.length; i++) {
 					stores.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
+						id: '',
+						name: 'Todas las Tiendas'
+					});
+
+					for (var i = 0; i < success.data.length; i++) {
+						stores.push({
+							id: parseInt(success.data[i].id),
+							name: success.data[i].attributes.name
+						});
+					}
+
+					defered.resolve({
+						success: false,
+						detail: 'OK',
+						data: stores
+					});
+				} else {
+					defered.reject({
+						success: false,
+						detail: success,
+						data: []
 					});
 				}
-				
-				defered.resolve({
-					success: false,
-					detail: 'OK',
-					data: stores
-				});
-			} else {
-				defered.reject({
-					success: false,
-					detail: success,
-					data: []
-				});
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getStores);
-			} else {
-				defered.reject({
-					success: false,
-					detail: error,
-					data: []
-				});
-			}
-		});
+			}, function(error) {
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				} else {
+					defered.reject({
+						success: false,
+						detail: error,
+						data: []
+					});
+				}
+			});
+		} else if (zoneSelected.id !== '' && dealerSelected.id === '') {
+			Stores.query({
+				'filter[zone_id]': zoneSelected.id
+			}, function(success) {
+				if (success.data) {
+
+					stores.push({
+						id: '',
+						name: 'Todas las Tiendas'
+					});
+
+					for (var i = 0; i < success.data.length; i++) {
+						stores.push({
+							id: parseInt(success.data[i].id),
+							name: success.data[i].attributes.name
+						});
+					}
+
+					defered.resolve({
+						success: false,
+						detail: 'OK',
+						data: stores
+					});
+				} else {
+					defered.reject({
+						success: false,
+						detail: success,
+						data: []
+					});
+				}
+			}, function(error) {
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				} else {
+					defered.reject({
+						success: false,
+						detail: error,
+						data: []
+					});
+				}
+			});
+		} else if (zoneSelected.id === '' && dealerSelected.id !== '') {
+			Stores.query({
+				'filter[dealer_id]': dealerSelected.id
+			}, function(success) {
+				if (success.data) {
+
+					stores.push({
+						id: '',
+						name: 'Todas las Tiendas'
+					});
+
+					for (var i = 0; i < success.data.length; i++) {
+						stores.push({
+							id: parseInt(success.data[i].id),
+							name: success.data[i].attributes.name
+						});
+					}
+
+					defered.resolve({
+						success: false,
+						detail: 'OK',
+						data: stores
+					});
+				} else {
+					defered.reject({
+						success: false,
+						detail: success,
+						data: []
+					});
+				}
+			}, function(error) {
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				} else {
+					defered.reject({
+						success: false,
+						detail: error,
+						data: []
+					});
+				}
+			});
+		} else {
+			Stores.query({
+				'filter[zone_id]': zoneSelected.id,
+				'filter[dealer_id]': dealerSelected.id
+			}, function(success) {
+				if (success.data) {
+
+					stores.push({
+						id: '',
+						name: 'Todas las Tiendas'
+					});
+
+					for (var i = 0; i < success.data.length; i++) {
+						stores.push({
+							id: parseInt(success.data[i].id),
+							name: success.data[i].attributes.name
+						});
+					}
+
+					defered.resolve({
+						success: false,
+						detail: 'OK',
+						data: stores
+					});
+				} else {
+					defered.reject({
+						success: false,
+						detail: success,
+						data: []
+					});
+				}
+			}, function(error) {
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken(getStores);
+				} else {
+					defered.reject({
+						success: false,
+						detail: error,
+						data: []
+					});
+				}
+			});
+		}
+
 		return promise;
 	};
 	var getUsers = function(e) {

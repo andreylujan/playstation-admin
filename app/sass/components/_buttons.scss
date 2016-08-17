@@ -1484,36 +1484,36 @@ button {
   }
 
   &.btn-orange-ps {
-    background-color: $orange-ps;
+    background-color: $blue-ps-2;
     color: white;
-    border-color: $darken-orange-ps;
+    border-color: $darken-blue-ps-2;
 
     &:hover,&:active,&.active {
-      background-color: $darken-orange-ps;
-      border-color: $darker-orange-ps;
+      background-color: $darken-blue-ps-2;
+      border-color: $darker-blue-ps-2;
       color: white;
     }
 
     &:active,&.active {
-      background-color: $darker-orange-ps;
-      border-color: $darkest-orange-ps;
+      background-color: $darker-blue-ps-2;
+      border-color: $darkest-blue-ps-2;
     }
   }
 
   &.btn-blue-ps {
-    background-color: $blue-ps;
+    background-color: $blue-ps-1;
     color: white;
-    border-color: $darken-blue-ps;
+    border-color: $darken-blue-ps-1;
 
     &:hover,&:active,&.active {
-      background-color: $darken-blue-ps;
-      border-color: $darker-blue-ps;
+      background-color: $darken-blue-ps-1;
+      border-color: $darker-blue-ps-1;
       color: white;
     }
 
     &:active,&.active {
-      background-color: $darker-blue-ps;
-      border-color: $darkest-blue-ps;
+      background-color: $darker-blue-ps-1;
+      border-color: $darkest-blue-ps-1;
     }
   }
 
@@ -1666,10 +1666,10 @@ button {
       }
     }
     &.btn-orange-ps {
-      color: $orange-ps;
+      color: $blue-ps-2;
 
       &:hover,&:active,&.active {
-        color: $darken-orange-ps;
+        color: $darken-blue-ps-2;
       }
     }
   }

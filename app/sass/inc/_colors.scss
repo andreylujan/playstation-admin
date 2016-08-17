@@ -18,15 +18,11 @@ $brand-danger: #d9534f;
 $brand-info: #5bc0de;
 $brand-default: #616f77;
 
-$blue-ps: #3f5b71;
-$red-ps: #f15f4c;
-$orange-ps: #f19122;
-$yellow-ps: #fcc111;
-
-$blue-repo-1: #19424f;
-$blue-repo-2: #265f76;
-$blue-repo-3: #00aaad;
-$orange-repo: #f9a01b;
+$blue-ps-1: #015496;
+$blue-ps-2: #0c7ebd;
+$gray-ps-1: #a8a9ac;
+$gray-ps-2: #6d6e71;
+$gray-ps-3: #221f1f;
 
 //darken
 
@@ -49,15 +45,12 @@ $darken-warning: darken($brand-warning, 5%);
 $darken-danger: darken($brand-danger, 5%);
 $darken-info: darken($brand-info, 5%);
 $darken-default: darken($brand-default, 5%);
-$darken-blue-ps: darken($blue-ps, 5%);
-$darken-red-ps: darken($red-ps, 5%);
-$darken-orange-ps: darken($orange-ps, 5%);
-$darken-yellow-ps: darken($yellow-ps, 5%);
 
-$darken-blue-repo-1: darken($blue-repo-1, 5%);
-$darken-blue-repo-2: darken($blue-repo-2, 5%);
-$darken-blue-repo-3: darken($blue-repo-3, 5%);
-$darken-orange-repo: darken($orange-repo, 5%);
+$darken-blue-ps-1: darken($blue-ps-1, 5%);
+$darken-blue-ps-2: darken($blue-ps-2, 5%);
+$darken-gray-ps-1: darken($gray-ps-1, 5%);
+$darken-gray-ps-2: darken($gray-ps-2, 5%);
+$darken-gray-ps-3: darken($gray-ps-3, 5%);
 
 
 //darker
@@ -81,15 +74,12 @@ $darker-warning: darken($brand-warning, 9%);
 $darker-danger: darken($brand-danger, 9%);
 $darker-info: darken($brand-info, 9%);
 $darker-default: darken($brand-default, 5%);
-$darker-blue-ps: darken($blue-ps, 9%);
-$darker-red-ps: darken($red-ps, 9%);
-$darker-orange-ps: darken($orange-ps, 9%);
-$darker-yellow-ps: darken($yellow-ps, 9%);
 
-$darker-blue-repo-1: darken($blue-repo-1, 9%);
-$darker-blue-repo-2: darken($blue-repo-2, 9%);
-$darker-blue-repo-3: darken($blue-repo-3, 9%);
-$darker-orange-repo: darken($orange-repo, 9%);
+$darker-blue-ps-1: darken($blue-ps-1, 9%);
+$darker-blue-ps-2: darken($blue-ps-2, 9%);
+$darker-gray-ps-1: darken($gray-ps-1, 9%);
+$darker-gray-ps-2: darken($gray-ps-2, 9%);
+$darker-gray-ps-3: darken($gray-ps-3, 9%);
 
 //darkest
 
@@ -112,17 +102,12 @@ $darkest-warning: darken($brand-warning, 12%);
 $darkest-danger: darken($brand-danger, 12%);
 $darkest-info: darken($brand-info, 12%);
 $darkest-default: darken($brand-default, 7%);
-$darkest-blue-ps: darken($blue-ps, 12%);
-$darkest-red-ps: darken($red-ps, 12%);
-$darkest-orange-ps: darken($orange-ps, 12%);
-$darkest-yellow-ps: darken($yellow-ps, 12%);
 
-$darkest-blue-repo-1: darken($blue-repo-1, 12%);
-$darkest-blue-repo-2: darken($blue-repo-2, 12%);
-$darkest-blue-repo-3: darken($blue-repo-3, 12%);
-$darkest-orange-repo: darken($orange-repo, 12%);
-
-
+$darkest-blue-ps-1: darken($blue-ps-1, 12%);
+$darkest-blue-ps-2: darken($blue-ps-2, 12%);
+$darkest-gray-ps-1: darken($gray-ps-1, 12%);
+$darkest-gray-ps-2: darken($gray-ps-2, 12%);
+$darkest-gray-ps-3: darken($gray-ps-3, 12%);
 
 //lighten
 
@@ -145,15 +130,12 @@ $lighten-warning: lighten($brand-warning, 5%);
 $lighten-danger: lighten($brand-danger, 5%);
 $lighten-info: lighten($brand-info, 5%);
 $lighten-default: lighten($brand-default, 5%);
-$lighten-blue-ps: lighten($blue-ps, 5%);
-$lighten-red-ps: lighten($red-ps, 5%);
-$lighten-orange-ps: lighten($orange-ps, 5%);
-$lighten-yellow-ps: lighten($yellow-ps, 5%);
 
-$lighten-blue-repo-1: lighten($blue-repo-1, 5%);
-$lighten-blue-repo-2: lighten($blue-repo-2, 5%);
-$lighten-blue-repo-3: lighten($blue-repo-3, 5%);
-$lighten-orange-repo: lighten($orange-repo, 5%);
+$lighten-blue-ps-1: lighten($blue-ps-1, 5%);
+$lighten-blue-ps-2: lighten($blue-ps-2, 5%);
+$lighten-gray-ps-1: lighten($gray-ps-1, 5%);
+$lighten-gray-ps-2: lighten($gray-ps-2, 5%);
+$lighten-gray-ps-3: lighten($gray-ps-3, 5%);
 
 //lighter
 
@@ -176,15 +158,12 @@ $lighter-warning: lighten($brand-warning, 10%);
 $lighter-danger: lighten($brand-danger, 10%);
 $lighter-info: lighten($brand-info, 10%);
 $lighter-default: lighten($brand-default, 10%);
-$lighter-blue-ps: lighten($blue-ps, 10%);
-$lighter-red-ps: lighten($red-ps, 10%);
-$lighter-orange-ps: lighten($orange-ps, 10%);
-$lighter-yellow-ps: lighten($yellow-ps, 10%);
 
-$lighter-blue-repo-1: lighten($blue-repo-1, 10%);
-$lighter-blue-repo-2: lighten($blue-repo-2, 10%);
-$lighter-blue-repo-3: lighten($blue-repo-3, 10%);
-$lighter-orange-repo: lighten($orange-repo, 10%);
+$lighter-blue-ps-1: lighten($blue-ps-1, 10%);
+$lighter-blue-ps-2: lighten($blue-ps-2, 10%);
+$lighter-gray-ps-1: lighten($gray-ps-1, 10%);
+$lighter-gray-ps-2: lighten($gray-ps-2, 10%);
+$lighter-gray-ps-3: lighten($gray-ps-3, 10%);
 
 //bright
 
@@ -207,12 +186,9 @@ $bright-warning: lighten($brand-warning, 35%);
 $bright-danger: lighten($brand-danger, 40%);
 $bright-info: lighten($brand-info, 35%);
 $bright-default: lighten($brand-default, 45%);
-$bright-blue-ps: lighten($blue-ps, 60%);
-$bright-red-ps: lighten($red-ps, 50%);
-$bright-orange-ps: lighten($orange-ps, 50%);
-$bright-yellow-ps: lighten($yellow-ps, 50%);
 
-$bright-blue-repo-1: lighten($blue-repo-1, 50%);
-$bright-blue-repo-2: lighten($blue-repo-2, 50%);
-$bright-blue-repo-3: lighten($blue-repo-3, 50%);
-$bright-orange-repo: lighten($orange-repo, 50%);
+$bright-blue-ps-1: lighten($blue-ps-1, 50%);
+$bright-blue-ps-2: lighten($blue-ps-2, 50%);
+$bright-gray-ps-1: lighten($gray-ps-1, 50%);
+$bright-gray-ps-2: lighten($gray-ps-2, 50%);
+$bright-gray-ps-3: lighten($gray-ps-3, 50%);

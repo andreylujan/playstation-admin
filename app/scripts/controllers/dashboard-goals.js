@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardGoalsCtrl', function($scope, $log, $filter, Utils, Dashboard, DataPlayStation) {
+.controller('DashboardGoalsCtrl', function($scope, $log, $filter, $uibModal, Utils, Dashboard, DataPlayStation) {
 
 	$scope.page = {
 		title: 'Metas y Comparativos',
@@ -112,6 +112,12 @@ angular.module('minovateApp')
 		}).then(function(data) {
 			$scope.page.filters.zone.list = data.data;
 			$scope.page.filters.zone.selected = data.data[0];
+
+			$scope.getDealers({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected);
+
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -127,6 +133,10 @@ angular.module('minovateApp')
 			$scope.page.filters.dealer.list = data.data;
 			$scope.page.filters.dealer.selected = data.data[0];
 			$scope.page.filters.dealer.disabled = false;
+			$scope.getStores({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -143,7 +153,6 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, zoneSelected, dealerSelected).then(function(data) {
-			$log.log(data);
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
@@ -403,6 +412,24 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.error(error);
 		});
+	};
+
+	$scope.openModalUploadGoals = function() {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: false,
+			templateUrl: 'uploadGoalsModal.html',
+			controller: 'UploadGoalsModalInstance',
+			size: 'md',
+			// resolve: {
+			// 	data: function() {
+			// 		return data;
+			// 	}
+			// }
+		});
+
+		modalInstance.result.then(function() {}, function() {});
 
 	};
 
@@ -415,5 +442,116 @@ angular.module('minovateApp')
 		detail: 'OK'
 	});
 
+
+})
+
+.controller('UploadGoalsModalInstance', function($scope, $log, $uibModalInstance, $uibModal, WeeklyBusinessSales, Utils) {
+
+	$scope.modal = {
+		alert: {
+			color: '',
+			show: '',
+			title: ''
+		},
+		goals: {
+			file: {
+				value: null
+			}
+		},
+		overlay: {
+			show: false
+		}
+	};
+
+	$scope.uploadGoals = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		if (!$scope.modal.goals.file.value) {
+			return;
+		}
+
+		$scope.modal.overlay.show = true;
+
+		var form = [{
+			field: 'csv',
+			value: $scope.modal.goals.file.value
+		}];
+
+		WeeklyBusinessSales.upload(form)
+			.success(function(success) {
+				$scope.modal.overlay.show = false;
+				// $log.log(success);
+				$uibModalInstance.close();
+				openModalSummaryLoadGoals(success);
+			}, function(error) {
+				$log.error(error);
+				$scope.modal.overlay.show = false;
+				if (error.status === 401) {
+					Utils.refreshToken(uploadGoals);
+				}
+			});
+	};
+
+	var openModalSummaryLoadGoals = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'summary.html',
+			controller: 'SummaryLoadGoalsModalInstance',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {
+			// $scope.getUsers();
+		});
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.close();
+	};
+
+})
+
+.controller('SummaryLoadGoalsModalInstance', function($scope, $log, $uibModalInstance, data) {
+
+	$scope.modal = {
+		countErrors: 0,
+		countSuccesses: 0,
+		countCreated: 0,
+		countChanged: 0,
+		errors: [],
+		successes: []
+	};
+	var i = 0;
+
+	for (i = 0; i < data.data.length; i++) {
+
+		if (!data.data[i].meta.success) {
+			$scope.modal.countErrors++;
+		} else if (data.data[i].meta.created) {
+			$scope.modal.countCreated++;
+		} else if (data.data[i].meta.changed) {
+			$scope.modal.countChanged++;
+		}
+
+		if (data.data[i].meta.errors) {
+			$scope.modal.errors.push({
+				rowNumber: data.data[i].meta.row_number,
+				field: Object.keys(data.data[i].meta.errors)[0],
+				details: data.data[i].meta.errors[Object.keys(data.data[i].meta.errors)[0]]
+			});
+		}
+
+	}
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
 
 });

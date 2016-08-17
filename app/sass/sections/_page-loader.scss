@@ -19,7 +19,7 @@
     display: inline-block;
     position: absolute;
     top: 0;
-    background-color: $red-ps;
+    background-color: $gray-ps-3;
     border-radius: 100%;
 
     @include animation(loaderbounce 2.0s infinite ease-in-out);
@@ -29,7 +29,7 @@
     top: auto;
     bottom: 0px;
     @include animation-delay(-1.0s);
-    background-color: $yellow-ps;
+    background-color: $blue-ps-1;
   }
 }
 

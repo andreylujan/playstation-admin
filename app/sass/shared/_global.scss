@@ -497,132 +497,131 @@ body {
   }
 }
 
-.bg-blue-ps {
-  background-color: $blue-ps!important;
+.bg-blue-ps-1 {
+  background-color: $blue-ps-1!important;
   color: white!important;
 
   &.dk {
-    background-color: $darken-blue-ps!important;
+    background-color: $darken-blue-ps-1!important;
   }
 
   &.dker {
-    background-color: $darker-blue-ps!important;
+    background-color: $darker-blue-ps-1!important;
   }
 
   &.lt {
-    background-color: $lighten-blue-ps!important;
+    background-color: $lighten-blue-ps-1!important;
   }
 
   &.lter {
-    background-color: $lighter-blue-ps!important;
+    background-color: $lighter-blue-ps-1!important;
   }
 
   &.bright {
-    background-color: $bright-blue-ps!important;
+    background-color: $bright-blue-ps-1!important;
   }
 }
 
-.bg-orange-ps {
-  background-color: $orange-ps!important;
+.bg-blue-ps-2 {
+  background-color: $blue-ps-2!important;
   color: white!important;
 
   &.dk {
-    background-color: $darken-orange-ps!important;
+    background-color: $darken-blue-ps-2!important;
   }
 
   &.dker {
-    background-color: $darker-orange-ps!important;
+    background-color: $darker-blue-ps-2!important;
   }
 
   &.lt {
-    background-color: $lighten-orange-ps!important;
+    background-color: $lighten-blue-ps-2!important;
   }
 
   &.lter {
-    background-color: $lighter-orange-ps!important;
+    background-color: $lighter-blue-ps-2!important;
   }
 
   &.bright {
-    background-color: $bright-orange-ps!important;
+    background-color: $bright-blue-ps-2!important;
   }
 }
 
-.bg-yellow-ps {
-  background-color: $yellow-ps!important;
+.bg-gray-ps-1 {
+  background-color: $gray-ps-1!important;
   color: white!important;
 
   &.dk {
-    background-color: $darken-yellow-ps!important;
+    background-color: $darken-gray-ps-1!important;
   }
 
   &.dker {
-    background-color: $darker-yellow-ps!important;
+    background-color: $darker-gray-ps-1!important;
   }
 
   &.lt {
-    background-color: $lighten-yellow-ps!important;
+    background-color: $lighten-gray-ps-1!important;
   }
 
   &.lter {
-    background-color: $lighter-yellow-ps!important;
+    background-color: $lighter-gray-ps-1!important;
   }
 
   &.bright {
-    background-color: $bright-yellow-ps!important;
+    background-color: $bright-gray-ps-1!important;
   }
 }
 
-.bg-red-ps {
-  background-color: $red-ps!important;
+.bg-gray-ps-2 {
+  background-color: $gray-ps-2!important;
   color: white!important;
 
   &.dk {
-    background-color: $darken-red-ps!important;
+    background-color: $darken-gray-ps-2!important;
   }
 
   &.dker {
-    background-color: $darker-red-ps!important;
+    background-color: $darker-gray-ps-2!important;
   }
 
   &.lt {
-    background-color: $lighten-red-ps!important;
+    background-color: $lighten-gray-ps-2!important;
   }
 
   &.lter {
-    background-color: $lighter-red-ps!important;
+    background-color: $lighter-gray-ps-2!important;
   }
 
   &.bright {
-    background-color: $bright-red-ps!important;
-  }
-}
-
-.bg-blue-ps {
-  background-color: $blue-ps!important;
-  color: white!important;
-
-  &.dk {
-    background-color: $darken-blue-ps!important;
-  }
-
-  &.dker {
-    background-color: $darker-blue-ps!important;
-  }
-
-  &.lt {
-    background-color: $lighten-blue-ps!important;
-  }
-
-  &.lter {
-    background-color: $lighter-blue-ps!important;
-  }
-
-  &.bright {
-    background-color: $bright-blue-ps!important;
+    background-color: $bright-gray-ps-2!important;
   }
 }
 
 
+.bg-gray-ps-3 {
+  background-color: $gray-ps-3!important;
+  color: white!important;
+
+  &.dk {
+    background-color: $darken-gray-ps-3!important;
+  }
+
+  &.dker {
+    background-color: $darker-gray-ps-3!important;
+  }
+
+  &.lt {
+    background-color: $lighten-gray-ps-3!important;
+  }
+
+  &.lter {
+    background-color: $lighter-gray-ps-3!important;
+  }
+
+  &.bright {
+    background-color: $bright-gray-ps-3!important;
+  }
+}
 
 .no-bg {
   background-color: transparent!important;
@@ -731,7 +730,7 @@ body {
 }
 
 .text-orange-ps {
-  color: $orange-ps;
+  color: $blue-ps-1;
 }
 
 .text-default {
@@ -768,22 +767,6 @@ body {
 
 .text-gray {
   color: #969696;
-}
-
-.text-red-ps {
-  color: $red-ps;
-}
-
-.text-blue-ps {
-  color: $blue-ps;
-}
-
-.text-yellow-ps {
-  color: $yellow-ps;
-}
-
-.text-orange-ps {
-  color: $orange-ps;
 }
 
 // text sizes
@@ -1424,77 +1407,83 @@ input[type="file"].custom-input-file {
   cursor: pointer;
 }
 
-.red-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
-  background-color: $red-ps;
+.gray-ps-1 > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $gray-ps-1;
   color: white;
   border-radius: 15px;
   border: 0;
 }
-.orange-ps > .multiselect-parent.btn-group.dropdown-multiselect > button {
-  background-color: $orange-ps;
+.gray-ps-2 > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $gray-ps-2;
   color:white;
   border-radius: 15px;
   border: 0;
 }
-
-.blue-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
-  background-color: $blue-ps;
+.gray-ps-3 > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $gray-ps-3;
+  color:white;
+  border-radius: 15px;
+  border: 0;
+}
+.blue-ps-1 > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $blue-ps-1;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.blue-ps-2 > .multiselect-parent.btn-group.dropdown-multiselect > button {
+  background-color: $blue-ps-2;
   color: white;
   border-radius: 15px;
   border: 0;
 }
 
-.orange-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
-  background-color: $orange-ps;
+
+.gray-ps-1 > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $gray-ps-1;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.gray-ps-2 > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $gray-ps-2;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.gray-ps-3 > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $gray-ps-3;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.blue-ps-1 > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $blue-ps-1;
+  color: white;
+  border-radius: 15px;
+  border: 0;
+}
+.blue-ps-2 > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
+  background-color: $blue-ps-2;
   color: white;
   border-radius: 15px;
   border: 0;
 }
 
-.yellow-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
-  background-color: $yellow-ps;
+.gray-ps-1 > .ui-select-search {
+  background-color: $gray-ps-1;
   color: white;
   border-radius: 15px;
   border: 0;
 }
-
-.red-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
-  background-color: $red-ps;
+.gray-ps-2 > .ui-select-search {
+  background-color: $gray-ps-2;
   color: white;
   border-radius: 15px;
   border: 0;
 }
-
-.yellow-ps > .ui-select-match > .btn.btn-default.form-control.ui-select-toggle {
-  background-color: $yellow-ps;
-  color: white;
-  border-radius: 15px;
-  border: 0;
-}
-
-.red-ps > .ui-select-search {
-  background-color: $red-ps;
-  color: white;
-  border-radius: 15px;
-  border: 0;
-}
-
-.yellow-ps > .ui-select-search {
-  background-color: $yellow-ps;
-  color: white;
-  border-radius: 15px;
-  border: 0;
-}
-
-.orange-ps > .ui-select-search {
-  background-color: $orange-ps;
-  color: white;
-  border-radius: 15px;
-  border: 0;
-}
-
-.blue-ps > .ui-select-search {
-  background-color: $blue-ps;
+.gray-ps-3 > .ui-select-search {
+  background-color: $gray-ps-3;
   color: white;
   border-radius: 15px;
   border: 0;
@@ -1510,4 +1499,17 @@ input[type="file"].custom-input-file {
 
 .disabled {
   cursor: not-allowed;
+}
+
+.overlay {
+  opacity: 0.85;
+  filter: alpha(opacity = 0);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0; 
+  right: 0;
+  display: block;
+  z-index: 2;
+  background: white;
 }
