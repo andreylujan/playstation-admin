@@ -74,8 +74,8 @@ angular.module('minovateApp')
 					reports.push({
 						id: success.data[i].id,
 						reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
-						createdAt: success.data[i].attributes.created_at,
-						limitDate: success.data[i].attributes.limit_date,
+						createdAt:  $filter('date')(success.data[i].attributes.created_at, 'dd-MM-yyyy'),
+						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd-MM-yyyy'),
 						zoneId: zoneId,
 						zoneName: '-',
 						dealerId: dealerId,

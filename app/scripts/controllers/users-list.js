@@ -48,9 +48,6 @@ angular.module('minovateApp')
 				$scope.tableParams = new NgTableParams({
 					page: 1, // show first page
 					count: 50, // count per page
-					filter: {
-						//name: 'M'       // initial filter
-					},
 					sorting: {
 						active: 'desc' // initial sorting
 					}
@@ -87,9 +84,17 @@ angular.module('minovateApp')
 			}
 		});
 
-		modalInstance.result.then(function() {}, function() {
-			// $scope.getUsers();
-		});
+		modalInstance.result.then(function(data) {
+			if (data.action === 'removeUser') {
+				for (i = 0; i < users.length; i++) {
+					if (users[i].id === data.idUser) {
+						users.splice(i, 1);
+						$log.log('borro el user: ' + users[i].email);
+					}
+				}
+			}
+			$scope.tableParams.reload();
+		}, function() {});
 	};
 
 	var openSendInvitation = function(userEmail) {
@@ -396,21 +401,18 @@ angular.module('minovateApp')
 			Users.delete({
 				idUser: idUser
 			}, function(success) {
-				if (success.data) {
-					// $log.log(success);
 
-					// HACER QUE SE REFRESQUE LA LISTA DE USUARIOS!!!
-				} else {
-					$log.log(success);
-				}
+				$uibModalInstance.close({
+					action: 'removeUser',
+					idUser: idUser
+				});
+				
 			}, function(error) {
 				$log.log(error);
 				if (error.status === 401) {
 					Utils.refreshToken($scope.removeUser);
 				}
 			});
-
-			$scope.ok();
 
 		}
 	};
