@@ -99,7 +99,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#fcc111',
+						barColor: '#0c7ebd',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,
@@ -114,7 +114,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#3f5b71',
+						barColor: '#221f1f',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,
@@ -140,7 +140,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#fcc111',
+						barColor: '#0c7ebd',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,
@@ -155,7 +155,7 @@ angular.module('minovateApp')
 							duration: 3000,
 							enabled: true
 						},
-						barColor: '#3f5b71',
+						barColor: '#221f1f',
 						scaleColor: false,
 						lineCap: 'round',
 						size: 140,

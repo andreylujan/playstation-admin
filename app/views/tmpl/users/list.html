@@ -92,11 +92,11 @@
                   {{user.roleName}}
                 </td>
                 <td data-title="'Activo'" sortable="'active'" filter="{ 'active': 'text' }" class="text-center">
-                  <img  ng-if="user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/check.png" style="width:24px">
-                  <img  ng-if="!user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/send.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId, {success: true, detail: 'OK'})" tooltip="Reenviar invitación">
+                  <img  ng-if="user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/check2.png" style="width:24px">
+                  <img  ng-if="!user.active" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/send2.png" style="width:24px; cursor:pointer" ng-click="resendInvitation(user.email, user.roleId, {success: true, detail: 'OK'})" uib-tooltip="Reenviar invitación">
                 </td>
                 <td data-title="'Info'">
-                  <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info.png" style="width:24px; cursor:pointer" tooltip="Más info">
+                  <img ng-if="user.active" ng-click="openModalUserDetails(user.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" uib-tooltip="Más info">
                 </td>
               </tr>
             </table>

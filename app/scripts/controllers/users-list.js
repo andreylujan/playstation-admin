@@ -15,7 +15,8 @@ angular.module('minovateApp')
 		title: 'Lista de usuarios'
 	};
 
-	var users = [];
+	var users = [],
+		i = 0;
 
 	$scope.getUsers = function(e) {
 
@@ -406,7 +407,7 @@ angular.module('minovateApp')
 					action: 'removeUser',
 					idUser: idUser
 				});
-				
+
 			}, function(error) {
 				$log.log(error);
 				if (error.status === 401) {

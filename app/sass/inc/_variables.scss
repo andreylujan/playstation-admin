@@ -29,9 +29,9 @@ $font-style-italic:                         italic;
 
 $site-min-width:         			        320px !default;
 
-$header-bg:                                 #324859;
-$sidebar-bg:                                #3f5b71;
-$rightbar-bg:                               #1d2833;
+$header-bg:                                 $blue-ps-2;
+$sidebar-bg:                                $blue-ps-1;
+$rightbar-bg:                               $blue-ps-1;
 
 $transparent-white-05:			rgba(255,255,255,.05);
 $transparent-white-1:				rgba(255,255,255,.1);
@@ -65,6 +65,6 @@ $link-color:                    $transparent-white-5;
 $link-color-dark:               $transparent-black-5;
 $active-el:                     $bright-blue-ps-1;
 $content-bg:                    lighten(#616f77, 49%);
-$active-link-bg:                #f8f8f8;
+$active-link-bg:                $blue-ps-1;
 
 

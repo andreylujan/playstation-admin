@@ -4,7 +4,7 @@
 	<div class="pageheader">
 
 		<h2>{{page.title}} <span></span></h2>
-		<button class="pull-right bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion({success: true,detail: 'OK'})" ng-show="page.buttons.sendInvitation.show">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
+		<button class="pull-right bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createPromotion({success: true,detail: 'OK'})" ng-show="page.buttons.sendInvitation.show">Enviar promoción &nbsp;&nbsp;<i class="fa fa-envelope-o"></i></button>
 
 		<div class="page-bar">
 
@@ -123,7 +123,7 @@
 							<div class="col-md-12 mb-5">
 								<label for="selUser" class="col-md-2 control-label" >Usuario</label>
 								<div class="col-md-4">
-									<ui-select class="bg-blue-ps br-15 b-0" multiple ng-model="page.user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false">
+									<ui-select class="bg-blue-ps-2 br-15 b-0" multiple ng-model="page.user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false">
 										<ui-select-match placeholder="Seleccionar usuario...">{{$item.fullName}}</ui-select-match>
 										<ui-select-choices repeat="user in page.users | propsFilter: {fullName: $select.search}">
 											<div ng-bind-html="user.fullName | highlight: $select.search"></div>
@@ -137,7 +137,7 @@
 							<div class="col-md-12 mb-5">
 								<label for="selZone" class="col-md-2 control-label" >Fecha inicio/fin</label>
 								<div class="col-md-10">
-									<button  class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.rangeOptions" date-begin="page.startDate" date-end="page.endDate">
+									<button  class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.rangeOptions" date-begin="page.startDate" date-end="page.endDate">
 										<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.startDate}} - {{page.endDate}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
 									</button>
 								</div>

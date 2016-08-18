@@ -326,7 +326,7 @@ angular.module('minovateApp')
 				$scope.tableShareOfSalesAll = success.data.attributes.sales_by_zone;
 
 				var donutData = [],
-					donutColors = ['#3f5b71', '#f15f4c', '#f19122', '#fcc111'];
+					donutColors = ['#015496', '#0c7ebd', '#a8a9ac', '#6d6e71'];
 				angular.forEach(success.data.attributes.share_percentages, function(value, key) {
 					donutData.push({
 						label: value.name,

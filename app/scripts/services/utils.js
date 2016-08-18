@@ -41,7 +41,7 @@ angular.module('minovateApp')
 	this.replaceAll = function(str, find, replace) {
 		return str.replace(new RegExp(this.escapeRegExp(find), 'g'), replace);
 	};
-	
+
 	this.formatRut = function(rut) {
 
 		if (rut.indexOf('.') !== -1 || rut.indexOf('-') !== -1 || rut.indexOf(',') !== -1) {
@@ -133,7 +133,7 @@ angular.module('minovateApp')
 						enabled: false
 					}
 				},
-				colors: ['#3f5b71', '#f15f4c', '#fcc111', '#f19122'],
+				colors: ['#015496', '#221f1f', '#a8a9ac', '#6d6e71'],
 				tooltip: {
 					style: {
 						padding: 10,

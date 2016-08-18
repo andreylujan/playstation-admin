@@ -11,7 +11,7 @@ angular.module('minovateApp')
   .controller('MainCtrl', function ($scope, $http) {
 
     $scope.main = {
-      title: 'e-Retail | admin',
+      title: 'Solutions 2GO',
       settings: {
         navbarHeaderColor: 'scheme-default',
         sidebarColor: 'scheme-default',

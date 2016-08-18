@@ -490,7 +490,7 @@ angular.module('minovateApp')
 				$log.error(error);
 				$scope.modal.overlay.show = false;
 				if (error.status === 401) {
-					Utils.refreshToken(uploadGoals);
+					Utils.refreshToken($scope.uploadGoals);
 				}
 			});
 	};

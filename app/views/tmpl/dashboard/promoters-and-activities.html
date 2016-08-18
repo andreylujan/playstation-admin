@@ -6,13 +6,13 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<button class="bg-greensea btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Descargar resumen (.xls)"><i class="fa fa-file-excel-o"></i> </button>
+				<button class="bg-blue-ps-2 btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Descargar resumen (.xls)"><i class="fa fa-file-excel-o"></i> </button>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-2 mt-5">
-				<ui-select class="red-ps br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
+				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
 					<ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name  | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="zone.name | highlight: $select.search | capitalize:true"></div>
@@ -20,7 +20,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="orange-ps br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
@@ -28,7 +28,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="yellow-ps br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Tiendas">
+				<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Tiendas">
 					<ui-select-match placeholder="Seleccionar tienda..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="store in page.filters.store.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="store.name | highlight: $select.search | capitalize:true"></div>
@@ -36,7 +36,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
+				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
 					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
 						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
@@ -44,7 +44,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
 						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
@@ -53,9 +53,9 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<input type="text" class="form-control bg-red-ps br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
+					<input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-red-ps br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
+						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
 					</span>
 				</div>
 			</div>
@@ -77,9 +77,9 @@
 
 				<div class="tile-widget">
 					<div class="mt-10">
-						<div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.storeVisits.countTotalReports}}</div>
-						<div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.storeVisits.countReportsToday}}</div>
-						<div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.storeVisits.countReportsYesterday}}</div>
+						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.storeVisits.countTotalReports}}</div>
+						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.storeVisits.countReportsToday}}</div>
+						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.storeVisits.countReportsYesterday}}</div>
 					</div>
 					<highchart class="mt-40" config="chartConfigStoreVisits"></highchart>
 				</div>
@@ -111,7 +111,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.mothlyReportsPerDay.all)" ng-class="{disabled:page.promotors.mothlyReportsPerDay.seeAll.disabled}"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.mothlyReportsPerDay.all)" ng-class="{disabled:page.promotors.mothlyReportsPerDay.seeAll.disabled}"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -133,9 +133,9 @@
 
 				<div class="tile-widget">
 					<div class="mt-10">
-						<div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.registry.entranceAndExit.countTotalExits}}</div>
-						<div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.registry.entranceAndExit.countExitsToday}}</div>
-						<div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.registry.entranceAndExit.countExitsYesterday}}</div>
+						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.registry.entranceAndExit.countTotalExits}}</div>
+						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.registry.entranceAndExit.countExitsToday}}</div>
+						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.registry.entranceAndExit.countExitsYesterday}}</div>
 					</div>
 					<highchart class="mt-40" config="chartConfigAccumulatedCheckins"></highchart>
 				</div>
@@ -151,92 +151,6 @@
 			<!-- tile -->
 			<section class="tile" fullscreen="isFullscreen01">
 				<div class="tile-widget">
-				 <!--  <table class="table table-condensed table-hover mt-10">
-						<thead>
-							<tr>
-								<th>Día semana</th>
-								<th class="text-center">Día</th>
-								<th class="text-center">Cantidad reportes</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Lunes</td>
-								<td class="text-center">1</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Martes</td>
-								<td class="text-center">2</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">3</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Jueves</td>
-								<td class="text-center">4</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Viernes</td>
-								<td class="text-center">5</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Sábado</td>
-								<td class="text-center">6</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Domingo</td>
-								<td class="text-center">7</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Lunes</td>
-								<td class="text-center">8</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Martes</td>
-								<td class="text-center">9</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-							<tr>
-								<td>Miercoles</td>
-								<td class="text-center">10</td>
-								<td class="text-center text-orange-ps">10</td>
-							</tr>
-						</tbody>
-					</table> -->
 					<table class="table table-condensed table-hover mt-10">
 						<thead>
 							<tr>
@@ -249,11 +163,11 @@
 							<tr ng-repeat="checkin in page.promotors.registry.mothlyExitsPerDay.latest15">
 								<td>{{checkin.weekDay}}</td>
 								<td class="text-center">{{checkin.monthDay}}</td>
-								<td class="text-orange-ps text-center">{{checkin.amount}}</td>
+								<td class="text-gray-ps-2 text-center">{{checkin.amount}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyExitsPerDay.all)"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyExitsPerDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -275,9 +189,9 @@
 
 				<div class="tile-widget">
 					<div class="mt-10">
-						<div class="bg-red-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.registry.hours.countTotalHours}}</div>
-						<div class="bg-orange-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.registry.hours.countHoursToday}}</div>
-						<div class="bg-yellow-ps pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.registry.hours.countHoursYesterday}}</div>
+						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.promotors.registry.hours.countTotalHours}}</div>
+						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Hoy: {{page.promotors.registry.hours.countHoursToday}}</div>
+						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Ayer: {{page.promotors.registry.hours.countHoursYesterday}}</div>
 					</div>
 					<highchart class="mt-40" config="chartConfigHours"></highchart>
 				</div>
@@ -309,7 +223,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyHoursPerDay.all)"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyHoursPerDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -339,22 +253,22 @@
 								<th class="text-center" colspan="2">XBox</th>
 							</tr>
 							<tr>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="hcByDealer in page.promotors.headCounts.byDealer">
 								<td>{{hcByDealer.name | capitalize:true}}</td>
-								<td class="text-center text-orange-ps">{{hcByDealer.playstation.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByDealer.playstation.full}}</td>
 								<td class="text-center">{{hcByDealer.playstation.part}}</td>
-								<td class="text-center text-orange-ps">{{hcByDealer.nintendo.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByDealer.nintendo.full}}</td>
 								<td class="text-center">{{hcByDealer.nintendo.part}}</td>
-								<td class="text-center text-orange-ps">{{hcByDealer.xbox.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByDealer.xbox.full}}</td>
 								<td class="text-center">{{hcByDealer.xbox.part}}</td>
 							</tr>
 						</tbody>
@@ -386,27 +300,27 @@
 								<th class="text-center" colspan="2">XBox</th>
 							</tr>
 							<tr>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
-								<th class="text-center text-orange-ps">Full</th>
+								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="hcByStore in page.promotors.headCounts.byStore">
 								<td>{{hcByStore.name | capitalize:true}}</td>
-								<td class="text-center text-orange-ps">{{hcByStore.playstation.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByStore.playstation.full}}</td>
 								<td class="text-center">{{hcByStore.playstation.part}}</td>
-								<td class="text-center text-orange-ps">{{hcByStore.nintendo.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByStore.nintendo.full}}</td>
 								<td class="text-center">{{hcByStore.nintendo.part}}</td>
-								<td class="text-center text-orange-ps">{{hcByStore.xbox.full}}</td>
+								<td class="text-center text-gray-ps-2">{{hcByStore.xbox.full}}</td>
 								<td class="text-center">{{hcByStore.xbox.part}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<h3 class="text-orange-ps text-center" ng-show="!page.promotors.headCounts.byStore.length">No se encontraron datos</h3>
+					<h3 class="text-gray-ps-2 text-center" ng-show="!page.promotors.headCounts.byStore.length">No se encontraron datos</h3>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -427,28 +341,28 @@
 				</div>
 
 				<div class="tile-widget">
-					<p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
+					<p class="text-center text-md">Cumplimiento <strong>Hoy</strong></p>
 					<div easypiechart options="page.promotors.pricesCommunicated.percenToday.options" percent="page.promotors.pricesCommunicated.percenToday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.pricesCommunicated.percenToday.show">
-						<i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
+						<i class="fa fa-check fa-4x text-gray-ps-2" style="line-height: 140px;"></i>
 					</div>
 					<p class="text-elg text-center mt-20 mb-0" ng-show="page.promotors.pricesCommunicated.percenToday.show">
-						<strong class="text-yellow-ps">{{page.promotors.pricesCommunicated.percenToday.value}} %</strong>
+						<strong class="text-gray-ps-2">{{page.promotors.pricesCommunicated.percenToday.value}} %</strong>
 					</p>
 					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.pricesCommunicated.percenToday.show">
-						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+						<strong class="text-gray-ps-2">No se han registrado reportes hoy</strong>
 					</p>
 
 					<hr>
 
-					<p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
+					<p class="text-center text-md">Cumplimiento <strong>Ayer</strong></p>
 					<div easypiechart options="page.promotors.pricesCommunicated.percentYesterday.options" percent="page.promotors.pricesCommunicated.percentYesterday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.pricesCommunicated.percentYesterday.show">
-						<i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
+						<i class="fa fa-check fa-4x text-gray-ps-2" style="line-height: 140px;"></i>
 					</div>
 					<p class="text-elg text-center mt-20 mb-0" ng-show="page.promotors.pricesCommunicated.percentYesterday.show">
-						<strong class="text-blue-ps">{{page.promotors.pricesCommunicated.percentYesterday.value}} %</strong>
+						<strong class="text-gray-ps-2">{{page.promotors.pricesCommunicated.percentYesterday.value}} %</strong>
 					</p>
 					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.pricesCommunicated.percentYesterday.show">
-						<strong class="text-orange-ps">No se registraron reportes ayer</strong>
+						<strong class="text-gray-ps-2">No se registraron reportes ayer</strong>
 					</p>
 				</div>
 
@@ -479,12 +393,12 @@
 						<tbody>
 							<tr ng-repeat="communicatedPrice in page.promotors.pricesCommunicated.byStore.list">
 								<td>{{communicatedPrice.zoneName}}</td>
-								<td class="text-center text-orange-ps">{{communicatedPrice.dealerName}}</td>
+								<td class="text-center text-gray-ps-2">{{communicatedPrice.dealerName}}</td>
 								<td class="text-center">{{communicatedPrice.dealerName}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<h3 ng-show="!page.promotors.pricesCommunicated.byStore.list.length" class="text-orange-ps text-center">No se encontraron datos</h3>
+					<h3 ng-show="!page.promotors.pricesCommunicated.byStore.list.length" class="text-gray-ps-2 text-center">No se encontraron datos</h3>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -537,7 +451,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalAllDataTableCommunicatedPricesByDay(page.promotors.pricesCommunicated.byDay.all)"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalAllDataTableCommunicatedPricesByDay(page.promotors.pricesCommunicated.byDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -558,24 +472,24 @@
 				</div>
 
 				<div class="tile-widget">
-					<p class="text-center text-md">Cumplimento <strong>Hoy</strong></p>
+					<p class="text-center text-md">Cumplimiento <strong>Hoy</strong></p>
 					<div easypiechart options="page.promotors.promotionsCommunicated.percenToday.options" percent="page.promotors.promotionsCommunicated.percenToday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.promotionsCommunicated.percenToday.show">
-						<i class="fa fa-check fa-4x text-yellow-ps" style="line-height: 140px;"></i>
+						<i class="fa fa-check fa-4x text-gray-ps-2" style="line-height: 140px;"></i>
 					</div>
-					<p class="text-elg text-center mt-20 mb-0"><strong class="text-yellow-ps" ng-show="page.promotors.promotionsCommunicated.percenToday.show">{{page.promotors.promotionsCommunicated.percenToday.value}} %</strong></p>
+					<p class="text-elg text-center mt-20 mb-0"><strong class="text-gray-ps-2" ng-show="page.promotors.promotionsCommunicated.percenToday.show">{{page.promotors.promotionsCommunicated.percenToday.value}} %</strong></p>
 					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.promotionsCommunicated.percenToday.show">
-						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+						<strong class="text-gray-ps-2">No se han registrado reportes hoy</strong>
 					</p>
 
 					<hr>
 
-					<p class="text-center text-md">Cumplimento <strong>Ayer</strong></p>
+					<p class="text-center text-md">Cumplimiento <strong>Ayer</strong></p>
 					<div easypiechart options="page.promotors.promotionsCommunicated.percentYesterday.options" percent="page.promotors.promotionsCommunicated.percentYesterday.value" class="easypiechart block" style="width: 140px; height: 140px;" ng-show="page.promotors.promotionsCommunicated.percentYesterday.show">
 						<i class="fa fa-check fa-4x text-blue-ps" style="line-height: 140px;"></i>
 					</div>
 					<p class="text-elg text-center mt-20 mb-0"><strong class="text-blue-ps" ng-show="page.promotors.promotionsCommunicated.percentYesterday.show">{{page.promotors.promotionsCommunicated.percentYesterday.value}} %</strong></p>
 					<p class="text-md text-center mt-20 mb-0" ng-show="!page.promotors.promotionsCommunicated.percentYesterday.show">
-						<strong class="text-orange-ps">No se han registrado reportes hoy</strong>
+						<strong class="text-gray-ps-2">No se han registrado reportes hoy</strong>
 					</p>
 				</div>
 
@@ -606,12 +520,12 @@
 						<tbody>
 							<tr ng-repeat="communicatedPromotion in page.promotors.promotionsCommunicated.byStore.list">
 								<td>{{communicatedPromotion.zoneName}}</td>
-								<td class="text-center text-orange-ps">{{communicatedPromotion.dealerName}}</td>
+								<td class="text-center text-gray-ps-2">{{communicatedPromotion.dealerName}}</td>
 								<td class="text-center">{{communicatedPromotion.dealerName}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<h3 ng-show="!page.promotors.promotionsCommunicated.byStore.list.length" class="text-orange-ps text-center">No se encontraron datos</h3>
+					<h3 ng-show="!page.promotors.promotionsCommunicated.byStore.list.length" class="text-gray-ps-2 text-center">No se encontraron datos</h3>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -664,7 +578,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalAllDataTableCommunicatedPricesByDay(page.promotors.promotionsCommunicated.byDay.all)"><p class="text-orange-ps mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalAllDataTableCommunicatedPricesByDay(page.promotors.promotionsCommunicated.byDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
