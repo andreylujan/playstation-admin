@@ -169,7 +169,7 @@ angular.module('minovateApp')
 					// $log.log(success);
 					if (success.data) {
 						disableForm();
-						$scope.page.elements.message.color = 'greensea';
+						$scope.page.elements.message.color = 'white';
 						$scope.page.elements.message.text = 'Usuario creado exitosamente';
 						$scope.page.elements.message.show = true;
 

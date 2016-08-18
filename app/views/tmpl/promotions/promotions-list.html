@@ -73,8 +73,8 @@
 
 						<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewPromotion()">Nueva promoción</button>
 
-						<table ng-table="tableParams" show-filter="true" class="table table-custom">
-							<tr ng-repeat="promotion in $data">
+						<table ng-table="tableParams" show-filter="true" class="table table-custom" ng-show="tableParams.data.length">
+							<tr ng-repeat="promotion in $data" >
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
 									{{promotion.title}}
 								</td>
@@ -90,9 +90,6 @@
 								<td data-title="'Dealers'" sortable="'dealerNames'" filter="{ 'dealerNames': 'text' }">
 									<span ng-bind-html="promotion.dealerNames"></span>
 								</td>
-								<!-- <td data-title="'Usuarios'" sortable="'userNames'" filter="{ 'userNames': 'text' }">
-									<span ng-bind-html="promotion.userNames"></span>
-								</td> -->
 								<td data-title="'Info'">
 									<img ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" tooltip="Más info" ng-click="gotoNewPromotion(promotion.id)">
 								</td>
@@ -101,6 +98,7 @@
 								</td>
 							</tr>
 						</table>
+						<h3 class="text-orange-ps text-center" ng-show="!tableParams.data.length">No hay promociones disponibles<span>
 
 				</div>
 				<!-- /tile body -->

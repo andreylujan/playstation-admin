@@ -2454,6 +2454,8 @@ html.boxed-layout {
 .sidebar-xs #header .branding {
   width: 40px;
   padding: 0; }
+  .sidebar-xs #header .branding .brand {
+    display: none; }
   .sidebar-xs #header .branding > a {
     background-position: 6px 10px;
     width: 40px; }

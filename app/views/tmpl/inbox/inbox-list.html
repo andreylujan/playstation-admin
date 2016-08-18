@@ -73,7 +73,7 @@
 
 						<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewInbox()">Nuevo mensaje</button>
 
-						<table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
+						<table ng-table="tableParams" show-filter="true" class="table table-custom table-hover" ng-show="tableParams.data.length">
 							<tr ng-repeat="inbox in $data" ng-click="gotoNewInbox(inbox.id)" style="cursor:pointer;">
 								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
 									{{inbox.id | number}}
@@ -92,6 +92,7 @@
 								</td>
 							</tr>
 						</table>
+						<h3 class="text-orange-ps text-center" ng-show="!tableParams.data.length">No se han encontrado mensajes<span>
 
 				</div>
 				<!-- /tile body -->

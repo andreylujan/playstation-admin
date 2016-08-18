@@ -83,19 +83,8 @@
               </div>
             </div>
 
-            <!-- <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="openModalCreateProduct()" uib-tooltip="Carga manual">Nuevo producto</button> -->
-
-            <!-- <label class="custom-input-file ml-10" uib-tooltip="Cargar por archivo">
-              <input type="file" ng-model="page.cvsProductsFile.value"/>
-              <span>Cargar productos</span>
-            </label>
-            <i class="fa fa-upload ml-5" style="color: #3f5b71" uib-tooltip="Subir archivo"></i> -->
-
             <table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
-              <tr ng-repeat="product in $data" ng-dblclick="openModalCreateProduct(product.id)">
-              <!-- <td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }" style="width:20px">
-                {{product.id | cut:true:4:'...'}}
-              </td> -->
+              <tr ng-repeat="product in $data">
               <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" uib-popover="{{product.sku}}">
                 <span>{{product.sku}}</span>
               </td>
@@ -114,31 +103,9 @@
               <td data-title="'Publisher'" sortable="'publisher'" filter="{ 'publisher': 'text' }">
                 {{product.publisher | capitalize}}
               </td>
-              <!-- <td data-title="'Descipción'" sortable="'description'" filter="{ 'description': 'text' }" uib-popover="{{product.description}}">
-                <span style="cursor:pointer">{{product.description | cut:true:5:'...'}}</span>
-              </td> -->
-              <!-- <td data-title="'PLU'" sortable="'plu'" filter="{ 'plu': 'text' }" uib-popover="{{product.plu}}">
-                <span style="cursor:pointer">{{product.plu | cut:true:5:'...'}}</span>
-              </td> -->
-              <!-- <td data-title="'ID Vigencia'" sortable="'validityCode'" filter="{ 'validityCode': 'text' }" uib-popover="{{product.validityCode}}">
-                <span style="cursor:pointer">{{product.validityCode | cut:true:5:'...'}}</span>
-              </td> -->
-              <!-- <td data-title="'Creado el'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-                {{product.createdAt | date:'dd/mm/yy'}}
-              </td> -->
-              <!-- <td data-title="'Marca'" sortable="'brand'" filter="{ 'brand': 'text' }">
-                {{product.brand}}
-              </td> -->
-              <!-- <td data-title="'Precio mínimo'" sortable="'minPrice'" filter="{ 'minPrice': 'text' }">
-                {{product.minPrice | currency:'$':0}}
-              </td> -->
-              <!-- <td data-title="'Precio máximo'" sortable="'maxPrice'" filter="{ 'maxPrice': 'text' }">
-                {{product.maxPrice | currency:'$':0}}
-              </td> -->
-              <!-- <td data-title="'Top'" sortable="'isTop'" filter="{ 'isTop': 'text' }" ng-switch="{{product.isTop}}">
-                <fa class="text-greensea" name="check" ng-switch-when="true"></fa>
-                <fa class="text-danger" name="times" ng-switch-when="false"></fa>
-              </td> -->
+              <td data-title="'Info'" >
+                <img ng-click="openModalCreateProduct(product.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" tooltip="Más info">
+              </td>
             </tr>
           </table>
 
