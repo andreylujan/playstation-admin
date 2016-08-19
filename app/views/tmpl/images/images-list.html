@@ -6,55 +6,74 @@
 		<h2>{{page.title}} <span></span></h2>
 
 		<div class="row">
-			<div class="col-md-2 mt-5">
-				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getImages({success:true,detail:'OK'})" title="Zonas">
 					<ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="zone.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+			<div class="col-md-3 mt-5">
+				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getImages({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Tiendas">
+			<div class="col-md-3 mt-5">
+				<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getImages({success:true,detail:'OK'})" title="Tiendas">
 					<ui-select-match placeholder="Seleccionar tienda..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="store in page.filters.store.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="store.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
-				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
+		</div>
+
+		<div class="row">
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getImages({success:true,detail:'OK'})" title="Instructores">
 					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
 						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
-				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getImages({success:true,detail:'OK'})" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
 						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategory.selected" close-on-select="true" ng-disabled="page.filters.imageCategory.disabled" ng-change="getImages({success:true,detail:'OK'})" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="imageCategory in page.filters.imageCategory.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="imageCategory.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-3 mt-5">
 				<div class="input-group">
-					<input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span>
+					<button  class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate" popup-placement="right">
+						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
+					</button>
 				</div>
 			</div>
 		</div>
+		<!-- <div class="row">
+			<div class="col-md-3 mt-5">
+				<div class="input-group">
+					<button  class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate" popup-placement="top">
+						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
+					</button>
+				</div>
+			</div>
+		</div> -->
 
 	</div>
 	<!-- /page header -->
@@ -109,37 +128,52 @@
 					<!-- tile body -->
 					<div class="tile-body">
 
+						<!-- <div class="row">
+							<div class="col-md-4">
+								<div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+									<a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img style="margin: 0 auto;" class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+									<a ng-href="http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg" alt="product_image"></a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+									<a ng-href="http://www.gettyimages.pt/gi-resources/images/Homepage/Hero/PT/PT_hero_42_153645159.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.gettyimages.pt/gi-resources/images/Homepage/Hero/PT/PT_hero_42_153645159.jpg" alt="product_image"></a>
+								</div>
+							</div>
+						</div> -->
 
-					</form>
+						<div class="row">
+							<div ng-repeat="image in page.images" ng-show="page.images.length">
+								<div class="col-md-4">
+									<div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
+										<a ng-href="{{image.url}}" target="_blank">
+										<img style="margin: 0 auto;" class="img-responsive p-10" ng-src="{{image.url}}" alt="image_{{image.id}}">
+									</a>
+									</div>
+								</div>
+							</div>
+							<h3 ng-show="!page.images.length" class="text-center">No se encontraron fotos</h3>
+						</div>
 
 
-				</div>
-				<!-- /tile body -->
+					</div>
+					<!-- /tile body -->
 
-			</section>
-			<!-- /tile -->
+				</section>
+				<!-- /tile -->
 
-		</div>
-		<!-- /col -->
-
-
-	</div>
-	<!-- /row -->
-
-</div>
-<!-- /page content -->
-
-<script type="text/ng-template" id="removeModal.html" class="">
-	<div class="modal-body text-gray">
-		<div class="row">
-			<div class="col-md-12">
-				<h4 class="text-center"><strong></strong></h4>
 			</div>
+			<!-- /col -->
+
+
 		</div>
+		<!-- /row -->
+
 	</div>
-	<div class="modal-footer">
-		<button class="btn btn-default" ng-click="cancel()">Cancelar</button>
-	</div>
-</script>
+	<!-- /page content -->
 
 </div>

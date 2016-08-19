@@ -17,8 +17,8 @@ angular.module('minovateApp')
       },
       link: function(scope, element) {
         element.daterangepicker(scope.options, function(start, end) {
-          scope.start = start.format('MMMM D, YYYY');
-          scope.end = end.format('MMMM D, YYYY');
+          scope.start = start.format('DD/MM/YYYY');
+          scope.end = end.format('DD/MM/YYYY');
           scope.$apply();
         });
       }

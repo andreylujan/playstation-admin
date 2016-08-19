@@ -678,6 +678,45 @@ angular.module('minovateApp')
 	});
 })
 
+//ImagesCategories
+.factory('ImagesCategories', function($resource) {
+	return $resource(API_URL + '/categories', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+})
+
+
+//Images
+.factory('Images', function($resource) {
+	return $resource(API_URL + '/images', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'page[number]': '@pageNumber',
+				'page[size]': '@pageSize',
+				include: 'category',
+				zone_id: '@zone_id',
+				dealer_id: '@dealer_id',
+				store_id: '@store_id',
+				instructor_id: '@instructor_id',
+				supervisor_id: '@supervisor_id',
+				start_date: 'start_date',
+				end_date: 'end_date',
+				category_id: '@category_id'
+			}
+		}
+	});
+})
+
 //weekly_business_sales
 .factory('WeeklyBusinessSales', function($http) {
 	var fd = new FormData();

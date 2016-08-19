@@ -173,7 +173,7 @@ angular.module('minovateApp')
 						$scope.page.elements.message.text = 'Usuario creado exitosamente';
 						$scope.page.elements.message.show = true;
 
-						$scope.page.elements.submessage.color = 'default';
+						$scope.page.elements.submessage.color = 'white';
 						$scope.page.elements.submessage.text = 'puede cerrar esta página';
 						$scope.page.elements.submessage.show = true;
 					} else {

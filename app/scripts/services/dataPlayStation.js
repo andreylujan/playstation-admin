@@ -2,7 +2,7 @@
 
 angular.module('minovateApp')
 
-.factory('DataPlayStation', function($log, $q, Zones, Stores, Dealers, Users, Utils) {
+.factory('DataPlayStation', function($log, $q, Zones, Stores, Dealers, Users, ImagesCategories, Utils) {
 	var storesIncluded = [],
 		i = 0,
 		j = 0;
@@ -161,7 +161,6 @@ angular.module('minovateApp')
 			});
 			return;
 		}
-
 
 		if (zoneSelected.id === '' && dealerSelected.id === '') {
 			Stores.query({}, function(success) {
@@ -334,6 +333,7 @@ angular.module('minovateApp')
 
 		return promise;
 	};
+
 	var getUsers = function(e) {
 
 		var defered = $q.defer();
@@ -393,11 +393,69 @@ angular.module('minovateApp')
 		return promise;
 	};
 
+	var getImagesCategories = function(e) {
+
+		var defered = $q.defer();
+		var promise = defered.promise;
+		var imagesCategories = [];
+
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			defered.reject({
+				success: false,
+				detail: e.detail,
+				data: []
+			});
+			return;
+		}
+
+		ImagesCategories.query({}, function(success) {
+			if (success.data) {
+
+				imagesCategories.push({
+					id: '',
+					name: 'Todas las categorías'
+				});
+
+				for (i = 0; i < success.data.length; i++) {
+					imagesCategories.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].attributes.name
+					});
+				}
+				defered.resolve({
+					success: true,
+					detail: success,
+					data: imagesCategories
+				});
+			} else {
+				defered.reject({
+					success: false,
+					detail: success,
+					data: []
+				});
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getImagesCategories);
+			} else {
+				defered.reject({
+					success: false,
+					detail: error,
+					data: []
+				});
+			}
+		});
+		return promise;
+	};
+
 	return {
 		getZones: getZones,
 		getDealers: getDealers,
 		getStores: getStores,
-		getUsers: getUsers
+		getUsers: getUsers,
+		getImagesCategories: getImagesCategories
 	};
 
 });
