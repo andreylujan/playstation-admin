@@ -38,6 +38,46 @@ angular.module('minovateApp')
 		k = 0,
 		children = [];
 
+	var getChecklistOptions = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		// Checklists.query({
+		// 	'filter[type]': 'ChecklistOption',
+		// 	include: 'detail'
+		// }, function(success) {
+		// 	// $log.log(success);
+		// 	if (success.data) {
+
+		// 		for (var i = 0; i < success.data.length; i++) {
+		// 			$scope.checklistOptions.push({
+		// 				id: success.data[i].id,
+		// 				name: success.data[i].attributes.name
+		// 			});
+		// 		}
+
+		// 		if (idChecklist) {
+		// 			$scope.getInfoChecklist({
+		// 				success: true,
+		// 				detail: 'OK'
+		// 			});
+		// 		} else {
+		// 			$scope.generateItem();
+		// 		}
+
+		// 	} else {
+
+		// 	}
+		// }, function(error) {
+		// 	$log.error(error);
+		// 	if (error.status === 401) {
+		// 		Utils.refreshToken(getChecklistOptions);
+		// 	}
+		// });
+	};
+
 	$scope.getInfoChecklist = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
@@ -49,10 +89,7 @@ angular.module('minovateApp')
 		Checklists.query({
 			idChecklist: idChecklist
 		}, function(success) {
-			// $log.log(success);
-
 			if (success.data) {
-
 				$scope.checklist.name = success.data.attributes.name;
 
 				for (i = 0; i < success.data.attributes.children.length; i++) {
@@ -66,32 +103,58 @@ angular.module('minovateApp')
 					});
 				}
 
-				// $log.log('$scope.checklist.items');
-				// $log.log($scope.checklist.items);
-				// $log.log('$scope.checklistOptions');
-				// $log.log($scope.checklistOptions);
-
-				for (i = 0; i < $scope.checklistOptions.length; i++) {
-					for (j = 0; j < $scope.checklist.items.length; j++) {
-						for (k = 0; k < $scope.checklist.items[j].options.length; k++) {
-							if (parseInt($scope.checklist.items[j].options[k].id) === parseInt($scope.checklistOptions[i].id)) {
-								$scope.checklist.items[j].option = $scope.checklistOptions[i];
-								break;
-							}
-						}
-					}
-				}
-
-			} else {
-				$log.error(success);
 			}
-
 		}, function(error) {
+			$log.log(error);
 			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.getInfoChecklist);
 			}
 		});
+
+		// $scope.checklist.items = [];
+
+		// Checklists.query({
+		// 	idChecklist: idChecklist
+		// }, function(success) {
+		// 	// $log.log(success);
+
+		// 	if (success.data) {
+
+		// 		$scope.checklist.name = success.data.attributes.name;
+
+		// 		for (i = 0; i < success.data.attributes.children.length; i++) {
+		// 			$scope.checklist.items.push({
+		// 				id: success.data.attributes.children[i].id,
+		// 				name: success.data.attributes.children[i].name,
+		// 				position: parseInt(success.data.attributes.children[i].position),
+		// 				options: success.data.attributes.children[i].data.options,
+		// 				option: null,
+		// 				required: success.data.attributes.children[i].required
+		// 			});
+		// 		}
+
+		// 		for (i = 0; i < $scope.checklistOptions.length; i++) {
+		// 			for (j = 0; j < $scope.checklist.items.length; j++) {
+		// 				for (k = 0; k < $scope.checklist.items[j].options.length; k++) {
+		// 					if (parseInt($scope.checklist.items[j].options[k].id) === parseInt($scope.checklistOptions[i].id)) {
+		// 						$scope.checklist.items[j].option = $scope.checklistOptions[i];
+		// 						break;
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+
+		// 	} else {
+		// 		$log.error(success);
+		// 	}
+
+		// }, function(error) {
+		// 	$log.error(error);
+		// 	if (error.status === 401) {
+		// 		Utils.refreshToken($scope.getInfoChecklist);
+		// 	}
+		// });
 	};
 
 	$scope.generateItem = function() {
@@ -109,46 +172,6 @@ angular.module('minovateApp')
 		});
 
 		$scope.page.buttons.oneMoreItem.disabled = true;
-	};
-
-	var getChecklistOptions = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		Checklists.query({
-			'filter[type]': 'ChecklistOption',
-			include: 'detail'
-		}, function(success) {
-			// $log.log(success);
-			if (success.data) {
-
-				for (var i = 0; i < success.data.length; i++) {
-					$scope.checklistOptions.push({
-						id: success.data[i].id,
-						name: success.data[i].attributes.name
-					});
-				}
-
-				if (idChecklist) {
-					$scope.getInfoChecklist({
-						success: true,
-						detail: 'OK'
-					});
-				} else {
-					$scope.generateItem();
-				}
-
-			} else {
-
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getChecklistOptions);
-			}
-		});
 	};
 
 	var prepareChecklistToSend = function() {
@@ -312,10 +335,13 @@ angular.module('minovateApp')
 		$scope.checklist.items.splice(index, 1);
 	};
 
-	getChecklistOptions({
-		success: true,
-		detail: 'OK'
-	});
+	if (idChecklist) {
+		$scope.getInfoChecklist({
+			success: true,
+			detail: 'OK'
+		});
+
+	}
 
 })
 
@@ -344,7 +370,7 @@ angular.module('minovateApp')
 
 		Checklists.query({
 			'filter[type]': 'ChecklistOption',
-			include: 'detail'
+			// include: 'detail'
 		}, function(success) {
 			if (success.data) {
 				for (var i = 0; i < success.data.length; i++) {
@@ -377,6 +403,18 @@ angular.module('minovateApp')
 		}
 
 		if (infoChecklist.id) {
+
+			// $log.log(infoChecklist);
+
+			// for (var i = 0; i < infoChecklist.data.attributes.children.length; i++) {
+			// 	if (success.data.attributes.children[i].id === idItem) {
+			// 		infoItem.id = success.data.attributes.children[i].id;
+			// 		infoItem.name = success.data.attributes.children[i].name;
+			// 		infoItem.data = success.data.attributes.children[i].data;
+			// 	}
+			// }
+
+
 			Checklists.query({
 				idChecklist: infoChecklist.id
 			}, function(success) {

@@ -79,7 +79,7 @@
             
             <div class="row">
               <div class="col-md-2">
-                <button class="bg-orange-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="updateOrCreateChecklist()" uib-tooltip="Guardar checklist"><i class="fa fa-floppy-o"></i></button>
+                <button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="updateOrCreateChecklist()" uib-tooltip="Guardar checklist"><i class="fa fa-floppy-o"></i></button>
               </div>
             </div>
 
@@ -99,8 +99,6 @@
                 <tr>
                   <th>Nombre item</th>
                   <th>Opciones</th>
-                  <!-- <th>Tipo</th> -->
-                  <!-- <th>Datos solicitados</th> -->
                   <th>Orden relativo</th>
                   <th>Eliminar</th>
                 </tr>
@@ -119,9 +117,6 @@
                   <td data-title="'Eliminar'" >
                     <img ng-click="removeItem($index)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar item">
                   </td>
-                  <!-- <td>
-                    <input class="" type="checkbox" ng-model="item.required" >
-                  </td> -->
                 </tr>
               </tbody>
             </table>

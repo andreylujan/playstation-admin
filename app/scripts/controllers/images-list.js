@@ -164,6 +164,28 @@ angular.module('minovateApp')
 			return;
 		}
 
+		// $log.log($scope.page.filters.dateRange.startDate);
+		// $log.log($scope.page.filters.dateRange.endDate);
+
+		// $log.log($scope.page.filters.dateRange.startDate.toISOString());
+
+
+		$log.log($scope.page.filters.dateRange.startDate);
+
+		var dateStart = new Date($scope.page.filters.dateRange.startDate);
+
+		var day = dateStart.getDay();
+		var month = dateStart.getMonth();
+		var year = dateStart.getFullYear();
+
+		$log.log(day);
+		$log.log(month);
+		$log.log(year);
+
+		dateStart = new Date(year, month, day);
+		$log.log(dateStart.toString());
+
+
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
@@ -172,17 +194,17 @@ angular.module('minovateApp')
 		var categoryIdSelected = $scope.page.filters.imageCategory.selected ? $scope.page.filters.imageCategory.selected.id : '';
 		var dateStartSelected = $scope.page.filters.dateRange.startDate;
 		var dateEndSelected = $scope.page.filters.dateRange.endDate;
-		dateStartSelected = dateStartSelected.toISOString();
-		dateEndSelected = dateEndSelected.toISOString();
+		// dateStartSelected = dateStartSelected.toISOString();
+		// dateEndSelected = dateEndSelected.toISOString();
 
-		$log.log(zoneIdSelected);
-		$log.log(dealerIdSelected);
-		$log.log(storeIdSelected);
-		$log.log(instructorIdSelected);
-		$log.log(supervisorIdSelected);
-		$log.log(categoryIdSelected);
-		$log.log(dateStartSelected);
-		$log.log(dateEndSelected);
+		// $log.log(zoneIdSelected);
+		// $log.log(dealerIdSelected);
+		// $log.log(storeIdSelected);
+		// $log.log(instructorIdSelected);
+		// $log.log(supervisorIdSelected);
+		// $log.log(categoryIdSelected);
+		// $log.log(dateStartSelected);
+		// $log.log(dateEndSelected);
 
 		$scope.page.images = [];
 

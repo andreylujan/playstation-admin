@@ -92,7 +92,7 @@ angular.module('minovateApp')
 				reset_password_token: $scope.user.token.text
 			}, function(success) {
 
-				$scope.page.msg.color = 'greensea';
+				$scope.page.msg.color = 'white';
 				$scope.page.msg.text = 'Se ha reestablecido tu contraseña';
 				$scope.page.msg.show = true;
 

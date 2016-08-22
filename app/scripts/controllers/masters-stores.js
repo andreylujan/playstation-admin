@@ -604,7 +604,7 @@ angular.module('minovateApp')
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
 			$scope.modal.buttons.edit.text = 'Guardar';
-			$scope.modal.buttons.edit.border = false;
+			// $scope.modal.buttons.edit.border = false;
 			$scope.modal.store.name.disabled = false;
 			$scope.modal.store.contact.disabled = false;
 			$scope.modal.store.phone.disabled = false;
@@ -616,7 +616,7 @@ angular.module('minovateApp')
 			$scope.modal.dealers.disabled = false;
 			$scope.modal.storeTypes.disabled = false;
 
-			$scope.modal.alert.color = 'warning';
+			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.title = 'Para efectuar la edición, presione el botón Guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;

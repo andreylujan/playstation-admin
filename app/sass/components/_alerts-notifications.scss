@@ -189,6 +189,15 @@
     }
   }
 
+  &.alert-blue-ps-1 {
+    color: $blue-ps-1;
+    background-color: $bright-blue-ps-1;
+
+    .alert-link {
+      color: $darken-blue-ps-1;
+    }
+  }
+
 }
 
 // toast notifications

@@ -519,13 +519,28 @@ angular.module('minovateApp')
 		}
 	};
 
+	var removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.show = true;
+	};
+
 	$scope.uploadGoals = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
 
+		removeAlert();
+
 		if (!$scope.modal.goals.file.value) {
+			return;
+		}
+
+		if ($scope.modal.goals.file.value.type !== 'text/csv') {
+			$scope.modal.alert.color = 'blue-ps-1';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';
 			return;
 		}
 

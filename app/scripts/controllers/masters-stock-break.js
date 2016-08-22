@@ -253,6 +253,8 @@ angular.module('minovateApp')
 		});
 	};
 
+	
+
 	var getDealers = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
@@ -436,16 +438,16 @@ angular.module('minovateApp')
 		}
 
 		if ($scope.modal.buttons.edit.text === 'Editar') {
-			$scope.modal.buttons.edit.border = true;
+			// $scope.modal.buttons.edit.border = true;
 			$scope.modal.buttons.edit.text = 'Guardar';
-			$scope.modal.alert.color = 'warning';
+			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.title = 'Para efectuar la edición presione el botón guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
 			enableForm();
 			Utils.gotoAnyPartOfPage('topModalCreateStockBreak');
 		} else {
-			$scope.modal.buttons.edit.border = false;
+			// $scope.modal.buttons.edit.border = false;
 			$scope.modal.buttons.edit.text = 'Editar';
 			disableForm();
 

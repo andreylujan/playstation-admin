@@ -238,19 +238,17 @@ angular.module('minovateApp')
 
 		$scope.page.newTask.stores.list = [];
 
-		Stores.query({}, function(success) {
+		Stores.query({
+			'filter[zone_id]': $scope.page.newTask.zones.selectedZone.id,
+			'filter[dealer_id]': $scope.page.newTask.dealers.selectedDealer.id
+		}, function(success) {
 			if (success.data) {
 
-				for (i = 0; i < storesIncluded.length; i++) {
-					for (j = 0; j < $scope.page.newTask.dealers.selectedDealer.storesIds.length; j++) {
-						if (parseInt($scope.page.newTask.dealers.selectedDealer.storesIds[j].id) === parseInt(success.data[i].id)) {
-							$scope.page.newTask.stores.list.push({
-								id: parseInt(success.data[i].id),
-								name: success.data[i].attributes.name
-							});
-							break;
-						}
-					}
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.newTask.stores.list.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].attributes.name
+					});
 				}
 
 				$scope.page.newTask.stores.selectedStore = $scope.page.newTask.stores.list[0];

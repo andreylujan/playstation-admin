@@ -5234,12 +5234,12 @@ button:focus {
       border-color: #085883; }
   .btn.btn-blue-ps-1 {
     background-color: #015496;
-    color: white;
+    color: #015496;
     border-color: #01467d; }
     .btn.btn-blue-ps-1:hover, .btn.btn-blue-ps-1:active, .btn.btn-blue-ps-1.active {
       background-color: #01467d;
       border-color: #013a68;
-      color: white; }
+      color: #015496; }
     .btn.btn-blue-ps-1:active, .btn.btn-blue-ps-1.active {
       background-color: #013a68;
       border-color: #013259; }
@@ -7412,6 +7412,11 @@ blockquote p {
     background-color: #a6a6a6; }
     .alert.alert-darkgray .alert-link {
       color: #262626; }
+  .alert.alert-blue-ps-1 {
+    color: #015496;
+    background-color: #98d1fe; }
+    .alert.alert-blue-ps-1 .alert-link {
+      color: #01467d; }
 
 #toast-container > div {
   opacity: 0.8 !important;
@@ -10310,7 +10315,7 @@ body {
   color: rgba(0, 0, 0, 0.5) !important; }
 
 .text-white {
-  color: white; }
+  color: white !important; }
 
 .text-gray {
   color: #969696; }

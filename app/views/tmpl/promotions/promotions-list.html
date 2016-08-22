@@ -71,7 +71,7 @@
 					<!-- tile body -->
 					<div class="tile-body">
 
-						<button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewPromotion()">Nueva promoción</button>
+						<button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewPromotion()" uib-tooltip="Nueva promoción"><i class="fa fa-cloud-upload"></i> </button>
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom" ng-show="tableParams.data.length">
 							<tr ng-repeat="promotion in $data" >

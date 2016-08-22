@@ -298,7 +298,7 @@ angular.module('minovateApp')
 			delete: {
 				show: false,
 				text: null,
-				border: false,
+				border: true,
 				disabled: true
 			}
 		}

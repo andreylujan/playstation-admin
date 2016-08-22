@@ -79,7 +79,7 @@
 
             <div class="row">
               <div class="col-md-2">
-                <button class="bg-yellow-ps pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateStore()" uib-tooltip="Ingresar nueva tienda"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateStore()" uib-tooltip="Ingresar nueva tienda"><i class="fa fa-cloud-upload"></i> </button>
               </div>
             </div>
 
@@ -222,9 +222,9 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="createStore({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
+    <button class="btn btn-success btn-rounded-10 mb-10" type="button" ng-show="modal.buttons.create.show" ng-click="createStore({success: true,detail: 'OK'})" >{{modal.buttons.create.text}}</button>
     
-    <button class="btn btn-warning btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.edit.border}" type="button" ng-show="modal.buttons.edit.show" ng-click="editStore({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
+    <button class="btn btn-blue-ps-1 text-blue-ps-1 btn-border btn-rounded-10 mb-10" type="button" ng-show="modal.buttons.edit.show" ng-click="editStore({success: true,detail: 'OK'})" >{{modal.buttons.edit.text}}</button>
     
     <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteStore({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>
     

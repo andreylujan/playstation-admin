@@ -231,11 +231,11 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>Monto</td>
+								<td>Cantidad</td>
 								<td ng-repeat="productQuiantity in chartConfigPriceAndAmount.series[0].data track by $index">{{productQuiantity | currency:'$ ':0}}</td>
 							</tr>
 							<tr>
-								<td>Cantidad</td>
+								<td>Monto</td>
 								<td ng-repeat="productAmount in chartConfigPriceAndAmount.series[1].data track by $index">{{productAmount | currency:'$ ':0}}</td>
 							</tr>
 						</tbody>

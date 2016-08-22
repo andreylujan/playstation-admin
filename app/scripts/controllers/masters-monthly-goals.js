@@ -91,6 +91,7 @@ angular.module('minovateApp')
 	$scope.openModalNewMonthlyGoal = function(idMonthlyGoal) {
 		var modalInstance = $uibModal.open({
 			animation: true,
+			backdrop: false,
 			templateUrl: 'newMonthlyGoal.html',
 			controller: 'NewMonthlyGoalModalInstance',
 			resolve: {
@@ -159,6 +160,9 @@ angular.module('minovateApp')
 				show: false,
 				border: false
 			}
+		},
+		overlay: {
+			show: false
 		}
 	};
 
@@ -173,6 +177,12 @@ angular.module('minovateApp')
 
 	$scope.cancel = function() {
 		$uibModalInstance.close();
+	};
+
+	var removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.show = true;
 	};
 
 	$scope.createMonthlyGoal = function() {
@@ -194,6 +204,21 @@ angular.module('minovateApp')
 		}
 
 		// openModalSummaryLoadMonthlyGoal();
+
+		removeAlert();
+
+		if (!$scope.modal.monthlyGoal.file.value) {
+			return;
+		}
+
+		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv') {
+			$scope.modal.alert.color = 'blue-ps-1';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';
+			return;
+		}
+
+		$scope.modal.overlay.show = true;
 
 		var form = [{
 			field: 'csv',
@@ -221,6 +246,7 @@ angular.module('minovateApp')
 	var openModalSummaryLoadMonthlyGoal = function(data) {
 		var modalInstance = $uibModal.open({
 			animation: true,
+			backdrop: false,
 			templateUrl: 'summaryLoadMonthlyGoal.html',
 			controller: 'SummaryLoadMonthlyGoalModalInstance',
 			resolve: {
