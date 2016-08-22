@@ -164,27 +164,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		// $log.log($scope.page.filters.dateRange.startDate);
-		// $log.log($scope.page.filters.dateRange.endDate);
-
-		// $log.log($scope.page.filters.dateRange.startDate.toISOString());
-
-
-		$log.log($scope.page.filters.dateRange.startDate);
-
-		var dateStart = new Date($scope.page.filters.dateRange.startDate);
-
-		var day = dateStart.getDay();
-		var month = dateStart.getMonth();
-		var year = dateStart.getFullYear();
-
-		$log.log(day);
-		$log.log(month);
-		$log.log(year);
-
-		dateStart = new Date(year, month, day);
-		$log.log(dateStart.toString());
-
 
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
@@ -194,6 +173,13 @@ angular.module('minovateApp')
 		var categoryIdSelected = $scope.page.filters.imageCategory.selected ? $scope.page.filters.imageCategory.selected.id : '';
 		var dateStartSelected = $scope.page.filters.dateRange.startDate;
 		var dateEndSelected = $scope.page.filters.dateRange.endDate;
+
+		var dateStartSelected = moment($scope.page.filters.dateRange.startDate, "DD/MM/YYYY");
+		var dateEndSelected = moment($scope.page.filters.dateRange.endDate, "DD/MM/YYYY");
+		
+		dateStartSelected = dateStartSelected.toISOString();
+		dateEndSelected = dateEndSelected.toISOString();
+
 		// dateStartSelected = dateStartSelected.toISOString();
 		// dateEndSelected = dateEndSelected.toISOString();
 
@@ -229,8 +215,6 @@ angular.module('minovateApp')
 						url: success.data[i].attributes.url
 					});
 				}
-				$log.log('$scope.page.images');
-				$log.log($scope.page.images);
 			}
 		}, function(error) {
 			$log.error(error);
