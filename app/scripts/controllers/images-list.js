@@ -60,13 +60,35 @@ angular.module('minovateApp')
 			},
 			dateRange: {
 				options: {
-					minDate: $moment('2016-07-01')
+					minDate: $moment('2016-07-01'),
+					locale: {
+						applyLabel: 'Buscar',
+						cancelLabel: 'Cerrar',
+						fromLabel: 'Desde',
+						toLabel: 'Hasta',
+						customRangeLabel: 'Personalizado',
+						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+						firstDay: 1
+					}
 				},
 				startDate: currentDate,
 				endDate: tomorrowDate
 			}
 		},
-		images: []
+		images: [],
+		overlay: {
+			show: false
+		},
+	};
+
+	$scope.pagination = {
+		pages: {
+			actual: 1,
+			size: 30,
+			_current: 1,
+			total: 0,
+		}
 	};
 
 	var getZones = function(e) {
@@ -158,12 +180,35 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.getImages = function(e) {
+	$scope.incrementPage = function() {
+		if ($scope.pagination.pages._current <= $scope.pagination.pages.total - 1) {
+			$scope.pagination.pages._current++;
+			$scope.getImages({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pages._current);
+		}
+	};
+
+	$scope.decrementPage = function() {
+		if ($scope.pagination.pages._current > 1) {
+			$scope.pagination.pages._current--;
+			$scope.getImages({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pages._current);
+		}
+	};
+
+	$scope.getImages = function(e, page) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
 
+		$log.log('page ' + page);
+
+		$scope.page.overlay.show = true;
 
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
@@ -174,14 +219,11 @@ angular.module('minovateApp')
 		var dateStartSelected = $scope.page.filters.dateRange.startDate;
 		var dateEndSelected = $scope.page.filters.dateRange.endDate;
 
-		var dateStartSelected = moment($scope.page.filters.dateRange.startDate, "DD/MM/YYYY");
-		var dateEndSelected = moment($scope.page.filters.dateRange.endDate, "DD/MM/YYYY");
-		
+		dateStartSelected = moment($scope.page.filters.dateRange.startDate, "DD/MM/YYYY");
+		dateEndSelected = moment($scope.page.filters.dateRange.endDate, "DD/MM/YYYY");
+
 		dateStartSelected = dateStartSelected.toISOString();
 		dateEndSelected = dateEndSelected.toISOString();
-
-		// dateStartSelected = dateStartSelected.toISOString();
-		// dateEndSelected = dateEndSelected.toISOString();
 
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
@@ -195,8 +237,8 @@ angular.module('minovateApp')
 		$scope.page.images = [];
 
 		Images.query({
-			'page[number]': 1,
-			'page[size]': 9999,
+			'page[number]': page,
+			'page[size]': $scope.pagination.pages.size,
 			include: 'category',
 			zone_id: zoneIdSelected,
 			dealer_id: dealerIdSelected,
@@ -207,7 +249,8 @@ angular.module('minovateApp')
 			end_date: dateEndSelected,
 			category_id: categoryIdSelected
 		}, function(success) {
-			// $log.log(success);
+			$scope.pagination.pages.total = success.meta.page_count;
+
 			if (success.data) {
 				for (i = 0; i < success.data.length; i++) {
 					$scope.page.images.push({
@@ -216,10 +259,18 @@ angular.module('minovateApp')
 					});
 				}
 			}
+			$scope.page.overlay.show = false;
 		}, function(error) {
 			$log.error(error);
 		});
 	};
+
+	angular.element('#daterange').on('apply.daterangepicker', function(ev, picker) {
+		$scope.getImages({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.pages._current);
+	});
 
 	getZones();
 
@@ -230,9 +281,6 @@ angular.module('minovateApp')
 	$scope.getImages({
 		success: true,
 		detail: 'OK'
-	});
-
-	// LOS ELEMENTOS QUE TIENEN ESTAS CLASES DEBEN SER CON BORDER RADIOUS:
-	// ui-select-match Y SU HERMANO INPUT TYPE = TEXT
+	}, $scope.pagination.pages._current);
 
 });
