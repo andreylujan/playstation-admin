@@ -37,7 +37,7 @@
 #sidebar {
   width: 250px;
   padding: 0;
-  background-color: $blue-ps-1;
+  background-color: white;
   z-index: 21;
   -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: -blackberry-touch;
@@ -166,7 +166,7 @@
   -webkit-overflow-scrolling: touch;
   -webkit-overflow-scrolling: -blackberry-touch;
   list-style: none;
-  background-color: $blue-ps-1;
+  background-color: white;
 
   >li>a>i {
     display: inline-block;
@@ -188,7 +188,7 @@
     &:hover {
       >a {
         background-color: $transparent-black-2;
-        color: white;
+        color: $gray-ps-2;
       }
       >i {
         color: black;
@@ -210,7 +210,7 @@
 
     a {
       font-size: 13px;
-      color: $link-color;
+      color: $gray-ps-1;
       @include transition(all .2s linear);
       @include user-select(none);
       position: relative;
@@ -276,7 +276,7 @@
 
     >ul {
       display: none;
-      background-color: $transparent-black-15;
+      background-color: white;
       list-style: none;
       padding: 5px 0;
 

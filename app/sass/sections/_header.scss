@@ -42,16 +42,17 @@
     width: 250px;
     height: 45px;
     float: left;
-    padding: 0 15px;
+    // padding: 0 15px;
 
     a.brand {
       font-family: $font-dosis;
       font-size: $font-size-large;
       font-weight: $font-weight-light;
-      color: white;
+      color: black;
       padding-left: 55px;
       height: 45px;
       line-height: 45px;
+      margin-top: -50px;
       // background: url(../images/minovate-logo.png) no-repeat 0 10px;
       background: url(../images/s2go-logo-mini.png) no-repeat 0 10px;
       float: left;

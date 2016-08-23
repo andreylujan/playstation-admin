@@ -547,6 +547,31 @@ body {
   }
 }
 
+.bg-blue-ps-3 {
+  background-color: $blue-ps-3!important;
+  color: white!important;
+
+  &.dk {
+    background-color: $darken-blue-ps-3!important;
+  }
+
+  &.dker {
+    background-color: $darker-blue-ps-3!important;
+  }
+
+  &.lt {
+    background-color: $lighten-blue-ps-3!important;
+  }
+
+  &.lter {
+    background-color: $lighter-blue-ps-3!important;
+  }
+
+  &.bright {
+    background-color: $bright-blue-ps-3!important;
+  }
+}
+
 .bg-gray-ps-1 {
   background-color: $gray-ps-1!important;
   color: white!important;
@@ -892,6 +917,10 @@ body {
 
 .mb-0 {
   margin-bottom: 0!important;
+}
+
+.mt-70 {
+  margin-top: 70px!important;
 }
 
 .mt-40 {

@@ -9,44 +9,44 @@
  * Main module of the application.
  */
 angular
-.module('minovateApp', [
-	'ngAnimate',
-	'ngCookies',
-	'ngResource',
-	'ngSanitize',
-	'ngTouch',
-	'picardy.fontawesome',
-	'ui.bootstrap',
-	'ui.router',
-	'ui.utils',
-	'angular-loading-bar',
-	'angular-momentjs',
-	'FBAngular',
-	'lazyModel',
-	'angularBootstrapNavTree',
-	'oc.lazyLoad',
-	'ui.select',
-	'ui.tree',
-	'textAngular',
-	'colorpicker.module',
-	'angularFileUpload',
-	'ngImgCrop',
-	'datatables',
-	'datatables.bootstrap',
-	'datatables.colreorder',
-	'datatables.colvis',
-	'datatables.tabletools',
-	'datatables.scroller',
-	'datatables.columnfilter',
-	'ngTable',
-	'angular-flot',
-	'LocalStorageModule',
-	'satellizer',
-	'naif.base64',
-	'ui.bootstrap.datetimepicker',
-	'highcharts-ng',
-	'slick'
-])
+	.module('minovateApp', [
+		'ngAnimate',
+		'ngCookies',
+		'ngResource',
+		'ngSanitize',
+		'ngTouch',
+		'picardy.fontawesome',
+		'ui.bootstrap',
+		'ui.router',
+		'ui.utils',
+		'angular-loading-bar',
+		'angular-momentjs',
+		'FBAngular',
+		'lazyModel',
+		'angularBootstrapNavTree',
+		'oc.lazyLoad',
+		'ui.select',
+		'ui.tree',
+		'textAngular',
+		'colorpicker.module',
+		'angularFileUpload',
+		'ngImgCrop',
+		'datatables',
+		'datatables.bootstrap',
+		'datatables.colreorder',
+		'datatables.colvis',
+		'datatables.tabletools',
+		'datatables.scroller',
+		'datatables.columnfilter',
+		'ngTable',
+		'angular-flot',
+		'LocalStorageModule',
+		'satellizer',
+		'naif.base64',
+		'ui.bootstrap.datetimepicker',
+		'highcharts-ng',
+		'slick'
+	])
 
 .run(['$rootScope', '$state', '$stateParams', 'Utils',
 	function($rootScope, $state, $stateParams, Utils) {
@@ -76,7 +76,7 @@ angular
 		// Listener que se ejecuta cuando se carga una pagina
 		$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 
-			var isLogin = toState.name === 'core.login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup' || toState.name === 'core.page404';
+			var isLogin = toState.name === 'login' || toState.name === 'core.forgotpass' || toState.name === 'core.resetpass' || toState.name === 'core.signup' || toState.name === 'core.page404';
 
 			// $log.log('is in Login or forgotpass or resetpass or signup... ' + isLogin);
 			// $log.log('loggedIn storage... ' + Utils.getInStorage('loggedIn'));
@@ -87,7 +87,7 @@ angular
 
 			if (Utils.getInStorage('loggedIn') === false || Utils.getInStorage('loggedIn') === null) {
 				e.preventDefault(); // stop current execution
-				$state.go('core.login'); // go to login
+				$state.go('login'); // go to login
 			}
 
 		});
@@ -140,237 +140,239 @@ angular
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-		$urlRouterProvider.otherwise('/core/login');
+	$urlRouterProvider.otherwise('/core/page404');
+	
+	$stateProvider
 
-		$stateProvider
+	//login
+		.state('login', {
+			url: '/',
+			controller: 'LoginCtrl',
+			templateUrl: 'views/tmpl/pages/login.html'
+		})
+		.state('app', {
+			abstract: true,
+			url: '/app',
+			templateUrl: 'views/tmpl/app.html'
+		})
+		//Dashboard
+		.state('app.dashboard', {
+			url: '/dashboard',
+			template: '<div ui-view></div>'
+		})
+		//Dashboard/sale
+		.state('app.dashboard.sale', {
+			url: '/sale',
+			controller: 'DashboardSaleCtrl',
+			templateUrl: 'views/tmpl/dashboard/sale.html'
+		})
+		//Dashboard/sale
+		.state('app.dashboard.promotersAndActivities', {
+			url: '/promoters-and-activities',
+			controller: 'DashboardPromotersAndActivitiesCtrl',
+			templateUrl: 'views/tmpl/dashboard/promoters-and-activities.html'
+		})
+		//Dashboard/sale
+		.state('app.dashboard.stock', {
+			url: '/stock',
+			controller: 'DashboardStockCtrl',
+			templateUrl: 'views/tmpl/dashboard/stock.html'
+		})
+		//Dashboard/goals
+		.state('app.dashboard.goals', {
+			url: '/goals',
+			controller: 'DashboardGoalsCtrl',
+			templateUrl: 'views/tmpl/dashboard/goals.html'
+		})
+		//users
+		.state('app.users', {
+			url: '/users',
+			template: '<div ui-view></div>'
+		})
+		//users/invite
+		.state('app.users.invite', {
+			url: '/invite',
+			controller: 'UsersInviteCtrl',
+			templateUrl: 'views/tmpl/users/invite.html'
+		})
+		//users/list
+		.state('app.users.list', {
+			url: '/list',
+			controller: 'UsersListCtrl',
+			templateUrl: 'views/tmpl/users/list.html'
+		})
+		//playStation
+		.state('app.playStation', {
+			url: '/playStation',
+			template: '<div ui-view></div>'
+		})
+		//playStation/reports
+		.state('app.playStation.reports', {
+			url: '/reports',
+			controller: 'ReportsCtrl',
+			templateUrl: 'views/tmpl/reports/reports.html'
+		})
+		//playStation/my-reports
+		.state('app.playStation.my-reports', {
+			url: '/my-reports',
+			controller: 'MyReportsCtrl',
+			templateUrl: 'views/tmpl/reports/my-reports.html'
+		})
+		//playStation/my-tasks
+		.state('app.playStation.my-tasks', {
+			url: '/my-tasks',
+			controller: 'MyTasksCtrl',
+			templateUrl: 'views/tmpl/reports/my-tasks.html'
+		})
+		//playStation/create-task
+		.state('app.playStation.create-task', {
+			url: '/create-task',
+			controller: 'CreateTaskCtrl',
+			templateUrl: 'views/tmpl/reports/create-task.html'
+		})
+		//Masters
+		.state('app.masters', {
+			url: '/masters',
+			template: '<div ui-view></div>'
+		})
+		//masters/reports
+		.state('app.masters.zones', {
+			url: '/reports',
+			controller: 'ZonesCtrl',
+			templateUrl: 'views/tmpl/masters/zones.html'
+		})
+		//masters/dealers
+		.state('app.masters.dealers', {
+			url: '/dealers',
+			controller: 'DealersCtrl',
+			templateUrl: 'views/tmpl/masters/dealers.html'
+		})
+		//masters/stores
+		.state('app.masters.stores', {
+			url: '/stores',
+			controller: 'StoresCtrl',
+			templateUrl: 'views/tmpl/masters/stores.html'
+		})
+		//masters/products
+		.state('app.masters.products', {
+			url: '/products',
+			controller: 'ProductsCtrl',
+			templateUrl: 'views/tmpl/masters/products.html'
+		})
+		//masters/checklist
+		.state('app.masters.checklist', {
+			url: '/checklist',
+			controller: 'ChecklistCtrl',
+			templateUrl: 'views/tmpl/masters/checklist.html'
+		})
+		//masters/checklist
+		.state('app.masters.new-checklist', {
+			url: '/new-checklist?idChecklist',
+			controller: 'NewChecklistCtrl',
+			templateUrl: 'views/tmpl/masters/new-checklist.html'
+		})
+		//masters/stock-break
+		.state('app.masters.stock-break', {
+			url: '/stock-break',
+			controller: 'StockBreakCtrl',
+			templateUrl: 'views/tmpl/masters/stock-break.html'
+		})
+		//masters/monthly-goals
+		.state('app.masters.monthly-goals', {
+			url: '/monthly-goals',
+			controller: 'MonthlyGoalsCtrl',
+			templateUrl: 'views/tmpl/masters/monthly-goals.html'
+		})
+		//promotions
+		.state('app.promotions', {
+			url: '/promotions',
+			template: '<div ui-view></div>'
+		})
+		//promotions
+		.state('app.promotions.list', {
+			url: '/promotions',
+			controller: 'PromotionsListCtrl',
+			templateUrl: 'views/tmpl/promotions/promotions-list.html'
+		})
+		//promotions
+		.state('app.promotions.new', {
+			url: '/new-promotion?idPromotion',
+			controller: 'NewPromotionCtrl',
+			templateUrl: 'views/tmpl/promotions/new-promotion.html'
+		})
+		//inbox
+		.state('app.inbox', {
+			url: '/inbox',
+			template: '<div ui-view></div>'
+		})
+		//inbox
+		.state('app.inbox.list', {
+			url: '/inbox',
+			controller: 'InboxListCtrl',
+			templateUrl: 'views/tmpl/inbox/inbox-list.html'
+		})
+		//inbox
+		.state('app.inbox.new', {
+			url: '/new-inbox?idInbox',
+			controller: 'NewInboxCtrl',
+			templateUrl: 'views/tmpl/inbox/new-inbox.html'
+		})
+		//images
+		.state('app.images', {
+			url: '/images',
+			template: '<div ui-view></div>'
+		})
+		//images
+		.state('app.images.list', {
+			url: '/images',
+			controller: 'ImagesListCtrl',
+			templateUrl: 'views/tmpl/images/images-list.html'
+		})
+		//app core pages (errors, login,signup)
+		.state('core', {
+			abstract: true,
+			url: '/core',
+			template: '<div ui-view></div>'
+		})
 
-			.state('app', {
-				abstract: true,
-				url: '/app',
-				templateUrl: 'views/tmpl/app.html'
-			})
-			//Dashboard
-			.state('app.dashboard', {
-				url: '/dashboard',
-				template: '<div ui-view></div>'
-			})
-			//Dashboard/sale
-			.state('app.dashboard.sale', {
-				url: '/sale',
-				controller: 'DashboardSaleCtrl',
-				templateUrl: 'views/tmpl/dashboard/sale.html'
-			})
-			//Dashboard/sale
-			.state('app.dashboard.promotersAndActivities', {
-				url: '/promoters-and-activities',
-				controller: 'DashboardPromotersAndActivitiesCtrl',
-				templateUrl: 'views/tmpl/dashboard/promoters-and-activities.html'
-			})
-			//Dashboard/sale
-			.state('app.dashboard.stock', {
-				url: '/stock',
-				controller: 'DashboardStockCtrl',
-				templateUrl: 'views/tmpl/dashboard/stock.html'
-			})
-			//Dashboard/goals
-			.state('app.dashboard.goals', {
-				url: '/goals',
-				controller: 'DashboardGoalsCtrl',
-				templateUrl: 'views/tmpl/dashboard/goals.html'
-			})
-			//users
-			.state('app.users', {
-				url: '/users',
-				template: '<div ui-view></div>'
-			})
-			//users/invite
-			.state('app.users.invite', {
-				url: '/invite',
-				controller: 'UsersInviteCtrl',
-				templateUrl: 'views/tmpl/users/invite.html'
-			})
-			//users/list
-			.state('app.users.list', {
-				url: '/list',
-				controller: 'UsersListCtrl',
-				templateUrl: 'views/tmpl/users/list.html'
-			})
-			//playStation
-			.state('app.playStation', {
-				url: '/playStation',
-				template: '<div ui-view></div>'
-			})
-			//playStation/reports
-			.state('app.playStation.reports', {
-				url: '/reports',
-				controller: 'ReportsCtrl',
-				templateUrl: 'views/tmpl/reports/reports.html'
-			})
-			//playStation/my-reports
-			.state('app.playStation.my-reports', {
-				url: '/my-reports',
-				controller: 'MyReportsCtrl',
-				templateUrl: 'views/tmpl/reports/my-reports.html'
-			})
-			//playStation/my-tasks
-			.state('app.playStation.my-tasks', {
-				url: '/my-tasks',
-				controller: 'MyTasksCtrl',
-				templateUrl: 'views/tmpl/reports/my-tasks.html'
-			})
-			//playStation/create-task
-			.state('app.playStation.create-task', {
-				url: '/create-task',
-				controller: 'CreateTaskCtrl',
-				templateUrl: 'views/tmpl/reports/create-task.html'
-			})
-			//Masters
-			.state('app.masters', {
-				url: '/masters',
-				template: '<div ui-view></div>'
-			})
-			//masters/reports
-			.state('app.masters.zones', {
-				url: '/reports',
-				controller: 'ZonesCtrl',
-				templateUrl: 'views/tmpl/masters/zones.html'
-			})
-			//masters/dealers
-			.state('app.masters.dealers', {
-				url: '/dealers',
-				controller: 'DealersCtrl',
-				templateUrl: 'views/tmpl/masters/dealers.html'
-			})
-			//masters/stores
-			.state('app.masters.stores', {
-				url: '/stores',
-				controller: 'StoresCtrl',
-				templateUrl: 'views/tmpl/masters/stores.html'
-			})
-			//masters/products
-			.state('app.masters.products', {
-				url: '/products',
-				controller: 'ProductsCtrl',
-				templateUrl: 'views/tmpl/masters/products.html'
-			})
-			//masters/checklist
-			.state('app.masters.checklist', {
-				url: '/checklist',
-				controller: 'ChecklistCtrl',
-				templateUrl: 'views/tmpl/masters/checklist.html'
-			})
-			//masters/checklist
-			.state('app.masters.new-checklist', {
-				url: '/new-checklist?idChecklist',
-				controller: 'NewChecklistCtrl',
-				templateUrl: 'views/tmpl/masters/new-checklist.html'
-			})
-			//masters/stock-break
-			.state('app.masters.stock-break', {
-				url: '/stock-break',
-				controller: 'StockBreakCtrl',
-				templateUrl: 'views/tmpl/masters/stock-break.html'
-			})
-			//masters/monthly-goals
-			.state('app.masters.monthly-goals', {
-				url: '/monthly-goals',
-				controller: 'MonthlyGoalsCtrl',
-				templateUrl: 'views/tmpl/masters/monthly-goals.html'
-			})
-			//promotions
-			.state('app.promotions', {
-				url: '/promotions',
-				template: '<div ui-view></div>'
-			})
-			//promotions
-			.state('app.promotions.list', {
-				url: '/promotions',
-				controller: 'PromotionsListCtrl',
-				templateUrl: 'views/tmpl/promotions/promotions-list.html'
-			})
-			//promotions
-			.state('app.promotions.new', {
-				url: '/new-promotion?idPromotion',
-				controller: 'NewPromotionCtrl',
-				templateUrl: 'views/tmpl/promotions/new-promotion.html'
-			})
-			//inbox
-			.state('app.inbox', {
-				url: '/inbox',
-				template: '<div ui-view></div>'
-			})
-			//inbox
-			.state('app.inbox.list', {
-				url: '/inbox',
-				controller: 'InboxListCtrl',
-				templateUrl: 'views/tmpl/inbox/inbox-list.html'
-			})
-			//inbox
-			.state('app.inbox.new', {
-				url: '/new-inbox?idInbox',
-				controller: 'NewInboxCtrl',
-				templateUrl: 'views/tmpl/inbox/new-inbox.html'
-			})
-			//images
-			.state('app.images', {
-				url: '/images',
-				template: '<div ui-view></div>'
-			})
-			//images
-			.state('app.images.list', {
-				url: '/images',
-				controller: 'ImagesListCtrl',
-				templateUrl: 'views/tmpl/images/images-list.html'
-			})
-			//app core pages (errors, login,signup)
-			.state('core', {
-				abstract: true,
-				url: '/core',
-				template: '<div ui-view></div>'
-			})
-			//login
-			.state('core.login', {
-				url: '/login',
-				controller: 'LoginCtrl',
-				templateUrl: 'views/tmpl/pages/login.html'
-			})
-			//signup
-			.state('core.signup', {
-				url: '/signup?confirmation_token?id',
-				controller: 'SignupCtrl',
-				templateUrl: 'views/tmpl/pages/signup.html'
-			})
-			//forgot password
-			.state('core.forgotpass', {
-				url: '/forgotpass',
-				controller: 'ForgotPasswordCtrl',
-				templateUrl: 'views/tmpl/pages/forgotpass.html'
-			})
-			//forgot password
-			.state('core.resetpass', {
-				url: '/resetpass?email',
-				controller: 'ResetPasswordCtrl',
-				templateUrl: 'views/tmpl/pages/resetpass.html'
-			})
-			//page 404
-			.state('core.page404', {
-				url: '/page404',
-				templateUrl: 'views/tmpl/pages/page404.html'
-			})
-			//page 500
-			.state('core.page500', {
-				url: '/page500',
-				templateUrl: 'views/tmpl/pages/page500.html'
-			})
-			//page offline
-			.state('core.page-offline', {
-				url: '/page-offline',
-				templateUrl: 'views/tmpl/pages/page-offline.html'
-			})
-			//locked screen
-			.state('core.locked', {
-				url: '/locked',
-				templateUrl: 'views/tmpl/pages/locked.html'
-			});
-	}
-]);
+	//signup
+	.state('core.signup', {
+			url: '/signup?confirmation_token?id',
+			controller: 'SignupCtrl',
+			templateUrl: 'views/tmpl/pages/signup.html'
+		})
+		//forgot password
+		.state('core.forgotpass', {
+			url: '/forgotpass',
+			controller: 'ForgotPasswordCtrl',
+			templateUrl: 'views/tmpl/pages/forgotpass.html'
+		})
+		//forgot password
+		.state('core.resetpass', {
+			url: '/resetpass?email',
+			controller: 'ResetPasswordCtrl',
+			templateUrl: 'views/tmpl/pages/resetpass.html'
+		})
+		//page 404
+		.state('core.page404', {
+			url: '/page404',
+			templateUrl: 'views/tmpl/pages/page404.html'
+		})
+		//page 500
+		.state('core.page500', {
+			url: '/page500',
+			templateUrl: 'views/tmpl/pages/page500.html'
+		})
+		//page offline
+		.state('core.page-offline', {
+			url: '/page-offline',
+			templateUrl: 'views/tmpl/pages/page-offline.html'
+		})
+		//locked screen
+		.state('core.locked', {
+			url: '/locked',
+			templateUrl: 'views/tmpl/pages/locked.html'
+		})
+
+
+}]);

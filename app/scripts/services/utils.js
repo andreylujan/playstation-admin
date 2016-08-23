@@ -112,7 +112,7 @@ angular.module('minovateApp')
 			});
 
 			$log.error(error);
-			$state.go('core.login');
+			$state.go('login');
 		});
 	};
 

@@ -1,31 +1,36 @@
-<div class="page page-core page-login">
+<div class="p-0 page page-core page-login">
 
-  <div class="text-center"><img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/s2go2-logo3.png" alt="play_logo"></div>
+  <img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/top_login2.png" style="width: 100%;top:0;position:fixed">
+  
+  <div class="mt-70">
+    <div class="text-center"><img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/s2go2-logo3.png" alt="play_logo"></div>
 
-  <div class="container w-420 p-20 bg-blue-ps-2 mt-40 text-center br-25">
+    <div class="container w-420 p-20 bg-blue-ps-3 mt-40 text-center br-25">
 
 
-    <h2 class="text-light text-white">Iniciar Sesión</h2>
+      <h2 class="text-light text-black">Iniciar Sesión</h2>
 
-    <h3 class="text-light text-red" ng-show="page.message.show"><fa name="times"></fa> {{page.message.text}}</h3>
+      <h3 class="text-light text-red" ng-show="page.message.show"><fa name="times"></fa> {{page.message.text}}</h3>
 
-    <form name="form" class="form-validation mt-20" novalidate>
+      <form name="form" class="form-validation mt-20" novalidate>
 
-      <div class="form-group">
-        <input type="email" class="form-control rounded" placeholder="Email de usuario..." ng-model="page.user.username" ng-change="removeMsg()" required>
-      </div>
+        <div class="form-group">
+          <input type="email" class="form-control rounded" placeholder="Email de usuario..." ng-model="page.user.username" ng-change="removeMsg()" required>
+        </div>
 
-      <div class="form-group">
-        <input type="password" placeholder="Clave de usuario..." class="form-control rounded" ng-model="page.user.password" ng-change="removeMsg()" required>
-      </div>
+        <div class="form-group">
+          <input type="password" placeholder="Clave de usuario..." class="form-control rounded" ng-model="page.user.password" ng-change="removeMsg()" required>
+        </div>
 
-      <div class="form-group text-left mt-20">
-        <button type="submit" class="btn btn-blue-ps-1 text-white b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="login()" ng-disabled='form.$invalid'>Login</button>
-        <a ui-sref="core.forgotpass" class="pull-right mt-10" style="color:white">Recuperar contraseña</a>
-      </div>
+        <div class="form-group text-left mt-20">
+          <button type="submit" class="btn btn-blue-ps-1 text-white b-0 br-20 mr-5 text-md pl-20 pr-20" ng-click="login()" ng-disabled='form.$invalid'>Login</button>
+          <a ui-sref="core.forgotpass" class="pull-right mt-10" style="color:#015496">Recuperar contraseña</a>
+        </div>
 
-    </form>
+      </form>
 
+    </div>
   </div>
+  <img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/bottom_login.png" style="width: 100%;bottom:0;position:fixed">
 
 </div>

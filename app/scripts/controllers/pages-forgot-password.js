@@ -45,7 +45,7 @@ angular.module('minovateApp')
 					$scope.page.msg.text = success.errors[0].detail;
 					$scope.page.msg.show = true;
 				} else {
-					$scope.page.msg.color = 'white';
+					$scope.page.msg.color = 'black';
 					$scope.page.msg.text = 'Te hemos enviado un correo con instrucciones, si el correo no aparece por favor revisa tu carpeta de spam';
 					$scope.page.msg.show = true;
 				}

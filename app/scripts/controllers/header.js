@@ -8,7 +8,7 @@
  * Controller of the minovateApp
  */
 angular.module('minovateApp')
-  .controller('HeaderCtrl', function($scope, $state, $auth, Utils) {
+  .controller('HeaderCtrl', function($scope, $log, $state, $auth, Utils) {
 
     $scope.page = {
       user: {
@@ -22,7 +22,7 @@ angular.module('minovateApp')
       $auth.logout()
         .then(function() {
           Utils.clearAllStorage();
-          $state.go('core.login');
+          $state.go('login');
         });
 
 

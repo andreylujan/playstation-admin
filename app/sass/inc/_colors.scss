@@ -20,6 +20,7 @@ $brand-default: #616f77;
 
 $blue-ps-1: #015496;
 $blue-ps-2: #0c7ebd;
+$blue-ps-3: #d6e3f4;
 $gray-ps-1: #a8a9ac;
 $gray-ps-2: #6d6e71;
 $gray-ps-3: #221f1f;
@@ -48,6 +49,7 @@ $darken-default: darken($brand-default, 5%);
 
 $darken-blue-ps-1: darken($blue-ps-1, 5%);
 $darken-blue-ps-2: darken($blue-ps-2, 5%);
+$darken-blue-ps-3: darken($blue-ps-3, 5%);
 $darken-gray-ps-1: darken($gray-ps-1, 5%);
 $darken-gray-ps-2: darken($gray-ps-2, 5%);
 $darken-gray-ps-3: darken($gray-ps-3, 5%);
@@ -77,6 +79,7 @@ $darker-default: darken($brand-default, 5%);
 
 $darker-blue-ps-1: darken($blue-ps-1, 9%);
 $darker-blue-ps-2: darken($blue-ps-2, 9%);
+$darker-blue-ps-3: darken($blue-ps-3, 9%);
 $darker-gray-ps-1: darken($gray-ps-1, 9%);
 $darker-gray-ps-2: darken($gray-ps-2, 9%);
 $darker-gray-ps-3: darken($gray-ps-3, 9%);
@@ -105,6 +108,7 @@ $darkest-default: darken($brand-default, 7%);
 
 $darkest-blue-ps-1: darken($blue-ps-1, 12%);
 $darkest-blue-ps-2: darken($blue-ps-2, 12%);
+$darkest-blue-ps-3: darken($blue-ps-3, 12%);
 $darkest-gray-ps-1: darken($gray-ps-1, 12%);
 $darkest-gray-ps-2: darken($gray-ps-2, 12%);
 $darkest-gray-ps-3: darken($gray-ps-3, 12%);
@@ -133,6 +137,7 @@ $lighten-default: lighten($brand-default, 5%);
 
 $lighten-blue-ps-1: lighten($blue-ps-1, 5%);
 $lighten-blue-ps-2: lighten($blue-ps-2, 5%);
+$lighten-blue-ps-3: lighten($blue-ps-3, 5%);
 $lighten-gray-ps-1: lighten($gray-ps-1, 5%);
 $lighten-gray-ps-2: lighten($gray-ps-2, 5%);
 $lighten-gray-ps-3: lighten($gray-ps-3, 5%);
@@ -161,6 +166,7 @@ $lighter-default: lighten($brand-default, 10%);
 
 $lighter-blue-ps-1: lighten($blue-ps-1, 10%);
 $lighter-blue-ps-2: lighten($blue-ps-2, 10%);
+$lighter-blue-ps-3: lighten($blue-ps-3, 10%);
 $lighter-gray-ps-1: lighten($gray-ps-1, 10%);
 $lighter-gray-ps-2: lighten($gray-ps-2, 10%);
 $lighter-gray-ps-3: lighten($gray-ps-3, 10%);
@@ -189,6 +195,7 @@ $bright-default: lighten($brand-default, 45%);
 
 $bright-blue-ps-1: lighten($blue-ps-1, 50%);
 $bright-blue-ps-2: lighten($blue-ps-2, 50%);
+$bright-blue-ps-3: lighten($blue-ps-3, 50%);
 $bright-gray-ps-1: lighten($gray-ps-1, 50%);
 $bright-gray-ps-2: lighten($gray-ps-2, 50%);
 $bright-gray-ps-3: lighten($gray-ps-3, 50%);
