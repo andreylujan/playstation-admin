@@ -104,10 +104,6 @@ angular
 	}
 ])
 
-.config(["$locationProvider", function($locationProvider) {
-	$locationProvider.html5Mode(true);
-}])
-
 .config(['$provide', function($provide) {
 	$provide.decorator('taOptions', ['taRegisterTool', '$delegate', '$uibModal', '$log', function(taRegisterTool, taOptions, $uibModal, $log) {
 		// $delegate is the taOptions we are decorating
@@ -143,8 +139,6 @@ angular
 }])
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-
-
 
 	$stateProvider
 
@@ -378,6 +372,5 @@ angular
 			templateUrl: 'views/tmpl/pages/locked.html'
 		});
 
-	$urlRouterProvider.otherwise('/core/page404');
-
+	$urlRouterProvider.otherwise('/');
 }]);
