@@ -2544,7 +2544,7 @@ html.boxed-layout {
       .pageheader .page-bar .page-breadcrumb > li {
         display: inline-block; }
         .pageheader .page-bar .page-breadcrumb > li > a {
-          color: #95a2a9;
+          color: #6d6e71;
           padding: 8px 10px;
           display: inline-block; }
           .pageheader .page-bar .page-breadcrumb > li > a:hover {
@@ -2564,9 +2564,9 @@ html.boxed-layout {
           background-color: white;
           margin-right: 8px; }
           .pageheader .page-bar .page-breadcrumb > li:first-child > a {
-            color: rgba(255, 255, 255, 0.5); }
+            color: #221f1f; }
             .pageheader .page-bar .page-breadcrumb > li:first-child > a:hover {
-              color: white; }
+              color: #6d6e71; }
           .pageheader .page-bar .page-breadcrumb > li:first-child:before {
             content: ""; }
     .pageheader .page-bar .page-toolbar {
@@ -10892,6 +10892,9 @@ input[type="file"].custom-input-file {
 
 .disabled {
   cursor: not-allowed; }
+
+.pointer {
+  cursor: pointer; }
 
 .overlay {
   opacity: 0.85;

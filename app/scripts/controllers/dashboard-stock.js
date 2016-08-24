@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $filter, Utils, NgTableParams, Dashboard, DataPlayStation) {
+.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $filter, $timeout, Utils, NgTableParams, Dashboard, DataPlayStation, ExcelDashboard) {
 
 	$scope.page = {
 		title: 'Stock',
@@ -50,17 +50,17 @@ angular.module('minovateApp')
 		stock: {
 			stockBreaks: {
 				loaded: false,
-				list: [],
-				// tableParams: new NgTableParams()
+				list: []
 			},
 			topProducts: {
 				loaded: false,
-				list: [],
-				// tableParams: new NgTableParams()
+				list: []
 			}
-			// stockBreaks: [],
-			// loaded: false,
-			// topProducts: []
+		},
+		buttons: {
+			getExcel: {
+				disabled: false
+			}
 		}
 	};
 
@@ -211,6 +211,41 @@ angular.module('minovateApp')
 			$log.error(error);
 		});
 
+	};
+
+	$scope.getExcel = function(e) {
+
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		if ($scope.page.buttons.getExcel.disabled) {
+			return;
+		}
+		$scope.page.buttons.getExcel.disabled = true;
+
+		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
+		var yearSelected = $scope.page.filters.month.value.getFullYear();
+
+		// $log.log(zoneIdSelected);
+		// $log.log(dealerIdSelected);
+		// $log.log(storeIdSelected);
+		// $log.log(instructorIdSelected);
+		// $log.log(supervisorIdSelected);
+		// $log.log(monthSelected);
+		// $log.log(yearSelected);
+
+		ExcelDashboard.getFile('#excelBtn', 'stock', 'stock', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
+
+		$timeout(function() {
+			$scope.page.buttons.getExcel.disabled = false;
+		}, 4000);
 	};
 
 	getZones();

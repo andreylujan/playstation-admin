@@ -304,7 +304,7 @@ angular.module('minovateApp')
 
 		if ($scope.elements.buttons.editUser.text === 'Editar') {
 			$scope.elements.buttons.editUser.text = 'Guardar';
-			$scope.elements.buttons.editUser.border = '';
+			// $scope.elements.buttons.editUser.border = '';
 			enableFormInputs();
 		} else {
 
@@ -333,7 +333,7 @@ angular.module('minovateApp')
 			}
 
 			$scope.elements.buttons.editUser.text = 'Editar';
-			$scope.elements.buttons.editUser.border = 'btn-border';
+			// $scope.elements.buttons.editUser.border = 'btn-border';
 			disableFormInputs();
 
 			Users.update({

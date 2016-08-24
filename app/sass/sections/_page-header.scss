@@ -28,7 +28,7 @@
         display: inline-block;
 
         >a {
-          color: $font-color-light;
+          color: $gray-ps-2;
           padding: 8px 10px;
           display: inline-block;
 
@@ -49,10 +49,10 @@
           margin-right: 8px;
 
           >a {
-            color: $link-color;
+            color: $gray-ps-3;
 
             &:hover {
-              color: white;
+              color: $gray-ps-2;
             }
           }
 

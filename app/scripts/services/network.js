@@ -739,6 +739,18 @@ angular.module('minovateApp')
 	};
 })
 
+.factory('ExcelDashboard', function($auth) {
+
+	return {
+		getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
+			var downloadLink = angular.element(elem);
+			downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
+			downloadLink.attr('download', fileName + '.xls');
+		}
+	};
+
+})
+
 // CSV
 .service('Csv', function($http) {
 

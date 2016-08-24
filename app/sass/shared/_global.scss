@@ -1546,6 +1546,10 @@ input[type="file"].custom-input-file {
   cursor: not-allowed;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .overlay {
   opacity: 0.85;
   filter: alpha(opacity = 0);
