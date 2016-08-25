@@ -395,6 +395,12 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			$scope.totalsSale = [{
+				title: 'Total',
+				hardwareTotal: 0,
+				accessoriesTotal: 0,
+				gamesTotal: 0
+			}];
 		});
 	};
 

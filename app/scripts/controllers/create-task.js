@@ -311,6 +311,8 @@ angular.module('minovateApp')
 			return;
 		}
 
+		var limitDate = new Date($scope.page.newTask.limitDate);
+
 		Reports.save({
 			dynamic_attributes: {
 				sections: [{
@@ -333,7 +335,7 @@ angular.module('minovateApp')
 			},
 			report_type_id: $scope.page.newTask.reportTypes.selectedReportType.id,
 			assigned_user_id: $scope.page.newTask.users.selectedUser.id,
-			limit_date: $scope.page.newTask.limitDate.toISOString()
+			limit_date: limitDate.toISOString()
 		}, function(success) {
 			$log.log(success);
 			if (success.data) {
