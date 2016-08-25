@@ -36,7 +36,7 @@ angular.module('minovateApp')
 
 		SaleGoalUploads.query({
 			year: $scope.page.dateSearch.value.getFullYear(),
-			month: $scope.page.dateSearch.value.getMonth() + 2
+			month: $scope.page.dateSearch.value.getMonth() + 1
 		}, function(success) {
 			// $log.log(success);
 
@@ -84,9 +84,7 @@ angular.module('minovateApp')
 		});
 
 		$scope.flag = true;
-
 	};
-
 
 	$scope.openModalNewMonthlyGoal = function(idMonthlyGoal) {
 		var modalInstance = $uibModal.open({

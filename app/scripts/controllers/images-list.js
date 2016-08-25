@@ -79,7 +79,7 @@ angular.module('minovateApp')
 		images: [],
 		overlay: {
 			show: false
-		},
+		}
 	};
 
 	$scope.pagination = {
@@ -254,7 +254,8 @@ angular.module('minovateApp')
 				for (i = 0; i < success.data.length; i++) {
 					$scope.page.images.push({
 						id: success.data[i].id,
-						url: success.data[i].attributes.url
+						url: success.data[i].attributes.url,
+						show: false
 					});
 				}
 			}
@@ -262,6 +263,12 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.error(error);
 		});
+	};
+
+	$scope.showImages = function() {
+		for (i = 0; i < $scope.page.images.length; i++) {
+			$scope.page.images[i].show = true;
+		}
 	};
 
 	$scope.deleteImage = function(imageId) {
