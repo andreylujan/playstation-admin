@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ImagesListCtrl', function($scope, $log, $state, $moment, Utils, DataPlayStation, Images) {
+.controller('ImagesListCtrl', function($scope, $log, $state, $moment, $uibModal, Utils, DataPlayStation, Images) {
 
 	var currentDate = new Date();
 	currentDate.setHours(0);
@@ -206,8 +206,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$log.log('page ' + page);
-
 		$scope.page.overlay.show = true;
 
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
@@ -237,6 +235,7 @@ angular.module('minovateApp')
 		$scope.page.images = [];
 
 		Images.query({
+			// imageId: '',
 			'page[number]': page,
 			'page[size]': $scope.pagination.pages.size,
 			include: 'category',
@@ -265,6 +264,33 @@ angular.module('minovateApp')
 		});
 	};
 
+	$scope.deleteImage = function(imageId) {
+		openModalDeleteImage(imageId);
+	};
+
+	var openModalDeleteImage = function(imageId) {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'deleteImage.html',
+			controller: 'DeleteImageModalInstance',
+			resolve: {
+				imageId: function() {
+					return imageId;
+				}
+			}
+		});
+
+		modalInstance.result.then(function(imageId) {
+			for (i = 0; i < $scope.page.images.length; i++) {
+				if (parseInt($scope.page.images[i].id) === parseInt(imageId)) {
+					$scope.page.images.splice(i, 1);
+					return;
+				}
+			}
+		}, function() {});
+	};
+
 	angular.element('#daterange').on('apply.daterangepicker', function(ev, picker) {
 		$scope.getImages({
 			success: true,
@@ -282,5 +308,55 @@ angular.module('minovateApp')
 		success: true,
 		detail: 'OK'
 	}, $scope.pagination.pages._current);
+
+})
+
+.controller('DeleteImageModalInstance', function($scope, $uibModalInstance, imageId, Images, $log) {
+
+	$scope.modal = {
+		title: {
+			text: '¿Realmente desea eliminar la foto?'
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			title: '',
+			text: null,
+			show: false
+		},
+		buttons: {
+			delete: {
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.deleteImage = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		$uibModalInstance.close(imageId);
+
+		Images.delete({
+			imageId: imageId
+		}, function(success) {
+			$uibModalInstance.close(imageId);
+		}, function(error) {
+			$log.log(error);
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.title = 'Error al eliminar la foto';
+			$scope.modal.alert.text = error.data.errors[0].title;
+			$scope.modal.alert.show = true;
+		});
+	};
 
 });

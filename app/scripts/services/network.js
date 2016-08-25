@@ -693,7 +693,9 @@ angular.module('minovateApp')
 
 //Images
 .factory('Images', function($resource) {
-	return $resource(API_URL + '/images', {}, {
+	return $resource(API_URL + '/images/:imageId', {
+		imageId: '@imageId'
+	}, {
 		query: {
 			method: 'GET',
 			headers: {
@@ -712,6 +714,12 @@ angular.module('minovateApp')
 				start_date: 'start_date',
 				end_date: 'end_date',
 				category_id: '@category_id'
+			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/vnd.api+json'
 			}
 		}
 	});
