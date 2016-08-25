@@ -17,6 +17,8 @@ angular.module('minovateApp')
 	currentDate.setSeconds(0);
 	currentDate.setMilliseconds(0);
 
+	$log.log('seteo inicial: ' + currentDate);
+
 	var tomorrowDate = new Date();
 	tomorrowDate.setHours(0);
 	tomorrowDate.setMinutes(0);
@@ -214,14 +216,8 @@ angular.module('minovateApp')
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
 		var categoryIdSelected = $scope.page.filters.imageCategory.selected ? $scope.page.filters.imageCategory.selected.id : '';
-		var dateStartSelected = $scope.page.filters.dateRange.startDate;
-		var dateEndSelected = $scope.page.filters.dateRange.endDate;
-
-		dateStartSelected = moment($scope.page.filters.dateRange.startDate, "DD/MM/YYYY");
-		dateEndSelected = moment($scope.page.filters.dateRange.endDate, "DD/MM/YYYY");
-
-		dateStartSelected = dateStartSelected.toISOString();
-		dateEndSelected = dateEndSelected.toISOString();
+		var dateStartSelected =  new Date($scope.page.filters.dateRange.startDate);
+		var dateEndSelected =  new Date($scope.page.filters.dateRange.endDate);
 
 		// $log.log(zoneIdSelected);
 		// $log.log(dealerIdSelected);
@@ -244,8 +240,8 @@ angular.module('minovateApp')
 			store_id: storeIdSelected,
 			instructor_id: instructorIdSelected,
 			supervisor_id: supervisorIdSelected,
-			start_date: dateStartSelected,
-			end_date: dateEndSelected,
+			start_date: dateStartSelected.toISOString(),
+			end_date: dateEndSelected.toISOString(),
 			category_id: categoryIdSelected
 		}, function(success) {
 			$scope.pagination.pages.total = success.meta.page_count;

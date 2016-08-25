@@ -194,6 +194,7 @@ angular.module('minovateApp')
 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
+
 				var hardwareTotal = 0,
 					accessoriesTotal = 0,
 					gamesTotal = 0,

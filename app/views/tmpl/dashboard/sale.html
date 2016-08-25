@@ -102,17 +102,17 @@
 						<tfoot>
 							<tr class="text-orange-ps text-bold" ng-repeat="total in totalsSale">
 								<td>{{total.title}}</td>
-								<td>{{total.hardwareTotal | number}}</td>
-								<td>{{total.accessoriesTotal | number}}</td>
-								<td>{{total.gamesTotal | number}}</td>
+								<td>{{total.hardwareTotal | currency:'$ ':0}}</td>
+								<td>{{total.accessoriesTotal | currency:'$ ':0}}</td>
+								<td>{{total.gamesTotal | currency:'$ ':0}}</td>
 							</tr>
 						</tfoot>
 						<tbody>
 							<tr ng-repeat="category in categories">
 								<td>{{category.name}}</td>
-								<td>{{category.hardware | number}}</td>
-								<td>{{category.accessories | number}}</td>
-								<td>{{category.games | number}}</td>
+								<td>{{category.hardware | currency:'$ ':0}}</td>
+								<td>{{category.accessories | currency:'$ ':0}}</td>
+								<td>{{category.games | currency:'$ ':0}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -201,7 +201,8 @@
 				<!-- /tile header -->
 
 				<div class="tile-widget">
-					<highchart config="chartConfigPriceAndAmount"></highchart>
+					<highchart ng-show="chartConfigPriceAndAmount.xAxis.categories.length" config="chartConfigPriceAndAmount"></highchart>
+					<h3 ng-show="!chartConfigPriceAndAmount.xAxis.categories.length" class="text-center">No se han registrado productos más vendidos</h3>
 				</div>
 
 			</section>
@@ -222,7 +223,7 @@
 
 				<div class="tile-widget">
 					<!-- {{chartConfigPriceAndAmount | json}} -->
-					<table class="table table-condensed mt-10">
+					<table class="table table-condensed mt-10" ng-show="chartConfigPriceAndAmount.xAxis.categories.length">
 						<thead>
 							<tr>
 								<th></th>
@@ -234,12 +235,13 @@
 								<td>Cantidad</td>
 								<td ng-repeat="productQuiantity in chartConfigPriceAndAmount.series[0].data track by $index">{{productQuiantity}}</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td>Monto</td>
 								<td ng-repeat="productAmount in chartConfigPriceAndAmount.series[1].data track by $index">{{productAmount | currency:'$ ':0}}</td>
-							</tr>
+							</tr> -->
 						</tbody>
 					</table>
+					<h3 ng-show="!chartConfigPriceAndAmount.xAxis.categories.length" class="text-center">No se han obtenido productos más vendidos</h3>
 				</div>
 
 			</section>
@@ -265,7 +267,7 @@
 						</slick>
 					</div>
 					<a ui-sref="app.images.list" style="cursor:pointer"><p class="text-orange-ps mt-10 mb-10 text-right">Ver todas ></p></a>
-					<h3 class="text-orange-ps" ng-show="!page.sales.bestPractices.list.length">No se registraron fotos de best practices</h3>
+					<h3 class="text-center" ng-show="!page.sales.bestPractices.list.length">No se registraron fotos de best practices</h3>
 				</div>
 
 			</section>

@@ -172,10 +172,6 @@ angular.module('minovateApp')
 					latest15: []
 				}
 			}
-			// bestPractices: {
-			// 	loaded: false,
-			// 	list: []
-			// }
 		},
 		buttons: {
 			getExcel: {
@@ -309,16 +305,6 @@ angular.module('minovateApp')
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
-
-		// $scope.page.promotors.bestPractices.loaded = false;
-
-		// $log.log(zoneIdSelected);
-		// $log.log(dealerIdSelected);
-		// $log.log(storeIdSelected);
-		// $log.log(instructorIdSelected);
-		// $log.log(supervisorIdSelected);
-		// $log.log(monthSelected);
-		// $log.log(yearSelected);
 
 		Dashboard.query({
 			category: 'promoter_activity',
