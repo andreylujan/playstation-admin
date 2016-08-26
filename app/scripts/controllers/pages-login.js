@@ -41,7 +41,7 @@ angular.module('minovateApp')
 					Utils.setInStorage('loggedIn', true);
 					Utils.setInStorage('image', success.data.data.relationships.user.data.image);
 
-					if (Utils.getInStorage('role') === 1) {
+					if (Utils.getInStorage('role') === 1 || Utils.getInStorage('role') === 3) {
 						$state.go('app.dashboard.sale');
 					} else if (Utils.getInStorage('role') === 2) {
 						$state.go('app.playStation.my-reports');

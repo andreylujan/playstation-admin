@@ -12,7 +12,7 @@
 
 		<div class="row">
 			<div class="col-md-2 mt-5">
-				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
+				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);" title="Zonas">
 					<ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name  | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="zone.name | highlight: $select.search | capitalize:true"></div>
@@ -20,7 +20,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
@@ -392,9 +392,9 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="communicatedPrice in page.promotors.pricesCommunicated.byStore.list">
-								<td>{{communicatedPrice.zoneName}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPrice.dealerName}}</td>
-								<td class="text-center">{{communicatedPrice.dealerName}}</td>
+								<td>{{communicatedPrice.zoneName | capitalize:true}}</td>
+								<td class="text-center text-gray-ps-2">{{communicatedPrice.dealerName | capitalize:true}}</td>
+								<td class="text-center">{{communicatedPrice.storeName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -519,9 +519,9 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="communicatedPromotion in page.promotors.promotionsCommunicated.byStore.list">
-								<td>{{communicatedPromotion.zoneName}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPromotion.dealerName}}</td>
-								<td class="text-center">{{communicatedPromotion.dealerName}}</td>
+								<td>{{communicatedPromotion.zoneName | capitalize:true}}</td>
+								<td class="text-center text-gray-ps-2">{{communicatedPromotion.dealerName | capitalize:true}}</td>
+								<td class="text-center">{{communicatedPromotion.storeName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>

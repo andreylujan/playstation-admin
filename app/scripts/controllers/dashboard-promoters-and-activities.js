@@ -233,6 +233,10 @@ angular.module('minovateApp')
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
+			$scope.getDashboardInfo({
+				success: true,
+				detail: 'OK'
+			});
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -591,6 +595,7 @@ angular.module('minovateApp')
 				// FIN Precios comunicados porcentajes
 
 				// INI Precios comunicados Tiendas que no cumplen
+				$scope.page.promotors.pricesCommunicated.byStore.list = [];
 				angular.forEach(success.data.attributes.communicated_prices_by_store, function(value, key) {
 					$scope.page.promotors.pricesCommunicated.byStore.list.push({
 						zoneName: value.zone_name,
@@ -689,6 +694,7 @@ angular.module('minovateApp')
 				// FIN Promociones comunicadas
 
 				// INI Promociones comunicadas Tiendas que no cumplen
+				$scope.page.promotors.promotionsCommunicated.byStore.list = [];
 				angular.forEach(success.data.attributes.communicated_promotions_by_store, function(value, key) {
 					$scope.page.promotors.promotionsCommunicated.byStore.list.push({
 						zoneName: value.zone_name,
@@ -810,11 +816,6 @@ angular.module('minovateApp')
 	getZones();
 
 	getUsers();
-
-	$scope.getDashboardInfo({
-		success: true,
-		detail: 'OK'
-	});
 
 })
 

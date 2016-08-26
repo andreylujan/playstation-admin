@@ -38,6 +38,9 @@ angular.module('minovateApp')
 				},
 				myReportsMyTasks: {
 					show: true
+				},
+				createTask: {
+					show: true
 				}
 			},
 			masters: {
@@ -65,6 +68,12 @@ angular.module('minovateApp')
 				list: {
 					show: true
 				}
+			},
+			inbox: {
+				show: true
+			},
+			images: {
+				show: true
 			}
 		};
 
@@ -74,16 +83,33 @@ angular.module('minovateApp')
 			$scope.nav.reports.show = true;
 			$scope.nav.reports.reports.show = true;
 			$scope.nav.reports.myReportsMyTasks.show = true;
+			$scope.nav.reports.createTask.show = true;
 			$scope.nav.masters.show = true;
 			$scope.nav.promotions.list.show = true;
+			$scope.nav.inbox.show = true;
+			$scope.nav.images.show = true;
 		} else if (Utils.getInStorage('role') === 2) {
 			$scope.nav.dashboard.show = false;
 			$scope.nav.users.show = false;
 			$scope.nav.reports.show = true;
 			$scope.nav.reports.reports.show = false;
 			$scope.nav.reports.myReportsMyTasks.show = true;
+			$scope.nav.reports.createTask.show = true;
 			$scope.nav.masters.show = false;
 			$scope.nav.promotions.list.show = false;
+			$scope.nav.inbox.show = true;
+			$scope.nav.images.show = true;
+		} else if (Utils.getInStorage('role') === 3) {
+			$scope.nav.dashboard.show = true;
+			$scope.nav.users.show = false;
+			$scope.nav.reports.show = true;
+			$scope.nav.reports.reports.show = false;
+			$scope.nav.reports.myReportsMyTasks.show = true;
+			$scope.nav.reports.createTask.show = false;
+			$scope.nav.masters.show = false;
+			$scope.nav.promotions.list.show = false;
+			$scope.nav.inbox.show = false;
+			$scope.nav.images.show = true;
 		}
 
 	});

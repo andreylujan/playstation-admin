@@ -104,6 +104,11 @@ angular.module('minovateApp')
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
+
+			$scope.getDashboardInfo({
+				success: true,
+				detail: 'OK'
+			});
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -148,8 +153,6 @@ angular.module('minovateApp')
 		modalInstance.result.then(function() {}, function() {});
 	};
 
-	// $scope.donutData = [];
-
 	$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
 	$scope.getDashboardInfo = function(e) {
@@ -174,14 +177,6 @@ angular.module('minovateApp')
 
 		$scope.page.sales.bestPractices.loaded = false;
 
-		// $log.log(zoneIdSelected);
-		// $log.log(dealerIdSelected);
-		// $log.log(storeIdSelected);
-		// $log.log(instructorIdSelected);
-		// $log.log(supervisorIdSelected);
-		// $log.log(monthSelected);
-		// $log.log(yearSelected);
-
 		Dashboard.query({
 			category: 'sales',
 			zone_id: zoneIdSelected,
@@ -200,6 +195,7 @@ angular.module('minovateApp')
 					gamesTotal = 0,
 					namesZones = [],
 					seriesSalesBetweenConsoles = [];
+				$scope.categories = [];
 
 				// Rescato los nombres de las plataformas
 				angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
@@ -444,10 +440,7 @@ angular.module('minovateApp')
 
 	getUsers();
 
-	$scope.getDashboardInfo({
-		success: true,
-		detail: 'OK'
-	});
+
 
 })
 

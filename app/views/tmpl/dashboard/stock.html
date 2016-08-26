@@ -77,8 +77,8 @@
 				<!-- {{page.stock.stockBreaks.tableParams.data.length}} -->
 
 				<div class="tile-widget">
-					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom" ng-show="page.stock.stockBreaks.tableParams.data.length">
-						<tr ng-repeat="stockBreak in $data">
+					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom" >
+						<tr ng-repeat="stockBreak in $data" ng-show="page.stock.stockBreaks.tableParams.data.length">
 							<td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
 								{{stockBreak.storeName | capitalize:true}}
 							</td>
@@ -118,8 +118,8 @@
 					<h1 class="custom-font"><strong>Productos más vendidos </strong>Todos</h1>
 				</div>
 				<div class="tile-widget">
-					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom" ng-show="page.stock.stockBreaks.tableParams.data.length">
-						<tr ng-repeat="topProduct in page.stock.topProducts.tableParams.data">
+					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom">
+						<tr ng-repeat="topProduct in page.stock.topProducts.tableParams.data" ng-show="page.stock.stockBreaks.tableParams.data.length">
 							<td data-title="'EAN'" sortable="'ean'" filter="{'ean':'text'}">
 								{{topProduct.ean}}
 							</td>
