@@ -107,6 +107,9 @@ angular.module('minovateApp')
 			getExcel: {
 				disabled: false
 			}
+		},
+		loader: {
+			show: false
 		}
 	};
 
@@ -449,6 +452,7 @@ angular.module('minovateApp')
 			return;
 		}
 		$scope.page.buttons.getExcel.disabled = true;
+		$scope.page.loader.show = true;
 
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
@@ -470,7 +474,8 @@ angular.module('minovateApp')
 
 		$timeout(function() {
 			$scope.page.buttons.getExcel.disabled = false;
-		}, 4000);
+			$scope.page.loader.show = false;
+		}, 3000);
 	};
 
 	getZones();

@@ -53,6 +53,9 @@ angular.module('minovateApp')
 			getExcel: {
 				disabled: false
 			}
+		},
+		loader: {
+			show: false
 		}
 	};
 
@@ -412,6 +415,7 @@ angular.module('minovateApp')
 			return;
 		}
 		$scope.page.buttons.getExcel.disabled = true;
+		$scope.page.loader.show = true;
 
 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
@@ -421,26 +425,17 @@ angular.module('minovateApp')
 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
 		var yearSelected = $scope.page.filters.month.value.getFullYear();
 
-		// $log.log(zoneIdSelected);
-		// $log.log(dealerIdSelected);
-		// $log.log(storeIdSelected);
-		// $log.log(instructorIdSelected);
-		// $log.log(supervisorIdSelected);
-		// $log.log(monthSelected);
-		// $log.log(yearSelected);
-
 		ExcelDashboard.getFile('#excelBtn', 'sales', 'ventas', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
 
 		$timeout(function() {
 			$scope.page.buttons.getExcel.disabled = false;
-		}, 4000);
+			$scope.page.loader.show = false;
+		}, 5000);
 	};
 
 	getZones();
 
 	getUsers();
-
-
 
 })
 

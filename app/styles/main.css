@@ -10871,6 +10871,18 @@ input[type="file"].custom-input-file {
   border-radius: 15px;
   border: 0; }
 
+.blue-ps-1 > .ui-select-search {
+  background-color: #015496;
+  color: white;
+  border-radius: 15px;
+  border: 0; }
+
+.blue-ps-2 > .ui-select-search {
+  background-color: #0c7ebd;
+  color: white;
+  border-radius: 15px;
+  border: 0; }
+
 .gray-ps-1 > .ui-select-search {
   background-color: #a8a9ac;
   color: white;
@@ -10910,7 +10922,7 @@ input[type="file"].custom-input-file {
   left: 0;
   right: 0;
   display: block;
-  z-index: 2;
+  z-index: 3;
   background: white; }
 
 .color-schemes a.scheme-black {
