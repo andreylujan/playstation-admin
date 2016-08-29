@@ -89,6 +89,9 @@ angular.module('minovateApp')
 			method: 'GET',
 			headers: {
 				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'filter[promoter_ids]': '@promoters'
 			}
 		},
 		update: {
@@ -224,7 +227,8 @@ angular.module('minovateApp')
 				Accept: 'application/vnd.api+json'
 			},
 			params: {
-				include: '@include'
+				include: '@include',
+				'filter[zone_id]': '@zoneIds'
 			}
 		},
 		save: {
@@ -398,6 +402,24 @@ angular.module('minovateApp')
 			headers: {
 				'Content-Type': 'application/vnd.api+json',
 				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// promotions-states
+.factory('PromotionsStates', function($resource) {
+
+	return $resource(API_URL + '/promotion-states', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'page[number]': '@number',
+				'page[size]': '@size'
 			}
 		}
 	});
@@ -690,6 +712,22 @@ angular.module('minovateApp')
 	});
 })
 
+//Tasks
+.factory('Tasks', function($resource) {
+	return $resource(API_URL + '/tasks', {}, {
+		save: {
+			method: 'POST',
+			headers: {
+				Accept: 'application/vnd.api+json',
+				'Content-Type':'application/vnd.api+json'
+			},
+			params: {
+				'fields[tasks]': 'title,description,task_start,task_end,result'
+			}
+		}
+	});
+})
+
 
 //Images
 .factory('Images', function($resource) {
@@ -745,6 +783,22 @@ angular.module('minovateApp')
 			});
 		}
 	};
+})
+
+//Promoters
+.factory('Promoters', function($resource) {
+	return $resource(API_URL + '/promoters', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				// 'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'filter[store_ids]': '@storeIds'
+			}
+		}
+	});
 })
 
 .factory('ExcelDashboard', function($auth) {

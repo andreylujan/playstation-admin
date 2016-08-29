@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('PromotionsListCtrl', function($scope, $filter, $log, $window, $state, $uibModal, NgTableParams, Promotions, Zones, Dealers, Users, Utils) {
 
 	$scope.page = {
-		title: 'Promociones'
+		title: 'Lista de promociones'
 	};
 
 	var i = 0;

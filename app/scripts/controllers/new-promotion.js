@@ -250,7 +250,7 @@ angular.module('minovateApp')
 	$scope.zoneMultiselectEvents = {
 		// Cuando se selecciona una zona:
 		onItemSelect: function(item) {
-			$log.log(item);
+			// $log.log(item);
 			// se recorre el arreglo q contiene TODAS la zonas
 			for (i = 0; i < $scope.page.zones.length; i++) {
 				// Si la zona q se seleccionó es la misma q la q se se está recorriedo
@@ -310,8 +310,8 @@ angular.module('minovateApp')
 					}
 				}
 
-				$log.log('$scope.page.dealers');
-				$log.log($scope.page.dealers);
+				// $log.log('$scope.page.dealers');
+				// $log.log($scope.page.dealers);
 
 				for (i = 0; i < $scope.page.dealers.length; i++) {
 					$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);

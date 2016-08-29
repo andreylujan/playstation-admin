@@ -15,7 +15,7 @@
           <a ui-sref="app.dashboard"> {{main.title}}</a>
         </li>
         <li>
-          <a href="javascript:;">Usuarios</a>
+          <a href="javascript:;">Reportes</a>
         </li>
         <li>
           <a ui-sref="app.users.list">{{page.title}}</a>
@@ -75,119 +75,96 @@
           <!-- /tile header -->
           <!-- tile body -->
           <div class="tile-body">
+
             <div class="alert alert-{{page.alert.color}}" ng-show="page.alert.show"> <h4 class="text-md"><strong>{{page.alert.title}}</strong></h4> {{page.alert.text}} </div>
+            
             <form class="form-horizontal" role="form">
               <div class="form-group">
-                <label class="col-sm-3 control-label">Usuario</label>
+                <label class="col-sm-3 control-label">Título</label>
                 <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.users.selectedUser" sortable="true" ng-change="removeAlert()">
-                    <ui-select-match placeholder="Seleccionar tipo...">
-                      <span ng-bind="$select.selected.fullName"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="user in (page.newTask.users.list | filter: $select.search) track by user.id">
-                      <span ng-bind="user.fullName"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+                 <input type="text" class="form-control" ng-model="page.newTask.title.value" placeholder="Indique título de la tarea">
+               </div>
+             </div>
+             <div class="form-group">
+              <label class="col-sm-3 control-label">Zonas</label>
+              <div class="col-sm-8">
+                <div ng-dropdown-multiselect="" options="page.newTask.zones.list" selected-model="page.newTask.zones.selectedZone" extra-settings="page.dropdownMultiselect.settings" translation-texts="page.dropdownMultiselect.texts" events="page.newTask.zones.events"></div>
               </div>
-             <!--  <div class="form-group">
-                <label class="col-sm-3 control-label">Enviar inmediatamente</label>
-                <div class="col-sm-8">
-                   <input type="checkbox" ng-change="setAlertProperties(false,null,null,null)" ng-model="check" ng-init="check = true">
-                </div>
-              </div> -->
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Fecha límite</label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup="{{page.dateOptions.format}}" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.limitDate" is-open="page.dateOptions.datepickerOpened" datepicker-options="page.dateOptions" show-button-bar="false"/>
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                  </div>
-                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Dealers</label>
+              <div class="col-sm-8">
+                <div ng-dropdown-multiselect="" options="page.newTask.dealers.list" selected-model="page.newTask.dealers.selectedDealer" extra-settings="page.dropdownMultiselect.settings" translation-texts="page.dropdownMultiselect.texts" events="page.newTask.dealers.events"></div>
               </div>
-              <!-- <div class="form-group">
-                <label class="col-sm-3 control-label" style="margin-top: 35px;">Hora</label>
-                <div class="col-sm-8">
-                  <uib-timepicker ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.limitDate" show-meridian="true"></uib-timepicker>
-                </div>
-              </div> -->
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Tipo reporte</label>
-                <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.reportTypes.selectedReportType" sortable="true" ng-change="removeAlert()">
-                    <ui-select-match placeholder="Seleccionar tipo de reporte...">
-                      <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="reportType in (page.newTask.reportTypes.list | filter: $select.search) track by reportType.id">
-                      <span ng-bind="reportType.name"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Tiendas</label>
+              <div class="col-sm-8">
+                <div ng-dropdown-multiselect="" options="page.newTask.stores.list" selected-model="page.newTask.stores.selectedStore" extra-settings="page.dropdownMultiselect.settings" translation-texts="page.dropdownMultiselect.texts" events="page.newTask.stores.events"></div>
               </div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Zona</label>
-                <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null); getDealers({success: true,detail: 'OK'})" ng-model="page.newTask.zones.selectedZone" sortable="true" ng-change="removeAlert()">
-                    <ui-select-match placeholder="Seleccionar tipo...">
-                      <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="zone in (page.newTask.zones.list | filter: $select.search) track by zone.id">
-                      <span ng-bind="zone.name"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Promotores</label>
+              <div class="col-sm-8">
+                <div ng-dropdown-multiselect="" options="page.newTask.promoters.list" selected-model="page.newTask.promoters.selectedPromoter" extra-settings="page.dropdownMultiselect.settings" translation-texts="page.dropdownMultiselect.texts" events="page.newTask.promoters.events"></div>
               </div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Dealer</label>
-                <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null); getStores({success: true,detail: 'OK'})" ng-model="page.newTask.dealers.selectedDealer" sortable="true">
-                    <ui-select-match placeholder="Seleccionar dealer...">
-                      <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="dealer in (page.newTask.dealers.list | filter: $select.search) track by dealer.id">
-                      <span ng-bind="dealer.name"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Ejecutar de inmediato</label>
+              <div class="col-sm-8">
+               <input type="checkbox" ng-change="changeExecImmediately()" ng-model="check" ng-init="check=true">
+             </div>
+           </div>
+           <div class="form-group">
+            <label class="col-sm-3 control-label">Fecha incio</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy HH:mm" ng-model="page.newTask.date.startDate.value" is-open="page.date.startDate.isOpen" ng-disabled="check" datepicker-options="page.newTask.date.startDate.options"/>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="page.date.startDate.isOpen=!page.date.startDate.isOpen" ng-disabled="check"><i class="fa fa-calendar"></i></button>
+                </span>
               </div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Tienda</label>
-                <div class="col-sm-8">
-                  <ui-select class="bg-white b-solid br-15" ng-change="setAlertProperties(false,null,null,null)" ng-model="page.newTask.stores.selectedStore" sortable="true" ng-change="removeAlert()">
-                    <ui-select-match placeholder="Seleccionar tienda...">
-                      <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="store in (page.newTask.stores.list | filter: $select.search) track by store.id">
-                      <span ng-bind="store.name"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-10">
-                  <button type="submit" class="btn btn-rounded btn-primary" ng-click="createTask({success: true,detail: 'OK'})">Crear</button>
-                </div>
-              </div>
-            </form>
-
+            </div>
           </div>
-          <!-- /tile body -->
-
-        </section>
-        <!-- /tile -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Fecha límite</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy HH:mm" ng-model="page.newTask.date.limitDate.value" is-open="page.date.limitDate.isOpen" ng-disabled="check" datepicker-options="page.newTask.date.limitDate.options"/>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default " ng-click="page.date.limitDate.isOpen=!page.date.limitDate.isOpen" ng-disabled="check"><i class="fa fa-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Descripción</label>
+            <div class="col-sm-8">
+              <textarea class="form-control" ng-model="page.newTask.description.value" style="resize:vertical" rows="4"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-10">
+              <button type="submit" class="btn btn-rounded btn-primary" ng-click="createTask({success: true,detail: 'OK'})">Crear</button>
+            </div>
+          </div>
+        </form>
 
       </div>
-      <!-- /col -->
+      <!-- /tile body -->
 
-
-    </div>
-    <!-- /row -->
-
+    </section>
+    <!-- /tile -->
 
   </div>
-  <!-- /page content -->
+  <!-- /col -->
+
+
+</div>
+<!-- /row -->
+
+
+</div>
+<!-- /page content -->
 
 </div>

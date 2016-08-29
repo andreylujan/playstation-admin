@@ -30,6 +30,7 @@
             <li ui-sref-active="active" ng-show="nav.reports.reports.show"><a ui-sref="app.playStation.reports"><fa name="caret-right"></fa> Reportes</a></li>
             <li ui-sref-active="active" ng-show="nav.reports.myReportsMyTasks.show"><a ui-sref="app.playStation.my-reports"><fa name="caret-right"></fa> Mis Reportes/Tareas</a></li>
             <li ui-sref-active="active" ng-show="nav.reports.createTask.show"><a ui-sref="app.playStation.create-task"><fa name="caret-right"></fa> Crear Tarea</a></li>
+            <li ui-sref-active="active" ng-show="true"><a ui-sref="app.playStation.task-tracking"><fa name="caret-right"></fa> Seguimiento tareas</a></li>
           </ul>
         </li>
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.masters')}" ng-show="nav.masters.show">
@@ -44,7 +45,14 @@
             <li ui-sref-active="active"><a ui-sref="app.masters.monthly-goals"><fa name="caret-right"></fa> Metas mensuales</a></li>
           </ul>
         </li>
-        <li ui-sref-active="active" ng-show="nav.promotions.list.show"><a ui-sref="app.promotions.list"><fa name="tag"></fa> <span>Promociones</span></a></li>
+        <li ui-sref-active="active" ng-class="{'open':$state.includes('app.promotions')}" ng-show="true">
+          <a ui-sref="app.promotions"><fa name="bullhorn"></fa> <span>Promociones</span></a>
+          <ul>
+            <li ui-sref-active="active"><a ui-sref="app.promotions.list"><fa name="caret-right"></fa> Lista</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.promotions.tracking"><fa name="caret-right"></fa> Seguimiento</a></li>
+          </ul>
+        </li>
+        <!-- <li ui-sref-active="active" ng-show="nav.promotions.list.show"><a ui-sref="app.promotions.list"><fa name="tag"></fa> <span>Promociones</span></a></li> -->
         <li ui-sref-active="active"><a ui-sref="app.inbox.list" ng-show="nav.inbox.show"><fa name="envelope"></fa> <span>Inbox</span></a></li>
         <li ui-sref-active="active"><a ui-sref="app.images.list" ng-show="nav.images.show"><fa name="fa fa-file-image-o"></fa> <span>Fotos</span></a></li>
 
