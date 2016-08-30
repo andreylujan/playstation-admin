@@ -158,42 +158,6 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getZones = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		$scope.page.zones = [];
-
-		Zones.query({}, function(success) {
-			for (i = 0; i < success.data.length; i++) {
-				$scope.page.zones.push({
-					type: 'zones',
-					id: parseInt(success.data[i].id),
-					name: $filter('capitalize')(success.data[i].attributes.name, true),
-					dealersIds: success.data[i].attributes.dealer_ids
-				});
-			}
-
-			for (i = 0; i < $scope.page.zones.length; i++) {
-				$scope.page.zone.selectedZone.push($scope.page.zones[i]);
-			}
-
-			$scope.getDealers({
-				success: true,
-				detail: 'OK'
-			});
-
-		}, function(error) {
-			$log.log(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getZones);
-			}
-
-		});
-	};
-
 	$scope.getDealers = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
@@ -247,87 +211,99 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.zoneMultiselectEvents = {
-		// Cuando se selecciona una zona:
-		onItemSelect: function(item) {
-			// $log.log(item);
-			// se recorre el arreglo q contiene TODAS la zonas
-			for (i = 0; i < $scope.page.zones.length; i++) {
-				// Si la zona q se seleccionó es la misma q la q se se está recorriedo
-				if ($scope.page.zones[i].id === item.id) {
-					// se agrega al arreglo de zonas seleccionada, con toda su info (name, dealersIds, etc)
-					$scope.page.zone.selectedZone.push({
-						type: 'zones',
-						id: parseInt(item.id),
-						name: $filter('capitalize')($scope.page.zones[i].name, true),
-						dealersIds: $scope.page.zones[i].dealersIds
+	var getZones = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		$scope.page.zones = [];
+		$scope.page.zone.selectedZone = [];
+		// var selectedZones = [];
+
+		Zones.query({}, function(success) {
+			if (success.data) {
+
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.zones.push({
+						id: parseInt(success.data[i].id),
+						name: $filter('capitalize')(success.data[i].attributes.name, true),
+						type: 'zones'
 					});
-					break;
 				}
-			}
-			// cómo por defecto se agrega al arreglo de las zonas seleccionadas un obj con sólo el id de la zona seleccionada...
-			// se borra ese elemento q solo tiene el id
-			for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
-				if (!$scope.page.zone.selectedZone[i].dealersIds) {
-					$scope.page.zone.selectedZone.splice(i, 1);
+
+				for (i = 0; i < $scope.page.zones.length; i++) {
+					$scope.page.zone.selectedZone.push($scope.page.zones[i]);
 				}
+
+				$scope.getDealers({
+					success: true,
+					detail: 'OK'
+				}, $scope.page.zone.selectedZone);
+
+			} else {
+				$log.error(success);
 			}
-		},
-		// cada vez q se selecciona o deselecciona un elemento, se cargan sus dealers
-		onChange: function() {
-			// $log.log('$scope.page.zone.selectedZone');
-			// $log.log($scope.page.zone.selectedZone);
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
+		});
+	};
+	$scope.getDealers = function(e, zones) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
 
-			var dealersIdsSelected = [];
-			$scope.page.dealers = [];
-			$scope.page.dealer.selectedDealer = [];
+		$scope.page.dealers = [];
+		$scope.page.dealer.selectedDealer = [];
+		var selectedZonesIds = [];
 
-			Dealers.query({}, function(success) {
-				dealersIdsSelected = [];
+		for (i = 0; i < zones.length; i++) {
+			selectedZonesIds.push(zones[i].id);
+		}
+
+		Dealers.query({
+			'filter[zone_ids]': selectedZonesIds.toString()
+		}, function(success) {
+			if (success.data) {
+
 				$scope.page.dealers = [];
 				$scope.page.dealer.selectedDealer = [];
 
-				for (i = 0; i < $scope.page.zone.selectedZone.length; i++) {
-					for (j = 0; j < $scope.page.zone.selectedZone[i].dealersIds.length; j++) {
-						dealersIdsSelected.push($scope.page.zone.selectedZone[i].dealersIds[j]);
-					}
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.dealers.push({
+						id: parseInt(success.data[i].id),
+						name: $filter('capitalize')(success.data[i].attributes.name, true),
+						type: 'dealers'
+					});
 				}
-				dealersIdsSelected = _.uniq(dealersIdsSelected);
-
-				// $log.log('dealersIdsSelected');
-				// $log.log(dealersIdsSelected);
-
-				for (i = 0; i < dealersIdsSelected.length; i++) {
-					for (j = 0; j < success.data.length; j++) {
-						if (parseInt(dealersIdsSelected[i]) === parseInt(success.data[j].id)) {
-							$scope.page.dealers.push({
-								type: 'dealers',
-								id: parseInt(success.data[i].id),
-								name: $filter('capitalize')(success.data[i].attributes.name, true)
-							});
-							break;
-						}
-					}
-				}
-
-				// $log.log('$scope.page.dealers');
-				// $log.log($scope.page.dealers);
 
 				for (i = 0; i < $scope.page.dealers.length; i++) {
 					$scope.page.dealer.selectedDealer.push($scope.page.dealers[i]);
 				}
 
-			}, function(error) {
-				$log.log(error);
-				if (error.status === 401) {
-					Utils.refreshToken($scope.getDealers);
-				}
-			});
-		},
-		// onChange: $scope.getDealers({
-		// 	success: true,
-		// 	detail: 'OK'
-		// })
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDealers);
+			}
+		});
+	};
+
+	$scope.zoneMultiselectEvents = {
+		onChange: function() {
+			$scope.getDealers({
+				success: true,
+				detail: 'OK'
+			}, $scope.page.zone.selectedZone);
+		}
 	};
 
 	$scope.dealerMultiselectEvents = {
@@ -513,7 +489,7 @@ angular.module('minovateApp')
 						title: $scope.page.subject,
 						start_date: startDate,
 						end_date: endDate,
-						html: '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html + '</html>'
+						html: '<style>body{background-color: #ffffff !important; color: #3f5b71 !important;}p>span{background-color: #ffffff !important;color: #3f5b71 !important;}p>strong {background-color: #ffffff !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #ffffff !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html + '</html>'
 					},
 					relationships: {
 						zones: {

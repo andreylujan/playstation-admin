@@ -282,15 +282,10 @@ angular.module('minovateApp')
 					return item.id;
 				});
 
-				// for (i = 0; i < $scope.page.newTask.stores.list.length; i++) {
-				// 	$scope.page.newTask.stores.selectedStore.push($scope.page.newTask.stores.list[i]);
-				// }
-				// selectedStores = $scope.page.newTask.stores.selectedStore;
-
 				getPromoters({
 					success: true,
 					detail: 'OK'
-				}, selectedStores);
+				}, $scope.page.newTask.stores.list);
 
 			} else {
 				$log.error(success);
@@ -456,21 +451,32 @@ angular.module('minovateApp')
 		}
 
 		$scope.page.newTask.stores.selectedStore = [];
+		$scope.page.newTask.stores.list = [];
 
 		Stores.query({
 			'filter[promoter_ids]': promotersIds.toString()
 		}, function(success) {
 			if (success.data) {
-				for (j = 0; j < $scope.page.newTask.stores.list.length; j++) {
-					for (k = 0; k < success.data.length; k++) {
-						if (parseInt($scope.page.newTask.stores.list[j].id) === parseInt(success.data[k].id)) {
-							$scope.page.newTask.stores.selectedStore.push($scope.page.newTask.stores.list[j]);
-						}
-					}
+
+				for (i = 0; i < success.data.length; i++) {
+
+					$scope.page.newTask.stores.list.push({
+						id: parseInt(success.data[i].id),
+						name: $filter('capitalize')(success.data[i].attributes.name, true),
+						type: 'stores'
+					});
 				}
-				$scope.page.newTask.stores.selectedStore = _.uniq($scope.page.newTask.stores.selectedStore, function(item) {
-					return item.id;
-				});
+
+				// for (j = 0; j < $scope.page.newTask.stores.list.length; j++) {
+				// 	for (k = 0; k < success.data.length; k++) {
+				// 		if (parseInt($scope.page.newTask.stores.list[j].id) === parseInt(success.data[k].id)) {
+				// 			$scope.page.newTask.stores.selectedStore.push($scope.page.newTask.stores.list[j]);
+				// 		}
+				// 	}
+				// }
+				// $scope.page.newTask.stores.selectedStore = _.uniq($scope.page.newTask.stores.selectedStore, function(item) {
+				// 	return item.id;
+				// });
 			} else {
 				$log.error(success);
 			}
@@ -498,15 +504,15 @@ angular.module('minovateApp')
 
 	$scope.page.newTask.dealers.events.onItemSelect = function() {
 		// $log.log($scope.page.newTask.dealers.selectedDealer);
-		$scope.getStores({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.zones.selectedZone, $scope.page.newTask.dealers.selectedDealer);
+		// $scope.getStores({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }, $scope.page.newTask.zones.selectedZone, $scope.page.newTask.dealers.selectedDealer);
 
-		getZonesFromDealers({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.dealers.selectedDealer);
+		// getZonesFromDealers({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }, $scope.page.newTask.dealers.selectedDealer);
 	};
 
 	$scope.page.newTask.dealers.events.onChange = function() {
@@ -548,11 +554,11 @@ angular.module('minovateApp')
 	};
 
 	$scope.page.newTask.promoters.events.onItemSelect = function() {
-		$log.log($scope.page.newTask.promoters.selectedPromoter);
-		getStoresFromPromoters({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.promoters.selectedPromoter);
+		// $log.log($scope.page.newTask.promoters.selectedPromoter);
+		// getStoresFromPromoters({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }, $scope.page.newTask.promoters.selectedPromoter);
 	};
 
 	$scope.page.newTask.promoters.events.onChange = function() {
@@ -696,7 +702,6 @@ angular.module('minovateApp')
 		$scope.page.newTask.date.limitDate.value = endDate;
 	};
 
-	
 	getZones({
 		success: true,
 		detail: 'OK'

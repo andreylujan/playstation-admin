@@ -265,7 +265,7 @@ angular.module('minovateApp')
 					type: 'broadcasts',
 					attributes: {
 						title: $scope.page.subject.text,
-						html: '<style>body{background-color: #fbfbfb !important; color: #3f5b71 !important;}p>span{background-color: #fbfbfb !important;color: #3f5b71 !important;}p>strong {background-color: #fbfbfb !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #fbfbfb !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html.value + '</html>',
+						html: '<style>body{background-color: #ffffff !important; color: #3f5b71 !important;}p>span{background-color: #ffffff !important;color: #3f5b71 !important;}p>strong {background-color: #ffffff !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #ffffff !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html.value + '</html>',
 						// Este campo es OPCIONAL, por mientra no lo pesques
 						// resource_id: 1,
 						// Este campo también es opcional, si NO se manda se envían los mensajes al tiro
