@@ -187,7 +187,9 @@ angular.module('minovateApp')
 				Accept: 'application/vnd.api+json'
 			},
 			params: {
-				include: '@include'
+				include: '@include',
+				'filter[dealer_ids]': '@dealers',
+				'fields[zones]': '@zones'
 			}
 		},
 		save: {
@@ -719,7 +721,7 @@ angular.module('minovateApp')
 			method: 'POST',
 			headers: {
 				Accept: 'application/vnd.api+json',
-				'Content-Type':'application/vnd.api+json'
+				'Content-Type': 'application/vnd.api+json'
 			},
 			params: {
 				'fields[tasks]': 'title,description,task_start,task_end,result'
