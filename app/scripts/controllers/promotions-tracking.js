@@ -221,7 +221,7 @@ angular.module('minovateApp')
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
-					if (success.data[i].activated) {
+					if (success.data[i].attributes.activated) {
 						finishedPromotions.push({
 							id: success.data[i].id,
 							title: success.data[i].attributes.title,
@@ -233,19 +233,16 @@ angular.module('minovateApp')
 							storeName: success.data[i].attributes.store_name,
 							creatorName: success.data[i].attributes.creator_name,
 							pdf: success.data[i].attributes.pdf,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded,
+							pdfUploaded: success.data[i].attributes.pdf_uploaded
 						});
 					}
 				}
-				$log.log('finishedPromotions');
-
-				$log.log(finishedPromotions);
 
 				$scope.tableParamsFinishedPromotions = new NgTableParams({
 					page: 1, // show first page
 					count: finishedPromotions.length, // count per page
 					sorting: {
-						id: 'asc' // initial sorting
+						endDate: 'asc' // initial sorting
 					}
 				}, {
 					counts: [],
@@ -280,30 +277,28 @@ angular.module('minovateApp')
 				$scope.pagination.pendingPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
-					if (!success.data[i].activated) {
+					if (!success.data[i].attributes.activated) {
 						pendingPromotions.push({
 							id: success.data[i].id,
 							title: success.data[i].attributes.title,
 							activatedAt: success.data[i].attributes.activated_at,
 							startDate: success.data[i].attributes.start_date,
-							limitDate: success.data[i].attributes.limit_date,
+							endDate: success.data[i].attributes.end_date,
 							zoneName: success.data[i].attributes.zone_name,
 							dealerName: success.data[i].attributes.dealer_name,
 							storeName: success.data[i].attributes.store_name,
-							activatorName: success.data[i].attributes.activator_name,
+							creatorName: success.data[i].attributes.creator_name,
 							pdf: success.data[i].attributes.pdf,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded,
+							pdfUploaded: success.data[i].attributes.pdf_uploaded
 						});
 					}
 				}
-				$log.log('pending');
-				$log.log(pendingPromotions);
 
 				$scope.tableParamsPendingPromotions = new NgTableParams({
 					page: 1, // show first page
 					count: pendingPromotions.length, // count per page
 					sorting: {
-						id: 'asc' // initial sorting
+						endDate: 'asc' // initial sorting
 					}
 				}, {
 					counts: [],
@@ -337,10 +332,5 @@ angular.module('minovateApp')
 		success: true,
 		detail: 'OK'
 	}, $scope.pagination.finishedPromotions.pages._current);
-
-	// getZones({
-	// 	success: true,
-	// 	detail: 'OK'
-	// });
 
 });

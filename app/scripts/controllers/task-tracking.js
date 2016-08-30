@@ -19,7 +19,7 @@ angular.module('minovateApp')
 		finishedTasks: {
 			pages: {
 				actual: 1,
-				size: 30,
+				size: 10,
 				_current: 1,
 				total: 0,
 			}
@@ -220,7 +220,7 @@ angular.module('minovateApp')
 			'filter[finished]': true,
 			'filter[store_ids]': '',
 			'filter[zone_ids]': '',
-			'fields[reports]': 'created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
+			'fields[reports]': 'finished_at,assigned_user_name,creator_name,store_name,zone_name,dealer_name,created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
 			'include': 'assigned_user',
 			'fields[users]': 'email,first_name,last_name'
 		}, function(success) {
@@ -234,12 +234,18 @@ angular.module('minovateApp')
 						createdAt: success.data[i].attributes.created_at,
 						taskStart: success.data[i].attributes.task_start,
 						limitDate: success.data[i].attributes.limit_date,
+						finishedAt: success.data[i].attributes.finished_at,
+						
 						finshed: success.data[i].attributes.finished,
 						pdf: success.data[i].attributes.pdf,
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
 						title: success.data[i].attributes.title,
-						description: success.data[i].attributes.description
-							// description: 'akdshb asdha hadkdhadk fkhadkf dkfsdhkf dshkfh skdf '
+						description: success.data[i].attributes.description,
+						assignedUserName: success.data[i].attributes.assigned_user_name,
+						creatorName: success.data[i].attributes.creator_name,
+						storeName: success.data[i].attributes.store_name,
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
 					});
 				}
 
@@ -247,7 +253,7 @@ angular.module('minovateApp')
 					page: 1, // show first page
 					count: finishedTasks.length, // count per page
 					sorting: {
-						id: 'asc' // initial sorting
+						// id: 'desc' // initial sorting
 					}
 				}, {
 					counts: [],
@@ -280,7 +286,7 @@ angular.module('minovateApp')
 			'filter[finished]': false,
 			'filter[store_ids]': '',
 			'filter[zone_ids]': '',
-			'fields[reports]': 'created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
+			'fields[reports]': 'finished_at,assigned_user_name,creator_name,store_name,zone_name,dealer_name,created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
 			'include': 'assigned_user',
 			'fields[users]': 'email,first_name,last_name'
 		}, function(success) {
@@ -299,7 +305,13 @@ angular.module('minovateApp')
 						pdf: success.data[i].attributes.pdf,
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
 						title: success.data[i].attributes.title,
-						description: success.data[i].attributes.description
+						description: success.data[i].attributes.description,
+						assignedUserName: success.data[i].attributes.assigned_user_name,
+						creatorName: success.data[i].attributes.creator_name,
+						storeName: success.data[i].attributes.store_name,
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
+						finishedAt: success.data[i].attributes.finished_at
 					});
 				}
 
