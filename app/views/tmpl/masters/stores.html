@@ -1,8 +1,5 @@
 <div class="page page-ng-table">
 
-
-
-
   <!-- page header -->
   <div class="pageheader">
 
@@ -79,7 +76,7 @@
 
             <div class="row">
               <div class="col-md-2">
-                <button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateStore()" uib-tooltip="Ingresar nueva tienda"><i class="fa fa-cloud-upload"></i> </button>
+                <button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateStore()" uib-tooltip="Ingresar nueva tienda"><i class="fa fa-plus-circle"></i> </button>
               </div>
             </div>
 
@@ -128,34 +125,40 @@
           <div class="form-group">
             <label for="inputStoreName" class="col-sm-3 control-label">Nombre</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control rounded" id="inputStoreName" placeholder="Nombre" ng-model="modal.store.name.text" ng-disabled="modal.store.name.disabled" ng-change="removeAlert()" required>
+              <input type="text" class="form-control" id="inputStoreName" placeholder="Nombre" ng-model="modal.store.name.text" ng-disabled="modal.store.name.disabled" ng-change="removeAlert()" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputStoreCode" class="col-sm-3 control-label">Código</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="inputStoreCode" placeholder="Código" ng-model="modal.store.code.text" ng-disabled="modal.store.code.disabled" ng-change="removeAlert()" required>
             </div>
           </div>
           <div class="form-group">
             <label for="inputStoreContact" class="col-sm-3 control-label">Contacto</label>
             <div class="col-sm-8">
-              <input type="email" class="form-control rounded" id="inputStoreContact" placeholder="email" ng-model="modal.store.contact.text" ng-disabled="modal.store.contact.disabled" ng-change="removeAlert()">
+              <input type="email" class="form-control" id="inputStoreContact" placeholder="email" ng-model="modal.store.contact.text" ng-disabled="modal.store.contact.disabled" ng-change="removeAlert()">
             </div>
           </div>
           <div class="form-group">
             <label for="inputStorePhone" class="col-sm-3 control-label">Teléfono</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control rounded" id="inputStorePhone" placeholder="+56 8 11111111" ng-model="modal.store.phone.text" ng-disabled="modal.store.phone.disabled" ng-change="removeAlert()">
+              <input type="text" class="form-control" id="inputStorePhone" placeholder="+56 8 11111111" ng-model="modal.store.phone.text" ng-disabled="modal.store.phone.disabled" ng-change="removeAlert()">
             </div>
           </div>
           <div class="form-group">
             <label for="inputDealerAddress" class="col-sm-3 control-label">Dirección</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control rounded" id="inputDealerAddress" placeholder="dirección #111" ng-model="modal.store.address.text" ng-disabled="modal.store.address.disabled" ng-change="removeAlert()">
+              <input type="text" class="form-control" id="inputDealerAddress" placeholder="dirección #111" ng-model="modal.store.address.text" ng-disabled="modal.store.address.disabled" ng-change="removeAlert()">
             </div>
           </div>
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Supervisor</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersSupervisor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario supervisor" ng-change="removeAlert()">
-                <ui-select-match placeholder="usuario supervisor...">{{$select.selected.fullName}}</ui-select-match>
+                <ui-select-match placeholder="usuario supervisor...">{{$select.selected.fullName | capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="user.fullName | highlight: $select.search"></div>
+                  <div ng-bind-html="user.fullName | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
@@ -164,9 +167,9 @@
             <label for="selectMultiZone" class="col-sm-3 control-label">Instructor</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersInstructor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario instructor" ng-change="removeAlert()">
-                <ui-select-match placeholder="usuario instructor...">{{$select.selected.fullName}}</ui-select-match>
+                <ui-select-match placeholder="usuario instructor...">{{$select.selected.fullName | capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="user.fullName | highlight: $select.search"></div>
+                  <div ng-bind-html="user.fullName | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
@@ -174,34 +177,21 @@
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Promotor</label>
             <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.promoters.selectedUsersInstructor" sortable="true" theme="bootstrap" ng-disabled="modal.promoters.disabled" reset-search-input="false" title="Selecciona un promotor" ng-change="removeAlert()">
-                <ui-select-match placeholder="promotor...">{{$select.selected.name}}</ui-select-match>
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.promoters.selectedUsersPromoter" sortable="true" theme="bootstrap" ng-disabled="modal.promoters.disabled" reset-search-input="false" title="Selecciona un promotor" ng-change="removeAlert()">
+                <ui-select-match placeholder="promotor...">{{$select.selected.name | capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="promoter in modal.promoters.list track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="promoter.name | highlight: $select.search"></div>
+                  <div ng-bind-html="promoter.name | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label for="inputMonthlyClp" class="col-sm-3 control-label">Meta mensual (CLP)</label>
-            <div class="col-sm-8">
-              <input type="number" class="form-control rounded" id="inputMonthlyClp" ng-model="modal.store.montlyGoalClp.text" ng-disabled="modal.store.montlyGoalClp.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputMonthlyGoalUsd" class="col-sm-3 control-label">Meta mensual (USD)</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" id="inputMonthlyGoalUsd" ng-model="modal.store.montlyGoalUsd.text" ng-disabled="modal.store.montlyGoalUsd.disabled" ng-change="removeAlert()">
-            </div>
-          </div> -->
-
           <div class="form-group">
             <label for="selectMultiZone" class="col-sm-3 control-label">Tipo de tienda</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.storeTypes.selectedStoreTypes" sortable="true" theme="bootstrap" ng-disabled="modal.storeTypes.disabled" reset-search-input="false" title="Selecciona un tipo de tienda" ng-change="removeAlert()">
-                <ui-select-match placeholder="tipo de tienda...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-match placeholder="tipo de tienda...">{{$select.selected.name | capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="zone in modal.storeTypes.storeTypes track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+                  <div ng-bind-html="zone.name | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
@@ -210,9 +200,9 @@
             <label for="selectMultiZone" class="col-sm-3 control-label">Zona</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.zones.selectedZones" sortable="true" theme="bootstrap" ng-disabled="modal.zones.disabled" reset-search-input="false" title="Selecciona una zona" ng-change="removeAlert(); getDealers({success: true,detail: 'OK'});">
-                <ui-select-match placeholder="zona...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-match placeholder="zona...">{{$select.selected.name |  capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="zone in modal.zones.zones track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="zone.name | highlight: $select.search"></div>
+                  <div ng-bind-html="zone.name | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
@@ -221,9 +211,9 @@
             <label for="selectMultiDealers" class="col-sm-3 control-label">Dealer</label>
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.dealers.selectedDealers" sortable="true" theme="bootstrap" ng-disabled="modal.dealers.disabled" reset-search-input="false" title="Selecciona un dealer" ng-change="removeAlert()">
-                <ui-select-match placeholder="dealer...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-match placeholder="dealer...">{{$select.selected.name | capitalize:true}}</ui-select-match>
                 <ui-select-choices repeat="dealer in modal.dealers.dealers track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="dealer.name | highlight: $select.search"></div>
+                  <div ng-bind-html="dealer.name | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>

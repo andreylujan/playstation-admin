@@ -71,7 +71,7 @@
 					<!-- tile body -->
 					<div class="tile-body">
 
-						<button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewInbox()" uib-tooltip="Nuevo mensaje"><i class="fa fa-cloud-upload"></i> </button>
+						<button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewInbox()" uib-tooltip="Nuevo mensaje"><i class="fa fa-plus-circle"></i> </button>
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom table-hover" ng-show="tableParams.data.length">
 							<tr ng-repeat="inbox in $data" ng-click="gotoNewInbox(inbox.id)" style="cursor:pointer;">

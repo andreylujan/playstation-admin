@@ -13,6 +13,12 @@ angular.module('minovateApp')
 
 	$scope.page = {
 		title: 'Seguimiento de promociones',
+		finishedPromotions: {
+			total: 0
+		},
+		pendingPromotions: {
+			total: 0
+		}
 	};
 
 	$scope.pagination = {
@@ -22,7 +28,8 @@ angular.module('minovateApp')
 				size: 30,
 				_current: 1,
 				total: 0,
-			}
+			},
+			total: 0
 		},
 		pendingPromotions: {
 			pages: {
@@ -31,7 +38,8 @@ angular.module('minovateApp')
 				_current: 1,
 				total: 0,
 			}
-		}
+		},
+		total: 0
 	};
 
 	var reports = [];
@@ -218,6 +226,9 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
+
+				$log.log(success.meta);
+				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
@@ -274,6 +285,7 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
+				$scope.page.pendingPromotions.total = success.meta.pending_promotions_count;
 				$scope.pagination.pendingPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {

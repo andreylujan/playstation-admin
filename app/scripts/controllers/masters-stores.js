@@ -129,6 +129,10 @@ angular.module('minovateApp')
 				text: null,
 				disabled: true
 			},
+			code: {
+				text: null,
+				disabled: true
+			},
 			contact: {
 				text: null,
 				disabled: true
@@ -171,7 +175,7 @@ angular.module('minovateApp')
 		},
 		promoters: {
 			list: [],
-			selected: [],
+			selectedUsersPromoter: [],
 			disabled: true
 		},
 		buttons: {
@@ -352,7 +356,7 @@ angular.module('minovateApp')
 
 		Stores.query({
 			storeId: idStore,
-			include: 'store_type,supervisor,instructor'
+			include: 'store_type,supervisor,instructor,promoter'
 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
@@ -362,13 +366,13 @@ angular.module('minovateApp')
 				$scope.modal.store.address.text = success.data.attributes.address;
 				$scope.modal.store.userSupervisorId = success.data.relationships.supervisor.data.id;
 				$scope.modal.store.userInstructorId = success.data.relationships.instructor.data.id;
+				$scope.modal.store.userPromoterId = success.data.relationships.promoter.data.id;
 				$scope.modal.store.zoneId = success.data.attributes.zone_id;
 				$scope.modal.store.dealerId = success.data.attributes.dealer_id;
+				$scope.modal.store.code.text = success.data.attributes.code;
 
 				$scope.modal.store.storeTypeId = success.data.relationships.store_type.data ? success.data.relationships.store_type.data.id : null;
 
-				// $scope.modal.store.montlyGoalClp.text = success.data.attributes.monthly_goal_clp;
-				// $scope.modal.store.montlyGoalUsd.text = success.data.attributes.monthly_goal_usd;
 
 				// Se seleccionan los datos de la tienda a editar
 				selectUsersInstructor();
@@ -447,14 +451,14 @@ angular.module('minovateApp')
 	};
 
 	var selectUsersPromoter = function() {
-		// for (i = 0; i < $scope.modal.users.users.length; i++) {
-		// 	if (parseInt($scope.modal.users.users[i].id) === parseInt($scope.modal.store.userInstructorId)) {
-		// 		$scope.modal.users.selectedUsersInstructor.id = $scope.modal.users.users[i].id;
-		// 		$scope.modal.users.selectedUsersInstructor.fullName = $scope.modal.users.users[i].fullName;
-		// 		$scope.modal.users.selectedUsersInstructor.type = $scope.modal.users.users[i].type;
-		// 		break;
-		// 	}
-		// }
+		for (i = 0; i < $scope.modal.promoters.list.length; i++) {
+			if (parseInt($scope.modal.promoters.list[i].id) === parseInt($scope.modal.store.userPromoterId)) {
+				$scope.modal.promoters.selectedUsersPromoter.id = $scope.modal.promoters.list[i].id;
+				$scope.modal.promoters.selectedUsersPromoter.name = $scope.modal.promoters.list[i].name;
+				$scope.modal.promoters.selectedUsersPromoter.type = $scope.modal.promoters.list[i].type;
+				break;
+			}
+		}
 	};
 
 	var selectZones = function() {
@@ -504,8 +508,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$log.log($scope.modal.promoters.selectedUsersInstructor);
-
 		if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'Faltan datos';
@@ -515,10 +517,19 @@ angular.module('minovateApp')
 			return;
 		}
 
+		if (!Validators.validaRequiredField($scope.modal.store.code.text)) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.title = 'Faltan datos';
+			$scope.modal.alert.text = 'Debe indicar un código para la tienda';
+			$scope.modal.alert.show = true;
+			Utils.gotoAnyPartOfPage('topModalCreateStore');
+			return;
+		}
+
 		if (!Validators.validaRequiredField($scope.modal.users.selectedUsersSupervisor.id)) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'Faltan datos';
-			$scope.modal.alert.text = 'Debe indicar un usuario supervisor';
+			$scope.modal.alert.text = 'Debe indicar un supervisor';
 			$scope.modal.alert.show = true;
 			Utils.gotoAnyPartOfPage('topModalCreateStore');
 			return;
@@ -527,7 +538,16 @@ angular.module('minovateApp')
 		if (!Validators.validaRequiredField($scope.modal.users.selectedUsersInstructor.id)) {
 			$scope.modal.alert.color = 'danger';
 			$scope.modal.alert.title = 'Faltan datos';
-			$scope.modal.alert.text = 'Debe indicar un usuario instructor';
+			$scope.modal.alert.text = 'Debe indicar un instructor';
+			$scope.modal.alert.show = true;
+			Utils.gotoAnyPartOfPage('topModalCreateStore');
+			return;
+		}
+
+		if (!Validators.validaRequiredField($scope.modal.promoters.selectedUsersPromoter.id)) {
+			$scope.modal.alert.color = 'danger';
+			$scope.modal.alert.title = 'Faltan datos';
+			$scope.modal.alert.text = 'Debe indicar un promotor';
 			$scope.modal.alert.show = true;
 			Utils.gotoAnyPartOfPage('topModalCreateStore');
 			return;
@@ -581,8 +601,8 @@ angular.module('minovateApp')
 			id: $scope.modal.users.selectedUsersInstructor.id
 		};
 		var promoter = {
-			type: $scope.modal.users.selectedUsersPromoter.type,
-			id: $scope.modal.users.selectedUsersPromoter.id
+			type: $scope.modal.promoters.selectedUsersPromoter.type,
+			id: $scope.modal.promoters.selectedUsersPromoter.id
 		};
 
 		Stores.save({
@@ -592,7 +612,8 @@ angular.module('minovateApp')
 					name: $scope.modal.store.name.text,
 					contact: $scope.modal.store.contact.text,
 					phone_number: $scope.modal.store.phone.text,
-					address: $scope.modal.store.address.text
+					address: $scope.modal.store.address.text,
+					code: $scope.modal.store.code.text
 				},
 				relationships: {
 					zone: {
@@ -609,11 +630,10 @@ angular.module('minovateApp')
 					},
 					instructor: {
 						data: instructor
+					},
+					promoter: {
+						data: promoter
 					}
-					// ,
-					// promoter: {
-					// 	data: promoter
-					// }
 				}
 			}
 		}, function(success) {
@@ -648,6 +668,7 @@ angular.module('minovateApp')
 			$scope.modal.buttons.edit.text = 'Guardar';
 			// $scope.modal.buttons.edit.border = false;
 			$scope.modal.store.name.disabled = false;
+			$scope.modal.store.code.disabled = false;
 			$scope.modal.store.contact.disabled = false;
 			$scope.modal.store.phone.disabled = false;
 			$scope.modal.store.address.disabled = false;
@@ -666,6 +687,7 @@ angular.module('minovateApp')
 		} else {
 			$scope.modal.buttons.edit.text = 'Editar';
 			$scope.modal.store.name.disabled = true;
+			$scope.modal.store.code.disabled = true;
 			$scope.modal.store.contact.disabled = true;
 			$scope.modal.store.phone.disabled = true;
 			$scope.modal.store.address.disabled = true;
@@ -685,6 +707,23 @@ angular.module('minovateApp')
 				return;
 			}
 
+			if (!Validators.validaRequiredField($scope.modal.store.code.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.title = 'Faltan datos';
+				$scope.modal.alert.text = 'Debe indicar un código para la tienda';
+				$scope.modal.alert.show = true;
+				Utils.gotoAnyPartOfPage('topModalCreateStore');
+				return;
+			}
+			if (!Validators.validaRequiredField($scope.modal.promoters.selectedUsersPromoter.id)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.title = 'Faltan datos';
+				$scope.modal.alert.text = 'Debe indicar un promotor';
+				$scope.modal.alert.show = true;
+				Utils.gotoAnyPartOfPage('topModalCreateStore');
+				return;
+			}
+
 			if (!Validators.validaRequiredField($scope.modal.users.selectedUsersSupervisor.id)) {
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'Faltan datos';
@@ -698,6 +737,23 @@ angular.module('minovateApp')
 				$scope.modal.alert.color = 'danger';
 				$scope.modal.alert.title = 'Faltan datos';
 				$scope.modal.alert.text = 'Debe indicar un usuario instructor';
+				$scope.modal.alert.show = true;
+				Utils.gotoAnyPartOfPage('topModalCreateStore');
+				return;
+			}
+
+			if (!Validators.validaRequiredField($scope.modal.store.code.text)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.title = 'Faltan datos';
+				$scope.modal.alert.text = 'Debe indicar un código para la tienda';
+				$scope.modal.alert.show = true;
+				Utils.gotoAnyPartOfPage('topModalCreateStore');
+				return;
+			}
+			if (!Validators.validaRequiredField($scope.modal.promoters.selectedUsersPromoter.id)) {
+				$scope.modal.alert.color = 'danger';
+				$scope.modal.alert.title = 'Faltan datos';
+				$scope.modal.alert.text = 'Debe indicar un promotor';
 				$scope.modal.alert.show = true;
 				Utils.gotoAnyPartOfPage('topModalCreateStore');
 				return;
@@ -748,39 +804,10 @@ angular.module('minovateApp')
 				type: $scope.modal.users.selectedUsersInstructor.type,
 				id: $scope.modal.users.selectedUsersInstructor.id
 			};
-
-			// var asd = {
-			// 	storeId: 161,
-			// 	data: {
-			// 		type: "stores",
-			// 		id: 161,
-			// 		attributes: {
-			// 			name: $scope.modal.store.name.text,
-			// 			contact: $scope.modal.store.contact.text,
-			// 			phone_number: $scope.modal.store.phone.text,
-			// 			address: $scope.modal.store.address.text
-			// 		},
-			// 		relationships: {
-			// 			zone: {
-			// 				data: zone
-			// 			},
-			// 			dealer: {
-			// 				data: dealer
-			// 			},
-			// 			store_type: {
-			// 				data: storeType
-			// 			},
-			// 			supervisor: {
-			// 				data: supervisor
-			// 			},
-			// 			instructor: {
-			// 				data: instructor
-			// 			}
-			// 		}
-			// 	}
-			// };
-
-			// $log.log(asd);
+			var promoter = {
+				type: $scope.modal.promoters.selectedUsersPromoter.type,
+				id: $scope.modal.promoters.selectedUsersPromoter.id
+			};
 
 			Stores.update({
 				storeId: idStore,
@@ -791,9 +818,8 @@ angular.module('minovateApp')
 						name: $scope.modal.store.name.text,
 						contact: $scope.modal.store.contact.text,
 						phone_number: $scope.modal.store.phone.text,
-						address: $scope.modal.store.address.text
-							// monthly_goal_clp: parseInt($scope.modal.store.montlyGoalClp.text),
-							// monthly_goal_usd: parseInt($scope.modal.store.montlyGoalUsd.text)
+						address: $scope.modal.store.address.text,
+						code: $scope.modal.store.code.text
 					},
 					relationships: {
 						zone: {
@@ -810,6 +836,9 @@ angular.module('minovateApp')
 						},
 						instructor: {
 							data: instructor
+						},
+						promoter: {
+							data: promoter
 						}
 					}
 				}
@@ -929,6 +958,7 @@ angular.module('minovateApp')
 		$scope.modal.buttons.delete.show = false;
 
 		$scope.modal.store.name.disabled = false;
+		$scope.modal.store.code.disabled = false;
 		$scope.modal.store.contact.disabled = false;
 		$scope.modal.store.phone.disabled = false;
 		$scope.modal.store.address.disabled = false;

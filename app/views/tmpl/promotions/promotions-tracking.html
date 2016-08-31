@@ -28,15 +28,15 @@
 	<div class="pagecontent">
 
 	<!-- RESUMEN -->
-		<!-- <div class="row">
+		<div class="row">
 			<div class="col-md-12">
 				<div class="mb-20">
-						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: 1.000</div>
-						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Activadas: 1.000</div>
-						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Pendientes: 1.000</div>
+						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.finishedPromotions.total+page.pendingPromotions.total}}</div>
+						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Activadas: {{page.finishedPromotions.total}}</div>
+						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Pendientes: {{page.pendingPromotions.total}}</div>
 					</div>
 			</div>
-		</div> -->
+		</div>
 
 		<!-- row -->
 		<div class="row">

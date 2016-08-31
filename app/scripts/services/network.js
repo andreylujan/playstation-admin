@@ -230,7 +230,9 @@ angular.module('minovateApp')
 			},
 			params: {
 				include: '@include',
-				'filter[zone_id]': '@zoneIds'
+				'filter[zone_id]': '@zoneIds',
+				'filter[store_ids]': '@dealerIds',
+				'fields[dealers]': '@dealers'
 			}
 		},
 		save: {

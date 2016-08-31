@@ -13,6 +13,12 @@ angular.module('minovateApp')
 
 	$scope.page = {
 		title: 'Seguimiento de tareas',
+		finishedTasks: {
+			total: 0
+		},
+		pendingTasks: {
+			total: 0
+		}
 	};
 
 	$scope.pagination = {
@@ -226,6 +232,7 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
+				$scope.page.finishedTasks.total = success.meta.finished_reports_count;
 				$scope.pagination.finishedTasks.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
@@ -295,6 +302,7 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
+				$scope.page.pendingTasks.total = success.meta.pending_reports_count;
 				$scope.pagination.pendingTasks.pages.total = success.meta.page_count;
 
 

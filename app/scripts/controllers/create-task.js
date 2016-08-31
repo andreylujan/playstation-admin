@@ -172,12 +172,6 @@ angular.module('minovateApp')
 					});
 				}
 
-				// for (i = 0; i < $scope.page.newTask.zones.list.length; i++) {
-				// 	$scope.page.newTask.zones.selectedZone.push($scope.page.newTask.zones.list[i]);
-				// }
-
-				// selectedZones = $scope.page.newTask.zones.selectedZone;
-
 				$scope.getDealers({
 					success: true,
 					detail: 'OK'
@@ -203,7 +197,7 @@ angular.module('minovateApp')
 		var selectedZonesIds = [];
 		var selectedDealers = [];
 		$scope.page.newTask.dealers.list = [];
-		$scope.page.newTask.dealers.selectedDealer = [];
+		// $scope.page.newTask.dealers.selectedDealer = [];
 
 		for (i = 0; i < zones.length; i++) {
 			selectedZonesIds.push(zones[i].id);
@@ -214,7 +208,7 @@ angular.module('minovateApp')
 		}, function(success) {
 			if (success.data) {
 				$scope.page.newTask.dealers.list = [];
-				$scope.page.newTask.dealers.selectedDealer = [];
+				// $scope.page.newTask.dealers.selectedDealer = [];
 
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.page.newTask.dealers.list.push({
@@ -249,7 +243,7 @@ angular.module('minovateApp')
 		var selectedZonesIds = [];
 		var selectedDealersIds = [];
 		var selectedStores = [];
-		$scope.page.newTask.stores.selectedStore = [];
+		// $scope.page.newTask.stores.selectedStore = [];
 
 		for (i = 0; i < zones.length; i++) {
 			selectedZonesIds.push(zones[i].id);
@@ -265,7 +259,7 @@ angular.module('minovateApp')
 			if (success.data) {
 
 				$scope.page.newTask.stores.list = [];
-				$scope.page.newTask.stores.selectedStore = [];
+				// $scope.page.newTask.stores.selectedStore = [];
 
 				for (i = 0; i < success.data.length; i++) {
 					$scope.page.newTask.stores.list.push({
@@ -303,11 +297,13 @@ angular.module('minovateApp')
 			return;
 		}
 
+		// if ($scope.page.newTask.promoters.selectedPromoter) {}
+
 		var selectedZonesIds = [];
 		var selectedDealersIds = [];
 		var selectedStoresIds = [];
 		$scope.page.newTask.promoters.list = [];
-		$scope.page.newTask.promoters.selectedPromoter = [];
+		// $scope.page.newTask.promoters.selectedPromoter = [];
 
 		for (i = 0; i < stores.length; i++) {
 			selectedStoresIds.push(stores[i].id);
@@ -318,7 +314,7 @@ angular.module('minovateApp')
 		}, function(success) {
 			if (success.data) {
 				$scope.page.newTask.promoters.list = [];
-				$scope.page.newTask.promoters.selectedPromoter = [];
+				// $scope.page.newTask.promoters.selectedPromoter = [];
 
 				for (var i = 0; i < success.data.length; i++) {
 					$scope.page.newTask.promoters.list.push({
@@ -327,10 +323,6 @@ angular.module('minovateApp')
 						type: 'users'
 					});
 				}
-
-				// for (i = 0; i < $scope.page.newTask.promoters.list.length; i++) {
-				// 	$scope.page.newTask.promoters.selectedPromoter.push($scope.page.newTask.promoters.list[i]);
-				// }
 
 			} else {
 				$log.error(success);
@@ -348,7 +340,6 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
-		// $scope.page.newTask.zones.selectedZone = [];
 
 		var dealersIds = [];
 		$scope.page.newTask.zones.list = [];
@@ -363,6 +354,9 @@ angular.module('minovateApp')
 			'fields[zones]': 'name'
 		}, function(success) {
 			if (success.data) {
+				$log.log('exec getZonesFromDealers');
+				$log.log(success.data);
+
 				for (i = 0; i < success.data.length; i++) {
 					$scope.page.newTask.zones.list.push({
 						id: parseInt(success.data[i].id),
@@ -373,20 +367,6 @@ angular.module('minovateApp')
 				$scope.page.newTask.zones.list = _.uniq($scope.page.newTask.zones.list, function(item) {
 					return item.id;
 				});
-
-				// var is = false;
-
-				// for (j = 0; j < $scope.page.newTask.zones.list.length; j++) {
-				// 	is = false;
-				// 	for (i = 0; i < $scope.page.newTask.zones.selectedZone.length; i++) {
-				// 		if (parseInt($scope.page.newTask.zones.selectedZone[i].id) === parseInt($scope.page.newTask.zones.list[j].id)) {
-				// 			is = true;
-				// 		}
-				// 	}
-				// 	if (!is) {
-
-				// 	}
-				// }
 
 			}
 		}, function(error) {
@@ -403,35 +383,34 @@ angular.module('minovateApp')
 		if ($scope.page.newTask.dealers.selectedDealer.length > 0) {
 			return;
 		}
-		$scope.page.newTask.dealers.selectedDealer = [];
 
-		/* jshint ignore:start */
+		var dealersIds = [];
 		for (i = 0; i < ids.length; i++) {
-			Stores.query({
-				include: 'dealer',
-				storeId: ids[i].id
-			}, function(success) {
-				if (success.data) {
-					for (j = 0; j < $scope.page.newTask.dealers.list.length; j++) {
-						if (parseInt($scope.page.newTask.dealers.list[j].id) === parseInt(success.data.relationships.dealer.data.id)) {
-							$scope.page.newTask.dealers.selectedDealer.push($scope.page.newTask.dealers.list[j]);
-							break;
-						}
-					}
-					$scope.page.newTask.dealers.selectedDealer = _.uniq($scope.page.newTask.dealers.selectedDealer, function(item) {
-						return item.id;
-					});
-				} else {
-					$log.error(success);
-				}
-			}, function(error) {
-				$log.error(error);
-				if (error.status === 401) {
-					Utils.refreshToken(getDealersFromStores);
-				}
-			});
+			dealersIds.push(ids[i].id);
 		}
-		/* jshint ignore:end */
+
+		$scope.page.newTask.dealers.selectedDealer = [];
+		$scope.page.newTask.dealers.list = [];
+
+		Dealers.query({
+			'filter[store_ids]': dealersIds.toString(),
+			'fields[dealers]': 'name'
+		}, function(success) {
+			$log.log(success);
+			for (i = 0; i < success.data.length; i++) {
+				$scope.page.newTask.dealers.list.push({
+					id: parseInt(success.data[i].id),
+					name: $filter('capitalize')(success.data[i].attributes.name, true),
+					type: 'dealers'
+				});
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealersFromStores);
+			}
+		});
+
 	};
 
 	var getStoresFromPromoters = function(e, ids) {
@@ -528,18 +507,7 @@ angular.module('minovateApp')
 		}, $scope.page.newTask.dealers.selectedDealer);
 	};
 
-	$scope.page.newTask.stores.events.onItemSelect = function() {
-		// $log.log('onItemSelect');
-		// getPromoters({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }, $scope.page.newTask.stores.selectedStore);
-
-		// getDealersFromStores({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }, $scope.page.newTask.stores.selectedStore);
-	};
+	$scope.page.newTask.stores.events.onItemSelect = function() {};
 
 	$scope.page.newTask.stores.events.onChange = function() {
 		getPromoters({
