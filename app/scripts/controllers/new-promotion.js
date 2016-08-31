@@ -31,7 +31,8 @@ angular.module('minovateApp')
 				enableSearch: true,
 				displayProp: 'name',
 				scrollable: true,
-				scrollableHeight: 400
+				scrollableHeight: 400,
+				externalIdProp: ''
 			}
 		},
 		dealers: {
@@ -46,7 +47,8 @@ angular.module('minovateApp')
 				enableSearch: true,
 				displayProp: 'name',
 				scrollable: true,
-				scrollableHeight: 400
+				scrollableHeight: 400,
+				externalIdProp: ''
 			}
 		}
 	};
