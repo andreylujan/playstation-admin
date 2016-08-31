@@ -75,6 +75,7 @@
 					<div class="tile-body">
 
 						<table ng-table="tableParamsFinishedTasks" show-filter="true" class="table table-custom">
+						<!-- {{tableParamsFinishedTasks}} -->
 							<tr ng-repeat="report in $data" >
 								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
 									{{report.id}}

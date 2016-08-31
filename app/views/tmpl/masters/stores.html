@@ -171,6 +171,17 @@
               </ui-select>
             </div>
           </div>
+          <div class="form-group">
+            <label for="selectMultiZone" class="col-sm-3 control-label">Promotor</label>
+            <div class="col-sm-8">
+              <ui-select class="bg-white b-solid br-15" ng-model="modal.promoters.selectedUsersInstructor" sortable="true" theme="bootstrap" ng-disabled="modal.promoters.disabled" reset-search-input="false" title="Selecciona un promotor" ng-change="removeAlert()">
+                <ui-select-match placeholder="promotor...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="promoter in modal.promoters.list track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <div ng-bind-html="promoter.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
           <!-- <div class="form-group">
             <label for="inputMonthlyClp" class="col-sm-3 control-label">Meta mensual (CLP)</label>
             <div class="col-sm-8">

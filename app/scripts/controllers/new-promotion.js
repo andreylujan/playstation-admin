@@ -80,14 +80,6 @@ angular.module('minovateApp')
 		endDate: ''
 	};
 
-	if ($stateParams.idPromotion) {
-		$scope.page.title = 'Ver promoción';
-		$scope.page.buttons.sendInvitation.show = false;
-	} else {
-		$scope.page.title = 'Nueva promoción';
-		$scope.page.buttons.sendInvitation.show = true;
-	}
-
 	$scope.rangeOptions = {
 		minDate: $moment()
 	};
@@ -542,6 +534,18 @@ angular.module('minovateApp')
 		success: true,
 		detail: 'OK'
 	});
+
+	if ($stateParams.idPromotion) {
+		$scope.page.title = 'Ver promoción';
+		$scope.page.buttons.sendInvitation.show = false;
+		getInfoPromotion($stateParams.idPromotion, {
+			success: true,
+			detail: 'OK'
+		});
+	} else {
+		$scope.page.title = 'Nueva promoción';
+		$scope.page.buttons.sendInvitation.show = true;
+	}
 
 })
 

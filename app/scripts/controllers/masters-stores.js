@@ -29,7 +29,7 @@ angular.module('minovateApp')
 		stores = [];
 
 		Stores.query({}, function(success) {
-			
+
 			for (var i = 0; i < success.data.length; i++) {
 				stores.push({
 					id: success.data[i].id,
@@ -109,7 +109,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('CreateStoreModalInstance', function($scope, $log, $uibModalInstance, idStore, Users, Stores, Dealers, Zones, StoreTypes, Validators, Utils) {
+.controller('CreateStoreModalInstance', function($scope, $log, $uibModalInstance, idStore, Users, Stores, Dealers, Zones, Promoters, StoreTypes, Validators, Utils) {
 
 	$scope.modal = {
 		title: {
@@ -141,14 +141,6 @@ angular.module('minovateApp')
 				text: null,
 				disabled: true
 			},
-			// montlyGoalClp: {
-			// 	text: null,
-			// 	disabled: true
-			// },
-			// montlyGoalUsd: {
-			// 	text: null,
-			// 	disabled: true
-			// },
 			disabled: true,
 			userSupervisorId: null,
 			userInstructorId: null,
@@ -175,6 +167,11 @@ angular.module('minovateApp')
 		storeTypes: {
 			selectedStoreTypes: [],
 			storeTypes: [],
+			disabled: true
+		},
+		promoters: {
+			list: [],
+			selected: [],
 			disabled: true
 		},
 		buttons: {
@@ -376,6 +373,7 @@ angular.module('minovateApp')
 				// Se seleccionan los datos de la tienda a editar
 				selectUsersInstructor();
 				selectUsersSupervisor();
+				selectUsersPromoter();
 				selectZones();
 				// selectDealers();
 				selectStoreTypes();
@@ -394,6 +392,34 @@ angular.module('minovateApp')
 			$log.log(error);
 			if (error.status === 401) {
 				Utils.refreshToken(getStoreDetails);
+			}
+		});
+	};
+
+	var getPromoters = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		Promoters.query({
+
+		}, function(success) {
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					$scope.modal.promoters.list.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name,
+						type: 'users'
+					});
+				}
+			}
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				if (error.status === 401) {
+					Utils.refreshToken(getPromoters);
+				}
 			}
 		});
 	};
@@ -418,6 +444,17 @@ angular.module('minovateApp')
 				break;
 			}
 		}
+	};
+
+	var selectUsersPromoter = function() {
+		// for (i = 0; i < $scope.modal.users.users.length; i++) {
+		// 	if (parseInt($scope.modal.users.users[i].id) === parseInt($scope.modal.store.userInstructorId)) {
+		// 		$scope.modal.users.selectedUsersInstructor.id = $scope.modal.users.users[i].id;
+		// 		$scope.modal.users.selectedUsersInstructor.fullName = $scope.modal.users.users[i].fullName;
+		// 		$scope.modal.users.selectedUsersInstructor.type = $scope.modal.users.users[i].type;
+		// 		break;
+		// 	}
+		// }
 	};
 
 	var selectZones = function() {
@@ -466,6 +503,8 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
+
+		$log.log($scope.modal.promoters.selectedUsersInstructor);
 
 		if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 			$scope.modal.alert.color = 'danger';
@@ -521,9 +560,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		// var monthlyGoalClp = $scope.modal.store.montlyGoalClp.text ? $scope.modal.store.montlyGoalClp.text : '0';
-		// var monthlyGoalUsd = $scope.modal.store.montlyGoalUsd.text ? $scope.modal.store.montlyGoalUsd.text : '0';
-
 		var zone = {
 			type: $scope.modal.zones.selectedZones.type,
 			id: $scope.modal.zones.selectedZones.id
@@ -544,17 +580,19 @@ angular.module('minovateApp')
 			type: $scope.modal.users.selectedUsersInstructor.type,
 			id: $scope.modal.users.selectedUsersInstructor.id
 		};
+		var promoter = {
+			type: $scope.modal.users.selectedUsersPromoter.type,
+			id: $scope.modal.users.selectedUsersPromoter.id
+		};
 
 		Stores.save({
 			data: {
-				type: "stores",
+				type: 'stores',
 				attributes: {
 					name: $scope.modal.store.name.text,
 					contact: $scope.modal.store.contact.text,
 					phone_number: $scope.modal.store.phone.text,
-					address: $scope.modal.store.address.text,
-					// monthly_goal_clp: monthlyGoalClp,
-					// monthly_goal_usd: monthlyGoalUsd
+					address: $scope.modal.store.address.text
 				},
 				relationships: {
 					zone: {
@@ -572,6 +610,10 @@ angular.module('minovateApp')
 					instructor: {
 						data: instructor
 					}
+					// ,
+					// promoter: {
+					// 	data: promoter
+					// }
 				}
 			}
 		}, function(success) {
@@ -615,6 +657,7 @@ angular.module('minovateApp')
 			$scope.modal.zones.disabled = false;
 			$scope.modal.dealers.disabled = false;
 			$scope.modal.storeTypes.disabled = false;
+			$scope.modal.promoters.disabled = false;
 
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.title = 'Para efectuar la edición, presione el botón Guardar';
@@ -632,6 +675,7 @@ angular.module('minovateApp')
 			$scope.modal.zones.disabled = true;
 			$scope.modal.dealers.disabled = true;
 			$scope.modal.storeTypes.disabled = true;
+			$scope.modal.promoters.disabled = true;
 
 			if (!Validators.validaRequiredField($scope.modal.store.name.text)) {
 				$scope.modal.alert.color = 'danger';
@@ -704,6 +748,39 @@ angular.module('minovateApp')
 				type: $scope.modal.users.selectedUsersInstructor.type,
 				id: $scope.modal.users.selectedUsersInstructor.id
 			};
+
+			// var asd = {
+			// 	storeId: 161,
+			// 	data: {
+			// 		type: "stores",
+			// 		id: 161,
+			// 		attributes: {
+			// 			name: $scope.modal.store.name.text,
+			// 			contact: $scope.modal.store.contact.text,
+			// 			phone_number: $scope.modal.store.phone.text,
+			// 			address: $scope.modal.store.address.text
+			// 		},
+			// 		relationships: {
+			// 			zone: {
+			// 				data: zone
+			// 			},
+			// 			dealer: {
+			// 				data: dealer
+			// 			},
+			// 			store_type: {
+			// 				data: storeType
+			// 			},
+			// 			supervisor: {
+			// 				data: supervisor
+			// 			},
+			// 			instructor: {
+			// 				data: instructor
+			// 			}
+			// 		}
+			// 	}
+			// };
+
+			// $log.log(asd);
 
 			Stores.update({
 				storeId: idStore,
@@ -817,6 +894,11 @@ angular.module('minovateApp')
 		detail: 'OK'
 	});
 
+	getPromoters({
+		success: true,
+		detail: 'OK'
+	});
+
 	if (idStore) {
 		$scope.modal.title.text = 'Información tienda';
 		$scope.modal.subtitle.text = '';
@@ -856,6 +938,7 @@ angular.module('minovateApp')
 		$scope.modal.zones.disabled = false;
 		$scope.modal.dealers.disabled = false;
 		$scope.modal.storeTypes.disabled = false;
+		$scope.modal.promoters.disabled = false;
 	}
 
 });

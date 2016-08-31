@@ -48,6 +48,7 @@
         <li ui-sref-active="active" ng-class="{'open':$state.includes('app.promotions')}" ng-show="true">
           <a ui-sref="app.promotions"><fa name="bullhorn"></fa> <span>Promociones</span></a>
           <ul>
+            <li ui-sref-active="active"><a ui-sref="app.promotions.new"><fa name="caret-right"></fa> Nueva</a></li>
             <li ui-sref-active="active"><a ui-sref="app.promotions.list"><fa name="caret-right"></fa> Lista</a></li>
             <li ui-sref-active="active"><a ui-sref="app.promotions.tracking"><fa name="caret-right"></fa> Seguimiento</a></li>
           </ul>

@@ -235,7 +235,6 @@ angular.module('minovateApp')
 						taskStart: success.data[i].attributes.task_start,
 						limitDate: success.data[i].attributes.limit_date,
 						finishedAt: success.data[i].attributes.finished_at,
-						
 						finshed: success.data[i].attributes.finished,
 						pdf: success.data[i].attributes.pdf,
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
@@ -253,13 +252,17 @@ angular.module('minovateApp')
 					page: 1, // show first page
 					count: finishedTasks.length, // count per page
 					sorting: {
-						// id: 'desc' // initial sorting
+						limitDate: 'asc' // initial sorting
+					},
+					filter: {
+						storeName: ''
 					}
 				}, {
 					counts: [],
 					total: finishedTasks.length, // length of stores
 					dataset: finishedTasks
 				});
+				$log.log($scope.tableParamsFinishedTasks);
 			} else {
 				$log.error(success);
 			}
@@ -319,7 +322,7 @@ angular.module('minovateApp')
 					page: 1, // show first page
 					count: pendingTasks.length, // count per page
 					sorting: {
-						id: 'asc' // initial sorting
+						limitDate: 'asc' // initial sorting
 					}
 				}, {
 					counts: [],
