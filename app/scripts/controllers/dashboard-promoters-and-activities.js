@@ -265,7 +265,7 @@ angular.module('minovateApp')
 
 	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {}, {}, []);
 
-	$scope.openModalMonthlyReportsPerDay = function(data) {
+	$scope.openModalMonthlyReportsPerDay = function(data, headers) {
 
 		var modalInstance = $uibModal.open({
 			animation: true,
@@ -275,6 +275,9 @@ angular.module('minovateApp')
 			resolve: {
 				data: function() {
 					return data;
+				},
+				headers: function() {
+					return headers;
 				}
 			}
 		});
@@ -841,7 +844,7 @@ angular.module('minovateApp')
 
 })
 
-.controller('ViewAllDataTableModalInstance', function($scope, $log, $uibModalInstance, data, Utils) {
+.controller('ViewAllDataTableModalInstance', function($scope, $log, $uibModalInstance, data, headers, Utils) {
 
 	$scope.modal = {
 		alert: {
@@ -850,7 +853,8 @@ angular.module('minovateApp')
 			title: '',
 			text: ''
 		},
-		dataTable: data
+		dataTable: data,
+		headers: headers
 	};
 
 	$scope.cancel = function() {

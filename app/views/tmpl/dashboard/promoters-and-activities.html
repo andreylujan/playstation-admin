@@ -122,7 +122,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.mothlyReportsPerDay.all)" ng-class="{disabled:page.promotors.mothlyReportsPerDay.seeAll.disabled}"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.mothlyReportsPerDay.all,{thirdHeader:'Cantidad reportes'})" ng-class="{disabled:page.promotors.mothlyReportsPerDay.seeAll.disabled}"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -178,7 +178,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyExitsPerDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyExitsPerDay.all,{thirdHeader:'Cantidad reportes'})"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -223,7 +223,7 @@
 							<tr>
 								<th>Día semana</th>
 								<th class="text-center">Día</th>
-								<th class="text-center">Cantidad de horas</th>
+								<th class="text-center">Horas</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -234,7 +234,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyHoursPerDay.all)"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
+					<a ng-click="openModalMonthlyReportsPerDay(page.promotors.registry.mothlyHoursPerDay.all,{thirdHeader:'Horas'})"><p class="text-gray-ps-2 mt-10 mb-10 text-right">Ver más ></p></a>
 				</div>
 			</section>
 			<!-- /tile -->
@@ -610,7 +610,7 @@
 							<tr>
 								<th>Día semana</th>
 								<th class="text-center">Día</th>
-								<th class="text-center">Cantidad reportes</th>
+								<th class="text-center">{{modal.headers.thirdHeader}}</th>
 							</tr>
 						</thead>
 						<tbody>
