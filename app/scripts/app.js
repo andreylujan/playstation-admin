@@ -99,7 +99,7 @@ angular
 		uiSelectConfig.theme = 'bootstrap';
 		localStorageServiceProvider.setStorageType('localStorage');
 		// $authProvider.loginUrl = 'http://10.77.0.189:3001/oauth/token';
-		$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token';
+		$authProvider.loginUrl = 'http://50.16.161.152/eretail-staging/oauth/token';
 		$authProvider.tokenName = 'access_token';
 	}
 ])
