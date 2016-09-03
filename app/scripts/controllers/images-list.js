@@ -217,15 +217,6 @@ angular.module('minovateApp')
 		var dateStartSelected =  new Date($scope.page.filters.dateRange.startDate);
 		var dateEndSelected =  new Date($scope.page.filters.dateRange.endDate);
 
-		// $log.log(zoneIdSelected);
-		// $log.log(dealerIdSelected);
-		// $log.log(storeIdSelected);
-		// $log.log(instructorIdSelected);
-		// $log.log(supervisorIdSelected);
-		// $log.log(categoryIdSelected);
-		// $log.log(dateStartSelected);
-		// $log.log(dateEndSelected);
-
 		$scope.page.images = [];
 
 		Images.query({

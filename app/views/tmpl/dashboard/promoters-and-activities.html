@@ -64,10 +64,13 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
+					<!-- <input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span>
+					</span> -->
+					<button id="daterangeDashPromoActiv" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
+						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
+					</button>
 				</div>
 			</div>
 		</div>

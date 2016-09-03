@@ -698,7 +698,9 @@ angular.module('minovateApp')
 				supervisor_id: '@supervisor_id',
 				zone_id: '@zone_id',
 				dealer_id: '@dealer_id',
-				store_id: '@store_id'
+				store_id: '@store_id',
+				start_date: '@start_date',
+				end_date: '@end_date'
 			}
 		}
 	});

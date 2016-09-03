@@ -11,6 +11,10 @@ angular.module('minovateApp')
 
 .controller('DashboardStockCtrl', function($scope, $log, $uibModal, $filter, $timeout, Utils, NgTableParams, Dashboard, DataPlayStation, ExcelDashboard) {
 
+	var currentDate = new Date();
+	var firstMonthDay = new Date();
+	firstMonthDay.setDate(1);
+
 	$scope.page = {
 		title: 'Stock',
 		filters: {
@@ -45,6 +49,22 @@ angular.module('minovateApp')
 					minMode: 'month',
 					maxDate: new Date()
 				}
+			},
+			dateRange: {
+				options: {
+					locale: {
+						applyLabel: 'Buscar',
+						cancelLabel: 'Cerrar',
+						fromLabel: 'Desde',
+						toLabel: 'Hasta',
+						customRangeLabel: 'Personalizado',
+						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+						firstDay: 1
+					}
+				},
+				startDate: firstMonthDay,
+				endDate: currentDate
 			}
 		},
 		stock: {
@@ -150,8 +170,12 @@ angular.module('minovateApp')
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
-		var yearSelected = $scope.page.filters.month.value.getFullYear();
+		var startDate = new Date($scope.page.filters.dateRange.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.endDate);
+		var startDay = startDate.getDate();
+		var endDay = endDate.getDate();
+		var month = startDate.getMonth() + 1;
+		var year = startDate.getFullYear();
 
 		var stockBreaks = [],
 			topProducts = [];
@@ -163,8 +187,10 @@ angular.module('minovateApp')
 			store_id: storeIdSelected,
 			instructor_id: instructorIdSelected,
 			supervisor_id: supervisorIdSelected,
-			month: monthSelected,
-			year: yearSelected
+			month: month,
+			year: year,
+			start_day: startDay,
+			end_day: endDay
 		}, function(success) {
 
 			// INI STOCK BREAKS
@@ -213,8 +239,14 @@ angular.module('minovateApp')
 		}, function(error) {
 			$log.error(error);
 		});
-
 	};
+
+	angular.element('#daterangeDashStock').on('apply.daterangepicker', function(ev, picker) {
+		$scope.getDashboardInfo({
+			success: true,
+			detail: 'OK'
+		});
+	});
 
 	$scope.getExcel = function(e) {
 
