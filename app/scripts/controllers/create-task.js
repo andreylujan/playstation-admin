@@ -590,6 +590,8 @@ angular.module('minovateApp')
                 $scope.page.newTask.dealers.selectedDealer = [];
                 $scope.store_ids = [];
                 $scope.page.newTask.stores.selectedStore = [];
+                $scope.promoter_ids = [];
+                $scope.page.newTask.promoters.selectedPromoter = [];
 
                 $scope.getZones({
                     success: true,
