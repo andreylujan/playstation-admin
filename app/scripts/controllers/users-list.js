@@ -90,10 +90,10 @@ angular.module('minovateApp')
 				for (i = 0; i < users.length; i++) {
 					if (users[i].id === data.idUser) {
 						users.splice(i, 1);
-						$log.log('borro el user: ' + users[i].email);
 					}
 				}
 			}
+			if (data.action === 'editUser') {}
 			$scope.tableParams.reload();
 		}, function() {});
 	};
@@ -447,7 +447,6 @@ angular.module('minovateApp')
 		$scope.elements.alert.text = '';
 		$scope.elements.alert.color = '';
 	};
-
 })
 
 .controller('SendInvitationInstance', function($scope, $log, $uibModalInstance, userEmail) {
@@ -459,6 +458,4 @@ angular.module('minovateApp')
 	$scope.ok = function() {
 		$uibModalInstance.close();
 	};
-
-
 });

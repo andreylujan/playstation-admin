@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
 		title: 'Lista de reportes',
@@ -57,7 +57,7 @@ angular.module('minovateApp')
 
 		reports = [];
 
-		Reports.query({
+		DailyReports.query({
 			all: true,
 			'page[number]': $scope.currentPage,
 			'page[size]': pageSize

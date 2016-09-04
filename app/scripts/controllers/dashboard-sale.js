@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $filter, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -57,10 +57,13 @@ angular.module('minovateApp')
 						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
-					}
+					},
+					minDate: firstMonthDay,
+					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
 				startDate: firstMonthDay,
-				endDate: currentDate
+				endDate: currentDate,
+
 			}
 		},
 		sales: {
@@ -201,6 +204,7 @@ angular.module('minovateApp')
 		var hardwareSales = [];
 		var accesoriesSales = [];
 		var gamesSales = [];
+		var totals = [];
 
 		$scope.page.sales.bestPractices.loaded = false;
 
@@ -222,6 +226,7 @@ angular.module('minovateApp')
 				var hardwareTotal = 0,
 					accessoriesTotal = 0,
 					gamesTotal = 0,
+					totalTotals = 0,
 					namesZones = [],
 					seriesSalesBetweenConsoles = [];
 				$scope.categories = [];
@@ -232,11 +237,14 @@ angular.module('minovateApp')
 					hardwareSales.push(value.sales_by_type.hardware);
 					accesoriesSales.push(value.sales_by_type.accessories);
 					gamesSales.push(value.sales_by_type.games);
+					totals.push(value.sales_by_type.total);
+					
 					$scope.categories.push({
 						name: value.name,
 						hardware: value.sales_by_type.hardware,
 						accessories: value.sales_by_type.accessories,
-						games: value.sales_by_type.games
+						games: value.sales_by_type.games,
+						total: value.sales_by_type.total
 					});
 				});
 				// Suma acumulada de hardware
@@ -251,11 +259,16 @@ angular.module('minovateApp')
 				angular.forEach(gamesSales, function(value, key) {
 					gamesTotal = value + gamesTotal;
 				});
+				// Suma todas las sumass
+				angular.forEach(totals, function(value, key) {
+					totalTotals = value + totalTotals;
+				});
 				$scope.totalsSale = [{
 					title: 'Total',
 					hardwareTotal: hardwareTotal,
 					accessoriesTotal: accessoriesTotal,
-					gamesTotal: gamesTotal
+					gamesTotal: gamesTotal,
+					totals: totalTotals
 				}];
 
 				$scope.chartConfigSales = Utils.setChartConfig('column', 300, {
@@ -285,7 +298,7 @@ angular.module('minovateApp')
 				}, {
 					categories: categories,
 					title: {
-						text: 'Plataformas'
+						text: 'Marcas'
 					}
 				}, [{
 					name: 'Hardware',
@@ -350,7 +363,7 @@ angular.module('minovateApp')
 				}, {
 					categories: namesZones,
 					title: {
-						text: 'Plataformas'
+						text: 'Zonas'
 					}
 				}, seriesSalesBetweenConsoles);
 
@@ -399,10 +412,12 @@ angular.module('minovateApp')
 				}, [{
 					name: 'Cantidad',
 					data: topProducts.quantities
-				}, {
-					name: 'Monto',
-					data: topProducts.salesMount
-				}]);
+				}
+				// , {
+				// 	name: 'Monto',
+				// 	data: topProducts.salesMount
+				// }
+				]);
 				// FIN para gráfica - Productos más vendidos Precio y Cantidad
 
 				// INI Best Practices

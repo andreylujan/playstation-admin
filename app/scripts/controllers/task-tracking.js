@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
 		title: 'Seguimiento de tareas',
@@ -219,16 +219,11 @@ angular.module('minovateApp')
 
 		var finishedTasks = [];
 
-		Reports.query({
+		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
 			'page[size]': $scope.pagination.finishedTasks.pages.size,
 			'filter[finished]': true,
-			'filter[store_ids]': '',
-			'filter[zone_ids]': '',
-			'fields[reports]': 'finished_at,assigned_user_name,creator_name,store_name,zone_name,dealer_name,created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
-			'include': 'assigned_user',
-			'fields[users]': 'email,first_name,last_name'
 		}, function(success) {
 
 			if (success.data) {
@@ -289,16 +284,11 @@ angular.module('minovateApp')
 		}
 		var pendingTasks = [];
 
-		Reports.query({
+		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
 			'page[size]': $scope.pagination.pendingTasks.pages.size,
-			'filter[finished]': false,
-			'filter[store_ids]': '',
-			'filter[zone_ids]': '',
-			'fields[reports]': 'finished_at,assigned_user_name,creator_name,store_name,zone_name,dealer_name,created_at,limit_date,finished,pdf,pdf_uploaded,task_start,title,description',
-			'include': 'assigned_user',
-			'fields[users]': 'email,first_name,last_name'
+			'filter[finished]': false
 		}, function(success) {
 
 			if (success.data) {
