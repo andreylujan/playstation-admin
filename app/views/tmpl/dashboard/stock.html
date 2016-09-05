@@ -134,26 +134,26 @@
 				<div class="tile-widget">
 					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom">
 						<tr ng-repeat="topProduct in page.stock.topProducts.tableParams.data" ng-show="page.stock.stockBreaks.tableParams.data.length">
-							<td data-title="'EAN'" sortable="'ean'" filter="{'ean':'text'}">
+							<td data-title="'Dealer'" sortable="'dealerName'" filter="{'dealerName':'text'}">
+								{{topProduct.dealerName | capitalize:true}}
+							</td>
+							<td data-title="'Tienda'" sortable="'store'" filter="{'store':'text'}">
+								{{topProduct.storeName | capitalize:true}}
+							</td>
+							<td data-title="'EAN'" sortable="'storeName'" filter="{'storeName':'text'}">
 								{{topProduct.ean}}
 							</td>
 							<td data-title="'Descripción'" sortable="'description'" filter="{'description': 'text'}">
 								{{topProduct.description | capitalize:true}}
 							</td>
-							<td data-title="'Clasificación'" sortable="'classification'" filter="{'classification': 'text'}">
-								{{topProduct.classification | capitalize:true}}
-							</td>
-							<td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
-								{{topProduct.platform | capitalize:true}}
+							<td data-title="'Categoría'" sortable="'category'" filter="{'category': 'text'}">
+								{{topProduct.category | capitalize:true}}
 							</td>
 							<td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
 								{{topProduct.publisher | capitalize:true}}
 							</td>
-							<td data-title="'Unidades'" sortable="'units'" filter="{'units': 'text'}">
+							<td data-title="'Unidades vendidas'" sortable="'units'" filter="{'units': 'text'}">
 								{{topProduct.units | currency:'':0}}
-							</td>
-							<td data-title="'Monto'" sortable="'salesAmount'" filter="{'salesAmount': 'text'}">
-								{{topProduct.salesAmount | currency:' $':0}}
 							</td>
 						</tr>
 					</table>

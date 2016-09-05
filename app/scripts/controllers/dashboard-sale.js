@@ -9,491 +9,519 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $filter, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
 
-	var currentDate = new Date();
-	var firstMonthDay = new Date();
-	firstMonthDay.setDate(1);
+    var currentDate = new Date();
+    var firstMonthDay = new Date();
+    firstMonthDay.setDate(1);
 
-	$scope.page = {
-		title: 'Venta',
-		filters: {
-			zone: {
-				list: [],
-				selected: null
-			},
-			dealer: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			store: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			instructor: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			supervisor: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			month: {
-				value: new Date(),
-				isOpen: false
-			},
-			dateRange: {
-				options: {
-					locale: {
-						applyLabel: 'Buscar',
-						cancelLabel: 'Cerrar',
-						fromLabel: 'Desde',
-						toLabel: 'Hasta',
-						customRangeLabel: 'Personalizado',
-						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
-						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-						firstDay: 1
-					}
-				},
-				startDate: firstMonthDay,
-				endDate: currentDate
-			}
-		},
-		sales: {
-			bestPractices: {
-				loaded: false,
-				list: []
-			}
-		},
-		buttons: {
-			getExcel: {
-				disabled: false
-			}
-		},
-		loader: {
-			show: false
-		}
-	};
+    $scope.page = {
+        title: 'Venta',
+        filters: {
+            zone: {
+                list: [],
+                selected: null
+            },
+            dealer: {
+                list: [],
+                selected: null,
+                disabled: false
+            },
+            store: {
+                list: [],
+                selected: null,
+                disabled: false
+            },
+            instructor: {
+                list: [],
+                selected: null,
+                disabled: false
+            },
+            supervisor: {
+                list: [],
+                selected: null,
+                disabled: false
+            },
+            month: {
+                value: new Date(),
+                isOpen: false
+            },
+            dateRange: {
+                options: {
+                    locale: {
+                        applyLabel: 'Buscar',
+                        cancelLabel: 'Cerrar',
+                        fromLabel: 'Desde',
+                        toLabel: 'Hasta',
+                        customRangeLabel: 'Personalizado',
+                        daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+                        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        firstDay: 1
+                    },
+                    //minDate: firstMonthDay,
+                    maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
+                },
+                startDate: firstMonthDay,
+                endDate: currentDate,
 
-	var storesIncluded = [],
-		i = 0,
-		j = 0,
-		k = 0;
+            }
+        },
+        sales: {
+            bestPractices: {
+                loaded: false,
+                list: []
+            }
+        },
+        buttons: {
+            getExcel: {
+                disabled: false
+            }
+        },
+        loader: {
+            show: false
+        }
+    };
 
-	var getZones = function() {
-		DataPlayStation.getZones({
-			success: true,
-			detail: 'OK'
-		}).then(function(data) {
-			$scope.page.filters.zone.list = data.data;
-			$scope.page.filters.zone.selected = data.data[0];
-			$scope.getDealers({
-				success: true,
-				detail: 'OK'
-			}, $scope.page.filters.zone.selected);
-		}).catch(function(error) {
-			$log.error(error);
-		});
-	};
+    var storesIncluded = [],
+        i = 0,
+        j = 0,
+        k = 0;
 
-	$scope.getDealers = function(e, zoneSelected) {
-		$scope.page.filters.dealer.disabled = true;
-		DataPlayStation.getDealers({
-			success: true,
-			detail: 'OK'
-		}, zoneSelected).then(function(data) {
-			$scope.page.filters.dealer.list = data.data;
-			$scope.page.filters.dealer.selected = data.data[0];
-			$scope.page.filters.dealer.disabled = false;
-			$scope.getStores({
-				success: true,
-				detail: 'OK'
-			}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
-		}).catch(function(error) {
-			$log.error(error);
-		});
-	};
+    var getZones = function() {
+        DataPlayStation.getZones({
+            success: true,
+            detail: 'OK'
+        }).then(function(data) {
+            $scope.page.filters.zone.list = data.data;
+            $scope.page.filters.zone.selected = data.data[0];
+            $scope.getDealers({
+                success: true,
+                detail: 'OK'
+            }, $scope.page.filters.zone.selected);
+        }).catch(function(error) {
+            $log.error(error);
+        });
+    };
 
-	$scope.getStores = function(e, zoneSelected, dealerSelected) {
-		$scope.page.filters.store.disabled = true;
-		DataPlayStation.getStores({
-			success: true,
-			detail: 'OK'
-		}, zoneSelected, dealerSelected).then(function(data) {
-			$scope.page.filters.store.list = data.data;
-			$scope.page.filters.store.selected = data.data[0];
-			$scope.page.filters.store.disabled = false;
+    $scope.getDealers = function(e, zoneSelected) {
+        $scope.page.filters.dealer.disabled = true;
+        DataPlayStation.getDealers({
+            success: true,
+            detail: 'OK'
+        }, zoneSelected).then(function(data) {
+            $scope.page.filters.dealer.list = data.data;
+            $scope.page.filters.dealer.selected = data.data[0];
+            $scope.page.filters.dealer.disabled = false;
+            $scope.getStores({
+                success: true,
+                detail: 'OK'
+            }, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
+        }).catch(function(error) {
+            $log.error(error);
+        });
+    };
 
-			$scope.getDashboardInfo({
-				success: true,
-				detail: 'OK'
-			});
-		}).catch(function(error) {
-			$log.error(error);
-		});
-	};
+    $scope.getStores = function(e, zoneSelected, dealerSelected) {
+        $scope.page.filters.store.disabled = true;
+        DataPlayStation.getStores({
+            success: true,
+            detail: 'OK'
+        }, zoneSelected, dealerSelected).then(function(data) {
+            $scope.page.filters.store.list = data.data;
+            $scope.page.filters.store.selected = data.data[0];
+            $scope.page.filters.store.disabled = false;
 
-	var getUsers = function(e) {
-		$scope.page.filters.supervisor.disabled = true;
-		$scope.page.filters.instructor.disabled = true;
-		DataPlayStation.getUsers({
-			success: true,
-			detail: 'OK'
-		}).then(function(data) {
-			$scope.page.filters.instructor.list = data.data;
-			$scope.page.filters.supervisor.list = data.data;
-			$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
-			$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
-			$scope.page.filters.instructor.disabled = false;
-			$scope.page.filters.supervisor.disabled = false;
-		}).catch(function(error) {
-			$log.error(error);
-		});
-	};
+            $scope.getDashboardInfo({
+                success: true,
+                detail: 'OK'
+            });
+        }).catch(function(error) {
+            $log.error(error);
+        });
+    };
 
-	$scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {}, {}, []);
+    var getUsers = function(e) {
+        $scope.page.filters.supervisor.disabled = true;
+        $scope.page.filters.instructor.disabled = true;
+        DataPlayStation.getUsers({
+            success: true,
+            detail: 'OK'
+        }).then(function(data) {
+            $scope.page.filters.instructor.list = data.data;
+            $scope.page.filters.supervisor.list = data.data;
+            $scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
+            $scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
+            $scope.page.filters.instructor.disabled = false;
+            $scope.page.filters.supervisor.disabled = false;
+        }).catch(function(error) {
+            $log.error(error);
+        });
+    };
 
-	$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {}, {}, {}, []);
+    $scope.chartConfigSales = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
-	$scope.openModalViewAllSalesValues = function(data) {
+    $scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 422, {}, {}, {}, []);
 
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'viewAllShareOfSalesModal.html',
-			controller: 'ViewAllShareOfSalesModalInstance',
-			size: 'md',
-			resolve: {
-				tableShareOfSalesAll: function() {
-					return data;
-				}
-			}
-		});
+    $scope.openModalViewAllSalesValues = function(data) {
 
-		modalInstance.result.then(function() {}, function() {});
-	};
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'viewAllShareOfSalesModal.html',
+            controller: 'ViewAllShareOfSalesModalInstance',
+            size: 'md',
+            resolve: {
+                tableShareOfSalesAll: function() {
+                    return data;
+                }
+            }
+        });
 
-	$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
+        modalInstance.result.then(function() {}, function() {});
+    };
 
-	$scope.getDashboardInfo = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+    $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
-		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
-		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
-		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
-		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
-		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var startDate = new Date($scope.page.filters.dateRange.startDate);
-		var endDate = new Date($scope.page.filters.dateRange.endDate);
-		var startDay = startDate.getDate();
-		var endDay = endDate.getDate();
-		var month = startDate.getMonth() + 1;
-		var year = startDate.getFullYear();
+    $scope.getDashboardInfo = function(e) {
+        if (!e.success) {
+            $log.error(e.detail);
+            return;
+        }
 
-		var categories = [];
-		$scope.categories = [];
-		var hardwareSales = [];
-		var accesoriesSales = [];
-		var gamesSales = [];
+        var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+        var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+        var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+        var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+        var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+        var startDate = new Date($scope.page.filters.dateRange.startDate);
+        var endDate = new Date($scope.page.filters.dateRange.endDate);
+        var startDay = startDate.getDate();
+        var endDay = endDate.getDate();
+        var month = startDate.getMonth() + 1;
+        var year = startDate.getFullYear();
 
-		$scope.page.sales.bestPractices.loaded = false;
+        var categories = [];
+        $scope.categories = [];
+        var hardwareSales = [];
+        var accesoriesSales = [];
+        var gamesSales = [];
+        var totals = [];
 
-		Dashboard.query({
-			category: 'sales',
-			zone_id: zoneIdSelected,
-			dealer_id: dealerIdSelected,
-			store_id: storeIdSelected,
-			instructor_id: instructorIdSelected,
-			supervisor_id: supervisorIdSelected,
-			month: month,
-			year: year,
-			start_day: startDay,
-			end_day: endDay
-		}, function(success) {
-			// $log.log(success);
-			if (success.data) {
+        $scope.page.sales.bestPractices.loaded = false;
 
-				var hardwareTotal = 0,
-					accessoriesTotal = 0,
-					gamesTotal = 0,
-					namesZones = [],
-					seriesSalesBetweenConsoles = [];
-				$scope.categories = [];
+        Dashboard.query({
+            category: 'sales',
+            zone_id: zoneIdSelected,
+            dealer_id: dealerIdSelected,
+            store_id: storeIdSelected,
+            instructor_id: instructorIdSelected,
+            supervisor_id: supervisorIdSelected,
+            month: month,
+            year: year,
+            start_day: startDay,
+            end_day: endDay
+        }, function(success) {
+            // $log.log(success);
+            if (success.data) {
 
-				// Rescato los nombres de las plataformas
-				angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
-					categories.push(value.name);
-					hardwareSales.push(value.sales_by_type.hardware);
-					accesoriesSales.push(value.sales_by_type.accessories);
-					gamesSales.push(value.sales_by_type.games);
-					$scope.categories.push({
-						name: value.name,
-						hardware: value.sales_by_type.hardware,
-						accessories: value.sales_by_type.accessories,
-						games: value.sales_by_type.games
-					});
-				});
-				// Suma acumulada de hardware
-				angular.forEach(hardwareSales, function(value, key) {
-					hardwareTotal = value + hardwareTotal;
-				});
-				// Suma acumulada de accesorios
-				angular.forEach(accesoriesSales, function(value, key) {
-					accessoriesTotal = value + accessoriesTotal;
-				});
-				// Suma acumulada de juegos
-				angular.forEach(gamesSales, function(value, key) {
-					gamesTotal = value + gamesTotal;
-				});
-				$scope.totalsSale = [{
-					title: 'Total',
-					hardwareTotal: hardwareTotal,
-					accessoriesTotal: accessoriesTotal,
-					gamesTotal: gamesTotal
-				}];
+                var hardwareTotal = 0,
+                    accessoriesTotal = 0,
+                    gamesTotal = 0,
+                    totalTotals = 0,
+                    namesZones = [],
+                    seriesSalesBetweenConsoles = [];
+                $scope.categories = [];
 
-				$scope.chartConfigSales = Utils.setChartConfig('column', 300, {
-					column: {
-						stacking: 'normal',
-						dataLabels: {
-							enabled: true,
-							color: 'white',
-							style: {
-								textShadow: '0 0 3px black',
-								fontWeight: 'normal'
-							}
-						}
-					}
-				}, {
-					min: 0,
-					title: {
-						text: null
-					},
-					stackLabels: {
-						enabled: true,
-						style: {
-							fontWeight: 'normal',
-							color: 'gray'
-						}
-					}
-				}, {
-					categories: categories,
-					title: {
-						text: 'Plataformas'
-					}
-				}, [{
-					name: 'Hardware',
-					data: hardwareSales
-				}, {
-					name: 'Accesorios',
-					data: accesoriesSales
-				}, {
-					name: 'Juegos',
-					data: gamesSales
-				}]);
+                // Rescato los nombres de las plataformas
+                angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
+                    categories.push(value.name);
+                    hardwareSales.push(value.sales_by_type.hardware);
+                    accesoriesSales.push(value.sales_by_type.accessories);
+                    gamesSales.push(value.sales_by_type.games);
+                    totals.push(value.sales_by_type.total);
 
-				angular.forEach(success.data.attributes.sales_by_zone, function(value, key) {
-					namesZones.push($filter('capitalize')(value.name, true));
-					if (key === 0) {
-						angular.forEach(value.sales_by_company, function(valueSaleByCompany, key) {
-							seriesSalesBetweenConsoles.push({
-								name: valueSaleByCompany.name,
-								data: []
-							});
-						});
-					}
-				});
+                    $scope.categories.push({
+                        name: value.name,
+                        hardware: value.sales_by_type.hardware,
+                        accessories: value.sales_by_type.accessories,
+                        games: value.sales_by_type.games,
+                        total: value.sales_by_type.total
+                    });
+                });
+                // Suma acumulada de hardware
+                angular.forEach(hardwareSales, function(value, key) {
+                    hardwareTotal = value + hardwareTotal;
+                });
+                // Suma acumulada de accesorios
+                angular.forEach(accesoriesSales, function(value, key) {
+                    accessoriesTotal = value + accessoriesTotal;
+                });
+                // Suma acumulada de juegos
+                angular.forEach(gamesSales, function(value, key) {
+                    gamesTotal = value + gamesTotal;
+                });
+                // Suma todas las sumass
+                angular.forEach(totals, function(value, key) {
+                    totalTotals = value + totalTotals;
+                });
+                $scope.totalsSale = [{
+                    title: 'Total',
+                    hardwareTotal: hardwareTotal,
+                    accessoriesTotal: accessoriesTotal,
+                    gamesTotal: gamesTotal,
+                    totals: totalTotals
+                }];
 
-				// recorro sales_by_zone
-				for (i = 0; i < success.data.attributes.sales_by_zone.length; i++) {
-					// dentro de ese arreglo, recorro sales_by_company
-					for (j = 0; j < success.data.attributes.sales_by_zone[i].sales_by_company.length; j++) {
-						// recorro el arreglo donde anteriormente guardo las companies y agrego loa valores
-						for (k = 0; k < seriesSalesBetweenConsoles.length; k++) {
-							if (seriesSalesBetweenConsoles[k].name === success.data.attributes.sales_by_zone[i].sales_by_company[j].name) {
-								seriesSalesBetweenConsoles[k].data.push(success.data.attributes.sales_by_zone[i].sales_by_company[j].sales_amount);
-							}
-						}
-					}
-				}
+                $scope.chartConfigSales = Utils.setChartConfig('column', 300, {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: 'white',
+                            style: {
+                                textShadow: '0 0 3px black',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                }, {
+                    min: 0,
+                    title: {
+                        text: null
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'normal',
+                            color: 'gray'
+                        }
+                    }
+                }, {
+                    categories: categories,
+                    title: {
+                        text: 'Marcas'
+                    }
+                }, [{
+                    name: 'Hardware',
+                    data: hardwareSales
+                }, {
+                    name: 'Accesorios',
+                    data: accesoriesSales
+                }, {
+                    name: 'Juegos',
+                    data: gamesSales
+                }]);
 
-				$scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 513, {
-					column: {
-						stacking: 'normal',
-						dataLabels: {
-							enabled: true,
-							color: 'white',
-							style: {
-								textShadow: '0 0 3px black',
-								fontWeight: 'normal'
-							}
-						}
-					}
-				}, {
-					min: 0,
-					title: {
-						text: null
-					},
-					stackLabels: {
-						enabled: true,
-						style: {
-							fontWeight: 'normal',
-							color: 'gray'
-						}
-					}
-				}, {
-					categories: namesZones,
-					title: {
-						text: 'Plataformas'
-					}
-				}, seriesSalesBetweenConsoles);
+                angular.forEach(success.data.attributes.sales_by_zone, function(value, key) {
+                    namesZones.push($filter('capitalize')(value.name, true));
+                    if (key === 0) {
+                        angular.forEach(value.sales_by_company, function(valueSaleByCompany, key) {
+                            seriesSalesBetweenConsoles.push({
+                                name: valueSaleByCompany.name,
+                                data: []
+                            });
+                        });
+                    }
+                });
 
-				$scope.tableShareOfSalesAll = success.data.attributes.sales_by_zone;
+                // recorro sales_by_zone
+                for (i = 0; i < success.data.attributes.sales_by_zone.length; i++) {
+                    // dentro de ese arreglo, recorro sales_by_company
+                    for (j = 0; j < success.data.attributes.sales_by_zone[i].sales_by_company.length; j++) {
+                        // recorro el arreglo donde anteriormente guardo las companies y agrego loa valores
+                        for (k = 0; k < seriesSalesBetweenConsoles.length; k++) {
+                            if (seriesSalesBetweenConsoles[k].name === success.data.attributes.sales_by_zone[i].sales_by_company[j].name) {
+                                seriesSalesBetweenConsoles[k].data.push(success.data.attributes.sales_by_zone[i].sales_by_company[j].sales_amount);
+                            }
+                        }
+                    }
+                }
 
-				var donutData = [],
-					donutColors = ['#015496', '#0c7ebd', '#a8a9ac', '#6d6e71'];
-				angular.forEach(success.data.attributes.share_percentages, function(value, key) {
-					donutData.push({
-						label: value.name,
-						value: Math.round(value.share_percentage * 10000) / 100,
-						color: donutColors[key]
-					});
-				});
+                $scope.chartConfigSalesBetweenConsoles = Utils.setChartConfig('column', 513, {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: 'white',
+                            style: {
+                                textShadow: '0 0 3px black',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                }, {
+                    min: 0,
+                    title: {
+                        text: null
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'normal',
+                            color: 'gray'
+                        }
+                    }
+                }, {
+                    categories: namesZones,
+                    title: {
+                        text: 'Zonas'
+                    }
+                }, seriesSalesBetweenConsoles);
 
-				$scope.donutData = donutData;
+                $scope.tableShareOfSalesAll = success.data.attributes.sales_by_zone;
 
-				// INICIO para gráfica - Productos más vendidos Precio y Cantidad
-				var topProducts = {
-					names: [],
-					quantities: [],
-					salesAmounts: []
-				};
-				angular.forEach(success.data.attributes.top_products, function(value, key) {
-					topProducts.names.push(
-						$filter('capitalize')(value.name, true)
-					);
-					topProducts.quantities.push(
-						value.quantity
-					);
-					topProducts.salesAmounts.push(
-						value.sales_amount
-					);
-				});
+                var donutData = [],
+                    donutColors = ['#015496', '#0c7ebd', '#a8a9ac', '#6d6e71'];
+                angular.forEach(success.data.attributes.share_percentages, function(value, key) {
+                    donutData.push({
+                        label: value.name,
+                        value: Math.round(value.share_percentage * 10000) / 100,
+                        color: donutColors[key]
+                    });
+                });
 
-				$scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {
-					min: 0,
-					title: {
-						text: null
-					}
-				}, {
-					categories: topProducts.names,
-					title: {
-						text: 'Juegos'
-					}
-				}, [{
-					name: 'Cantidad',
-					data: topProducts.quantities
-				}, {
-					name: 'Monto',
-					data: topProducts.salesMount
-				}]);
-				// FIN para gráfica - Productos más vendidos Precio y Cantidad
+                $scope.donutData = donutData;
 
-				// INI Best Practices
-				var bestPractices = [];
+                // INICIO para gráfica - Productos más vendidos Precio y Cantidad
+                var topProducts = {
+                    names: [],
+                    quantities: [],
+                    salesAmounts: []
+                };
+                angular.forEach(success.data.attributes.top_products, function(value, key) {
+                    topProducts.names.push(
+                        $filter('capitalize')(value.name, true)
+                    );
+                    topProducts.quantities.push(
+                        value.quantity
+                    );
+                    topProducts.salesAmounts.push(
+                        value.sales_amount
+                    );
+                });
 
-				angular.forEach(success.data.attributes.best_practices, function(value, key) {
-					bestPractices.push({
-						src: value
-					});
-				});
+                $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: 'white',
+                            style: {
+                                textShadow: '0 0 3px black',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
 
-				$scope.page.sales.bestPractices.list = bestPractices;
-				$scope.page.sales.bestPractices.loaded = true;
+                }, {
+                    min: 0,
+                    title: {
+                        text: null
+                    }
+                }, {
+                    categories: topProducts.names,
+                    title: {
+                        text: 'Juegos'
+                    }
+                }, [{
+                        name: 'Cantidad',
+                        data: topProducts.quantities
+                    }
+                    // , {
+                    // 	name: 'Monto',
+                    // 	data: topProducts.salesMount
+                    // }
+                ]);
+                // FIN para gráfica - Productos más vendidos Precio y Cantidad
 
-				// FIN Best Practices
-			}
-		}, function(error) {
-			$log.error(error);
-			$scope.totalsSale = [{
-				title: 'Total',
-				hardwareTotal: 0,
-				accessoriesTotal: 0,
-				gamesTotal: 0
-			}];
-		});
-	};
+                // INI Best Practices
+                var bestPractices = [];
 
-	angular.element('#daterangeDashSale').on('apply.daterangepicker', function(ev, picker) {
-		$scope.getDashboardInfo({
-			success: true,
-			detail: 'OK'
-		});
-	});
+                angular.forEach(success.data.attributes.best_practices, function(value, key) {
+                    bestPractices.push({
+                        src: value
+                    });
+                });
 
-	$scope.getExcel = function(e) {
+                $scope.page.sales.bestPractices.list = bestPractices;
+                $scope.page.sales.bestPractices.loaded = true;
 
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+                // FIN Best Practices
+            }
+        }, function(error) {
+            $log.error(error);
+            $scope.totalsSale = [{
+                title: 'Total',
+                hardwareTotal: 0,
+                accessoriesTotal: 0,
+                gamesTotal: 0
+            }];
+        });
+    };
 
-		if ($scope.page.buttons.getExcel.disabled) {
-			return;
-		}
-		$scope.page.buttons.getExcel.disabled = true;
-		$scope.page.loader.show = true;
+    angular.element('#daterangeDashSale').on('apply.daterangepicker', function(ev, picker) {
+        $scope.getDashboardInfo({
+            success: true,
+            detail: 'OK'
+        });
+    });
 
-		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
-		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
-		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
-		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
-		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
-		var yearSelected = $scope.page.filters.month.value.getFullYear();
+    $scope.getExcel = function(e) {
 
-		ExcelDashboard.getFile('#excelBtn', 'sales', 'ventas', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
+        if (!e.success) {
+            $log.error(e.detail);
+            return;
+        }
 
-		$timeout(function() {
-			$scope.page.buttons.getExcel.disabled = false;
-			$scope.page.loader.show = false;
-		}, 5000);
-	};
+        if ($scope.page.buttons.getExcel.disabled) {
+            return;
+        }
+        $scope.page.buttons.getExcel.disabled = true;
+        $scope.page.loader.show = true;
 
-	getZones();
+        var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+        var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+        var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+        var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+        var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+        var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
+        var yearSelected = $scope.page.filters.month.value.getFullYear();
 
-	getUsers();
+        ExcelDashboard.getFile('#excelBtn', 'sales', 'ventas', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
+
+        $timeout(function() {
+            $scope.page.buttons.getExcel.disabled = false;
+            $scope.page.loader.show = false;
+        }, 5000);
+    };
+
+    getZones();
+
+    getUsers();
 
 })
 
 .controller('ViewAllShareOfSalesModalInstance', function($scope, $log, $uibModalInstance, tableShareOfSalesAll) {
 
-	$scope.modal = {
-		title: {
-			text: null,
-			show: false
-		},
-		subtitle: {
-			text: null,
-			show: false
-		},
-		alert: {
-			show: false,
-			color: null,
-			text: null,
-			title: null
-		},
-		tableShareOfSalesAll: tableShareOfSalesAll
-	};
+    $scope.modal = {
+        title: {
+            text: null,
+            show: false
+        },
+        subtitle: {
+            text: null,
+            show: false
+        },
+        alert: {
+            show: false,
+            color: null,
+            text: null,
+            title: null
+        },
+        tableShareOfSalesAll: tableShareOfSalesAll
+    };
 
-	$scope.cancel = function() {
-		$uibModalInstance.close();
-	};
+    $scope.cancel = function() {
+        $uibModalInstance.close();
+    };
 
 });

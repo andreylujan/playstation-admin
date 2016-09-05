@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $filter, $timeout, Utils, NgTableParams, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, DataPlayStation, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -61,7 +61,9 @@ angular.module('minovateApp')
 						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
-					}
+					},
+					// minDate: firstMonthDay,
+					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
 				startDate: firstMonthDay,
 				endDate: currentDate
@@ -217,9 +219,11 @@ angular.module('minovateApp')
 			angular.forEach(success.data.attributes.top_products, function(value, key) {
 
 				topProducts.push({
+					dealerName: value.dealer_name,
+					storeName: value.store_name,
 					ean: value.ean,
 					description: value.description,
-					classification: value.classification,
+					category: value.category,
 					platform: value.platform,
 					publisher: value.publisher,
 					units: value.units,

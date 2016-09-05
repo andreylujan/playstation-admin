@@ -91,7 +91,7 @@
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{report.title }}
+									{{report.title | capitalize:true}}
 								</td>
 								<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
 									{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
@@ -100,7 +100,8 @@
 									{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
 								</td>
 								<td data-title="'Fecha ejecución'" sortable="'finishedAt'" filter="{ 'finishedAt': 'text' }">
-									{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}
+									<p ng-if="report.finishedAt">{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}</p>
+									<p ng-if="!report.finishedAt" class="text-center">-</p>
 								</td>
 								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
 									{{report.zoneName | capitalize:true}}

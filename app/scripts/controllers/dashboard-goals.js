@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardGoalsCtrl', function($scope, $log, $filter, $uibModal, $state, $location, $window, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardGoalsCtrl', function($scope, $log, $filter, $uibModal, $moment, $state, $location, $window, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -61,7 +61,9 @@ angular.module('minovateApp')
 						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
-					}
+					},
+					// minDate: firstMonthDay,
+					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
 				startDate: firstMonthDay,
 				endDate: currentDate

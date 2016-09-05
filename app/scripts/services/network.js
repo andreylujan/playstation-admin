@@ -174,6 +174,46 @@ angular.module('minovateApp')
 
 })
 
+// DailyReports
+.factory('DailyReports', function($resource) {
+
+	return $resource(API_URL + '/daily_reports', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'all': '@all',
+				'page[number]': '@number',
+				'page[size]': '@size'
+			}
+		}
+	});
+
+})
+
+// ASSIGNED REPORTS (TAREAS)
+.factory('AssignedReports', function($resource) {
+
+	return $resource(API_URL + '/assigned_reports', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'all': '@all',
+				'page[number]': '@number',
+				'page[size]': '@size'
+			}
+		}
+	});
+
+})
+
 // ZONES
 .factory('Zones', function($resource) {
 

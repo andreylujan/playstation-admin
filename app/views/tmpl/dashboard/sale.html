@@ -107,26 +107,29 @@
 					<table class="table mt-10">
 						<thead>
 							<tr>
-								<th>Consola</th>
+								<th>Marcas</th>
 								<th>Hardware</th>
 								<th>Accesorios</th>
 								<th>Juegos</th>
+								<th>Total</th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr class="text-orange-ps text-bold" ng-repeat="total in totalsSale">
 								<td>{{total.title}}</td>
-								<td>{{total.hardwareTotal | currency:'$ ':0}}</td>
-								<td>{{total.accessoriesTotal | currency:'$ ':0}}</td>
-								<td>{{total.gamesTotal | currency:'$ ':0}}</td>
+								<td>{{total.hardwareTotal | currency:'$':0}}</td>
+								<td>{{total.accessoriesTotal | currency:'$':0}}</td>
+								<td>{{total.gamesTotal | currency:'$':0}}</td>
+								<td>{{total.totals | currency:'$':0}}</td>
 							</tr>
 						</tfoot>
 						<tbody>
 							<tr ng-repeat="category in categories">
 								<td>{{category.name}}</td>
-								<td>{{category.hardware | currency:'$ ':0}}</td>
-								<td>{{category.accessories | currency:'$ ':0}}</td>
-								<td>{{category.games | currency:'$ ':0}}</td>
+								<td>{{category.hardware | currency:'$':0}}</td>
+								<td>{{category.accessories | currency:'$':0}}</td>
+								<td>{{category.games | currency:'$':0}}</td>
+								<td>{{category.total | currency:'$':0}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -144,7 +147,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Share de ventas </strong>Venta entre consolas</h1>
+					<h1 class="custom-font"><strong>Share de ventas </strong>Venta entre marcas</h1>
 				</div>
 				<!-- /tile header -->
 
@@ -204,13 +207,13 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-8">
 			<!-- tile -->
 			<section class="tile" >
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y categorías</h1>
 				</div>
 				<!-- /tile header -->
 
@@ -222,16 +225,19 @@
 			</section>
 			<!-- /tile -->
 		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-4">
 			<!-- tile -->
 			<section class="tile" >
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y Cantidad</h1>
+					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y categorías</h1>
+					<select class="pull-right">
+						<option disabled>Categoría</option>
+						<option>Accesorios</option>
+						<option>Juegos</option>
+						<option>Consolas</option>
+					</select>
 				</div>
 				<!-- /tile header -->
 
@@ -241,7 +247,8 @@
 						<thead>
 							<tr>
 								<th></th>
-								<th ng-repeat="productName in chartConfigPriceAndAmount.xAxis.categories">{{productName}}</th>
+								<th>Cantidad</th>
+								<!-- <th ng-repeat="productName in chartConfigPriceAndAmount.xAxis.categories">{{productName}}</th> -->
 							</tr>
 						</thead>
 						<tbody>
@@ -261,8 +268,8 @@
 			</section>
 			<!-- /tile -->
 		</div>
-
 	</div>
+
 
 	<div class="row">
 		<div class="col-md-12">
