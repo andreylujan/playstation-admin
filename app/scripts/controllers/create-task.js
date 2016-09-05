@@ -103,9 +103,9 @@ angular.module('minovateApp')
             },
             texts: {
                 checkAll: 'Seleccionar todos',
-                uncheckAll: 'Deseleccionar todas',
+                uncheckAll: 'Desmarcar todos',
                 searchPlaceholder: 'Buscar',
-                buttonDefaultText: 'Seleccionar',
+                buttonDefaultText: 'Todos',
                 dynamicButtonTextSuffix: 'seleccionados'
             }
         }
