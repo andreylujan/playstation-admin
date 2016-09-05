@@ -58,7 +58,8 @@
     "highcharts-ng": "^0.0.11",
     "highcharts": "^4.2.5",
     "angular-slick": "^0.2.1",
-    "jquery": "2.2.4"
+    "jquery": "2.2.4",
+    "myforce-angularjs-dropdown-multiselect": "^1.10.2"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
