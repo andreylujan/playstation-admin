@@ -336,6 +336,7 @@ angular.module('minovateApp')
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
 		var startDate = new Date($scope.page.filters.dateRange.startDate);
+		startDate.setMinutes(startDate.getTimezoneOffset());
 		var endDate = new Date($scope.page.filters.dateRange.endDate);
 		var startDay = startDate.getDate();
 		var endDay = endDate.getDate();
