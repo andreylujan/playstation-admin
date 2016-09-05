@@ -1,9 +1,11 @@
 'use strict';
 
-// var API_URL = 'http://10.77.0.189:3001/api/v1';
-var API_URL = 'http://50.16.161.152/eretail-staging/api/v1';
-// var URL_SERVER = 'http://10.77.0.189:3001/';
-var URL_SERVER = 'http://50.16.161.152/eretail-staging';
+
+// var API_URL = 'http://10.77.0.189:3001/api/v1'; // PRODUCCIÓN
+// var URL_SERVER = 'http://10.77.0.189:3001/'; // PRODUCCIÓN
+
+var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
+var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
 
 angular.module('minovateApp')
 
