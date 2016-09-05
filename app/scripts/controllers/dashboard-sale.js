@@ -58,7 +58,7 @@ angular.module('minovateApp')
                         monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                         firstDay: 1
                     },
-                    minDate: firstMonthDay,
+                    //minDate: firstMonthDay,
                     maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
                 },
                 startDate: firstMonthDay,
