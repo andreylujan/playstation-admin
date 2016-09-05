@@ -80,7 +80,7 @@
 									{{report.id}}
 								</td>
 								<td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
-									{{report.reportTypeName}}
+									{{report.reportTypeName | capitalize:true}}
 								</td>
 								<td data-title="'Fecha Creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
 									{{report.createdAt }}
@@ -89,16 +89,16 @@
 									{{report.limitDate}}
 								</td> -->
 								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
-									{{report.zoneName}}
+									{{report.zoneName | capitalize:true}}
 								</td>
 								<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-									{{report.dealerName}}
+									{{report.dealerName | capitalize:true}}
 								</td>
 								<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-									{{report.storeName}}
+									{{report.storeName | capitalize:true}}
 								</td>
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-									{{report.creatorName}}
+									{{report.creatorName | capitalize:true}}
 								</td>
 								<!-- <td data-title="'Asignado a'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
 									{{report.assignedUserName}}

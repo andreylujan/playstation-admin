@@ -209,7 +209,9 @@ angular.module('minovateApp')
 			return;
 		}
 
-		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv') {
+		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv' && 
+			$scope.modal.monthlyGoal.file.value.type !== 'text/comma-separated-values') {
+			
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.show = true;
 			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';

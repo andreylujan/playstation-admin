@@ -563,7 +563,9 @@ angular.module('minovateApp')
 
 		$log.log($scope.modal.goals.file.value);
 
-		if ($scope.modal.goals.file.value.type !== 'text/csv') {
+		if ($scope.modal.goals.file.value.type !== 'text/csv' && 
+			$scope.modal.goals.file.value.type !== 'text/comma-separated-values') {
+
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.show = true;
 			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';
@@ -577,19 +579,19 @@ angular.module('minovateApp')
 			value: $scope.modal.goals.file.value
 		}];
 
-		// WeeklyBusinessSales.upload(form)
-		// 	.success(function(success) {
-		// 		$scope.modal.overlay.show = false;
-		// 		// $log.log(success);
-		// 		$uibModalInstance.close();
-		// 		openModalSummaryLoadGoals(success);
-		// 	}, function(error) {
-		// 		$log.error(error);
-		// 		$scope.modal.overlay.show = false;
-		// 		if (error.status === 401) {
-		// 			Utils.refreshToken($scope.uploadGoals);
-		// 		}
-		// 	});
+		WeeklyBusinessSales.upload(form)
+			.success(function(success) {
+				$scope.modal.overlay.show = false;
+				// $log.log(success);
+				$uibModalInstance.close();
+				openModalSummaryLoadGoals(success);
+			}, function(error) {
+				$log.error(error);
+				$scope.modal.overlay.show = false;
+				if (error.status === 401) {
+					Utils.refreshToken($scope.uploadGoals);
+				}
+			});
 	};
 
 	var openModalSummaryLoadGoals = function(data) {

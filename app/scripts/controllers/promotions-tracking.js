@@ -49,7 +49,7 @@ angular.module('minovateApp')
 	var users = [];
 	var i, j;
 
-	$scope.incrementPageFinishedTasks = function() {
+	$scope.incrementPageFinishedPromotions = function() {
 		if ($scope.pagination.finishedPromotions.pages._current <= $scope.pagination.finishedPromotions.pages.total - 1) {
 			$scope.pagination.finishedPromotions.pages._current++;
 			$scope.getFinishedPromotions({
@@ -59,7 +59,7 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.decrementPagePendingTasks = function() {
+	$scope.decrementPagePromotionsPromotions = function() {
 		if ($scope.pagination.finishedPromotions.pages._current > 1) {
 			$scope.pagination.finishedPromotions.pages._current--;
 			$scope.getFinishedPromotions({
@@ -69,7 +69,7 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.incrementPagePendingTasks = function() {
+	$scope.incrementPagePendingPromotions = function() {
 		if ($scope.pagination.pendingPromotions.pages._current <= $scope.pagination.pendingPromotions.pages.total - 1) {
 			$scope.pagination.pendingPromotions.pages._current++;
 			$scope.getPendingPromotions({
@@ -79,7 +79,7 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.decrementPagePendingTasks = function() {
+	$scope.decrementPagePendingPromotions = function() {
 		if ($scope.pagination.pendingPromotions.pages._current > 1) {
 			$scope.pagination.pendingPromotions.pages._current--;
 			$scope.getPendingPromotions({

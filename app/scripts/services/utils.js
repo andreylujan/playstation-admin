@@ -150,13 +150,6 @@ angular.module('minovateApp')
 				}
 			},
 			yAxis: yAxisData,
-			// yAxis: {
-			// 	min: 0,
-			// 	title: {
-			// 		text: null
-			// 	},
-			// 	stackLabels: stackLabels
-			// },
 			xAxis: xAxisData,
 			series: series
 		};

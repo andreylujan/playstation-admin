@@ -93,21 +93,22 @@
 				<div class="tile-widget">
 					<table ng-table="page.stock.stockBreaks.tableParams" show-filter="true" class="table table-custom" >
 						<tr ng-repeat="stockBreak in $data" ng-show="page.stock.stockBreaks.tableParams.data.length">
-							<td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
-								{{stockBreak.storeName | capitalize:true}}
-							</td>
 							<td data-title="'Dealer'" sortable="'dealerName'" filter="{'dealerName': 'text'}">
 								{{stockBreak.dealerName | capitalize:true}}
 							</td>
-							<td data-title="'Producto'" sortable="'productName'" filter="{'product_name': 'text'}">
+							<td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
+								{{stockBreak.storeName | capitalize:true}}
+							</td>
+							<td data-title="'EAN'" sortable="'identifier'" filter="{'identifier': 'text'}">
+								{{stockBreak.identifier}}
+							</td>
+							<td data-title="'Descripción'" sortable="'productName'" filter="{'product_name': 'text'}">
 								{{stockBreak.productName | capitalize:true}}
 							</td>
 							<td data-title="'Unidades'" sortable="'units'" filter="{'units': 'text'}">
 								{{stockBreak.units | currency:'':0}}
 							</td>
-							<td data-title="'Identificador'" sortable="'identifier'" filter="{'identifier': 'text'}">
-								{{stockBreak.identifier}}
-							</td>
+							
 						</tr>
 					</table>
 					<h3 class="text-orange-ps text-center" ng-show="!page.stock.stockBreaks.tableParams.data.length">No se encontraron datos</h3>
