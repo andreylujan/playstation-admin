@@ -17,7 +17,7 @@ set :ssh_options, {
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/srv/http/www/echeckit/eretail/admin'
-set :branch, 'master'
+set :branch, 'production'
 
 # role-based syntax
 # ==================

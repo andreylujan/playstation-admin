@@ -179,8 +179,8 @@
             <div class="col-sm-8">
               <ui-select class="bg-white b-solid br-15" ng-model="modal.promoters.selectedUsersPromoter" sortable="true" theme="bootstrap" ng-disabled="modal.promoters.disabled" reset-search-input="false" title="Selecciona un promotor" ng-change="removeAlert()">
                 <ui-select-match placeholder="promotor...">{{$select.selected.name | capitalize:true}}</ui-select-match>
-                <ui-select-choices repeat="promoter in modal.promoters.list track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
-                  <div ng-bind-html="promoter.name | capitalize:true | highlight: $select.search"></div>
+                <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <div ng-bind-html="user.fullName | capitalize:true | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
