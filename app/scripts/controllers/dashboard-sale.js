@@ -401,20 +401,7 @@ angular.module('minovateApp')
                     );
                 });
 
-                $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: 'white',
-                            style: {
-                                textShadow: '0 0 3px black',
-                                fontWeight: 'normal'
-                            }
-                        }
-                    }
-
-                }, {
+                $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {
                     min: 0,
                     title: {
                         text: null
