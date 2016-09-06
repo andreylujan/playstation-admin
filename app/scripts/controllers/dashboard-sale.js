@@ -49,6 +49,7 @@ angular.module('minovateApp')
 			dateRange: {
 				options: {
 					locale: {
+						format: 'DD/MM/YYYY',
 						applyLabel: 'Buscar',
 						cancelLabel: 'Cerrar',
 						fromLabel: 'Desde',
@@ -58,12 +59,13 @@ angular.module('minovateApp')
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
 					},
-					//minDate: firstMonthDay,
+					autoApply: true,
 					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
-				startDate: firstMonthDay,
-				endDate: currentDate,
-
+				date: {
+					startDate: firstMonthDay,
+					endDate: currentDate
+				}
 			}
 		},
 		sales: {
@@ -86,6 +88,44 @@ angular.module('minovateApp')
 		i = 0,
 		j = 0,
 		k = 0;
+
+	$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+
+		if (startDate.getMonth() !== endDate.getMonth()) {
+			openModalMessage({
+				title: 'Error en el rango de fechas ',
+				message: 'El rango de fechas debe estar dentro del mismo mes.'
+			});
+
+			$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+			$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+			return;
+		}
+
+		$scope.getDashboardInfo({
+			success: true,
+			detail: 'OK'
+		});
+	});
+
+	var openModalMessage = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: true,
+			templateUrl: 'messageModal.html',
+			controller: 'MessageModalInstance',
+			size: 'md',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+	};
 
 	var getZones = function() {
 		DataPlayStation.getZones({
@@ -192,13 +232,8 @@ angular.module('minovateApp')
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var startDate = new Date($scope.page.filters.dateRange.startDate);
-		console.log(startDate);
-		startDate.setMinutes(startDate.getTimezoneOffset());
-		console.log('After: ' + startDate);
-		$scope.page.filters.dateRange.startDate = startDate;
-		var endDate = new Date($scope.page.filters.dateRange.endDate);
-		console.log(endDate);
+		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 		var startDay = startDate.getDate();
 		var endDay = endDate.getDate();
 		var month = startDate.getMonth() + 1;
@@ -446,8 +481,8 @@ angular.module('minovateApp')
 					for (i = 0; i < topTroductByType.length; i++) {
 						if (category === topTroductByType[i].name) {
 							for (var j = 0; j < topTroductByType[i].products.length; j++) {
-								$scope.topProducts.headers.push($filter('capitalize')(topTroductByType[i].products[j].name, true)); 
-								$scope.topProducts.data.push(topTroductByType[i].products[j].quantity); 
+								$scope.topProducts.headers.push($filter('capitalize')(topTroductByType[i].products[j].name, true));
+								$scope.topProducts.data.push(topTroductByType[i].products[j].quantity);
 							}
 						}
 					}
