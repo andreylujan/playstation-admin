@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal,$moment, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal, $moment, $timeout, Utils, Dashboard, DataPlayStation, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -53,6 +53,7 @@ angular.module('minovateApp')
 			dateRange: {
 				options: {
 					locale: {
+						format: 'DD/MM/YYYY',
 						applyLabel: 'Buscar',
 						cancelLabel: 'Cerrar',
 						fromLabel: 'Desde',
@@ -62,11 +63,13 @@ angular.module('minovateApp')
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
 					},
-					// minDate: firstMonthDay,
+					autoApply: true,
 					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
-				startDate: firstMonthDay,
-				endDate: currentDate
+				date: {
+					startDate: firstMonthDay,
+					endDate: currentDate
+				}
 			}
 		},
 		promotors: {
@@ -208,6 +211,44 @@ angular.module('minovateApp')
 	var storesIncluded = [],
 		i = 0,
 		j = 0;
+		
+	$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+
+		if (startDate.getMonth() !== endDate.getMonth()) {
+			openModalMessage({
+				title: 'Error en el rango de fechas ',
+				message: 'El rango de fechas debe estar dentro del mismo mes.'
+			});
+
+			$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+			$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+			return;
+		}
+
+		$scope.getDashboardInfo({
+			success: true,
+			detail: 'OK'
+		});
+	});
+
+	var openModalMessage = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: true,
+			templateUrl: 'messageModal.html',
+			controller: 'MessageModalInstance',
+			size: 'md',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+	};
 
 	var getZones = function() {
 		DataPlayStation.getZones({
@@ -335,8 +376,8 @@ angular.module('minovateApp')
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var startDate = new Date($scope.page.filters.dateRange.startDate);
-		var endDate = new Date($scope.page.filters.dateRange.endDate);
+		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 		var startDay = startDate.getDate();
 		var endDay = endDate.getDate();
 		var month = startDate.getMonth() + 1;

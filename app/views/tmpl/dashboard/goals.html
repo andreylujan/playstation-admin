@@ -58,7 +58,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-			<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
 						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
@@ -67,17 +67,11 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<button id="daterangeDashGoals" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
+					<!-- <button id="daterangeDashGoals" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
-					</button>
+					</button> -->
 
-					<!-- <input style="cursor:pointer" id="daterangeDashGoals2" date-range-picker class="bg-gray-ps-1 br-15 text-sm form-control b-0 date-picker" type="text" ng-model="datePicker.date" ng-change="asd()" options="{changeMonth: false,numberOfMonths: 0, autoUpdateInput:false,showCustomRangeLabel:false}" /> -->
-						<style>
-		/*.calendar{
-			display: none;
-			border-bottom-color: red;
-		}*/
-	</style>
+					<input style="cursor:pointer" id="daterangeDashGoals2" date-range-picker class="bg-gray-ps-1 br-15 text-sm form-control b-0 date-picker" type="text" ng-model="page.filters.dateRange.date" options="page.filters.dateRange.options" />
 				</div>
 			</div>
 		</div>
@@ -396,6 +390,24 @@
 				</li>
 			</ul>
 		</div>
+
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-default btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+	</div>
+
+</script>
+
+<script type="text/ng-template" id="messageModal.html">
+
+	<div class="modal-header text-gray">
+		<h3 class="text-center">{{modal.title}}</h3>
+	</div>
+
+	<div class="modal-body text-center">
+
+		<h4>{{modal.text}}</h4>
 
 	</div>
 
