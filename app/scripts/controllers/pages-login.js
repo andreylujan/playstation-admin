@@ -31,6 +31,8 @@ angular.module('minovateApp')
 				})
 				.then(function(success) {
 
+					$log.log(success);
+
 					Utils.setInStorage('logged', true);
 					Utils.setInStorage('refresh_t', success.data.data.attributes.refresh_token);
 					$auth.setToken(success.data.data.attributes.access_token);

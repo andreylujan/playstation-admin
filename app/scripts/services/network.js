@@ -1,9 +1,13 @@
 'use strict';
 
-// var API_URL = 'http://10.77.0.189:3001/api/v1';
-var API_URL = 'http://50.16.161.152/eretail/api/v1';
-// var URL_SERVER = 'http://10.77.0.189:3001/';
-var URL_SERVER = 'http://50.16.161.152/eretail';
+var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
+var URL_SERVER = 'http://50.16.161.152/eretail'; // PRODUCCIÓN
+
+// var API_URL = 'http://192.168.1.184:3000/api/v1'; // DESARROLLO PABLO
+// var URL_SERVER = 'http://192.168.1.184:3000/'; // DESARROLLO PABLO
+
+// var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
+// var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
 
 angular.module('minovateApp')
 

@@ -64,13 +64,10 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<!-- <input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="{minMode: 'month'}" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span> -->
-					<button id="daterangeDashSale" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
+					<!-- <button id="daterangeDashSale" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
-					</button>
+					</button> -->
+					<input style="cursor:pointer" id="daterangeDashGoals2" date-range-picker class="bg-gray-ps-1 br-15 text-sm form-control b-0 date-picker" type="text" ng-model="page.filters.dateRange.date" options="page.filters.dateRange.options" />
 				</div>
 			</div>
 		</div>
@@ -104,7 +101,7 @@
 			<!-- tile -->
 			<section class="tile" fullscreen="isFullscreen01">
 				<div class="tile-widget pt-74 pb-74">
-					<table class="table mt-10">
+					<table class="table mt-10 text-sm">
 						<thead>
 							<tr>
 								<th>Marca</th>
@@ -235,33 +232,23 @@
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y categorías</h1>
-					<select class="pull-right">
-						<option disabled>Categoría</option>
-						<option>Accesorios</option>
-						<option>Juegos</option>
-						<option>Consolas</option>
-					</select>
+					<select class="pull-right" ng-options="category as category.name for category in topPorductsCategories" ng-model="selectedCategory" ng-change="getProductsByCategory(selectedCategory.name)"></select>
 				</div>
 				<!-- /tile header -->
 
 				<div class="tile-widget">
-					<!-- {{chartConfigPriceAndAmount | json}} -->
 					<table class="table table-condensed mt-10" ng-show="chartConfigPriceAndAmount.xAxis.categories.length">
 						<thead>
-							<tr>
+							<tr >
 								<th></th>
-								<th ng-repeat="productName in chartConfigPriceAndAmount.xAxis.categories">{{productName}}</th>
+								<th class="text-center" ng-repeat="productName in topProducts.headers">{{productName}}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>Cantidad</td>
-								<td ng-repeat="productQuiantity in chartConfigPriceAndAmount.series[0].data track by $index">{{productQuiantity}}</td>
+								<td class="text-center" ng-repeat="productQuiantity in topProducts.data track by $index">{{productQuiantity}}</td>
 							</tr>
-							<!-- <tr>
-								<td>Monto</td>
-								<td ng-repeat="productAmount in chartConfigPriceAndAmount.series[1].data track by $index">{{productAmount | currency:'$ ':0}}</td>
-							</tr> -->
 						</tbody>
 					</table>
 					<h3 ng-show="!chartConfigPriceAndAmount.xAxis.categories.length" class="text-center">No se han obtenido productos más vendidos</h3>
@@ -282,8 +269,8 @@
 				</div>
 
 				<div class="tile-widget">
-					<div style="width:95%;margin:0 auto">
-						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1" ng-if="page.sales.bestPractices.loaded" ng-show="page.sales.bestPractices.list.length">
+					<div style="width:95%;margin:0 auto" ng-if="page.sales.bestPractices.loaded" >
+						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1"  ng-show="page.sales.bestPractices.list.length">
 							<div ng-repeat="image in page.sales.bestPractices.list">
 								<div class="" ng-include="'imagesTmpl.html'"></div>
 							</div>
@@ -332,6 +319,24 @@
 		<div class="modal-footer">
 			<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
 		</div>
+	</script>
+
+	<script type="text/ng-template" id="messageModal.html">
+
+		<div class="modal-header text-gray">
+			<h3 class="text-center">{{modal.title}}</h3>
+		</div>
+
+		<div class="modal-body text-center">
+
+			<h4>{{modal.text}}</h4>
+
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-default btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+		</div>
+
 	</script>
 
 

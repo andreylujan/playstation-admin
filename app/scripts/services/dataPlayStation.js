@@ -42,6 +42,7 @@ angular.module('minovateApp')
 					data: zones
 				});
 			} else {
+				$log.log('error en dataplaystation getZones else');
 				defered.reject({
 					success: false,
 					detail: success,
@@ -49,8 +50,16 @@ angular.module('minovateApp')
 				});
 			}
 		}, function(error) {
+			$log.log('error en dataplaystation getZones error');
+			$log.log(error);
 			if (error.status === 401) {
+				$log.log('error en dataplaystation getZones error (401)');
 				Utils.refreshToken(getZones);
+				defered.resolve({
+					success: true,
+					detail: 'OK',
+					data: zones
+				});
 			} else {
 				defered.reject({
 					success: false,
@@ -136,6 +145,11 @@ angular.module('minovateApp')
 		}, function(error) {
 			if (error.status === 401) {
 				Utils.refreshToken(getDealers);
+				defered.resolve({
+					success: true,
+					detail: 'OK',
+					data: dealers
+				});
 			} else {
 				defered.reject({
 					success: false,
@@ -162,7 +176,7 @@ angular.module('minovateApp')
 			return;
 		}
 
-		if (zoneSelected.id === '' && dealerSelected.id === '') {
+		if ((!zoneSelected || !dealerSelected) ||( zoneSelected.id === '' && dealerSelected.id === '')) {
 			Stores.query({}, function(success) {
 				if (success.data) {
 
@@ -194,6 +208,11 @@ angular.module('minovateApp')
 				$log.error(error);
 				if (error.status === 401) {
 					Utils.refreshToken(getStores);
+					defered.resolve({
+						success: true,
+						detail: 'OK',
+						data: stores
+					});
 				} else {
 					defered.reject({
 						success: false,
@@ -236,6 +255,11 @@ angular.module('minovateApp')
 				$log.error(error);
 				if (error.status === 401) {
 					Utils.refreshToken(getStores);
+					defered.resolve({
+						success: true,
+						detail: 'OK',
+						data: stores
+					});
 				} else {
 					defered.reject({
 						success: false,
@@ -278,6 +302,11 @@ angular.module('minovateApp')
 				$log.error(error);
 				if (error.status === 401) {
 					Utils.refreshToken(getStores);
+					defered.resolve({
+						success: true,
+						detail: 'OK',
+						data: stores
+					});
 				} else {
 					defered.reject({
 						success: false,

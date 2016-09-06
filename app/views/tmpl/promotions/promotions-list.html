@@ -79,7 +79,7 @@
 						<table ng-table="tableParams" show-filter="true" class="table table-custom" ng-show="tableParams.data.length">
 							<tr ng-repeat="promotion in $data" >
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{promotion.title}}
+									{{promotion.title | capitalize:true}}
 								</td>
 								<td data-title="'Fecha inicio'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
 									{{promotion.startDate | date: 'dd/MM/yyyy'}}

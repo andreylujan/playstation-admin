@@ -76,7 +76,17 @@ angular.module('minovateApp')
 			selectedUser: []
 		},
 		rangeOptions: {
-			minDate: $moment()
+			minDate: $moment(),
+			locale: {
+				applyLabel: 'Buscar',
+				cancelLabel: 'Cerrar',
+				fromLabel: 'Desde',
+				toLabel: 'Hasta',
+				customRangeLabel: 'Personalizado',
+				daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+				monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+				firstDay: 1
+			}
 		},
 		startDate: '',
 		endDate: ''

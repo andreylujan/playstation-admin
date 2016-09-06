@@ -91,7 +91,7 @@
 									{{promotion.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{promotion.title}}
+									{{promotion.title | capitalize:true}}
 								</td>
 								<td data-title="'Fecha activación'" sortable="'activatedAt'" filter="{ 'activatedAt': 'text' }">
 									{{promotion.activatedAt | date: 'dd/MM/yyyy HH:mm'}}
@@ -126,7 +126,7 @@
 
 						<div class="row">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.finishedPromotions.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getImages({success:true,detail:'OK'},pagination.finishedTasks.pages._current)" current-page="pagination.finishedPromotions.pages._current" />
+								<pager all="pagination.finishedPromotions.pages.total" prev="decrementPagePromotionsPromotions()" next="incrementPageFinishedPromotions()" change-page="getImages({success:true,detail:'OK'},pagination.finishedTasks.pages._current)" current-page="pagination.finishedPromotions.pages._current" />
 							</div>
 						</div>
 
@@ -196,7 +196,7 @@
 									{{promotion.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{promotion.title}}
+									{{promotion.title | capitalize:true}}
 								</td>
 								<td data-title="'Fecha inicio'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
 									{{promotion.startDate | date: 'dd/MM/yyyy HH:mm'}}
@@ -225,7 +225,7 @@
 						<!-- <div class="row" ng-show="page.images.length" > -->
 						<div class="row">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.pendingPromotions.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getImages({success:true,detail:'OK'},pagination.pendingTasks.pages._current)" current-page="pagination.pendingPromotions.pages._current" />
+								<pager all="pagination.pendingPromotions.pages.total" prev="decrementPagePendingPromotions()" next="incrementPagePendingPromotions()" change-page="getImages({success:true,detail:'OK'},pagination.pendingTasks.pages._current)" current-page="pagination.pendingPromotions.pages._current" />
 							</div>
 						</div>
 

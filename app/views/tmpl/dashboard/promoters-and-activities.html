@@ -64,13 +64,11 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<!-- <input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span> -->
-					<button id="daterangeDashPromoActiv" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
+					<!-- <button id="daterangeDashPromoActiv" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
-					</button>
+					</button> -->
+
+					<input style="cursor:pointer" id="daterangeDashGoals2" date-range-picker class="bg-gray-ps-1 br-15 text-sm form-control b-0 date-picker" type="text" ng-model="page.filters.dateRange.date" options="page.filters.dateRange.options" />
 				</div>
 			</div>
 		</div>
@@ -392,7 +390,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen en el periodo seleccionado ({{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}})</h1>
+					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen en el periodo seleccionado</h1>
 				</div>
 
 				<div class="tile-widget">
@@ -409,10 +407,10 @@
 						<tbody>
 							<tr ng-repeat="communicatedPrice in page.promotors.pricesCommunicated.byStore.list">
 								<td>{{communicatedPrice.zoneName | capitalize:true}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPrice.dealerName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.storeName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.supervisor | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.instructor | capitalize:true}}</td>
+								<td class="text-gray-ps-2">{{communicatedPrice.dealerName | capitalize:true}}</td>
+								<td>{{communicatedPrice.storeName | capitalize:true}}</td>
+								<td>{{communicatedPrice.instructorName | capitalize:true}}</td>
+								<td>{{communicatedPrice.supervisorName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -523,7 +521,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Promociones comunicadas </strong>Tiendas que no cumplen</h1>
+					<h1 class="custom-font"><strong>Promociones comunicadas </strong>Tiendas que no cumplen en el periodo seleccionado</h1>
 				</div>
 
 				<div class="tile-widget">
@@ -533,13 +531,17 @@
 								<th>Zona</th>
 								<th>Dealer</th>
 								<th>Tienda</th>
+								<th>Instructor</th>
+								<th>Supervisor</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="communicatedPromotion in page.promotors.promotionsCommunicated.byStore.list">
 								<td>{{communicatedPromotion.zoneName | capitalize:true}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPromotion.dealerName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPromotion.storeName | capitalize:true}}</td>
+								<td class="text-gray-ps-2">{{communicatedPromotion.dealerName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.storeName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.instructorName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.supervisorName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -668,4 +670,22 @@
 		<div class="modal-footer">
 			<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
 		</div>
+	</script>
+
+	<script type="text/ng-template" id="messageModal.html">
+
+		<div class="modal-header text-gray">
+			<h3 class="text-center">{{modal.title}}</h3>
+		</div>
+
+		<div class="modal-body text-center">
+
+			<h4>{{modal.text}}</h4>
+
+		</div>
+
+		<div class="modal-footer">
+			<button class="btn btn-default btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+		</div>
+
 	</script>

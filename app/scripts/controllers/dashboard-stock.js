@@ -14,6 +14,8 @@ angular.module('minovateApp')
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
 	firstMonthDay.setDate(1);
+	var stockBreaks = [],
+		topProducts = [];
 
 	$scope.page = {
 		title: 'Stock',
@@ -53,6 +55,7 @@ angular.module('minovateApp')
 			dateRange: {
 				options: {
 					locale: {
+						format: 'DD/MM/YYYY',
 						applyLabel: 'Buscar',
 						cancelLabel: 'Cerrar',
 						fromLabel: 'Desde',
@@ -62,11 +65,13 @@ angular.module('minovateApp')
 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 						firstDay: 1
 					},
-					// minDate: firstMonthDay,
+					autoApply: true,
 					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
 				},
-				startDate: firstMonthDay,
-				endDate: currentDate
+				date: {
+					startDate: firstMonthDay,
+					endDate: currentDate
+				}
 			}
 		},
 		stock: {
@@ -87,6 +92,48 @@ angular.module('minovateApp')
 		loader: {
 			show: false
 		}
+	};
+
+	$scope.$watch('page.filters.supervisor.disabled', function() {
+		if (!$scope.page.filters.supervisor.disabled) {
+			$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+				var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+				var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+
+				if (startDate.getMonth() !== endDate.getMonth()) {
+					openModalMessage({
+						title: 'Error en el rango de fechas ',
+						message: 'El rango de fechas debe estar dentro del mismo mes.'
+					});
+
+					$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+					$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+					return;
+				}
+
+				$scope.getDashboardInfo({
+					success: true,
+					detail: 'OK'
+				});
+			});
+		}
+	});
+
+	var openModalMessage = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: true,
+			templateUrl: 'messageModal.html',
+			controller: 'MessageModalInstance',
+			size: 'md',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
 	};
 
 	var getZones = function() {
@@ -138,6 +185,10 @@ angular.module('minovateApp')
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
+			getUsers({
+				success: true,
+				detail: 'OK'
+			});
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -172,17 +223,15 @@ angular.module('minovateApp')
 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var startDate = new Date($scope.page.filters.dateRange.startDate);
-		startDate.setMinutes(startDate.getTimezoneOffset());
-		$scope.page.filters.dateRange.startDate = startDate;
-		var endDate = new Date($scope.page.filters.dateRange.endDate);
+		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 		var startDay = startDate.getDate();
 		var endDay = endDate.getDate();
 		var month = startDate.getMonth() + 1;
 		var year = startDate.getFullYear();
 
-		var stockBreaks = [],
-			topProducts = [];
+		stockBreaks = [];
+		topProducts = [];
 
 		Dashboard.query({
 			category: 'stock',
@@ -198,52 +247,67 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			// INI STOCK BREAKS
-			angular.forEach(success.data.attributes.stock_breaks, function(value, key) {
-
-				stockBreaks.push({
-					storeName: value.store_name,
-					dealerName: value.dealer_name,
-					productName: value.product_name,
-					units: value.units,
-					identifier: value.identifier
-				});
-			});
-			$scope.page.stock.stockBreaks.tableParams = new NgTableParams({
-				sorting: {
-					units: "desc"
-				}
-			}, {
-				dataset: stockBreaks
-			});
+			getStockProducts(success);
 			// FIN STOCK BREAKS
 
 			// INI TOP PRODUCTS
-			angular.forEach(success.data.attributes.top_products, function(value, key) {
-
-				topProducts.push({
-					dealerName: value.dealer_name,
-					storeName: value.store_name,
-					ean: value.ean,
-					description: value.description,
-					category: value.category,
-					platform: value.platform,
-					publisher: value.publisher,
-					units: value.units,
-					salesAmount: value.sales_amount
-				});
-			});
-
-			$scope.page.stock.topProducts.tableParams = new NgTableParams({
-				sorting: {
-					units: "desc"
-				}
-			}, {
-				dataset: topProducts
-			});
+			getProductsHighRotation(success);
 			// FIN TOP PRODUCTS
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDashboardInfo);
+			}
+		});
+	};
+
+	var getStockProducts = function(data) {
+		angular.forEach(data.data.attributes.stock_breaks, function(value, key) {
+
+			stockBreaks.push({
+				storeName: value.store_name,
+				dealerName: value.dealer_name,
+				description: value.description,
+				category: value.category,
+				platform: value.platform,
+				publisher: value.publisher,
+				units: value.units,
+				ean: value.ean
+			});
+		});
+
+		$scope.page.stock.stockBreaks.tableParams = new NgTableParams({
+			sorting: {
+				units: "desc"
+			}
+		}, {
+			dataset: stockBreaks
+		});
+	};
+
+	var getProductsHighRotation = function(data) {
+		angular.forEach(data.data.attributes.top_products, function(value, key) {
+
+			topProducts.push({
+				dealerName: value.dealer_name,
+				storeName: value.store_name,
+				ean: value.ean,
+				description: value.description,
+				category: value.category,
+				platform: value.platform,
+				publisher: value.publisher,
+				units: value.units,
+				salesAmount: value.sales_amount
+			});
+		});
+
+		$scope.page.stock.topProducts.tableParams = new NgTableParams({
+			sorting: {
+				units: "desc"
+			}
+		}, {
+			dataset: topProducts
 		});
 	};
 
@@ -285,12 +349,10 @@ angular.module('minovateApp')
 
 	getZones();
 
-	getUsers();
-
-	$scope.getDashboardInfo({
-		success: true,
-		detail: 'OK'
-	});
+	// $scope.getDashboardInfo({
+	// 	success: true,
+	// 	detail: 'OK'
+	// });
 
 
 });

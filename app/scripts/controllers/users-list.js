@@ -93,7 +93,18 @@ angular.module('minovateApp')
 					}
 				}
 			}
-			if (data.action === 'editUser') {}
+			if (data.action === 'editUser') {
+				for (i = 0; i < users.length; i++) {
+					if (parseInt(users[i].id) === parseInt(data.success.data.id)) {
+						users[i].firstName = data.success.data.attributes.first_name;
+						users[i].lastName = data.success.data.attributes.last_name;
+						users[i].email = data.success.data.attributes.email;
+						users[i].roleName = data.success.data.attributes.role_name;
+						users[i].roleId = data.success.data.attributes.role_id;
+						break;
+					}
+				}
+			}
 			$scope.tableParams.reload();
 		}, function() {});
 	};
@@ -308,12 +319,6 @@ angular.module('minovateApp')
 			enableFormInputs();
 		} else {
 
-			// $log.log($scope.user.firstName.text);
-			// $log.log($scope.user.lastName.text);
-			// $log.log($scope.user.rut.text);
-			// $log.log($scope.user.phoneNumber.text);
-			// $log.log($scope.user.role.id);
-
 			if (!Validators.validaRequiredField($scope.user.firstName.text) || !Validators.validaRequiredField($scope.user.lastName.text) || !Validators.validaRequiredField($scope.user.role.id)) {
 				$scope.elements.alert.title = 'Faltan datos por rellenar';
 				$scope.elements.alert.text = '';
@@ -364,7 +369,12 @@ angular.module('minovateApp')
 						detail: 'OK'
 					});
 
-					$uibModalInstance.close();
+					$log.log(success);
+
+					$uibModalInstance.close({
+						action: 'editUser',
+						success: success
+					});
 
 				} else {
 					$log.log(success);
