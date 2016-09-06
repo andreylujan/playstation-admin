@@ -390,7 +390,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen en el periodo seleccionado ({{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}})</h1>
+					<h1 class="custom-font"><strong>Precios comunicados </strong>Tiendas que no cumplen en el periodo seleccionado</h1>
 				</div>
 
 				<div class="tile-widget">
@@ -407,10 +407,10 @@
 						<tbody>
 							<tr ng-repeat="communicatedPrice in page.promotors.pricesCommunicated.byStore.list">
 								<td>{{communicatedPrice.zoneName | capitalize:true}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPrice.dealerName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.storeName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.supervisor | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPrice.instructor | capitalize:true}}</td>
+								<td class="text-gray-ps-2">{{communicatedPrice.dealerName | capitalize:true}}</td>
+								<td>{{communicatedPrice.storeName | capitalize:true}}</td>
+								<td>{{communicatedPrice.instructorName | capitalize:true}}</td>
+								<td>{{communicatedPrice.supervisorName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -521,7 +521,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Promociones comunicadas </strong>Tiendas que no cumplen</h1>
+					<h1 class="custom-font"><strong>Promociones comunicadas </strong>Tiendas que no cumplen en el periodo seleccionado</h1>
 				</div>
 
 				<div class="tile-widget">
@@ -531,13 +531,17 @@
 								<th>Zona</th>
 								<th>Dealer</th>
 								<th>Tienda</th>
+								<th>Instructor</th>
+								<th>Supervisor</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="communicatedPromotion in page.promotors.promotionsCommunicated.byStore.list">
 								<td>{{communicatedPromotion.zoneName | capitalize:true}}</td>
-								<td class="text-center text-gray-ps-2">{{communicatedPromotion.dealerName | capitalize:true}}</td>
-								<td class="text-center">{{communicatedPromotion.storeName | capitalize:true}}</td>
+								<td class="text-gray-ps-2">{{communicatedPromotion.dealerName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.storeName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.instructorName | capitalize:true}}</td>
+								<td>{{communicatedPromotion.supervisorName | capitalize:true}}</td>
 							</tr>
 						</tbody>
 					</table>

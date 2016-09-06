@@ -89,7 +89,11 @@ angular.module('minovateApp')
 		j = 0,
 		k = 0;
 
+	// revisar
+	// $scope.$watch('page.filters.supervisor.disabled', function() {
+	// if (!$scope.page.filters.supervisor.disabled) {
 	$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+
 		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
 		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
@@ -109,6 +113,8 @@ angular.module('minovateApp')
 			detail: 'OK'
 		});
 	});
+	// }
+	// });
 
 	var openModalMessage = function(data) {
 		var modalInstance = $uibModal.open({
@@ -171,10 +177,11 @@ angular.module('minovateApp')
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
 
-			$scope.getDashboardInfo({
+			getUsers({
 				success: true,
 				detail: 'OK'
 			});
+
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -474,6 +481,9 @@ angular.module('minovateApp')
 					data: []
 				};
 
+				// $log.log('$scope.topPorductsCategories');
+				// $log.log($scope.topPorductsCategories);
+
 				$scope.getProductsByCategory = function(category) {
 					$scope.topProducts.headers = [];
 					$scope.topProducts.data = [];
@@ -506,6 +516,9 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDashboardInfo);
+			}
 			$scope.totalsSale = [{
 				title: 'Total',
 				hardwareTotal: 0,
@@ -514,13 +527,6 @@ angular.module('minovateApp')
 			}];
 		});
 	};
-
-	angular.element('#daterangeDashSale').on('apply.daterangepicker', function(ev, picker) {
-		$scope.getDashboardInfo({
-			success: true,
-			detail: 'OK'
-		});
-	});
 
 	$scope.getExcel = function(e) {
 
@@ -552,8 +558,6 @@ angular.module('minovateApp')
 	};
 
 	getZones();
-
-	getUsers();
 
 })
 

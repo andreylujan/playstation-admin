@@ -130,25 +130,29 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
-		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
-		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+	$scope.$watch('page.filters.supervisor.disabled', function() {
+		if (!$scope.page.filters.supervisor.disabled) {
+			$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+				var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+				var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
-		if (startDate.getMonth() !== endDate.getMonth()) {
-			openModalMessage({
-				title: 'Error en el rango de fechas ',
-				message: 'El rango de fechas debe estar dentro del mismo mes.'
+				if (startDate.getMonth() !== endDate.getMonth()) {
+					openModalMessage({
+						title: 'Error en el rango de fechas ',
+						message: 'El rango de fechas debe estar dentro del mismo mes.'
+					});
+
+					$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+					$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+					return;
+				}
+
+				$scope.getDashboardInfo({
+					success: true,
+					detail: 'OK'
+				});
 			});
-
-			$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
-			$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
-			return;
 		}
-
-		$scope.getDashboardInfo({
-			success: true,
-			detail: 'OK'
-		});
 	});
 
 	var openModalMessage = function(data) {
@@ -219,6 +223,10 @@ angular.module('minovateApp')
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
+			getUsers({
+				success: true,
+				detail: 'OK'
+			});
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -480,15 +488,11 @@ angular.module('minovateApp')
 
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDashboardInfo);
+			}
 		});
 	};
-
-	// angular.element('#daterangeDashGoals').on('apply.daterangepicker', function(ev, picker) {
-	// 	$scope.getDashboardInfo({
-	// 		success: true,
-	// 		detail: 'OK'
-	// 	});
-	// });
 
 	$scope.openModalUploadGoals = function() {
 
@@ -547,14 +551,6 @@ angular.module('minovateApp')
 	};
 
 	getZones();
-
-	getUsers();
-
-	$scope.getDashboardInfo({
-		success: true,
-		detail: 'OK'
-	});
-
 
 })
 

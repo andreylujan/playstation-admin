@@ -40,7 +40,8 @@ angular.module('minovateApp')
 			supervisor: {
 				list: [],
 				selected: null,
-				disabled: false
+				disabled: true,
+				loaded: false
 			},
 			month: {
 				value: new Date(),
@@ -211,26 +212,31 @@ angular.module('minovateApp')
 	var storesIncluded = [],
 		i = 0,
 		j = 0;
-		
-	$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
-		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
-		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
-		if (startDate.getMonth() !== endDate.getMonth()) {
-			openModalMessage({
-				title: 'Error en el rango de fechas ',
-				message: 'El rango de fechas debe estar dentro del mismo mes.'
+	$scope.$watch('page.filters.supervisor.disabled', function() {
+		$log.log($scope.page.filters.supervisor.disabled);
+		if (!$scope.page.filters.supervisor.disabled) {
+			$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+				var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+				var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+
+				if (startDate.getMonth() !== endDate.getMonth()) {
+					openModalMessage({
+						title: 'Error en el rango de fechas ',
+						message: 'El rango de fechas debe estar dentro del mismo mes.'
+					});
+
+					$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+					$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+					return;
+				}
+
+				$scope.getDashboardInfo({
+					success: true,
+					detail: 'OK'
+				});
 			});
-
-			$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
-			$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
-			return;
 		}
-
-		$scope.getDashboardInfo({
-			success: true,
-			detail: 'OK'
-		});
 	});
 
 	var openModalMessage = function(data) {
@@ -262,6 +268,7 @@ angular.module('minovateApp')
 				detail: 'OK'
 			}, $scope.page.filters.zone.selected);
 		}).catch(function(error) {
+			$log.error('error del catch');
 			$log.error(error);
 		});
 	};
@@ -299,7 +306,7 @@ angular.module('minovateApp')
 			$scope.page.filters.store.list = data.data;
 			$scope.page.filters.store.selected = data.data[0];
 			$scope.page.filters.store.disabled = false;
-			$scope.getDashboardInfo({
+			getUsers({
 				success: true,
 				detail: 'OK'
 			});
@@ -321,6 +328,7 @@ angular.module('minovateApp')
 			$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
 			$scope.page.filters.instructor.disabled = false;
 			$scope.page.filters.supervisor.disabled = false;
+			$scope.page.filters.supervisor.loaded = true;
 		}).catch(function(error) {
 			$log.error(error);
 		});
@@ -675,7 +683,9 @@ angular.module('minovateApp')
 					$scope.page.promotors.pricesCommunicated.byStore.list.push({
 						zoneName: value.zone_name,
 						dealerName: value.dealer_name,
-						storeName: value.store_name
+						storeName: value.store_name,
+						instructorName: value.instructor_name,
+						supervisorName: value.supervisor_name
 					});
 				});
 
@@ -774,7 +784,9 @@ angular.module('minovateApp')
 					$scope.page.promotors.promotionsCommunicated.byStore.list.push({
 						zoneName: value.zone_name,
 						dealerName: value.dealer_name,
-						storeName: value.store_name
+						storeName: value.store_name,
+						instructorName: value.instructor_name,
+						supervisorName: value.supervisor_name
 					});
 				});
 
@@ -850,15 +862,11 @@ angular.module('minovateApp')
 			}
 		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDashboardInfo);
+			}
 		});
 	};
-
-	angular.element('#daterangeDashPromoActiv').on('apply.daterangepicker', function(ev, picker) {
-		$scope.getDashboardInfo({
-			success: true,
-			detail: 'OK'
-		});
-	});
 
 	$scope.getExcel = function(e) {
 
@@ -890,8 +898,6 @@ angular.module('minovateApp')
 	};
 
 	getZones();
-
-	getUsers();
 
 })
 

@@ -87,6 +87,9 @@ angular.module('minovateApp')
 			return;
 		}
 
+		$log.log('functionToCall');
+		$log.log(functionToCall);
+
 		var that = this.setInStorage;
 		var that2 = this.getInStorage;
 
@@ -94,6 +97,7 @@ angular.module('minovateApp')
 			refresh_token: that2('refresh_t'),
 			grant_type: 'refresh_token'
 		}, function(success) {
+			$log.info(success);
 
 			$auth.setToken(success.data.attributes.access_token);
 			that('refresh_t', success.data.attributes.refresh_token);

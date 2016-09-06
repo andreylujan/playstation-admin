@@ -269,8 +269,8 @@
 				</div>
 
 				<div class="tile-widget">
-					<div style="width:95%;margin:0 auto">
-						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1" ng-if="page.sales.bestPractices.loaded" ng-show="page.sales.bestPractices.list.length">
+					<div style="width:95%;margin:0 auto" ng-if="page.sales.bestPractices.loaded" >
+						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1"  ng-show="page.sales.bestPractices.list.length">
 							<div ng-repeat="image in page.sales.bestPractices.list">
 								<div class="" ng-include="'imagesTmpl.html'"></div>
 							</div>
