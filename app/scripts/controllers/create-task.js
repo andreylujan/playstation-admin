@@ -15,6 +15,10 @@ angular.module('minovateApp')
   $scope.store_ids = [];
   $scope.dealer_ids = [];
   $scope.promoter_ids = [];
+  var filteredZoneIds = [];
+  var filteredDealerIds = [];
+  var filteredPromoterIds = [];
+  var filteredStoreIds = [];
 
   $scope.page = {
     title: 'Crear tarea',
@@ -151,12 +155,14 @@ angular.module('minovateApp')
             type: 'zones'
           };
           $scope.page.newTask.zones.list.push(zone);
+          // If this zone was selected before, keep it selected
           if (_.indexOf(selectedZoneIds, parseInt(success.data[i].id)) !== -1) {
             newZoneIds.push(zone.id);
             $scope.page.newTask.zones.selectedZone.push(zone);
           }
         }
-        $scope.zone_ids = newZoneIds;
+        $scope.zone_ids = _.union(selectedZoneIds, newZoneIds);
+        filteredZoneIds = newZoneIds;
         console.log('New zone ids: ' + newZoneIds);
 
         $scope.page.newTask.zones.disabled = false;
@@ -212,7 +218,10 @@ angular.module('minovateApp')
           }
 
         }
-        $scope.dealer_ids = newDealerIds;
+      
+        $scope.dealer_ids = _.union(newDealerIds, selectedDealerIds);
+        filteredDealerIds = newDealerIds;
+
         console.log('New selected dealer ids: ' + newDealerIds);
         $scope.page.newTask.dealers.disabled = false;
 
@@ -267,7 +276,9 @@ angular.module('minovateApp')
           }
         }
 
-        $scope.store_ids = newStoreIds;
+        $scope.store_ids = _.union(newStoreIds, selectedStoreIds);
+        filteredStoreIds = newStoreIds;
+
         console.log('New selected store ids: ' + newStoreIds);
         $scope.page.newTask.stores.disabled = false;
 
@@ -323,7 +334,9 @@ angular.module('minovateApp')
           }
         }
 
-        $scope.promoter_ids = newPromoterIds;
+        $scope.promoter_ids = _.union(newPromoterIds, selectedPromoterIds);
+        filteredPromoterIds = newPromoterIds;
+        
         console.log('New selected promoter ids: ' + newPromoterIds);
         $scope.page.newTask.promoters.disabled = false;
 
