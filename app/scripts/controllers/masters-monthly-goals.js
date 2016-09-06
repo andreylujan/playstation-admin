@@ -49,8 +49,8 @@ angular.module('minovateApp')
 						createdAt: success.data[i].attributes.created_at,
 						uploadedCsv: success.data[i].attributes.uploaded_csv,
 						resultCsv: success.data[i].attributes.result_csv,
-						rowsSuccesses: 0,
-						rowsErrors: 0
+						rowsSuccesses: success.data[i].attributes.num_uploaded || 0,
+						rowsErrors: success.data[i].attributes.num_errors || 0
 					});
 				}
 
@@ -209,9 +209,9 @@ angular.module('minovateApp')
 			return;
 		}
 
-		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv' && 
+		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv' &&
 			$scope.modal.monthlyGoal.file.value.type !== 'text/comma-separated-values') {
-			
+
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.show = true;
 			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';

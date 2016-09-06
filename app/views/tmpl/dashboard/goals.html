@@ -17,7 +17,7 @@
 
 		<div class="row">
 			<div class="col-md-1 col-md-offset-10">
-				<button class="bg-blue-ps-1 btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Cargar metas y comparativos (.csv)" ng-click="openModalUploadGoals()"><i class="fa fa-cloud-upload"></i> </button>
+				<button class="bg-blue-ps-1 btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Cargar ventas B2B (.csv)" ng-click="openModalUploadGoals()"><i class="fa fa-cloud-upload"></i> </button>
 			</div>
 			<div class="col-md-1 col-md-offset-0">
 				<a id="excelBtn" ng-href="" class="bg-blue-ps-2 btn-border pt-7 pb-7 pr-12 pl-12 br-10 b-0 text-white pull-right" uib-tooltip="Descargar resumen (.xls)" ng-click="getExcel({success:true,detail:'OK'})" ng-class="{disabled:page.buttons.getExcel.disabled,pointer:!page.buttons.getExcel.disabled}"><i class="fa fa-file-excel-o"></i> </a>
@@ -67,13 +67,17 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<!-- <input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span> -->
 					<button id="daterangeDashGoals" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
 					</button>
+
+					<!-- <input style="cursor:pointer" id="daterangeDashGoals2" date-range-picker class="bg-gray-ps-1 br-15 text-sm form-control b-0 date-picker" type="text" ng-model="datePicker.date" ng-change="asd()" options="{changeMonth: false,numberOfMonths: 0, autoUpdateInput:false,showCustomRangeLabel:false}" /> -->
+						<style>
+		/*.calendar{
+			display: none;
+			border-bottom-color: red;
+		}*/
+	</style>
 				</div>
 			</div>
 		</div>
@@ -326,7 +330,7 @@
 	</div>
 
 	<div class="modal-header text-gray" id="topModalNewMonthlyGoal">
-		<h3 class="text-center">Carga de metas y comparativos</h3>
+		<h3 class="text-center">Carga de ventas B2B</h3>
 	</div>
 
 	<div class="modal-body text-gray">

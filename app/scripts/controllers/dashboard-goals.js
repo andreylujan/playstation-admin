@@ -135,6 +135,17 @@ angular.module('minovateApp')
 		}
 	};
 
+	// $scope.datePicker = {
+	// 	date: {
+	// 		startDate: new Date(),
+	// 		endDate: new Date()
+	// 	}
+	// };
+
+	// $scope.$watch("datePicker.date.startDate", function(newValue, oldValue) {
+	// 	console.log("I've changed : ");
+	// });
+
 	var getZones = function() {
 		DataPlayStation.getZones({
 			success: true,
@@ -563,7 +574,7 @@ angular.module('minovateApp')
 
 		$log.log($scope.modal.goals.file.value);
 
-		if ($scope.modal.goals.file.value.type !== 'text/csv' && 
+		if ($scope.modal.goals.file.value.type !== 'text/csv' &&
 			$scope.modal.goals.file.value.type !== 'text/comma-separated-values') {
 
 			$scope.modal.alert.color = 'blue-ps-1';

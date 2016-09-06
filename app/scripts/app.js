@@ -45,7 +45,8 @@ angular
 		'naif.base64',
 		'ui.bootstrap.datetimepicker',
 		'highcharts-ng',
-		'slick'
+		'slick',
+		'daterangepicker'
 	])
 
 .run(['$rootScope', '$state', '$stateParams', 'Utils',

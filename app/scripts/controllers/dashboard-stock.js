@@ -14,6 +14,8 @@ angular.module('minovateApp')
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
 	firstMonthDay.setDate(1);
+	var stockBreaks = [],
+		topProducts = [];
 
 	$scope.page = {
 		title: 'Stock',
@@ -179,7 +181,7 @@ angular.module('minovateApp')
 		var month = startDate.getMonth() + 1;
 		var year = startDate.getFullYear();
 
-		var stockBreaks = [],
+		stockBreaks = [],
 			topProducts = [];
 
 		Dashboard.query({
@@ -196,52 +198,64 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			// INI STOCK BREAKS
-			angular.forEach(success.data.attributes.stock_breaks, function(value, key) {
-
-				stockBreaks.push({
-					storeName: value.store_name,
-					dealerName: value.dealer_name,
-					productName: value.product_name,
-					units: value.units,
-					identifier: value.identifier
-				});
-			});
-			$scope.page.stock.stockBreaks.tableParams = new NgTableParams({
-				sorting: {
-					units: "desc"
-				}
-			}, {
-				dataset: stockBreaks
-			});
+			getStockProducts(success);
 			// FIN STOCK BREAKS
 
 			// INI TOP PRODUCTS
-			angular.forEach(success.data.attributes.top_products, function(value, key) {
-
-				topProducts.push({
-					dealerName: value.dealer_name,
-					storeName: value.store_name,
-					ean: value.ean,
-					description: value.description,
-					category: value.category,
-					platform: value.platform,
-					publisher: value.publisher,
-					units: value.units,
-					salesAmount: value.sales_amount
-				});
-			});
-
-			$scope.page.stock.topProducts.tableParams = new NgTableParams({
-				sorting: {
-					units: "desc"
-				}
-			}, {
-				dataset: topProducts
-			});
+			getProductsHighRotation(success);
 			// FIN TOP PRODUCTS
 
 		}, function(error) {
 			$log.error(error);
+		});
+	};
+
+	var getStockProducts = function(data) {
+		angular.forEach(data.data.attributes.stock_breaks, function(value, key) {
+
+			stockBreaks.push({
+				storeName: value.store_name,
+				dealerName: value.dealer_name,
+				description: value.description,
+				category: value.category,
+				platform: value.platform,
+				publisher: value.publisher,
+				units: value.units,
+				ean: value.ean
+			});
+		});
+		
+		$scope.page.stock.stockBreaks.tableParams = new NgTableParams({
+			sorting: {
+				units: "desc"
+			}
+		}, {
+			dataset: stockBreaks
+		});
+	};
+
+	var getProductsHighRotation = function(data) {
+		angular.forEach(data.data.attributes.top_products, function(value, key) {
+
+			topProducts.push({
+				dealerName: value.dealer_name,
+				storeName: value.store_name,
+				ean: value.ean,
+				description: value.description,
+				category: value.category,
+				platform: value.platform,
+				publisher: value.publisher,
+				units: value.units,
+				salesAmount: value.sales_amount
+			});
+		});
+
+		$scope.page.stock.topProducts.tableParams = new NgTableParams({
+			sorting: {
+				units: "desc"
+			}
+		}, {
+			dataset: topProducts
 		});
 	};
 

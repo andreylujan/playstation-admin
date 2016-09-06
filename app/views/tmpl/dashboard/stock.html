@@ -64,10 +64,6 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<div class="input-group">
-					<!-- <input type="text" class="form-control bg-gray-ps-1 br-15-l b-0" uib-datepicker-popup="MMMM, yyyy" ng-model="page.filters.month.value" is-open="page.filters.month.isOpen" datepicker-options="page.filters.month.options" show-button-bar="false" ng-change="getDashboardInfo({success:true,detail:'OK'})" style="font-style: italic;font-size: 12px;"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default bg-gray-ps-1 br-15-r b-0 pt-7 pb-7" ng-click="page.filters.month.isOpen = !page.filters.month.isOpen"><i class="fa fa-calendar"></i></button>
-					</span> -->
 					<button id="daterangeDashStock" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
 					</button>
@@ -99,13 +95,22 @@
 							<td data-title="'Tienda'" sortable="'storeName'" filter="{'storeName':'text'}">
 								{{stockBreak.storeName | capitalize:true}}
 							</td>
-							<td data-title="'EAN'" sortable="'identifier'" filter="{'identifier': 'text'}">
-								{{stockBreak.identifier}}
+							<td data-title="'EAN'" sortable="'ean'" filter="{'ean': 'text'}">
+								{{stockBreak.ean}}
 							</td>
-							<td data-title="'Descripción'" sortable="'productName'" filter="{'product_name': 'text'}">
-								{{stockBreak.productName | capitalize:true}}
+							<td data-title="'Descripción'" sortable="'description'" filter="{'description': 'text'}">
+								{{stockBreak.description | capitalize:true}}
 							</td>
-							<td data-title="'Unidades'" sortable="'units'" filter="{'units': 'text'}">
+							<td data-title="'Categoría'" sortable="'category'" filter="{'category': 'text'}">
+								{{stockBreak.category | capitalize:true}}
+							</td>
+							<td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
+								{{stockBreak.platform | capitalize:true}}
+							</td>
+							<td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
+								{{stockBreak.publisher | capitalize:true}}
+							</td>
+							<td data-title="'Stock unidades'" sortable="'units'" filter="{'units': 'text'}">
 								{{stockBreak.units | currency:'':0}}
 							</td>
 							
@@ -149,6 +154,9 @@
 							</td>
 							<td data-title="'Categoría'" sortable="'category'" filter="{'category': 'text'}">
 								{{topProduct.category | capitalize:true}}
+							</td>
+							<td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
+								{{topProduct.platform | capitalize:true}}
 							</td>
 							<td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
 								{{topProduct.publisher | capitalize:true}}
