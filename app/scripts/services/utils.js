@@ -87,8 +87,8 @@ angular.module('minovateApp')
 			return;
 		}
 
-		$log.log('functionToCall');
-		$log.log(functionToCall);
+		// $log.log('functionToCall');
+		// $log.log(functionToCall);
 
 		var that = this.setInStorage;
 		var that2 = this.getInStorage;

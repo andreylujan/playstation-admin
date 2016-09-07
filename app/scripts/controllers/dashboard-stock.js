@@ -9,13 +9,14 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, DataPlayStation, ExcelDashboard) {
+.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
 	firstMonthDay.setDate(1);
 	var stockBreaks = [],
-		topProducts = [];
+		topProducts = [],
+		i = 0;
 
 	$scope.page = {
 		title: 'Stock',
@@ -42,7 +43,8 @@ angular.module('minovateApp')
 			supervisor: {
 				list: [],
 				selected: null,
-				disabled: false
+				disabled: false,
+				loaded: false
 			},
 			month: {
 				value: new Date(),
@@ -94,8 +96,8 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.$watch('page.filters.supervisor.disabled', function() {
-		if (!$scope.page.filters.supervisor.disabled) {
+	$scope.$watch('page.filters.supervisor.loaded', function() {
+		if ($scope.page.filters.supervisor.loaded) {
 			$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
 				var startDate = new Date($scope.page.filters.dateRange.date.startDate);
 				var endDate = new Date($scope.page.filters.dateRange.date.endDate);
@@ -137,79 +139,244 @@ angular.module('minovateApp')
 	};
 
 	var getZones = function() {
-		DataPlayStation.getZones({
-			success: true,
-			detail: 'OK'
-		}).then(function(data) {
-			$scope.page.filters.zone.list = data.data;
-			$scope.page.filters.zone.selected = data.data[0];
-			$scope.getDealers({
-				success: true,
-				detail: 'OK'
-			}, $scope.page.filters.zone.selected);
-		}).catch(function(error) {
+
+		$scope.page.filters.zone.list = [];
+
+		Zones.query({}, function(success) {
+			if (success.data) {
+
+				$scope.page.filters.zone.list.push({
+					id: '',
+					name: 'Todas las Zonas',
+					dealersIds: []
+				});
+
+				angular.forEach(success.data, function(value, key) {
+					$scope.page.filters.zone.list.push({
+						id: parseInt(value.id),
+						name: value.attributes.name,
+						dealersIds: value.attributes.dealer_ids
+					});
+				});
+
+				$scope.page.filters.zone.selected = $scope.page.filters.zone.list[0];
+				$scope.getDealers({
+					success: true,
+					detail: 'OK'
+				}, $scope.page.filters.zone.selected);
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
 		});
+		// DataPlayStation.getZones({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }).then(function(data) {
+		// 	$scope.page.filters.zone.list = data.data;
+		// 	$scope.page.filters.zone.selected = data.data[0];
+		// 	$scope.getDealers({
+		// 		success: true,
+		// 		detail: 'OK'
+		// 	}, $scope.page.filters.zone.selected);
+		// }).catch(function(error) {
+		// 	$log.error(error);
+		// });
 	};
 
 	$scope.getDealers = function(e, zoneSelected) {
 
-		$scope.page.filters.dealer.disabled = true;
-		DataPlayStation.getDealers({
-			success: true,
-			detail: 'OK'
-		}, zoneSelected).then(function(data) {
-			$scope.page.filters.dealer.list = data.data;
-			$scope.page.filters.dealer.selected = data.data[0];
-			$scope.page.filters.dealer.disabled = false;
-			$scope.getStores({
-				success: true,
-				detail: 'OK'
-			}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
-		}).catch(function(error) {
+		$scope.page.filters.dealer.selected = [];
+		$scope.page.filters.dealer.list = [];
+
+		Dealers.query({
+			'filter[zone_ids]': zoneSelected.id
+		}, function(success) {
+			if (success.data) {
+
+				$scope.page.filters.dealer.list.push({
+					id: '',
+					name: 'Todos los dealers'
+				});
+
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.filters.dealer.list.push({
+						id: parseInt(success.data[i].id),
+						name: $filter('capitalize')(success.data[i].attributes.name, true),
+						type: 'dealers'
+					});
+				}
+
+				$scope.page.filters.dealer.selected = $scope.page.filters.dealer.list[0];
+				$scope.page.filters.dealer.disabled = false;
+
+				$scope.getStores({
+					success: true,
+					detail: 'OK'
+				}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getDealers);
+			}
 		});
 
-		// Cada vez que se cargan los dealers, se limpia la lista de tiendas y se deselecciona la tienda anteriormente seleccionada
-		$scope.page.filters.store.list = [];
-		$scope.page.filters.store.selected = null;
+		// $scope.page.filters.dealer.disabled = true;
+		// DataPlayStation.getDealers({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }, zoneSelected).then(function(data) {
+		// 	$scope.page.filters.dealer.list = data.data;
+		// 	$scope.page.filters.dealer.selected = data.data[0];
+		// 	$scope.page.filters.dealer.disabled = false;
+		// 	$scope.getStores({
+		// 		success: true,
+		// 		detail: 'OK'
+		// 	}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
+		// }).catch(function(error) {
+		// 	$log.error(error);
+		// });
+
+		// // Cada vez que se cargan los dealers, se limpia la lista de tiendas y se deselecciona la tienda anteriormente seleccionada
+		// $scope.page.filters.store.list = [];
+		// $scope.page.filters.store.selected = null;
 	};
 
 	$scope.getStores = function(e, zoneSelected, dealerSelected) {
 
-		$scope.page.filters.store.disabled = true;
-		DataPlayStation.getStores({
-			success: true,
-			detail: 'OK'
-		}, zoneSelected, dealerSelected).then(function(data) {
-			$scope.page.filters.store.list = data.data;
-			$scope.page.filters.store.selected = data.data[0];
-			$scope.page.filters.store.disabled = false;
-			getUsers({
-				success: true,
-				detail: 'OK'
-			});
-		}).catch(function(error) {
+		$scope.page.filters.store.selected = [];
+		$scope.page.filters.store.list = [];
+
+		Stores.query({
+			'filter[dealer_ids]': dealerSelected.id,
+			'filter[zone_ids]': zoneSelected.id
+		}, function(success) {
+			if (success.data) {
+
+				$scope.page.filters.store.list.push({
+					id: '',
+					name: 'Todas las tiendas'
+				});
+
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.filters.store.list.push({
+						id: parseInt(success.data[i].id),
+						name: $filter('capitalize')(success.data[i].attributes.name, true),
+						type: 'dealers'
+					});
+				}
+
+				$scope.page.filters.store.selected = $scope.page.filters.store.list[0];
+				$scope.page.filters.store.disabled = false;
+
+				getUsers({
+					success: true,
+					detail: 'OK'
+				});
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getStores);
+			}
 		});
+
+		// $scope.page.filters.store.disabled = true;
+		// DataPlayStation.getStores({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }, zoneSelected, dealerSelected).then(function(data) {
+		// 	$scope.page.filters.store.list = data.data;
+		// 	$scope.page.filters.store.selected = data.data[0];
+		// 	$scope.page.filters.store.disabled = false;
+		// 	getUsers({
+		// 		success: true,
+		// 		detail: 'OK'
+		// 	});
+		// }).catch(function(error) {
+		// 	$log.error(error);
+		// });
 	};
 
 	var getUsers = function(e) {
-		$scope.page.filters.supervisor.disabled = true;
-		$scope.page.filters.instructor.disabled = true;
-		DataPlayStation.getUsers({
-			success: true,
-			detail: 'OK'
-		}).then(function(data) {
-			$scope.page.filters.instructor.list = data.data;
-			$scope.page.filters.supervisor.list = data.data;
-			$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
-			$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
-			$scope.page.filters.instructor.disabled = false;
-			$scope.page.filters.supervisor.disabled = false;
-		}).catch(function(error) {
+
+		$scope.page.filters.instructor.selected = [];
+		$scope.page.filters.instructor.list = [];
+		$scope.page.filters.supervisor.selected = [];
+		$scope.page.filters.supervisor.list = [];
+
+		Users.query({}, function(success) {
+			if (success.data) {
+
+				$scope.page.filters.instructor.list.push({
+					id: '',
+					name: 'Todos los instructores'
+				});
+
+				$scope.page.filters.supervisor.list.push({
+					id: '',
+					name: 'Todos los supervisores'
+				});
+
+				angular.forEach(success.data, function(value, key) {
+					if (value.attributes.role_id === 1) { // supervisor
+						$scope.page.filters.supervisor.list.push({
+							id: parseInt(value.id),
+							name: value.attributes.first_name + ' ' + value.attributes.last_name
+						});
+					}
+					if (value.attributes.role_id === 3) { // instructor
+						$scope.page.filters.instructor.list.push({
+							id: parseInt(value.id),
+							name: value.attributes.first_name + ' ' + value.attributes.last_name
+						});
+					}
+
+				});
+
+				$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
+				$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
+
+				$scope.page.filters.supervisor.loaded = true;
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
 			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
 		});
+
+		// $scope.page.filters.supervisor.disabled = true;
+		// $scope.page.filters.instructor.disabled = true;
+		// DataPlayStation.getUsers({
+		// 	success: true,
+		// 	detail: 'OK'
+		// }).then(function(data) {
+		// 	$scope.page.filters.instructor.list = data.data;
+		// 	$scope.page.filters.supervisor.list = data.data;
+		// 	$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
+		// 	$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
+		// 	$scope.page.filters.instructor.disabled = false;
+		// 	$scope.page.filters.supervisor.disabled = false;
+		// 	$scope.page.filters.supervisor.loaded = true;
+		// }).catch(function(error) {
+		// 	$log.error(error);
+		// });
 	};
 
 	$scope.getDashboardInfo = function(e) {
@@ -282,9 +449,23 @@ angular.module('minovateApp')
 				units: "desc"
 			}
 		}, {
-			dataset: stockBreaks
+			dataset: stockBreaks,
+			// filterOptions: {
+			// 	filterFn: ageRangeFilter
+			// },
 		});
 	};
+
+	// function ageRangeFilter(data, filterValues /*, comparator*/ ) {
+	// 	$log.log(data);
+	// 	$log.log(filterValues);
+
+	// 	return data.filter(function(item) {
+	// 		var start = filterValues.start == null ? Number.MIN_VALUE : filterValues.start;
+	// 		var end = filterValues.end == null ? Number.MAX_VALUE : filterValues.end;
+	// 		return start <= item.age && end >= item.age;
+	// 	});
+	// };
 
 	var getProductsHighRotation = function(data) {
 		angular.forEach(data.data.attributes.top_products, function(value, key) {

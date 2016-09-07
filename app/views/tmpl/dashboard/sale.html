@@ -48,17 +48,17 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
-					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
-					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
@@ -126,7 +126,7 @@
 								<td>{{category.hardware | currency:'$':0}}</td>
 								<td>{{category.accessories | currency:'$':0}}</td>
 								<td>{{category.games | currency:'$':0}}</td>
-								<td>{{category.total | currency:'$':0}}</td>
+								<td><strong>{{category.total | currency:'$':0}}</strong></td>
 							</tr>
 						</tbody>
 					</table>
@@ -144,7 +144,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Share de ventas </strong>Venta entre marcas</h1>
+					<h1 class="custom-font"><strong>Share de ventas </strong>Venta por zona</h1>
 				</div>
 				<!-- /tile header -->
 
@@ -210,7 +210,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y categorías</h1>
+					<h1 class="custom-font"><strong>Productos más vendidos </strong>Por categorías</h1>
 				</div>
 				<!-- /tile header -->
 
@@ -231,7 +231,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Precio y categorías</h1>
+					<h1 class="custom-font"><strong>Productos más vendidos </strong>Cantidad</h1>
 					<select class="pull-right" ng-options="category as category.name for category in topPorductsCategories" ng-model="selectedCategory" ng-change="getProductsByCategory(selectedCategory.name)"></select>
 				</div>
 				<!-- /tile header -->

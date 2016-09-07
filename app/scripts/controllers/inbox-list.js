@@ -78,7 +78,8 @@ angular.module('minovateApp')
 						messageActionName: messageActionName,
 						title: success.data[i].attributes.title,
 						sendAt: success.data[i].attributes.send_at,
-						recipients: recipientsNames
+						recipients: recipientsNames,
+						sendToAll: success.data[i].attributes.send_to_all
 					});
 
 				}

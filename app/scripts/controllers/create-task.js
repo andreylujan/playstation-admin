@@ -130,7 +130,6 @@ angular.module('minovateApp')
       return;
     }
 
-
     var selectedZones = [];
 
     var selectedZoneIds = $scope.zone_ids;
@@ -249,8 +248,6 @@ angular.module('minovateApp')
 
     $scope.page.newTask.stores.disabled = true;
     // $scope.page.newTask.stores.selectedStore = [];
-
-
 
     Stores.query({
       'filter[dealer_ids]': $scope.dealer_ids.toString(),
