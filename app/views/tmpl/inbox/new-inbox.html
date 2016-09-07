@@ -120,14 +120,17 @@
 						</div>
 						<hr class="mt-10 mb-10">
 						<div class="row">
-							<div class="col-md-12 mb-5">
-								<label for="selUser" class="col-md-2 control-label">Acción</label>
-								<div class="col-md-4">
-									<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled">
+							<div class="col-md-6 mb-5">
+								<label for="selUser" class="col-md-4 control-label">Acción</label>
+								<div class="col-md-8">
+									<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled" ng-change="changeAction()">
 										<ui-select-match placeholder="Seleccione acción..."><span ng-bind="$select.selected.name"></span></ui-select-match>
 										<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id"><span ng-bind="messageAction.name"></span></ui-select-choices>
 									</ui-select>
 								</div>
+							</div>
+							<div class="col-md-6 mb-5">
+								<input type="text" class="form-control underline-input" ng-model="page.messageAction.custom.value" placeholder="Acción" ng-disabled="page.messageAction.custom.disabled">
 							</div>
 						</div>
 						<hr class="mt-10 mb-10">
