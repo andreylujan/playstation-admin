@@ -35,12 +35,12 @@ angular.module('minovateApp')
 			instructor: {
 				list: [],
 				selected: null,
-				disabled: false
+				disabled: false,
 			},
 			supervisor: {
 				list: [],
 				selected: null,
-				disabled: true,
+				disabled: false,
 				loaded: false
 			},
 			month: {

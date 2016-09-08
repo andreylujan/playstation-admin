@@ -21,7 +21,7 @@ angular.module('minovateApp')
   var filteredStoreIds = [];
 
   $scope.page = {
-    title: 'Crear tarea',
+    title: 'Crear Tarea',
     prevBtn: {
       disabled: true
     },

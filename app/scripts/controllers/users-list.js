@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('UsersListCtrl', function($scope, $log, $filter, $uibModal, NgTableParams, Users, Invitations, RefreshToken, $auth, Utils) {
 
 	$scope.page = {
-		title: 'Lista de usuarios'
+		title: 'Lista de Usuarios'
 	};
 
 	var users = [],

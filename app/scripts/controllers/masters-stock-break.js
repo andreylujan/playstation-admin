@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('StockBreakCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, StockBreaks, Utils) {
 
 	$scope.page = {
-		title: 'Quiebre de stock'
+		title: 'Quiebre de Stock'
 	};
 
 	var stockbreaksIncluded = [],

@@ -51,17 +51,17 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
-					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
-					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
@@ -87,7 +87,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Metas </strong>Metas v/s Ventas</h1>
+					<h1 class="custom-font"><strong>Metas y Alcances</strong></h1>
 				</div>
 				<div class="tile-widget">
 
@@ -140,7 +140,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Comparación semanal </strong>W-pasada y W-actual</h1>
+					<h1 class="custom-font"><strong>Semáforo Semanal</strong></h1>
 				</div>
 				<div class="tile-widget">
 
@@ -199,7 +199,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Comparativos de venta </strong>Semanal</h1>
+					<h1 class="custom-font"><strong>Semáforos </strong>Semanas de Mes</h1>
 				</div>
 				<div class="tile-widget">
 
@@ -258,7 +258,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Comparativos de venta </strong>Mensual</h1>
+					<h1 class="custom-font"><strong>Semáforo Mensual</strong></h1>
 				</div>
 				<div class="tile-widget">
 

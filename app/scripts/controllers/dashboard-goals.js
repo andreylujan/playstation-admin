@@ -18,7 +18,7 @@ angular.module('minovateApp')
 		j = 0;
 
 	$scope.page = {
-		title: 'Metas y Comparativos',
+		title: 'Metas - Semáforos',
 		filters: {
 			zone: {
 				list: [],
