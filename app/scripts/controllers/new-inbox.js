@@ -57,9 +57,9 @@ angular.module('minovateApp')
 	};
 
 	if ($stateParams.idInbox) {
-		$scope.page.title = 'Ver mensaje';
+		$scope.page.title = 'Ver Mensaje';
 	} else {
-		$scope.page.title = 'Nuevo mensaje';
+		$scope.page.title = 'Nuevo Mensaje';
 	}
 
 	var getUsers = function(e) {
