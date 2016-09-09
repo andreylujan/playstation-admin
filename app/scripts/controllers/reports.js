@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
-		title: 'Lista de reportes',
+		title: 'Lista de Reportes',
 		prevBtn: {
 			disabled: true
 		},

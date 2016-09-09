@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
-		title: 'Seguimiento de tareas',
+		title: 'Seguimiento Tareas',
 		finishedTasks: {
 			total: 0
 		},

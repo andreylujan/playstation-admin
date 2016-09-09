@@ -48,17 +48,17 @@
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
-					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
-					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.fullName | capitalize:true"></span></ui-select-match>
-					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {fullName: $select.search}">
-						<div ng-bind-html="user.fullName | highlight: $select.search | capitalize:true"></div>
+					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
 					</ui-select-choices>
 				</ui-select>
 			</div>
@@ -106,12 +106,12 @@
 								{{stockBreak.category | capitalize:true}}
 							</td>
 							<td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
-								{{stockBreak.platform | capitalize:true}}
+								{{stockBreak.platform}}
 							</td>
 							<td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
-								{{stockBreak.publisher | capitalize:true}}
+								{{stockBreak.publisher}}
 							</td>
-							<td data-title="'Stock unidades'" sortable="'units'" filter="{'units': 'text'}">
+							<td data-title="'Stock Unidades'" sortable="'units'" filter="{'units': 'text'}">
 								{{stockBreak.units | currency:'':0}}
 							</td>
 							
@@ -136,7 +136,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos de alta rotación</strong></h1>
+					<h1 class="custom-font"><strong>Productos de Alta Rotación</strong></h1>
 				</div>
 				<div class="tile-widget">
 					<table ng-table="page.stock.topProducts.tableParams" show-filter="true" class="table table-custom">
@@ -157,12 +157,12 @@
 								{{topProduct.category | capitalize:true}}
 							</td>
 							<td data-title="'Plataforma'" sortable="'platform'" filter="{'platform': 'text'}">
-								{{topProduct.platform | capitalize:true}}
+								{{topProduct.platform}}
 							</td>
 							<td data-title="'Publisher'" sortable="'publisher'" filter="{'publisher': 'text'}">
-								{{topProduct.publisher | capitalize:true}}
+								{{topProduct.publisher}}
 							</td>
-							<td data-title="'Unidades vendidas'" sortable="'units'" filter="{'units': 'text'}">
+							<td data-title="'Unidades Vendidas'" sortable="'units'" filter="{'units': 'text'}">
 								{{topProduct.units | currency:'':0}}
 							</td>
 						</tr>

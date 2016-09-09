@@ -555,7 +555,7 @@ angular.module('minovateApp')
 			detail: 'OK'
 		});
 	} else {
-		$scope.page.title = 'Nueva promoción';
+		$scope.page.title = 'Nueva Promoción';
 		$scope.page.buttons.sendInvitation.show = true;
 	}
 

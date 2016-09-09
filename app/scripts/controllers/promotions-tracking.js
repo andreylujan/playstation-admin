@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('PromotionsTrackingCtrl', function($scope, $filter, $log, $window, NgTableParams, Reports, Zones, Dealers, Stores, Users, PromotionsStates, Utils) {
 
 	$scope.page = {
-		title: 'Seguimiento de promociones',
+		title: 'Seguimiento de Promociones',
 		finishedPromotions: {
 			total: 0
 		},
