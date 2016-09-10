@@ -227,7 +227,6 @@ angular.module('minovateApp')
 
 			if (success.data) {
 
-				$log.log(success.meta);
 				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
 

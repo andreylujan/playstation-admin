@@ -121,7 +121,6 @@ angular.module('minovateApp')
 		}
 	});
 
-
 	var openModalMessage = function(data) {
 		var modalInstance = $uibModal.open({
 			animation: true,
@@ -450,11 +449,6 @@ angular.module('minovateApp')
 	};
 
 	getZones();
-
-	// $scope.getDashboardInfo({
-	// 	success: true,
-	// 	detail: 'OK'
-	// });
 
 
 });

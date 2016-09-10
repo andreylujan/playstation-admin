@@ -22,6 +22,24 @@ angular.module('minovateApp')
 		tableLoaded: false
 	};
 
+	$scope.pagination = {
+		reports: {
+			pages: {
+				actual: 1,
+				size: 30,
+				_current: 1,
+				total: 0,
+			},
+			total: 0
+		}
+	};
+	$scope.filters = {
+		zoneName: '',
+		dealerName: '',
+		storeName: '',
+		creatorName: ''
+	};
+
 	var reports = [];
 	var zones = [];
 	var dealers = [];
@@ -29,125 +47,182 @@ angular.module('minovateApp')
 	var users = [];
 	var i, j;
 	$scope.currentPage = 0;
-	var pageSize = 30;
+	$scope.pageSize = 30;
 
-	$scope.getReports = function(mode, e) {
+	$scope.decrementPage = function() {
+		if ($scope.pagination.reports.pages._current > 1) {
+			$scope.pagination.reports.pages._current--;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, $scope.pageSize, $scope.filters);
+		}
+	};
+
+	$scope.incrementPage = function() {
+		if ($scope.pagination.reports.pages._current <= $scope.pagination.reports.total - 1) {
+			$scope.pagination.reports.pages._current++;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, $scope.pageSize, $scope.filters);
+		}
+	};
+
+	var reportsFilter = function(data, filterValues) {
+		$log.info('data');
+		$log.info(data);
+
+		$scope.filters = {
+			zoneName: filterValues.zoneName || '',
+			dealerName: filterValues.dealerName || '',
+			storeName: filterValues.storeName || '',
+			creatorName: filterValues.creatorName || ''
+		};
+
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, $scope.pageSize, {
+			zoneName: $scope.filters.zoneName,
+			dealerName: $scope.filters.dealerName,
+			storeName: $scope.filters.storeName,
+			creatorName: $scope.filters.creatorName
+		});
+
+		return data.filter(function(item) {
+
+			var zoneName = $scope.filters.zoneName === undefined ? '' : $scope.filters.zoneName;
+			var dealerName = $scope.filters.dealerName === undefined ? '' : $scope.filters.dealerName;
+			var storeName = $scope.filters.storeName === undefined ? '' : $scope.filters.storeName;
+			var creatorName = $scope.filters.creatorName === undefined ? '' : $scope.filters.creatorName;
+
+			// $log.log('zoneName: ' + zoneName);
+			// $log.log('item.zoneName: ' + item.zoneName);
+
+			// $log.log('dealerName: ' + dealerName);
+			// $log.log('item.dealerName: ' + item.dealerName);
+
+			// $log.log('storeName: ' + storeName);
+			// $log.log('item.storeName: ' + item.storeName);
+
+			// $log.log('creatorName: ' + creatorName);
+			// $log.log('item.creatorName: ' + item.creatorName);
+
+			var isZoneName = item.zoneName.toLowerCase().indexOf(zoneName.toLowerCase()) !== -1;
+			var isDealerName = item.dealerName.toLowerCase().indexOf(dealerName.toLowerCase()) !== -1;
+			var isStoreName = item.storeName.toLowerCase().indexOf(storeName.toLowerCase()) !== -1;
+			var isCreatorName = item.creatorName.toLowerCase().indexOf(creatorName.toLowerCase()) !== -1;
+
+			// $log.log('isZoneName : ' + (isZoneName));
+			// $log.log('isDealerName : ' + (isDealerName));
+			// $log.log('isStoreName : ' + (isStoreName));
+			// $log.log('isCreatorName : ' + (isCreatorName));
+
+			return isZoneName && isDealerName && isStoreName && isCreatorName;
+		});
+	};
+
+	$scope.tableParams = new NgTableParams({
+		count: reports.length, // count per page
+	}, {
+		dataset: reports,
+		counts: [],
+		total: reports.length, // length of reports
+		filterOptions: {
+			filterFn: reportsFilter
+		}
+	});
+
+	$scope.getReports = function(e, page, pageSize, filters) {
 		// Valida si el parametro e.success se seteó true para el refresh token
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
+		// reports = [{
+		// 	id: 1,
+		// 	reportTypeName: '',
+		// 	createdAt: '2016-02-03',
+		// 	limitDate: '2016-02-03',
+		// 	zoneName: 'zone_name',
+		// 	dealerName: 'dealer_name',
+		// 	storeName: 'store_name',
+		// 	creatorName: 'creator_name',
+		// 	pdfUploaded: 'pdf_uploaded',
+		// 	pdf: 'pdf'
+		// }, {
+		// 	id: 2,
+		// 	reportTypeName: '',
+		// 	createdAt: '2016-02-03',
+		// 	limitDate: '2016-02-03',
+		// 	zoneName: 'zone_name',
+		// 	dealerName: 'dealer_name',
+		// 	storeName: 'store_name',
+		// 	creatorName: 'creator_name',
+		// 	pdfUploaded: 'pdf_uploaded',
+		// 	pdf: 'pdf'
+		// }];
 
-		reports = [];
+		// $log.log('hola');
 
-		if ($scope.currentPage === 2) {
-			$scope.page.prevBtn.disabled = true;
-		}
-
-		if (mode === 'prev') {
-			if ($scope.currentPage > 1) {
-				$scope.currentPage--;
-			}
-		} else if (mode === 'next') {
-			$scope.currentPage++;
-			if ($scope.currentPage > 1) {
-				$scope.page.prevBtn.disabled = false;
-			}
-		}
-
-		reports = [];
-
+		// $scope.tableParams.count(reports.length);
+		// $scope.tableParams.settings({2
+		// 	dataset: reports,
+		// 	counts: [],
+		// 	total: reports.length, // length of reports
+		// 	filterOptions: {
+		// 		filterComparator: false,
+		// 		filterFn: reportsFilter
+		// 	},
+		// });
 		DailyReports.query({
 			all: true,
-			'page[number]': $scope.currentPage,
-			'page[size]': pageSize
+			'page[number]': page,
+			'page[size]': pageSize,
+			'filter[zone_name]': $scope.filters.zoneName,
+			'filter[dealer_name]': $scope.filters.dealerName,
+			'filter[store_name]': $scope.filters.storeName,
+			'filter[creator_name]': $scope.filters.creatorName,
+			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
 			if (success.data) {
+				reports = [];
+				$scope.pagination.reports.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
 
-					var zoneId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? zoneId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone) : zoneId = null;
-					var dealerId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? dealerId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer) : dealerId = null;
-					var storeId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? storeId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store) : dealerId = null;
-
 					reports.push({
 						id: success.data[i].id,
-						reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
-						createdAt:  $filter('date')(success.data[i].attributes.created_at, 'dd-MM-yyyy'),
+						reportTypeName: '',
+						createdAt: $filter('date')(success.data[i].attributes.created_at, 'dd-MM-yyyy'),
 						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd-MM-yyyy'),
-						zoneId: zoneId,
-						zoneName: '-',
-						dealerId: dealerId,
-						dealerName: '-',
-						storeId: storeId,
-						storeName: '-',
-						creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
+						storeName: success.data[i].attributes.store_name,
+						creatorName: success.data[i].attributes.creator_name,
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
-						pdf: success.data[i].attributes.pdf,
-						assigned_user_id: success.data[i].attributes.assigned_user_id,
-						assignedUserName: '-'
+						pdf: success.data[i].attributes.pdf
 					});
 
 				}
+				$log.log(reports);
 
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < zones.length; j++) {
-						if (reports[i].zoneId === zones[j].id) {
-							reports[i].zoneName = zones[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < dealers.length; j++) {
-						if (reports[i].dealerId === dealers[j].id) {
-							reports[i].dealerName = dealers[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < stores.length; j++) {
-						if (reports[i].storeId === stores[j].id) {
-							reports[i].storeName = stores[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < users.length; j++) {
-						if (reports[i].storeId === users[j].id) {
-							reports[i].assignedUserName = users[j].fullName;
-							break;
-						}
-					}
-				}
-
-				// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
-				if (reports.length < pageSize) {
-					$scope.page.nextBtn.disabled = true;
-				} else {
-					$scope.page.nextBtn.disabled = false;
-				}
-
-				$scope.tableParams = new NgTableParams({
-					count: reports.length, // count per page
-					sorting: {
-						'reportTypeName': 'desc' // initial sorting
-					}
-				}, {
+				$scope.tableParams.count(reports.length);
+				$scope.tableParams.settings({
 					dataset: reports,
 					counts: [],
 					total: reports.length, // length of reports
+					filterOptions: {
+						filterComparator: false,
+						filterFn: reportsFilter,
+						// filterDelay: 1000
+					},
 				});
-				$scope.page.tableLoaded = true;
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
 			$log.log(error);
@@ -268,9 +343,14 @@ angular.module('minovateApp')
 					}
 				}
 
-				$scope.getReports('next', {
+				$scope.getReports({
 					success: true,
 					detail: 'OK'
+				}, $scope.pagination.reports.pages._current, 30, {
+					zoneName: '',
+					dealerName: '',
+					storeName: '',
+					creatorName: ''
 				});
 
 			} else {
