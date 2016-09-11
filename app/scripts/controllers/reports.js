@@ -69,69 +69,74 @@ angular.module('minovateApp')
 		}
 	};
 
-	var reportsFilter = function(data, filterValues) {
-		$log.info('data');
-		$log.info(data);
-
-		$scope.filters = {
-			zoneName: filterValues.zoneName || '',
-			dealerName: filterValues.dealerName || '',
-			storeName: filterValues.storeName || '',
-			creatorName: filterValues.creatorName || ''
-		};
-
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, $scope.pageSize, {
-			zoneName: $scope.filters.zoneName,
-			dealerName: $scope.filters.dealerName,
-			storeName: $scope.filters.storeName,
-			creatorName: $scope.filters.creatorName
-		});
-
-		return data.filter(function(item) {
-
-			var zoneName = $scope.filters.zoneName === undefined ? '' : $scope.filters.zoneName;
-			var dealerName = $scope.filters.dealerName === undefined ? '' : $scope.filters.dealerName;
-			var storeName = $scope.filters.storeName === undefined ? '' : $scope.filters.storeName;
-			var creatorName = $scope.filters.creatorName === undefined ? '' : $scope.filters.creatorName;
-
-			// $log.log('zoneName: ' + zoneName);
-			// $log.log('item.zoneName: ' + item.zoneName);
-
-			// $log.log('dealerName: ' + dealerName);
-			// $log.log('item.dealerName: ' + item.dealerName);
-
-			// $log.log('storeName: ' + storeName);
-			// $log.log('item.storeName: ' + item.storeName);
-
-			// $log.log('creatorName: ' + creatorName);
-			// $log.log('item.creatorName: ' + item.creatorName);
-
-			var isZoneName = item.zoneName.toLowerCase().indexOf(zoneName.toLowerCase()) !== -1;
-			var isDealerName = item.dealerName.toLowerCase().indexOf(dealerName.toLowerCase()) !== -1;
-			var isStoreName = item.storeName.toLowerCase().indexOf(storeName.toLowerCase()) !== -1;
-			var isCreatorName = item.creatorName.toLowerCase().indexOf(creatorName.toLowerCase()) !== -1;
-
-			// $log.log('isZoneName : ' + (isZoneName));
-			// $log.log('isDealerName : ' + (isDealerName));
-			// $log.log('isStoreName : ' + (isStoreName));
-			// $log.log('isCreatorName : ' + (isCreatorName));
-
-			return isZoneName && isDealerName && isStoreName && isCreatorName;
-		});
-	};
-
 	$scope.tableParams = new NgTableParams({
 		count: reports.length, // count per page
 	}, {
 		dataset: reports,
 		counts: [],
 		total: reports.length, // length of reports
-		filterOptions: {
-			filterFn: reportsFilter
-		}
+		// filterOptions: {
+		// 	filterFn: reportsFilter
+		// }
+	});
+
+	var filters = {
+		zoneName: '',
+		dealerName: '',
+		storeName: '',
+		creatorName: ''
+	};
+
+	$scope.$watch('tableParams.filter().zoneName', function(newZoneName) {
+		filters.zoneName = newZoneName;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			zoneName: filters.zoneName,
+			dealerName: filters.dalerName,
+			storeName:  filters.storeName,
+			creatorName:  filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParams.filter().dealerName', function(newDealerName) {
+		filters.dealerName = newDealerName;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			zoneName: filters.zoneName,
+			dealerName: filters.dealerName,
+			storeName:  filters.storeName,
+			creatorName:  filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParams.filter().storeName', function(newStoreName) {
+		filters.storeName = newStoreName;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			zoneName: filters.zoneName,
+			dealerName: filters.dealerName,
+			storeName:  filters.storeName,
+			creatorName:  filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParams.filter().creatorName', function(newCreatorName) {
+		filters.dealerName = newCreatorName;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			zoneName: filters.zoneName,
+			dealerName: filters.dealerName,
+			storeName:  filters.storeName,
+			creatorName:  filters.creatorName
+		});
 	});
 
 	$scope.getReports = function(e, page, pageSize, filters) {
@@ -140,50 +145,14 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
-		// reports = [{
-		// 	id: 1,
-		// 	reportTypeName: '',
-		// 	createdAt: '2016-02-03',
-		// 	limitDate: '2016-02-03',
-		// 	zoneName: 'zone_name',
-		// 	dealerName: 'dealer_name',
-		// 	storeName: 'store_name',
-		// 	creatorName: 'creator_name',
-		// 	pdfUploaded: 'pdf_uploaded',
-		// 	pdf: 'pdf'
-		// }, {
-		// 	id: 2,
-		// 	reportTypeName: '',
-		// 	createdAt: '2016-02-03',
-		// 	limitDate: '2016-02-03',
-		// 	zoneName: 'zone_name',
-		// 	dealerName: 'dealer_name',
-		// 	storeName: 'store_name',
-		// 	creatorName: 'creator_name',
-		// 	pdfUploaded: 'pdf_uploaded',
-		// 	pdf: 'pdf'
-		// }];
-
-		// $log.log('hola');
-
-		// $scope.tableParams.count(reports.length);
-		// $scope.tableParams.settings({2
-		// 	dataset: reports,
-		// 	counts: [],
-		// 	total: reports.length, // length of reports
-		// 	filterOptions: {
-		// 		filterComparator: false,
-		// 		filterFn: reportsFilter
-		// 	},
-		// });
 		DailyReports.query({
 			all: true,
 			'page[number]': page,
 			'page[size]': pageSize,
-			'filter[zone_name]': $scope.filters.zoneName,
-			'filter[dealer_name]': $scope.filters.dealerName,
-			'filter[store_name]': $scope.filters.storeName,
-			'filter[creator_name]': $scope.filters.creatorName,
+			'filter[zone_name]': filters.zoneName,
+			'filter[dealer_name]': filters.dealerName,
+			'filter[store_name]': filters.storeName,
+			'filter[creator_name]': filters.creatorName,
 			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
@@ -207,20 +176,17 @@ angular.module('minovateApp')
 					});
 
 				}
-				$log.log(reports);
-
 				$scope.tableParams.count(reports.length);
 				$scope.tableParams.settings({
 					dataset: reports,
 					counts: [],
 					total: reports.length, // length of reports
-					filterOptions: {
-						filterComparator: false,
-						filterFn: reportsFilter,
-						// filterDelay: 1000
-					},
+					// filterOptions: {
+					// 	filterComparator: false,
+					// 	filterFn: reportsFilter,
+					// 	// filterDelay: 1000
+					// },
 				});
-
 			} else {
 				$log.error(success);
 			}
