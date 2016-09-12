@@ -71,11 +71,11 @@ angular.module('minovateApp')
 		pendingTasks = [];
 
 	$scope.tableParamsFinishedTasks = new NgTableParams({
-		count: finishedTasks.length, // count per page
+		count: finishedTasks.length,
 	}, {
 		dataset: finishedTasks,
 		counts: [],
-		total: finishedTasks.length, // length of finishedTasks
+		total: finishedTasks.length,
 		filterOptions: {
 			filterDelay: 1500
 		}
@@ -103,7 +103,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().createdAt', function(newCreatedAt) {
@@ -126,7 +125,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().limitDate', function(newLimitDate) {
@@ -149,7 +147,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().title', function(newTitle) {
@@ -169,7 +166,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().zoneName', function(newZoneName) {
@@ -192,7 +188,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().dealerName', function(newDealerName) {
@@ -215,7 +210,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().storeName', function(newStoreName) {
@@ -235,7 +229,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().creatorName', function(newCreatorName) {
@@ -258,18 +251,14 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.tableParamsPendingTasks = new NgTableParams({
-		count: pendingTasks.length, // count per page
+		count: pendingTasks.length,
 	}, {
 		dataset: pendingTasks,
 		counts: [],
-		total: pendingTasks.length, // length of pendingTasks
-		filterOptions: {
-			filterDelay: 1500
-		}
+		total: pendingTasks.length,
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().id', function(newId) {
@@ -292,7 +281,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().createdAt', function(newCreatedAt) {
@@ -337,7 +325,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().title', function(newTitle) {
@@ -360,7 +347,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().zoneName', function(newZoneName) {
@@ -383,7 +369,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().dealerName', function(newDealerName) {
@@ -406,7 +391,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().storeName', function(newStoreName) {
@@ -429,7 +413,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().creatorName', function(newCreatorName) {
@@ -452,7 +435,6 @@ angular.module('minovateApp')
 				creatorName: filters.creatorName
 			});
 		}, filterTimeoutDuration);
-
 	});
 
 	$scope.incrementPageFinishedTasks = function() {
@@ -706,7 +688,7 @@ angular.module('minovateApp')
 				$scope.tableParamsFinishedTasks.settings({
 					dataset: finishedTasks,
 					counts: [],
-					total: finishedTasks.length, // length of finishedTasks
+					total: finishedTasks.length,
 					filterOptions: {
 						filterDelay: 1500
 					},
@@ -776,7 +758,7 @@ angular.module('minovateApp')
 				$scope.tableParamsPendingTasks.settings({
 					dataset: pendingTasks,
 					counts: [],
-					total: pendingTasks.length, // length of pendingTasks
+					total: pendingTasks.length,
 					filterOptions: {
 						filterDelay: 1500
 					},

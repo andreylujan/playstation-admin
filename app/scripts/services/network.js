@@ -487,7 +487,17 @@ angular.module('minovateApp')
 			},
 			params: {
 				'page[number]': '@number',
-				'page[size]': '@size'
+				'page[size]': '@size',
+				'filter[id]': '@id',
+				'filter[title]': '@title',
+				'filter[activated_at]': '@activatedAt',
+				'filter[end_date]': '@endDate',
+				'filter[start_date]': '@startDate',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'filter[activator_name]': '@activatorName'
 			}
 		}
 	});

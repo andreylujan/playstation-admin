@@ -20,7 +20,7 @@ angular.module('minovateApp')
 		j = 0;
 
 	$scope.page = {
-		title: 'Quiebre de Stock',
+		title: 'Stock',
 		filters: {
 			zone: {
 				list: [],
