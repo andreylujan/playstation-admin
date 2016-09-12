@@ -127,7 +127,7 @@
 
 						<div class="row">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getImages({success:true,detail:'OK'},pagination.finishedTasks.pages._current)" current-page="pagination.finishedTasks.pages._current" />
+								<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getFinishedTasks({success:true,detail:'OK'},pagination.finishedTasks.pages._current,pageSize,filters)" current-page="pagination.finishedTasks.pages._current" />
 							</div>
 						</div>
 
@@ -229,7 +229,7 @@
 						<!-- <div class="row" ng-show="page.images.length" > -->
 						<div class="row">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getImages({success:true,detail:'OK'},pagination.pendingTasks.pages._current)" current-page="pagination.pendingTasks.pages._current" />
+								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getPendingTasks({success:true,detail:'OK'},pagination.reports.pages._current,pageSize,filters)" current-page="pagination.pendingTasks.pages._current" />
 							</div>
 						</div>
 

@@ -195,6 +195,7 @@ angular.module('minovateApp')
 				'all': '@all',
 				'page[number]': '@number',
 				'page[size]': '@size',
+				'filter[title]': '@title',
 				'filter[zone_name]': '@zoneName',
 				'filter[dealer_name]': '@dealerName',
 				'filter[store_name]': '@storeName',

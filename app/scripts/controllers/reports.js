@@ -75,9 +75,9 @@ angular.module('minovateApp')
 		dataset: reports,
 		counts: [],
 		total: reports.length, // length of reports
-		// filterOptions: {
-		// 	filterFn: reportsFilter
-		// }
+		filterOptions: {
+			filterDelay: 1500
+		}
 	});
 
 	var filters = {
@@ -149,10 +149,10 @@ angular.module('minovateApp')
 			all: true,
 			'page[number]': page,
 			'page[size]': pageSize,
-			'filter[zone_name]': filters.zoneName,
-			'filter[dealer_name]': filters.dealerName,
-			'filter[store_name]': filters.storeName,
-			'filter[creator_name]': filters.creatorName,
+			'filter[zone_name]': filters.zoneName || '',
+			'filter[dealer_name]': filters.dealerName || '',
+			'filter[store_name]': filters.storeName || '',
+			'filter[creator_name]': filters.creatorName || '',
 			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
@@ -181,11 +181,9 @@ angular.module('minovateApp')
 					dataset: reports,
 					counts: [],
 					total: reports.length, // length of reports
-					// filterOptions: {
-					// 	filterComparator: false,
-					// 	filterFn: reportsFilter,
-					// 	// filterDelay: 1000
-					// },
+					filterOptions: {
+						filterDelay: 1500
+					},
 				});
 			} else {
 				$log.error(success);
