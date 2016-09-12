@@ -203,6 +203,7 @@ angular.module('minovateApp')
 				'all': '@all',
 				'page[number]': '@number',
 				'page[size]': '@size',
+				'filter[id]': '@id',
 				'filter[title]': '@title',
 				'filter[created_at]': '@created_at',
 				'filter[limit_date]': '@limit_date',
@@ -833,25 +834,37 @@ angular.module('minovateApp')
 })
 
 //weekly_business_sales
-.factory('WeeklyBusinessSales', function($http) {
-	var fd = new FormData();
+.factory('WeeklyBusinessSales', function($resource, $http) {
 
-	return {
-		upload: function(form) {
 
-			for (var i = 0; i < form.length; i++) {
-				fd.append(form[i].field, form[i].value);
+	return $resource(API_URL + '/weekly_business_sales/csv/:csv', {
+		csv: '@csv'
+	}, {
+		upload: {
+			method: "POST",
+			transformRequest: angular.identity,
+			headers: {
+				'Content-Type': undefined
 			}
-
-			return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
-				transformRequest: angular.identity,
-				headers: {
-					'Content-Type': undefined,
-					Accept: 'application/vnd.api+json'
-				}
-			});
 		}
-	};
+	});
+
+	// return {
+	// 	upload: function(form) {
+
+	// 		for (var i = 0; i < form.length; i++) {
+	// 			fd.append(form[i].field, form[i].value);
+	// 		}
+
+	// 		return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
+	// 			transformRequest: angular.identity,
+	// 			headers: {
+	// 				'Content-Type': undefined,
+	// 				Accept: 'application/vnd.api+json'
+	// 			}
+	// 		});
+	// 	}
+	// };
 })
 
 //Promoters
@@ -872,10 +885,18 @@ angular.module('minovateApp')
 
 .factory('ExcelDashboard', function($auth) {
 
+	// return {
+	// 	getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
+	// 		var downloadLink = angular.element(elem);
+	// 		downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
+	// 		downloadLink.attr('download', fileName + '.xlsx');
+	// 	}
+	// };
+
 	return {
-		getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
+		getFile: function(elem, dashboard, fileName, month, year) {
 			var downloadLink = angular.element(elem);
-			downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
+			downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&access_token=' + $auth.getToken());
 			downloadLink.attr('download', fileName + '.xlsx');
 		}
 	};

@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('ReportsCtrl', function($scope, $filter, $log, $timeout, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
 		title: 'Lista de Reportes',
@@ -34,6 +34,18 @@ angular.module('minovateApp')
 		}
 	};
 	$scope.filters = {
+		id: null,
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
+	};
+
+	var filters = {
+		id: null,
 		title: null,
 		createdAt: null,
 		limitDate: null,
@@ -83,126 +95,170 @@ angular.module('minovateApp')
 		}
 	});
 
-	var filters = {
-		title: null,
-		createdAt: null,
-		limitDate: null,
-		zoneName: null,
-		dealerName: null,
-		storeName: null,
-		creatorName: null
-	};
+	var filterTimeout, filterTimeoutDuration = 1000;
+
+	$scope.$watch('tableParams.filter().id', function(newId) {
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+
+		filterTimeout = $timeout(function() {
+			filters.id = newId;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				storeName: filters.storeName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+
+	});
 
 	$scope.$watch('tableParams.filter().createdAt', function(newCreatedAt) {
-		filters.createdAt = newCreatedAt;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+
+		filterTimeout = $timeout(function() {
+			filters.createdAt = newCreatedAt;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().limitDate', function(newLimitDate) {
-		filters.limitDate = newLimitDate;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+
+		filterTimeout = $timeout(function() {
+			filters.limitDate = newLimitDate;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().title', function(newTitle) {
-		filters.title = newTitle;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+		filterTimeout = $timeout(function() {
+			filters.title = newTitle;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().zoneName', function(newZoneName) {
-		filters.zoneName = newZoneName;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+		filterTimeout = $timeout(function() {
+			filters.zoneName = newZoneName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().dealerName', function(newDealerName) {
-		filters.dealerName = newDealerName;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+		filterTimeout = $timeout(function() {
+			filters.dealerName = newDealerName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().storeName', function(newStoreName) {
-		filters.storeName = newStoreName;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+		filterTimeout = $timeout(function() {
+			filters.storeName = newStoreName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.$watch('tableParams.filter().creatorName', function(newCreatorName) {
-		filters.dealerName = newCreatorName;
-		$scope.getReports({
-			success: true,
-			detail: 'OK'
-		}, $scope.pagination.reports.pages._current, 30, {
-			title: filters.title,
-			zoneName: filters.zoneName,
-			createdAt: filters.createdAt,
-			limitDate: filters.limitDate,
-			dealerName: filters.dalerName,
-			storeName: filters.storeName,
-			creatorName: filters.creatorName
-		});
+		if (filterTimeout) $timeout.cancel(filterTimeout);
+		filterTimeout = $timeout(function() {
+			filters.creatorName = newCreatorName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				zoneName: filters.zoneName,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
 	});
 
 	$scope.getReports = function(e, page, pageSize, filters) {
@@ -211,17 +267,19 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
+
 		DailyReports.query({
 			all: true,
 			'page[number]': page,
 			'page[size]': pageSize,
-			'filter[title]': filters.title,
-			'filter[created_at]': filters.createdAt,
-			'filter[limit_date]': filters.limitDate,
-			'filter[zone_name]': filters.zoneName,
-			'filter[dealer_name]': filters.dealerName,
-			'filter[store_name]': filters.storeName,
-			'filter[creator_name]': filters.creatorName,
+			'filter[id]': filters.id || null,
+			'filter[title]': filters.title || null,
+			'filter[created_at]': filters.createdAt || null,
+			'filter[limit_date]': filters.limitDate || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
 			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
@@ -380,14 +438,14 @@ angular.module('minovateApp')
 					success: true,
 					detail: 'OK'
 				}, 1, 30, {
-					title: '',
-					zoneName: '',
-					createdAt: '',
-					limitDate: '',
-					zoneName: '',
-					dealerName: '',
-					storeName: '',
-					creatorName: ''
+					id: null,
+					title: null,
+					zoneName: null,
+					createdAt: null,
+					limitDate: null,
+					dealerName: null,
+					storeName: null,
+					creatorName: null
 				});
 
 			} else {

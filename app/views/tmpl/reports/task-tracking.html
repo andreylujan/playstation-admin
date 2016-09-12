@@ -87,7 +87,7 @@
 						<table ng-table="tableParamsFinishedTasks" show-filter="true" class="table table-custom">
 						<!-- {{tableParamsFinishedTasks}} -->
 							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
@@ -115,7 +115,7 @@
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{report.creatorName}}
 								</td>
-								<td data-title="'Asignado'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
+								<td data-title="'Asignados'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
 									{{report.assignedUserName}}
 								</td>
 								<td data-title="'PDF'" >
@@ -193,7 +193,7 @@
 
 						<table ng-table="tableParamsPendingTasks" show-filter="true" class="table table-custom">
 							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
@@ -220,7 +220,7 @@
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{report.creatorName}}
 								</td>
-								<td data-title="'Asignado'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
+								<td data-title="'Asignados'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
 									{{report.assignedUserName}}
 								</td>
 							</tr>
