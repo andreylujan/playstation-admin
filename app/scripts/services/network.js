@@ -167,7 +167,15 @@ angular.module('minovateApp')
 				'filter[assigned_user_id]': '@assigned_user_id',
 				'filter[creator_id]': '@creator_id',
 				'page[number]': '@number',
-				'page[size]': '@size'
+				'page[size]': '@size',
+				'filter[title]': '@title',
+				'filter[created_at]': '@created_at',
+				'filter[limit_date]': '@limit_date',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'fields[reports]': '@reports'
 			}
 		},
 		save: {
@@ -196,6 +204,8 @@ angular.module('minovateApp')
 				'page[number]': '@number',
 				'page[size]': '@size',
 				'filter[title]': '@title',
+				'filter[created_at]': '@created_at',
+				'filter[limit_date]': '@limit_date',
 				'filter[zone_name]': '@zoneName',
 				'filter[dealer_name]': '@dealerName',
 				'filter[store_name]': '@storeName',

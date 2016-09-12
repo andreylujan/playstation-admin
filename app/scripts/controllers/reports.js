@@ -34,10 +34,13 @@ angular.module('minovateApp')
 		}
 	};
 	$scope.filters = {
-		zoneName: '',
-		dealerName: '',
-		storeName: '',
-		creatorName: ''
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
 	};
 
 	var reports = [];
@@ -81,11 +84,62 @@ angular.module('minovateApp')
 	});
 
 	var filters = {
-		zoneName: '',
-		dealerName: '',
-		storeName: '',
-		creatorName: ''
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
 	};
+
+	$scope.$watch('tableParams.filter().createdAt', function(newCreatedAt) {
+		filters.createdAt = newCreatedAt;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParams.filter().limitDate', function(newLimitDate) {
+		filters.limitDate = newLimitDate;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParams.filter().title', function(newTitle) {
+		filters.title = newTitle;
+		$scope.getReports({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
 
 	$scope.$watch('tableParams.filter().zoneName', function(newZoneName) {
 		filters.zoneName = newZoneName;
@@ -93,10 +147,13 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
 			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
 			dealerName: filters.dalerName,
-			storeName:  filters.storeName,
-			creatorName:  filters.creatorName
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
 		});
 	});
 
@@ -106,10 +163,13 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
-			storeName:  filters.storeName,
-			creatorName:  filters.creatorName
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
 		});
 	});
 
@@ -119,10 +179,13 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
-			storeName:  filters.storeName,
-			creatorName:  filters.creatorName
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
 		});
 	});
 
@@ -132,10 +195,13 @@ angular.module('minovateApp')
 			success: true,
 			detail: 'OK'
 		}, $scope.pagination.reports.pages._current, 30, {
+			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
-			storeName:  filters.storeName,
-			creatorName:  filters.creatorName
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
 		});
 	});
 
@@ -149,10 +215,13 @@ angular.module('minovateApp')
 			all: true,
 			'page[number]': page,
 			'page[size]': pageSize,
-			'filter[zone_name]': filters.zoneName || '',
-			'filter[dealer_name]': filters.dealerName || '',
-			'filter[store_name]': filters.storeName || '',
-			'filter[creator_name]': filters.creatorName || '',
+			'filter[title]': filters.title,
+			'filter[created_at]': filters.createdAt,
+			'filter[limit_date]': filters.limitDate,
+			'filter[zone_name]': filters.zoneName,
+			'filter[dealer_name]': filters.dealerName,
+			'filter[store_name]': filters.storeName,
+			'filter[creator_name]': filters.creatorName,
 			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
@@ -165,8 +234,8 @@ angular.module('minovateApp')
 					reports.push({
 						id: success.data[i].id,
 						reportTypeName: '',
-						createdAt: $filter('date')(success.data[i].attributes.created_at, 'dd-MM-yyyy'),
-						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd-MM-yyyy'),
+						createdAt: $filter('date')(success.data[i].attributes.created_at, 'dd/MM/yyyy'),
+						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd/MM/yyyy'),
 						zoneName: success.data[i].attributes.zone_name,
 						dealerName: success.data[i].attributes.dealer_name,
 						storeName: success.data[i].attributes.store_name,
@@ -310,7 +379,11 @@ angular.module('minovateApp')
 				$scope.getReports({
 					success: true,
 					detail: 'OK'
-				}, $scope.pagination.reports.pages._current, 30, {
+				}, 1, 30, {
+					title: '',
+					zoneName: '',
+					createdAt: '',
+					limitDate: '',
 					zoneName: '',
 					dealerName: '',
 					storeName: '',

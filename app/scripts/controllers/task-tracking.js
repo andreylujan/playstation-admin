@@ -40,18 +40,22 @@ angular.module('minovateApp')
 		}
 	};
 	$scope.filters = {
-		zoneName: '',
-		dealerName: '',
-		storeName: '',
-		creatorName: ''
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
 	};
 	var filters = {
-		title: '',
-		zoneName: '',
-		dealerName: '',
-		storeName: '',
-
-		creatorName: ''
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
 	};
 
 	var zones = [];
@@ -73,6 +77,38 @@ angular.module('minovateApp')
 		}
 	});
 
+	$scope.$watch('tableParamsFinishedTasks.filter().createdAt', function(newCreatedAt) {
+		filters.createdAt = newCreatedAt;
+		$scope.getFinishedTasks({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.finishedTasks.pages._current, 15, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().limitDate', function(newLimitDate) {
+		filters.limitDate = newLimitDate;
+		$scope.getFinishedTasks({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.finishedTasks.pages._current, 15, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
 	$scope.$watch('tableParamsFinishedTasks.filter().title', function(newTitle) {
 		filters.title = newTitle;
 		$scope.getFinishedTasks({
@@ -80,6 +116,8 @@ angular.module('minovateApp')
 			detail: 'OK'
 		}, $scope.pagination.finishedTasks.pages._current, 15, {
 			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
 			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
@@ -94,6 +132,8 @@ angular.module('minovateApp')
 		}, $scope.pagination.finishedTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
 			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
@@ -108,7 +148,9 @@ angular.module('minovateApp')
 		}, $scope.pagination.finishedTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
 		});
@@ -122,7 +164,8 @@ angular.module('minovateApp')
 		}, $scope.pagination.finishedTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
+			createdAt: filters.createdAt,
+			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
 		});
@@ -136,7 +179,9 @@ angular.module('minovateApp')
 		}, $scope.pagination.finishedTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
 		});
@@ -153,6 +198,38 @@ angular.module('minovateApp')
 		}
 	});
 
+	$scope.$watch('tableParamsPendingTasks.filter().createdAt', function(newCreatedAt) {
+		filters.createdAt = newCreatedAt;
+		$scope.getPendingTasks({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.pendingTasks.pages._current, 15, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().limitDate', function(newLimitDate) {
+		filters.limitDate = newLimitDate;
+		$scope.getPendingTasks({
+			success: true,
+			detail: 'OK'
+		}, $scope.pagination.pendingTasks.pages._current, 15, {
+			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
+			storeName: filters.storeName,
+			creatorName: filters.creatorName
+		});
+	});
+
 	$scope.$watch('tableParamsPendingTasks.filter().title', function(newTitle) {
 		filters.title = newTitle;
 		$scope.getPendingTasks({
@@ -160,6 +237,9 @@ angular.module('minovateApp')
 			detail: 'OK'
 		}, $scope.pagination.pendingTasks.pages._current, 15, {
 			title: filters.title,
+			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
 			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
@@ -174,6 +254,8 @@ angular.module('minovateApp')
 		}, $scope.pagination.pendingTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
 			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
@@ -188,7 +270,9 @@ angular.module('minovateApp')
 		}, $scope.pagination.pendingTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
 		});
@@ -202,7 +286,9 @@ angular.module('minovateApp')
 		}, $scope.pagination.pendingTasks.pages._current, 15, {
 			title: filters.title,
 			zoneName: filters.zoneName,
-			dealerName: filters.dealerName,
+			createdAt: filters.createdAt,
+			limitDate: filters.limitDate,
+			dealerName: filters.dalerName,
 			storeName: filters.storeName,
 			creatorName: filters.creatorName
 		});
@@ -231,7 +317,9 @@ angular.module('minovateApp')
 			}, $scope.pagination.finishedTasks.pages._current, 15, {
 				title: filters.title,
 				zoneName: filters.zoneName,
-				dealerName: filters.dealerName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
 				storeName: filters.storeName,
 				creatorName: filters.creatorName
 			});
@@ -247,7 +335,9 @@ angular.module('minovateApp')
 			}, $scope.pagination.finishedTasks.pages._current, 15, {
 				title: filters.title,
 				zoneName: filters.zoneName,
-				dealerName: filters.dealerName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
 				storeName: filters.storeName,
 				creatorName: filters.creatorName
 			});
@@ -263,7 +353,9 @@ angular.module('minovateApp')
 			}, $scope.pagination.pendingTasks.pages._current, 15, {
 				title: filters.title,
 				zoneName: filters.zoneName,
-				dealerName: filters.dealerName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
 				storeName: filters.storeName,
 				creatorName: filters.creatorName
 			});
@@ -279,7 +371,9 @@ angular.module('minovateApp')
 			}, $scope.pagination.pendingTasks.pages._current, 15, {
 				title: filters.title,
 				zoneName: filters.zoneName,
-				dealerName: filters.dealerName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
 				storeName: filters.storeName,
 				creatorName: filters.creatorName
 			});
@@ -410,7 +504,6 @@ angular.module('minovateApp')
 	};
 
 	$scope.getFinishedTasks = function(e, page, pageSize, filters) {
-
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
@@ -421,6 +514,8 @@ angular.module('minovateApp')
 			'page[number]': page,
 			'page[size]': pageSize,
 			'filter[finished]': true,
+			'filter[created_at]': filters.createdAt || '',
+			'filter[limit_date]': filters.limitDate || '',
 			'filter[title]': filters.title || '',
 			'filter[zone_name]': filters.zoneName || '',
 			'filter[dealer_name]': filters.dealerName || '',
@@ -487,11 +582,13 @@ angular.module('minovateApp')
 			'page[number]': page,
 			'page[size]': pageSize,
 			'filter[finished]': false,
-			'filter[title]': filters.title || '',
-			'filter[zone_name]': filters.zoneName || '',
-			'filter[dealer_name]': filters.dealerName || '',
-			'filter[store_name]': filters.storeName || '',
-			'filter[creator_name]': filters.creatorName || '',
+			'filter[created_at]': filters.createdAt,
+			'filter[limit_date]': filters.limitDate,
+			'filter[title]': filters.title,
+			'filter[zone_name]': filters.zoneName,
+			'filter[dealer_name]': filters.dealerName,
+			'filter[store_name]': filters.storeName,
+			'filter[creator_name]': filters.creatorName,
 			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
@@ -556,6 +653,8 @@ angular.module('minovateApp')
 		detail: 'OK'
 	}, $scope.pagination.finishedTasks.pages._current, 15, {
 		title: '',
+		createdAt: '',
+		limitDate: '',
 		zoneName: '',
 		dealerName: '',
 		storeName: '',
@@ -567,6 +666,8 @@ angular.module('minovateApp')
 		detail: 'OK'
 	}, $scope.pagination.pendingTasks.pages._current, 15, {
 		title: '',
+		createdAt: '',
+		limitDate: '',
 		zoneName: '',
 		dealerName: '',
 		storeName: '',
