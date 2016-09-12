@@ -98,7 +98,9 @@ angular.module('minovateApp')
 	var filterTimeout, filterTimeoutDuration = 1000;
 
 	$scope.$watch('tableParams.filter().id', function(newId) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.id = newId;
@@ -120,7 +122,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().createdAt', function(newCreatedAt) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.createdAt = newCreatedAt;
@@ -141,7 +145,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().limitDate', function(newLimitDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.limitDate = newLimitDate;
@@ -162,7 +168,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().title', function(newTitle) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			filters.title = newTitle;
 			$scope.getReports({
@@ -182,7 +190,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().zoneName', function(newZoneName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			filters.zoneName = newZoneName;
 			$scope.getReports({
@@ -202,7 +212,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().dealerName', function(newDealerName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			filters.dealerName = newDealerName;
 			$scope.getReports({
@@ -222,7 +234,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().storeName', function(newStoreName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			filters.storeName = newStoreName;
 			$scope.getReports({
@@ -242,7 +256,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParams.filter().creatorName', function(newCreatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			filters.creatorName = newCreatorName;
 			$scope.getReports({

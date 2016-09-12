@@ -86,7 +86,9 @@ angular.module('minovateApp')
 	var filterTimeout, filterTimeoutDuration = 1000;
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().id', function(newId) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.id = newId;
@@ -109,7 +111,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().activatedAt', function(newTitle) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.title = newTitle;
@@ -132,7 +136,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().startDate', function(newActivatedAt) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.activatedAt = newActivatedAt;
@@ -155,7 +161,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().startDate', function(newStartDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.startDate = newStartDate;
@@ -178,7 +186,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().endDate', function(newEndDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.endDate = newEndDate;
@@ -201,7 +211,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().zoneName', function(newZoneName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.zoneName = newZoneName;
@@ -224,7 +236,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().dealerName', function(newDealerName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 		filterTimeout = $timeout(function() {
 			$scope.filters.dealerName = newDealerName;
 			$scope.getFinishedPromotions({
@@ -246,7 +260,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().storeName', function(newStoreName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.storeName = newStoreName;
@@ -269,7 +285,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().creatorName', function(newCreatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.creatorName = newCreatorName;
@@ -292,7 +310,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedPromotions.filter().activatorName', function(newActivatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.activatorName = newActivatorName;
@@ -317,7 +337,9 @@ angular.module('minovateApp')
 
 
 	$scope.$watch('tableParamsPendingPromotions.filter().id', function(newId) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.id = newId;
@@ -340,7 +362,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().title', function(newTitle) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.title = newTitle;
@@ -363,7 +387,7 @@ angular.module('minovateApp')
 	});
 
 	// $scope.$watch('tableParamsPendingPromotions.filter().activatedAt', function(newActivatedAt) {
-	// 	if (filterTimeout) $timeout.cancel(filterTimeout);
+	// 	if (filterTimeout) {$timeout.cancel(filterTimeout);}
 
 	// 	filterTimeout = $timeout(function() {
 	// 		$scope.filters.id = newActivatedAt;
@@ -386,7 +410,9 @@ angular.module('minovateApp')
 	// });
 
 	$scope.$watch('tableParamsPendingPromotions.filter().endDate', function(newEndDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.endDate = newEndDate;
@@ -409,7 +435,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().startDate', function(newStartDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.startDate = newStartDate;
@@ -432,7 +460,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().zoneName', function(newZoneName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.zoneName = newZoneName;
@@ -455,7 +485,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().dealerName', function(newDealerName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.dealerName = newDealerName;
@@ -478,7 +510,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().storeName', function(newStoreName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.storeName = newStoreName;
@@ -501,7 +535,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().creatorName', function(newCreatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.creatorName = newCreatorName;
@@ -524,7 +560,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingPromotions.filter().activatorName', function(newActivatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			$scope.filters.activatorName = newActivatorName;
@@ -743,19 +781,19 @@ angular.module('minovateApp')
 
 				for (i = 0; i < success.data.length; i++) {
 					// if (success.data[i].attributes.activated) {
-						finishedPromotions.push({
-							id: success.data[i].id,
-							title: success.data[i].attributes.title,
-							activatedAt: success.data[i].attributes.activated_at,
-							startDate: success.data[i].attributes.start_date,
-							endDate: success.data[i].attributes.end_date,
-							zoneName: success.data[i].attributes.zone_name,
-							dealerName: success.data[i].attributes.dealer_name,
-							storeName: success.data[i].attributes.store_name,
-							creatorName: success.data[i].attributes.creator_name,
-							pdf: success.data[i].attributes.pdf,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded
-						});
+					finishedPromotions.push({
+						id: success.data[i].id,
+						title: success.data[i].attributes.title,
+						activatedAt: success.data[i].attributes.activated_at,
+						startDate: success.data[i].attributes.start_date,
+						endDate: success.data[i].attributes.end_date,
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
+						storeName: success.data[i].attributes.store_name,
+						creatorName: success.data[i].attributes.creator_name,
+						pdf: success.data[i].attributes.pdf,
+						pdfUploaded: success.data[i].attributes.pdf_uploaded
+					});
 					// }
 				}
 

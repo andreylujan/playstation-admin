@@ -84,7 +84,9 @@ angular.module('minovateApp')
 	var filterTimeout, filterTimeoutDuration = 1000;
 
 	$scope.$watch('tableParamsFinishedTasks.filter().id', function(newId) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.id = newId;
@@ -106,7 +108,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().createdAt', function(newCreatedAt) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.createdAt = newCreatedAt;
@@ -128,7 +132,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().limitDate', function(newLimitDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.limitDate = newLimitDate;
@@ -150,7 +156,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().title', function(newTitle) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.title = newTitle;
@@ -169,7 +177,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().zoneName', function(newZoneName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.zoneName = newZoneName;
@@ -191,7 +201,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().dealerName', function(newDealerName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.dealerName = newDealerName;
@@ -213,7 +225,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().storeName', function(newStoreName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.storeName = newStoreName;
@@ -232,7 +246,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsFinishedTasks.filter().creatorName', function(newCreatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.creatorName = newCreatorName;
@@ -262,7 +278,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().id', function(newId) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.id = newId;
@@ -284,7 +302,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().createdAt', function(newCreatedAt) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.createdAt = newCreatedAt;
@@ -306,7 +326,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().limitDate', function(newLimitDate) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.limitDate = newLimitDate;
@@ -328,7 +350,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().title', function(newTitle) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.title = newTitle;
@@ -350,7 +374,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().zoneName', function(newZoneName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.zoneName = newZoneName;
@@ -372,7 +398,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().dealerName', function(newDealerName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.dealerName = newDealerName;
@@ -394,7 +422,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().storeName', function(newStoreName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.storeName = newStoreName;
@@ -416,7 +446,9 @@ angular.module('minovateApp')
 	});
 
 	$scope.$watch('tableParamsPendingTasks.filter().creatorName', function(newCreatorName) {
-		if (filterTimeout) $timeout.cancel(filterTimeout);
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
 
 		filterTimeout = $timeout(function() {
 			filters.creatorName = newCreatorName;
