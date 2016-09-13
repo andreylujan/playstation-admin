@@ -169,12 +169,12 @@
 								</tr>
 								<tr>
 									<td class="text-bold">Growth</td>
-									<td class="text-center" ng-repeat="data in page.goals.lastWeekComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
+									<td class="text-center" ng-repeat="data in page.goals.lastWeekComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
 								</tr>
 								<tr>
 									<td style="border-top:0"></td>
 									<td class="text-center" style="border-top:0" ng-repeat="data in page.goals.lastWeekComparison.table.row3">
-										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}"></i>
+										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}"></i>
 									</td>
 								</tr>
 							</tbody>
@@ -227,12 +227,12 @@
 								</tr>
 								<tr>
 									<td class="text-bold">Growth</td>
-									<td class="text-center" ng-repeat="data in page.goals.weeklySalesComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
+									<td class="text-center" ng-repeat="data in page.goals.weeklySalesComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
 								</tr>
 								<tr>
 									<td style="border-top:0"></td>
 									<td class="text-center" style="border-top:0" ng-repeat="data in page.goals.weeklySalesComparison.table.row3  track by $index">
-										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}"></i>
+										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}"></i>
 									</td>
 								</tr>
 							</tbody>
@@ -288,12 +288,12 @@
 								</tr>
 								<tr>
 									<td class="text-bold">Growth</td>
-									<td class="text-center" ng-repeat="data in page.goals.monthlySalesComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
+									<td class="text-center" ng-repeat="data in page.goals.monthlySalesComparison.table.row3 track by $index" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}">{{data * 100 | number:1}} %</td>
 								</tr>
 								<tr>
 									<td style="border-top:0"></td>
 									<td class="text-center" style="border-top:0" ng-repeat="data in page.goals.monthlySalesComparison.table.row3  track by $index">
-										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-danger':data>0 && data<0.5,'text-success':data>=0.5}"></i>
+										<i class="fa fa-circle" ng-class="{'text-red': data<=0,'text-warning':data>0 && data<0.5,'text-success':data>=0.5}"></i>
 									</td>
 								</tr>
 							</tbody>

@@ -110,7 +110,7 @@ angular.module('minovateApp')
 		}, filterTimeoutDuration);
 	});
 
-	$scope.$watch('tableParamsFinishedPromotions.filter().activatedAt', function(newTitle) {
+	$scope.$watch('tableParamsFinishedPromotions.filter().title', function(newTitle) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
 		}
@@ -135,7 +135,7 @@ angular.module('minovateApp')
 		}, filterTimeoutDuration);
 	});
 
-	$scope.$watch('tableParamsFinishedPromotions.filter().startDate', function(newActivatedAt) {
+	$scope.$watch('tableParamsFinishedPromotions.filter().activatedAt', function(newActivatedAt) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
 		}
@@ -386,29 +386,6 @@ angular.module('minovateApp')
 		}, filterTimeoutDuration);
 	});
 
-	// $scope.$watch('tableParamsPendingPromotions.filter().activatedAt', function(newActivatedAt) {
-	// 	if (filterTimeout) {$timeout.cancel(filterTimeout);}
-
-	// 	filterTimeout = $timeout(function() {
-	// 		$scope.filters.id = newActivatedAt;
-	// 		$scope.getPendingPromotions({
-	// 			success: true,
-	// 			detail: 'OK'
-	// 		}, $scope.pagination.pendingPromotions.pages._current, 15, {
-	// 			id: $scope.filters.id,
-	// 			title: $scope.filters.title,
-	// 			// activatedAt: $scope.filters.activatedAt,
-	// 			endDate: $scope.filters.endDate,
-	// 			startDate: $scope.filters.startDate,
-	// 			zoneName: $scope.filters.zoneName,
-	// 			dealerName: $scope.filters.dealerName,
-	// 			storeName: $scope.filters.storeName,
-	// 			creatorName: $scope.filters.creatorName,
-	// 			activatorName: $scope.filters.activatorName
-	// 		});
-	// 	}, filterTimeoutDuration);
-	// });
-
 	$scope.$watch('tableParamsPendingPromotions.filter().endDate', function(newEndDate) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
@@ -647,7 +624,7 @@ angular.module('minovateApp')
 			});
 
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken(getZones);
 			}
@@ -676,7 +653,7 @@ angular.module('minovateApp')
 				detail: 'OK'
 			});
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken(getDealers);
 			}
@@ -708,7 +685,7 @@ angular.module('minovateApp')
 				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken(getStores);
 			}
@@ -740,7 +717,7 @@ angular.module('minovateApp')
 				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken(getUsers);
 			}
@@ -758,7 +735,7 @@ angular.module('minovateApp')
 		PromotionsStates.query({
 			'page[number]': page,
 			'page[size]': pageSize,
-			'activated': true,
+			'filter[activated]': true,
 			'filter[id]': filters.id || null,
 			'filter[title]': filters.title || null,
 			'filter[activated_at]': filters.activatedAt || null,
@@ -772,29 +749,25 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
-
-				$log.log('success.data');
-				$log.log(success.data);
-
 				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
-					// if (success.data[i].attributes.activated) {
-					finishedPromotions.push({
-						id: success.data[i].id,
-						title: success.data[i].attributes.title,
-						activatedAt: success.data[i].attributes.activated_at,
-						startDate: success.data[i].attributes.start_date,
-						endDate: success.data[i].attributes.end_date,
-						zoneName: success.data[i].attributes.zone_name,
-						dealerName: success.data[i].attributes.dealer_name,
-						storeName: success.data[i].attributes.store_name,
-						creatorName: success.data[i].attributes.creator_name,
-						pdf: success.data[i].attributes.pdf,
-						pdfUploaded: success.data[i].attributes.pdf_uploaded
-					});
-					// }
+					if (success.data[i].attributes.activated) {
+						finishedPromotions.push({
+							id: success.data[i].id,
+							title: success.data[i].attributes.title,
+							activatedAt: success.data[i].attributes.activated_at,
+							startDate: success.data[i].attributes.start_date,
+							endDate: success.data[i].attributes.end_date,
+							zoneName: success.data[i].attributes.zone_name,
+							dealerName: success.data[i].attributes.dealer_name,
+							storeName: success.data[i].attributes.store_name,
+							creatorName: success.data[i].attributes.creator_name,
+							pdf: success.data[i].attributes.pdf,
+							pdfUploaded: success.data[i].attributes.pdf_uploaded
+						});
+					}
 				}
 
 				$scope.tableParamsFinishedPromotions.count(finishedPromotions.length);
@@ -805,10 +778,10 @@ angular.module('minovateApp')
 				});
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.getFinishedPromotions);
 			}
@@ -820,15 +793,13 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
-		$log.log('filters');
-		$log.log(filters);
 
 		var pendingPromotions = [];
 
 		PromotionsStates.query({
 			'page[number]': page,
 			'page[size]': pageSize,
-			'activated': false,
+			'filter[activated]': false,
 			'filter[id]': filters.id || null,
 			'filter[title]': filters.title || null,
 			// 'filter[activated_at]': filters.activatedAt || null,
@@ -872,10 +843,10 @@ angular.module('minovateApp')
 				});
 
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.getFinishedPromotions);
 			}

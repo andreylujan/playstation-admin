@@ -83,52 +83,55 @@
 
 					<!-- tile body -->
 					<div class="tile-body">
+						<div ng-show="tableParamsFinishedTasks.count.length">
+							<table ng-table="tableParamsFinishedTasks" show-filter="true" class="table table-custom">
+								<tr ng-repeat="report in $data" >
+									<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
+										{{report.id}}
+									</td>
+									<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
+										{{report.title | capitalize:true}}
+									</td>
+									<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
+										{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
+									</td>
+									<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
+										{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
+									</td>
+									<td data-title="'Fecha ejecución'" sortable="'finishedAt'" filter="{ 'finishedAt': 'text' }">
+										<p ng-if="report.finishedAt">{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}</p>
+										<p ng-if="!report.finishedAt" class="text-center">-</p>
+									</td>
+									<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
+										{{report.zoneName | capitalize:true}}
+									</td>
+									<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
+										{{report.dealerName | capitalize:true}}
+									</td>
+									<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
+										{{report.storeName | capitalize:true}}
+									</td>
+									<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
+										{{report.creatorName}}
+									</td>
+									<td data-title="'Asignados'" sortable="'assignedUserNames'" filter="{ 'assignedUserNames': 'text' }">
+										{{report.assignedUserNames}}
+									</td>
+									<td data-title="'PDF'" >
+										<input ng-if="report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/pdf2.png" uib-tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
+										<input ng-if="!report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/denied2.png" uib-tooltip="PDF no disponible" tooltip-placement="bottom" style="width: 20px;cursor:default;" data-pdf="{{report.pdf}}" />
+									</td>
+								</tr>
+							</table>
 
-						<table ng-table="tableParamsFinishedTasks" show-filter="true" class="table table-custom">
-						<!-- {{tableParamsFinishedTasks}} -->
-							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
-									{{report.id}}
-								</td>
-								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{report.title | capitalize:true}}
-								</td>
-								<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-									{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
-								</td>
-								<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
-									{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
-								</td>
-								<td data-title="'Fecha ejecución'" sortable="'finishedAt'" filter="{ 'finishedAt': 'text' }">
-									<p ng-if="report.finishedAt">{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}</p>
-									<p ng-if="!report.finishedAt" class="text-center">-</p>
-								</td>
-								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
-									{{report.zoneName | capitalize:true}}
-								</td>
-								<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-									{{report.dealerName | capitalize:true}}
-								</td>
-								<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-									{{report.storeName | capitalize:true}}
-								</td>
-								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-									{{report.creatorName}}
-								</td>
-								<td data-title="'Asignados'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
-									{{report.assignedUserName}}
-								</td>
-								<td data-title="'PDF'" >
-									<input ng-if="report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/pdf2.png" uib-tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
-									<input ng-if="!report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/denied2.png" uib-tooltip="PDF no disponible" tooltip-placement="bottom" style="width: 20px;cursor:default;" data-pdf="{{report.pdf}}" />
-								</td>
-							</tr>
-						</table>
-
-						<div class="row">
-							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getFinishedTasks({success:true,detail:'OK'},pagination.finishedTasks.pages._current,pageSize,filters)" current-page="pagination.finishedTasks.pages._current" />
+							<div class="row">
+								<div class="col-md-6" style="margin: 0 auto;float: none;">
+									<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getFinishedTasks({success:true,detail:'OK'},pagination.finishedTasks.pages._current,pageSize,filters)" current-page="pagination.finishedTasks.pages._current" />
+								</div>
 							</div>
+						</div>
+						<div class="text-center" ng-show="!tableParamsFinishedTasks.count.length">
+							<h4>No se han registrado tareas completadas</h4>
 						</div>
 
 					</div>
@@ -190,47 +193,48 @@
 
 					<!-- tile body -->
 					<div class="tile-body">
+						<div ng-show="tableParamsPendingTasks.count.length">
+							<table ng-table="tableParamsPendingTasks" show-filter="true" class="table table-custom">
+								<tr ng-repeat="report in $data" >
+									<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
+										{{report.id}}
+									</td>
+									<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
+										{{report.title }}
+									</td>
+									<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
+										{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
+									</td>
+									<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
+										{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
+									</td>
+									<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
+										{{report.zoneName | capitalize:true}}
+									</td>
+									<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
+										{{report.dealerName | capitalize:true}}
+									</td>
+									<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
+										{{report.storeName | capitalize:true}}
+									</td>
+									<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
+										{{report.creatorName}}
+									</td>
+									<td data-title="'Asignados'" sortable="'assignedUserNames'" filter="{ 'assignedUserNames': 'text' }">
+										{{report.assignedUserNames}}
+									</td>
+								</tr>
+							</table>
 
-						<table ng-table="tableParamsPendingTasks" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
-									{{report.id}}
-								</td>
-								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{report.title }}
-								</td>
-								<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
-									{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
-								</td>
-								<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
-									{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
-								</td>
-								<!-- <td data-title="'Fecha ejecución'" sortable="'finishedAt'" filter="{ 'finishedAt': 'text' }">
-									{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}
-								</td> -->
-								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
-									{{report.zoneName | capitalize:true}}
-								</td>
-								<td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-									{{report.dealerName | capitalize:true}}
-								</td>
-								<td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-									{{report.storeName | capitalize:true}}
-								</td>
-								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-									{{report.creatorName}}
-								</td>
-								<td data-title="'Asignados'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
-									{{report.assignedUserName}}
-								</td>
-							</tr>
-						</table>
-
-						<!-- <div class="row" ng-show="page.images.length" > -->
-						<div class="row">
-							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getPendingTasks({success:true,detail:'OK'},pagination.reports.pages._current,pageSize,filters)" current-page="pagination.pendingTasks.pages._current" />
+							<!-- <div class="row" ng-show="page.images.length" > -->
+							<div class="row">
+								<div class="col-md-6" style="margin: 0 auto;float: none;">
+									<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getPendingTasks({success:true,detail:'OK'},pagination.reports.pages._current,pageSize,filters)" current-page="pagination.pendingTasks.pages._current" />
+								</div>
 							</div>
+						</div>
+						<div class="text-center" ng-show="!tableParamsPendingTasks.count.length">
+							<h4>No se han registrado tareas pendientes</h4>
 						</div>
 
 					</div>
