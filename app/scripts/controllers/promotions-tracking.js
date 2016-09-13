@@ -597,7 +597,7 @@ angular.module('minovateApp')
 			$scope.getPendingPromotions({
 				success: true,
 				detail: 'OK'
-			}, $scope.pagination.pendingPromotions.pages._current);
+			}, $scope.pagination.pendingPromotions.pages._current, $scope.pageSize, $scope.filters);
 		}
 	};
 
@@ -753,7 +753,7 @@ angular.module('minovateApp')
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
-					if (success.data[i].attributes.activated) {
+					// if (success.data[i].attributes.activated) {
 						finishedPromotions.push({
 							id: success.data[i].id,
 							title: success.data[i].attributes.title,
@@ -764,10 +764,11 @@ angular.module('minovateApp')
 							dealerName: success.data[i].attributes.dealer_name,
 							storeName: success.data[i].attributes.store_name,
 							creatorName: success.data[i].attributes.creator_name,
+							activatorName: success.data[i].attributes.activator_name,
 							pdf: success.data[i].attributes.pdf,
 							pdfUploaded: success.data[i].attributes.pdf_uploaded
 						});
-					}
+					// }
 				}
 
 				$scope.tableParamsFinishedPromotions.count(finishedPromotions.length);
