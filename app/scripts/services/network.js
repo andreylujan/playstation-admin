@@ -845,8 +845,6 @@ angular.module('minovateApp')
 
 //weekly_business_sales
 .factory('WeeklyBusinessSales', function($resource, $http) {
-
-
 	return $resource(API_URL + '/weekly_business_sales/csv/:csv', {
 		csv: '@csv'
 	}, {
@@ -858,23 +856,21 @@ angular.module('minovateApp')
 			}
 		}
 	});
+})
 
-	// return {
-	// 	upload: function(form) {
-
-	// 		for (var i = 0; i < form.length; i++) {
-	// 			fd.append(form[i].field, form[i].value);
-	// 		}
-
-	// 		return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
-	// 			transformRequest: angular.identity,
-	// 			headers: {
-	// 				'Content-Type': undefined,
-	// 				Accept: 'application/vnd.api+json'
-	// 			}
-	// 		});
-	// 	}
-	// };
+//UploadProducts
+.factory('UploadProducts', function($resource, $http) {
+	return $resource(API_URL + '/products/csv/:csv', {
+		csv: '@csv'
+	}, {
+		upload: {
+			method: "POST",
+			transformRequest: angular.identity,
+			headers: {
+				'Content-Type': undefined
+			}
+		}
+	});
 })
 
 //Promoters

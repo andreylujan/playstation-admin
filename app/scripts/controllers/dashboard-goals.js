@@ -786,8 +786,6 @@ angular.module('minovateApp')
 		text: data.message
 	};
 
-	var i = 0;
-
 	$scope.cancel = function() {
 		$uibModalInstance.dismiss('cancel');
 	};

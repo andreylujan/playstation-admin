@@ -144,7 +144,7 @@ angular.module('minovateApp')
 		},
 		buttons: {
 			create: {
-				text: 'Guardar',
+				text: 'Cargar',
 				show: false,
 				border: false
 			},
