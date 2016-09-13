@@ -77,12 +77,12 @@
           <!-- tile body -->
           <div class="tile-body">
 
-            <select class="bg-gray-ps-3 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" name="selMyRepMyTasks" ng-model="option" ng-change="getMyreports('prev',{success: true,detail: 'OK'})" ng-options="option.name for option in page.myReportsMysTasksSel track by option.id"></select>
+          <select class="bg-gray-ps-3 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" name="selMyRepMyTasks" ng-model="option" ng-change="pagination.reports.pages._current=1;getMyreports({success:true,detail:'OK'},pagination.reports.pages._current,pageSize)" ng-options="option.name for option in page.myReportsMysTasksSel track by option.id"></select>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom">
               <tr ng-repeat="report in $data">
-                <td data-title="'Tipo de reporte'" sortable="'reportTypeName'" filter="{ 'reportTypeName': 'text' }">
-                  {{report.reportTypeName}}
+                <td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+                  {{report.id}}
                 </td>
                 <td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
                   {{report.createdAt | date: 'dd/MM/yyyy'}}
@@ -91,16 +91,16 @@
                   {{report.limitDate | date: 'dd/MM/yyyy'}}
                 </td>
                 <td data-title="'Zona'" sortable="'zone'" filter="{ 'zone': 'text' }">
-                  {{report.zoneName}}
+                  {{report.zoneName | capitalize:true}}
                 </td>
                 <td data-title="'Dealer'" sortable="'dealerName'" filter="{ 'dealerName': 'text' }">
-                  {{report.dealerName}}
+                  {{report.dealerName | capitalize:true}}
                 </td>
                 <td data-title="'Tienda'" sortable="'storeName'" filter="{ 'storeName': 'text' }">
-                  {{report.storeName}}
+                  {{report.storeName | capitalize:true}}
                 </td>
                 <td data-title="'Creador reporte'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
-                  {{report.creatorName}}
+                  {{report.creatorName | capitalize:true}}
                 </td>
                 <td data-title="'PDF'" >
                   <input ng-if="report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/pdf2.png" uib-tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
@@ -109,30 +109,30 @@
               </tr>
             </table>
 
-            <div class="text-center">
-              <button type="button" class="btn btn-default" ng-click="getMyreports('prev', {success: true,detail: 'OK'})" ng-disabled="page.prevBtn.disabled"> &lt; Anterior</button>
-              <span class="ml-5 mr-5">{{currentPage}}</span>
-              <button type="button" class="btn btn-default" ng-click="getMyreports('next', {success: true,detail: 'OK'})">Siguiente &gt; </button>
+            <div class="row">
+              <div class="col-md-6" style="margin: 0 auto;float: none;">
+                <pager all="pagination.reports.total" prev="decrementPage()" next="incrementPage()" change-page="getMyreports({success:true,detail:'OK'},pagination.reports.pages._current,pageSize)" current-page="pagination.reports.pages._current" />
+              </div>
             </div>
 
-        </div>
-        <!-- /tile body -->
+          </div>
+          <!-- /tile body -->
 
-      </section>
-      <!-- /tile -->
+        </section>
+        <!-- /tile -->
+
+      </div>
+      <!-- /col -->
+
 
     </div>
-    <!-- /col -->
+    <!-- /row -->
+
+
+
 
 
   </div>
-  <!-- /row -->
-
-
-
-
-
-</div>
-<!-- /page content -->
+  <!-- /page content -->
 
 </div>
