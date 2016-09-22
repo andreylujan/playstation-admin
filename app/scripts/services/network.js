@@ -3,11 +3,11 @@
 // var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
 // var URL_SERVER = 'http://50.16.161.152/eretail'; // PRODUCCIÓN
 
-// var API_URL = 'http://192.168.1.184:3000/api/v1'; // DESARROLLO PABLO
-// var URL_SERVER = 'http://192.168.1.184:3000/'; // DESARROLLO PABLO
-
 var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
 var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
+
+// var API_URL = 'http://192.168.1.184:3000/api/v1'; // DESARROLLO PABLO
+// var URL_SERVER = 'http://192.168.1.184:3000/'; // DESARROLLO PABLO
 
 angular.module('minovateApp')
 
@@ -164,7 +164,15 @@ angular.module('minovateApp')
 				'filter[assigned_user_id]': '@assigned_user_id',
 				'filter[creator_id]': '@creator_id',
 				'page[number]': '@number',
-				'page[size]': '@size'
+				'page[size]': '@size',
+				'filter[title]': '@title',
+				'filter[created_at]': '@created_at',
+				'filter[limit_date]': '@limit_date',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'fields[reports]': '@reports'
 			}
 		},
 		save: {
@@ -191,7 +199,16 @@ angular.module('minovateApp')
 			params: {
 				'all': '@all',
 				'page[number]': '@number',
-				'page[size]': '@size'
+				'page[size]': '@size',
+				'filter[id]': '@id',
+				'filter[title]': '@title',
+				'filter[created_at]': '@created_at',
+				'filter[limit_date]': '@limit_date',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'fields[reports]': '@reports'
 			}
 		}
 	});
@@ -467,7 +484,17 @@ angular.module('minovateApp')
 			},
 			params: {
 				'page[number]': '@number',
-				'page[size]': '@size'
+				'page[size]': '@size',
+				'filter[id]': '@id',
+				'filter[title]': '@title',
+				'filter[activated_at]': '@activatedAt',
+				'filter[end_date]': '@endDate',
+				'filter[start_date]': '@startDate',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'filter[activator_name]': '@activatorName'
 			}
 		}
 	});
@@ -814,25 +841,33 @@ angular.module('minovateApp')
 })
 
 //weekly_business_sales
-.factory('WeeklyBusinessSales', function($http) {
-	var fd = new FormData();
-
-	return {
-		upload: function(form) {
-
-			for (var i = 0; i < form.length; i++) {
-				fd.append(form[i].field, form[i].value);
+.factory('WeeklyBusinessSales', function($resource, $http) {
+	return $resource(API_URL + '/weekly_business_sales/csv/:csv', {
+		csv: '@csv'
+	}, {
+		upload: {
+			method: "POST",
+			transformRequest: angular.identity,
+			headers: {
+				'Content-Type': undefined
 			}
-
-			return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
-				transformRequest: angular.identity,
-				headers: {
-					'Content-Type': undefined,
-					Accept: 'application/vnd.api+json'
-				}
-			});
 		}
-	};
+	});
+})
+
+//UploadProducts
+.factory('UploadProducts', function($resource, $http) {
+	return $resource(API_URL + '/products/csv/:csv', {
+		csv: '@csv'
+	}, {
+		upload: {
+			method: "POST",
+			transformRequest: angular.identity,
+			headers: {
+				'Content-Type': undefined
+			}
+		}
+	});
 })
 
 //Promoters
@@ -853,10 +888,18 @@ angular.module('minovateApp')
 
 .factory('ExcelDashboard', function($auth) {
 
+	// return {
+	// 	getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
+	// 		var downloadLink = angular.element(elem);
+	// 		downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
+	// 		downloadLink.attr('download', fileName + '.xlsx');
+	// 	}
+	// };
+
 	return {
-		getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
+		getFile: function(elem, dashboard, fileName, month, year) {
 			var downloadLink = angular.element(elem);
-			downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
+			downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&access_token=' + $auth.getToken());
 			downloadLink.attr('download', fileName + '.xlsx');
 		}
 	};
