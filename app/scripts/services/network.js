@@ -1,10 +1,10 @@
 'use strict';
 
-var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
-var URL_SERVER = 'http://50.16.161.152/eretail'; // PRODUCCIÓN
+// var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
+// var URL_SERVER = 'http://50.16.161.152/'; // PRODUCCIÓN
 
-// var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
-// var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
+var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
+var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
 
 // var API_URL = 'http://192.168.1.184:3000/api/v1'; // DESARROLLO PABLO
 // var URL_SERVER = 'http://192.168.1.184:3000/'; // DESARROLLO PABLO
@@ -842,6 +842,7 @@ angular.module('minovateApp')
 
 //weekly_business_sales
 .factory('WeeklyBusinessSales', function($resource, $http) {
+
 	return $resource(API_URL + '/weekly_business_sales/csv/:csv', {
 		csv: '@csv'
 	}, {
@@ -868,6 +869,23 @@ angular.module('minovateApp')
 			}
 		}
 	});
+
+	// return {
+	// 	upload: function(form) {
+
+	// 		for (var i = 0; i < form.length; i++) {
+	// 			fd.append(form[i].field, form[i].value);
+	// 		}
+
+	// 		return $http.post(API_URL + '/weekly_business_sales/csv', fd, {
+	// 			transformRequest: angular.identity,
+	// 			headers: {
+	// 				'Content-Type': undefined,
+	// 				Accept: 'application/vnd.api+json'
+	// 			}
+	// 		});
+	// 	}
+	// };
 })
 
 //Promoters
