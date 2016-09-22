@@ -27,13 +27,13 @@
 	<!-- page content -->
 	<div class="pagecontent">
 
-	<div class="row">
+		<div class="row">
 			<div class="col-md-12">
 				<div class="mb-20">
-						<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.finishedTasks.total+page.pendingTasks.total}}</div>
-						<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Activadas: {{page.finishedTasks.total}}</div>
-						<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Pendientes: {{page.pendingTasks.total}}</div>
-					</div>
+					<div class="bg-gray-ps-3 pt-7 pb-7 pr-20 pl-20 br-15 b-0 text-white inline-block">Total: {{page.finishedTasks.total+page.pendingTasks.total}}</div>
+					<div class="bg-blue-ps-1 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Completadas: {{page.finishedTasks.total}}</div>
+					<div class="bg-blue-ps-2 pt-7 pb-7 pr-20 pl-20 br-15 b-0 ml-10 text-white inline-block">Pendientes: {{page.pendingTasks.total}}</div>
+				</div>
 			</div>
 		</div>
 
@@ -83,11 +83,9 @@
 
 					<!-- tile body -->
 					<div class="tile-body">
-
 						<table ng-table="tableParamsFinishedTasks" show-filter="true" class="table table-custom">
-						<!-- {{tableParamsFinishedTasks}} -->
-							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+							<tr ng-repeat="report in $data" ng-show="tableParamsFinishedTasks.data.length">
+								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
@@ -115,8 +113,8 @@
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{report.creatorName}}
 								</td>
-								<td data-title="'Asignado'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
-									{{report.assignedUserName}}
+								<td data-title="'Asignados'" sortable="'assignedUserNames'" filter="{ 'assignedUserNames': 'text' }">
+									{{report.assignedUserNames}}
 								</td>
 								<td data-title="'PDF'" >
 									<input ng-if="report.pdfUploaded" class="text-center" type="image" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/pdf2.png" uib-tooltip="Descargar PDF del reporte" tooltip-placement="bottom" style="width: 15px" data-pdf="{{report.pdf}}" ng-click="downloadPdf($event)"/>
@@ -125,11 +123,16 @@
 							</tr>
 						</table>
 
-						<div class="row">
+						<div class="text-center" ng-show="!tableParamsFinishedTasks.data.length">
+							<h4>No se han registrado tareas completadas</h4>
+						</div>
+
+						<div class="row" ng-show="tableParamsFinishedTasks.data.length">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getImages({success:true,detail:'OK'},pagination.finishedTasks.pages._current)" current-page="pagination.finishedTasks.pages._current" />
+								<pager all="pagination.finishedTasks.pages.total" prev="decrementPageFinishedTasks()" next="incrementPageFinishedTasks()" change-page="getFinishedTasks({success:true,detail:'OK'},pagination.finishedTasks.pages._current,pageSize,filters)" current-page="pagination.finishedTasks.pages._current" />
 							</div>
 						</div>
+						
 
 					</div>
 					<!-- /tile body -->
@@ -190,10 +193,9 @@
 
 					<!-- tile body -->
 					<div class="tile-body">
-
 						<table ng-table="tableParamsPendingTasks" show-filter="true" class="table table-custom">
-							<tr ng-repeat="report in $data" >
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
+							<tr ng-repeat="report in $data" ng-show="tableParamsPendingTasks.data.length" >
+								<td data-title="'ID'" sortable="'id'"  filter="{ 'id': 'text' }">
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
@@ -205,9 +207,6 @@
 								<td data-title="'Fecha límite'" sortable="'limitDate'" filter="{ 'limitDate': 'text' }">
 									{{report.limitDate | date: 'dd/MM/yyyy HH:mm'}}
 								</td>
-								<!-- <td data-title="'Fecha ejecución'" sortable="'finishedAt'" filter="{ 'finishedAt': 'text' }">
-									{{report.finishedAt | date: 'dd/MM/yyyy HH:mm'}}
-								</td> -->
 								<td data-title="'Zona'" sortable="'zoneName'" filter="{ 'zoneName': 'text' }">
 									{{report.zoneName | capitalize:true}}
 								</td>
@@ -220,16 +219,19 @@
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{report.creatorName}}
 								</td>
-								<td data-title="'Asignado'" sortable="'assignedUserName'" filter="{ 'assignedUserName': 'text' }">
-									{{report.assignedUserName}}
+								<td data-title="'Asignados'" sortable="'assignedUserNames'" filter="{ 'assignedUserNames': 'text' }">
+									{{report.assignedUserNames}}
 								</td>
 							</tr>
 						</table>
 
-						<!-- <div class="row" ng-show="page.images.length" > -->
-						<div class="row">
+						<div class="text-center" ng-show="!tableParamsPendingTasks.data.length">
+							<h4>No se han registrado tareas pendientes</h4>
+						</div>
+
+						<div class="row" ng-show="tableParamsPendingTasks.data.length">
 							<div class="col-md-6" style="margin: 0 auto;float: none;">
-								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getImages({success:true,detail:'OK'},pagination.pendingTasks.pages._current)" current-page="pagination.pendingTasks.pages._current" />
+								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getPendingTasks({success:true,detail:'OK'},pagination.reports.pages._current,pageSize,filters)" current-page="pagination.pendingTasks.pages._current" />
 							</div>
 						</div>
 

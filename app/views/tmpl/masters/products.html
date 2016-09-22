@@ -80,259 +80,272 @@
             <div class="row">
               <div class="col-md-2">
                 <button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalCreateProduct()" uib-tooltip="Ingresar nuevo producto"><i class="fa fa-plus-circle"></i> </button>
+                <button class="bg-blue-ps-2 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white ml-20 mb-10" ng-click="openModalUploadProducts()" uib-tooltip="Ingresar productos con achivo (.csv)"><i class="fa fa-cloud-upload"></i> </button>
               </div>
             </div>
 
             <table ng-table="tableParams" show-filter="true" class="table table-custom table-hover">
               <tr ng-repeat="product in $data">
-              <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" uib-popover="{{product.sku}}">
-                <span>{{product.sku}}</span>
-              </td>
-              <td data-title="'Descripción'" sortable="'name'" filter="{ 'name': 'text' }">
-                {{product.name | capitalize:true}}
-              </td>
-              <td data-title="'Clasificación'" sortable="'destinationName'" filter="{ 'destinationName': 'text' }">
-                {{product.destinationName | capitalize}}
-              </td>
-              <td data-title="'Categoría'" sortable="'typeName'" filter="{ 'typeName': 'text' }">
-                {{product.typeName | capitalize}}
-              </td>
-              <td data-title="'Plataforma'" sortable="'platformName'" filter="{ 'platformName': 'text' }">
-                {{product.platformName | capitalize}}
-              </td>
-              <td data-title="'Publisher'" sortable="'publisher'" filter="{ 'publisher': 'text' }">
-                {{product.publisher | capitalize}}
-              </td>
-              <td data-title="'Info'" >
-                <img ng-click="openModalCreateProduct(product.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" tooltip="Más info">
-              </td>
-            </tr>
+                <td data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }" uib-popover="{{product.sku}}">
+                  <span>{{product.sku}}</span>
+                </td>
+                <td data-title="'Descripción'" sortable="'name'" filter="{ 'name': 'text' }">
+                  {{product.name | capitalize:true}}
+                </td>
+                <td data-title="'Clasificación'" sortable="'destinationName'" filter="{ 'destinationName': 'text' }">
+                  {{product.destinationName | capitalize}}
+                </td>
+                <td data-title="'Categoría'" sortable="'typeName'" filter="{ 'typeName': 'text' }">
+                  {{product.typeName | capitalize}}
+                </td>
+                <td data-title="'Plataforma'" sortable="'platformName'" filter="{ 'platformName': 'text' }">
+                  {{product.platformName | capitalize}}
+                </td>
+                <td data-title="'Publisher'" sortable="'publisher'" filter="{ 'publisher': 'text' }">
+                  {{product.publisher | capitalize}}
+                </td>
+                <td data-title="'Info'" >
+                  <img ng-click="openModalCreateProduct(product.id)" src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" tooltip="Más info">
+                </td>
+              </tr>
+            </table>
+
+          </div>
+          <!-- /tile body -->
+
+        </section>
+        <!-- /tile -->
+
+      </div>
+      <!-- /col -->
+
+
+    </div>
+    <!-- /row -->
+
+  </div>
+  <!-- /page content -->
+
+  <script type="text/ng-template" id="createProduct.html">
+    <div class="modal-header text-gray" id="topModal">
+      <h3 class="text-center">{{modal.title.text}}</h3><h2>{{modal.subtitle.text}}</h2>
+    </div>
+
+    <div class="modal-body text-gray">
+      <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+      <div class="row">
+        <div class="col-md-12">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="inputStoreName" class="col-sm-3 control-label">Nombre</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control rounded" id="inputStoreName" placeholder="Nombre" ng-model="modal.product.name.text" ng-disabled="modal.product.name.disabled" ng-change="removeAlert()" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputStoreContact" class="col-sm-3 control-label">Descripción</label>
+              <div class="col-sm-8">
+                <textarea rows="3" class="form-control br-10" placeholder="Descripción" ng-model="modal.product.description.text" ng-disabled="modal.product.description.disabled" ng-change="removeAlert()" style="resize:vertical"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputMonthlyClp" class="col-sm-3 control-label">SKU</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control rounded" ng-model="modal.product.sku.text" ng-disabled="modal.product.sku.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">PLU</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control rounded" ng-model="modal.product.plu.text" ng-disabled="modal.product.plu.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">ID Vigencia</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control rounded" ng-model="modal.product.validityCode.text" ng-disabled="modal.product.validityCode.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Precio mínimo</label>
+              <div class="col-sm-8">
+                <input type="number" class="form-control rounded" ng-model="modal.product.minPrice.text" ng-disabled="modal.product.minPrice.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Precio máximo</label>
+              <div class="col-sm-8">
+                <input type="number" class="form-control rounded" ng-model="modal.product.maxPrice.text" ng-disabled="modal.product.maxPrice.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Publisher</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control rounded" ng-model="modal.product.publisher.text" ng-disabled="modal.product.publisher.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Visibilidad en APP</label>
+              <div class="col-sm-8">
+                <input type="checkbox" class="uiswitch custom" ng-model="modal.product.isListed.value" ng-disabled="modal.product.isListed.disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Clasificación</label>
+              <div class="col-sm-8">
+                <ui-select class="bg-white b-solid br-15" ng-model="modal.product.destination" ng-disabled="modal.product.destination.disabled" ng-change="removeAlert()">
+                  <ui-select-match placeholder="Seleccionar clasificación...">
+                    <span ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="destination in (modal.destinations | filter: $select.search) track by destination.id">
+                    <span ng-bind="destination.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="selectMultiZone" class="col-sm-3 control-label">Categoría</label>
+              <div class="col-sm-8">
+                <ui-select class="bg-white b-solid br-15" ng-model="modal.product.type" sortable="true" ng-disabled="modal.product.type.disabled" ng-change="removeAlert()">
+                  <ui-select-match placeholder="Seleccionar categoría...">
+                    <span ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="type in (modal.productTypes | filter: $select.search) track by type.id">
+                    <span ng-bind="type.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Plataforma</label>
+              <div class="col-sm-8">
+                <ui-select class="bg-white b-solid br-15" ng-model="modal.product.platform" ng-disabled="modal.product.platform.disabled" ng-change="removeAlert()">
+                  <ui-select-match placeholder="Seleccionar plataforma...">
+                    <span ng-bind="$select.selected.name"></span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="platform in (modal.platforms | filter: $select.search) track by platform.id">
+                    <span ng-bind="platform.name"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="validateForm()" ng-disabled="modal.buttons.create.disabled">{{modal.buttons.create.text}}</button>
+
+      <button class="btn btn-blue-ps-1 text-blue-ps-1 btn-border btn-rounded-10 mb-10" type="button" ng-show="modal.buttons.edit.show" ng-click="validateForm()" ng-disabled="modal.buttons.edit.disabled">{{modal.buttons.edit.text}}</button>
+
+      <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteProduct({success: true,detail: 'OK'})" ng-disabled="modal.buttons.delete.disabled">{{modal.buttons.delete.text}}</button>
+
+      <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="uploadProducts.html">
+
+    <div class="overlay br-30" ng-show="modal.overlay.show">
+      <div style="position:absolute;top: 50%;left:50%;transform: translate(-50%, -50%);">
+        <div>
+          <p><strong>Subiendo el archivo...</strong></p>
+          <p class="text-center">
+            <img src="images/loader.gif" alt="loader" class="size-45x45">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-header text-gray" id="topModalNewMonthlyGoal">
+      <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
+    </div>
+    <div class="modal-body text-gray">
+
+      <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Archivo</label>
+              <div class="col-sm-8">
+                <input class="form-control" type="file" file-model="modal.products.file.value" ng-disabled="" accept=".xls,.xlsx,.csv,.txt" ng-model="modal.products.file.value" ng-change="removeAlert()" valid-file required>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.upload.border}" type="button" ng-show="modal.buttons.upload.show" ng-click="createProducts({success: true,detail: 'OK'})" >{{modal.buttons.upload.text}}</button>
+      <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="summary.html">
+    <div class="modal-header text-gray" id="topModalSummaryLoadMonthlyGoal">
+      <h3 class="text-center">{{modal.title.text}} {{modal.subtitle.text}}</h3>
+    </div>
+    <div class="modal-body text-gray">
+
+      <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <h4 class="text-center text-success">Éxitos - <b> {{modal.successes.count}}</b> productos insertados</h4>
+          <h5 class="text-center text-blue-ps-1" ng-click="showList=!showList" style="cursor:pointer">Ver lista</h5>
+          <ol ng-show="showList">
+            <li class="list-inline-item" ng-repeat="success in modal.successes.data">{{success.storeCode}}</li>
+          </ol>
+          <hr>
+
+          <h4 class="text-center text-danger">Errores - <b>{{modal.errors.count}}</b> productos con error</h4>
+          <table class="table table-hover" ng-show="modal.errors.data.length">
+            <thead>
+              <tr>
+                <th>Fila</th>
+                <th>Campo</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody ng-repeat="error in modal.errors.data">
+              <tr>
+                <td>{{error.rowNumber}}</td>
+                <!-- Si hay un error de codigo de store, se muestra -->
+                <td ng-if="error.fields[0].name">{{error.fields[0].name}}</td>
+                <td ng-if="error.fields[0].detail">{{error.fields[0].detail}}</td>
+
+                <!-- si no hay un error de codigo de store, se muestra el error de monto -->
+                <td ng-if="!error.fields[0].name">{{error.fields[1].name}}</td>
+                <td ng-if="!error.fields[0].detail">{{error.fields[1].detail}}</td>
+              </tr>
+            </tbody>
           </table>
-
-        </div>
-        <!-- /tile body -->
-
-      </section>
-      <!-- /tile -->
-
-    </div>
-    <!-- /col -->
-
-
-  </div>
-  <!-- /row -->
-
-</div>
-<!-- /page content -->
-
-<script type="text/ng-template" id="createProduct.html">
-  <div class="modal-header text-gray" id="topModal">
-    <h3 class="text-center">{{modal.title.text}}</h3><h2>{{modal.subtitle.text}}</h2>
-  </div>
-
-  <div class="modal-body text-gray">
-    <div class="alert alert-{{modal.alert.color}}" ng-show="modal.alert.show"> <h4 class="text-md"><strong>{{modal.alert.title}}</strong></h4> {{modal.alert.text}} </div>
-    <div class="row">
-      <div class="col-md-12">
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label for="inputStoreName" class="col-sm-3 control-label">Nombre</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" id="inputStoreName" placeholder="Nombre" ng-model="modal.product.name.text" ng-disabled="modal.product.name.disabled" ng-change="removeAlert()" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputStoreContact" class="col-sm-3 control-label">Descripción</label>
-            <div class="col-sm-8">
-              <textarea rows="3" class="form-control br-10" placeholder="Descripción" ng-model="modal.product.description.text" ng-disabled="modal.product.description.disabled" ng-change="removeAlert()" style="resize:vertical"></textarea>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputMonthlyClp" class="col-sm-3 control-label">SKU</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" ng-model="modal.product.sku.text" ng-disabled="modal.product.sku.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">PLU</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" ng-model="modal.product.plu.text" ng-disabled="modal.product.plu.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="col-sm-3 control-label">Marca</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" ng-model="modal.product.brand.text" ng-disabled="modal.product.brand.disabled" ng-change="removeAlert()">
-            </div>
-          </div> -->
-          <div class="form-group">
-            <label class="col-sm-3 control-label">ID Vigencia</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" ng-model="modal.product.validityCode.text" ng-disabled="modal.product.validityCode.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Precio mínimo</label>
-            <div class="col-sm-8">
-              <input type="number" class="form-control rounded" ng-model="modal.product.minPrice.text" ng-disabled="modal.product.minPrice.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Precio máximo</label>
-            <div class="col-sm-8">
-              <input type="number" class="form-control rounded" ng-model="modal.product.maxPrice.text" ng-disabled="modal.product.maxPrice.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Publisher</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control rounded" ng-model="modal.product.publisher.text" ng-disabled="modal.product.publisher.disabled" ng-change="removeAlert()">
-            </div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="col-sm-3 control-label">Stock</label>
-            <div class="col-sm-8">
-              <input type="number" class="form-control rounded" ng-model="modal.product.stock.text" ng-disabled="modal.product.stock.disabled" ng-change="removeAlert()">
-            </div>
-          </div> -->
-          <!-- <div class="form-group">
-            <label class="col-sm-3 control-label">Top</label>
-            <div class="col-sm-8">
-              <input type="checkbox" class="uiswitch custom" ng-model="modal.product.isTop.value" ng-disabled="modal.product.isTop.disabled">
-            </div>
-          </div> -->
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Visibilidad en APP</label>
-            <div class="col-sm-8">
-              <input type="checkbox" class="uiswitch custom" ng-model="modal.product.isListed.value" ng-disabled="modal.product.isListed.disabled">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Clasificación</label>
-            <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.product.destination" ng-disabled="modal.product.destination.disabled" ng-change="removeAlert()">
-                <ui-select-match placeholder="Seleccionar clasificación...">
-                  <span ng-bind="$select.selected.name"></span>
-                </ui-select-match>
-                <ui-select-choices repeat="destination in (modal.destinations | filter: $select.search) track by destination.id">
-                  <span ng-bind="destination.name"></span>
-                </ui-select-choices>
-              </ui-select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="selectMultiZone" class="col-sm-3 control-label">Categoría</label>
-            <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.product.type" sortable="true" ng-disabled="modal.product.type.disabled" ng-change="removeAlert()">
-                <ui-select-match placeholder="Seleccionar categoría...">
-                  <span ng-bind="$select.selected.name"></span>
-                </ui-select-match>
-                <ui-select-choices repeat="type in (modal.productTypes | filter: $select.search) track by type.id">
-                  <span ng-bind="type.name"></span>
-                </ui-select-choices>
-              </ui-select>
-            </div>
-            <!-- {{modal.product.type}} -->
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Plataforma</label>
-            <div class="col-sm-8">
-              <ui-select class="bg-white b-solid br-15" ng-model="modal.product.platform" ng-disabled="modal.product.platform.disabled" ng-change="removeAlert()">
-                <ui-select-match placeholder="Seleccionar plataforma...">
-                  <span ng-bind="$select.selected.name"></span>
-                </ui-select-match>
-                <ui-select-choices repeat="platform in (modal.platforms | filter: $select.search) track by platform.id">
-                  <span ng-bind="platform.name"></span>
-                </ui-select-choices>
-              </ui-select>
-            </div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="col-sm-3 control-label">Fotos</label>
-            <div class="col-sm-8">
-              <input type="file" class="form-control" ng-model="modal.product.images.src" base-sixty-four-input ng-change="removeAlert()" ng-disabled="modal.product.images.disabled" ng-show="modal.product.images.show" multiple>
-              <button class="btn btn-default" ng-click="openModalProductImages()" ng-show="!modal.product.images.show">Ver fotos del producto</button>
-            </div>
-          </div> -->
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-success btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.create.border}" type="button" ng-show="modal.buttons.create.show" ng-click="validateForm()" ng-disabled="modal.buttons.create.disabled">{{modal.buttons.create.text}}</button>
-    
-    <button class="btn btn-blue-ps-1 text-blue-ps-1 btn-border btn-rounded-10 mb-10" type="button" ng-show="modal.buttons.edit.show" ng-click="validateForm()" ng-disabled="modal.buttons.edit.disabled">{{modal.buttons.edit.text}}</button>
-    
-    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteProduct({success: true,detail: 'OK'})" ng-disabled="modal.buttons.delete.disabled">{{modal.buttons.delete.text}}</button>
-    
-    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
-  </div>
-</script>
-
-<script type="text/ng-template" id="productImages.html">
-  <div class="modal-body"  slimscroll="{height: '100%'}">
-    <div class="row">
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" alt="product_image"></a>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="https://pixabay.com/static/uploads/photo/2016/01/14/01/41/image-view-1139205_960_720.jpg" target="_blank"><img class="img-responsive p-10" src="http://www.johnworldpeace.com/images/buddha017.jpg" alt="product_image"></a>
-        </div>
-      </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div style="border: solid #D9D9D9 1px; margin-bottom: 10px">
-          <a ng-href="http://i.stack.imgur.com/Zk3YO.jpg" target="_blank"><img class="img-responsive p-10" src="http://i.stack.imgur.com/Zk3YO.jpg" alt="product_image"></a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>
-  </div>
-</script>
+  </script>
 
-<script type="text/ng-template" id="csvProductChargeSummary.html">
-  <div class="modal-body"  slimscroll="{height: '100%'}">
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-cancelRecit btn-rounded" ng-click="cancel()">Cerrar</button>
-  </div>
-</script>
+  <script type="text/ng-template" id="messageModal.html">
+
+    <div class="modal-header text-gray">
+    <h3 class="text-center text-danger">{{modal.title}}</h3>
+    </div>
+
+    <div class="modal-body">
+
+      <h4>{{modal.text}}</h4>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-default btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+    </div>
+
+  </script>
 </div>

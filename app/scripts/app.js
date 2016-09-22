@@ -99,10 +99,9 @@ angular
 	function(uiSelectConfig, localStorageServiceProvider, $authProvider) {
 		uiSelectConfig.theme = 'bootstrap';
 		localStorageServiceProvider.setStorageType('localStorage');
-		// $authProvider.loginUrl = 'http://10.77.0.189:3001/oauth/token';
+		// $authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token'; //PRODUCCION
+		$authProvider.loginUrl = 'http://50.16.161.152/eretail-staging/oauth/token'; //DESARROLLO
 		// $authProvider.loginUrl = 'http://192.168.1.184:3000/oauth/token'; //DESARROLLO PABLO
-		$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token/'; // PRODUCCION
-		// $authProvider.loginUrl = 'http://50.16.161.152/eretail-staging/oauth/token';
 		$authProvider.tokenName = 'access_token';
 	}
 ])

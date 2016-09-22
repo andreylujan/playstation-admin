@@ -9,10 +9,10 @@
  */
 angular.module('minovateApp')
 
-.controller('ReportsCtrl', function($scope, $filter, $log, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('ReportsCtrl', function($scope, $filter, $log, $timeout, $window, NgTableParams, DailyReports, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
-		title: 'Lista de reportes',
+		title: 'Lista de Reportes',
 		prevBtn: {
 			disabled: true
 		},
@@ -22,6 +22,39 @@ angular.module('minovateApp')
 		tableLoaded: false
 	};
 
+	$scope.pagination = {
+		reports: {
+			pages: {
+				actual: 1,
+				size: 30,
+				_current: 1,
+				total: 0,
+			},
+			total: 0
+		}
+	};
+	$scope.filters = {
+		id: null,
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
+	};
+
+	var filters = {
+		id: null,
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null
+	};
+
 	var reports = [];
 	var zones = [];
 	var dealers = [];
@@ -29,125 +62,274 @@ angular.module('minovateApp')
 	var users = [];
 	var i, j;
 	$scope.currentPage = 0;
-	var pageSize = 30;
+	$scope.pageSize = 30;
 
-	$scope.getReports = function(mode, e) {
+	$scope.decrementPage = function() {
+		if ($scope.pagination.reports.pages._current > 1) {
+			$scope.pagination.reports.pages._current--;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, $scope.pageSize, $scope.filters);
+		}
+	};
+
+	$scope.incrementPage = function() {
+		if ($scope.pagination.reports.pages._current <= $scope.pagination.reports.total - 1) {
+			$scope.pagination.reports.pages._current++;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, $scope.pageSize, $scope.filters);
+		}
+	};
+
+	$scope.tableParams = new NgTableParams({
+		count: reports.length, // count per page
+	}, {
+		dataset: reports,
+		counts: [],
+		total: reports.length, // length of reports
+		filterOptions: {
+			filterDelay: 1500
+		}
+	});
+
+	var filterTimeout, filterTimeoutDuration = 1000;
+
+	$scope.$watch('tableParams.filter().id', function(newId) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			filters.id = newId;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				storeName: filters.storeName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+
+	});
+
+	$scope.$watch('tableParams.filter().createdAt', function(newCreatedAt) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			filters.createdAt = newCreatedAt;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().limitDate', function(newLimitDate) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			filters.limitDate = newLimitDate;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().title', function(newTitle) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+		filterTimeout = $timeout(function() {
+			filters.title = newTitle;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().zoneName', function(newZoneName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+		filterTimeout = $timeout(function() {
+			filters.zoneName = newZoneName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().dealerName', function(newDealerName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+		filterTimeout = $timeout(function() {
+			filters.dealerName = newDealerName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().storeName', function(newStoreName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+		filterTimeout = $timeout(function() {
+			filters.storeName = newStoreName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				zoneName: filters.zoneName,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParams.filter().creatorName', function(newCreatorName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+		filterTimeout = $timeout(function() {
+			filters.creatorName = newCreatorName;
+			$scope.getReports({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.reports.pages._current, 30, {
+				id: filters.id,
+				title: filters.title,
+				createdAt: filters.createdAt,
+				limitDate: filters.limitDate,
+				zoneName: filters.zoneName,
+				dealerName: filters.dalerName,
+				storeName: filters.storeName,
+				creatorName: filters.creatorName
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.getReports = function(e, page, pageSize, filters) {
 		// Valida si el parametro e.success se seteó true para el refresh token
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
 
-		reports = [];
-
-		if ($scope.currentPage === 2) {
-			$scope.page.prevBtn.disabled = true;
-		}
-
-		if (mode === 'prev') {
-			if ($scope.currentPage > 1) {
-				$scope.currentPage--;
-			}
-		} else if (mode === 'next') {
-			$scope.currentPage++;
-			if ($scope.currentPage > 1) {
-				$scope.page.prevBtn.disabled = false;
-			}
-		}
-
-		reports = [];
-
 		DailyReports.query({
 			all: true,
-			'page[number]': $scope.currentPage,
-			'page[size]': pageSize
+			'page[number]': page,
+			'page[size]': pageSize,
+			'filter[id]': filters.id || null,
+			'filter[title]': filters.title || null,
+			'filter[created_at]': filters.createdAt || null,
+			'filter[limit_date]': filters.limitDate || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
+			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
 			if (success.data) {
+				reports = [];
+				$scope.pagination.reports.total = success.meta.page_count;
 
 				for (i = 0; i < success.data.length; i++) {
 
-					var zoneId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? zoneId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.zone) : zoneId = null;
-					var dealerId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? dealerId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.dealer) : dealerId = null;
-					var storeId = success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location ? storeId = parseInt(success.data[i].attributes.dynamic_attributes.sections[0].data_section[1].zone_location.store) : dealerId = null;
-
 					reports.push({
 						id: success.data[i].id,
-						reportTypeName: success.data[i].attributes.dynamic_attributes.report_type_name,
-						createdAt:  $filter('date')(success.data[i].attributes.created_at, 'dd-MM-yyyy'),
-						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd-MM-yyyy'),
-						zoneId: zoneId,
-						zoneName: '-',
-						dealerId: dealerId,
-						dealerName: '-',
-						storeId: storeId,
-						storeName: '-',
-						creatorName: success.data[i].attributes.dynamic_attributes.creator_name,
+						reportTypeName: '',
+						createdAt: $filter('date')(success.data[i].attributes.created_at, 'dd/MM/yyyy'),
+						limitDate: $filter('date')(success.data[i].attributes.limit_date, 'dd/MM/yyyy'),
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
+						storeName: success.data[i].attributes.store_name,
+						creatorName: success.data[i].attributes.creator_name,
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
-						pdf: success.data[i].attributes.pdf,
-						assigned_user_id: success.data[i].attributes.assigned_user_id,
-						assignedUserName: '-'
+						pdf: success.data[i].attributes.pdf
 					});
 
 				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < zones.length; j++) {
-						if (reports[i].zoneId === zones[j].id) {
-							reports[i].zoneName = zones[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < dealers.length; j++) {
-						if (reports[i].dealerId === dealers[j].id) {
-							reports[i].dealerName = dealers[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < stores.length; j++) {
-						if (reports[i].storeId === stores[j].id) {
-							reports[i].storeName = stores[j].name;
-							break;
-						}
-					}
-				}
-
-				for (i = 0; i < reports.length; i++) {
-					for (j = 0; j < users.length; j++) {
-						if (reports[i].storeId === users[j].id) {
-							reports[i].assignedUserName = users[j].fullName;
-							break;
-						}
-					}
-				}
-
-				// Si la cantidad de reportes es menor a la cantidad de reportes que se solicitan, el boton siguiente se bloquea
-				if (reports.length < pageSize) {
-					$scope.page.nextBtn.disabled = true;
-				} else {
-					$scope.page.nextBtn.disabled = false;
-				}
-
-				$scope.tableParams = new NgTableParams({
-					count: reports.length, // count per page
-					sorting: {
-						'reportTypeName': 'desc' // initial sorting
-					}
-				}, {
+				$scope.tableParams.count(reports.length);
+				$scope.tableParams.settings({
 					dataset: reports,
 					counts: [],
 					total: reports.length, // length of reports
+					filterOptions: {
+						filterDelay: 1500
+					},
 				});
-				$scope.page.tableLoaded = true;
-
 			} else {
-				$log.log(success);
+				$log.error(success);
 			}
 		}, function(error) {
 			$log.log(error);
@@ -268,9 +450,18 @@ angular.module('minovateApp')
 					}
 				}
 
-				$scope.getReports('next', {
+				$scope.getReports({
 					success: true,
 					detail: 'OK'
+				}, 1, 30, {
+					id: null,
+					title: null,
+					zoneName: null,
+					createdAt: null,
+					limitDate: null,
+					dealerName: null,
+					storeName: null,
+					creatorName: null
 				});
 
 			} else {

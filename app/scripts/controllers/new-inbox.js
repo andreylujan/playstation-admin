@@ -32,7 +32,11 @@ angular.module('minovateApp')
 		messageActions: [],
 		messageAction: {
 			selectedMessageAction: [],
-			disabled: false
+			disabled: false,
+			custom: {
+				value: '',
+				disabled: true
+			}
 		},
 		dateTimePicker: {
 			date: new Date(),
@@ -53,9 +57,9 @@ angular.module('minovateApp')
 	};
 
 	if ($stateParams.idInbox) {
-		$scope.page.title = 'Ver mensaje';
+		$scope.page.title = 'Ver Mensaje';
 	} else {
-		$scope.page.title = 'Nuevo mensaje';
+		$scope.page.title = 'Nuevo Mensaje';
 	}
 
 	var getUsers = function(e) {
@@ -197,15 +201,23 @@ angular.module('minovateApp')
 
 		$scope.page.user.selectedUser = [];
 
-		for (i = 0; i < $scope.page.users.length; i++) {
-			if (data.relationships.recipients.data.length > 0) {
-				for (j = 0; j < data.relationships.recipients.data.length; j++) {
-					if (parseInt($scope.page.users[i].id) === parseInt(data.relationships.recipients.data[j].id)) {
-						$scope.page.user.selectedUser.push($scope.page.users[i]);
-						break;
+		if ($scope.page.users.length === data.relationships.recipients.data.length) {
+			$scope.page.user.selectedUser.push({
+				type: 'users',
+				id: 0,
+				firstName: '',
+				lastName: '',
+				fullName: 'Todos los usuarios'
+			});
+		} else {
+			for (i = 0; i < $scope.page.users.length; i++) {
+				if (data.relationships.recipients.data.length > 0) {
+					for (j = 0; j < data.relationships.recipients.data.length; j++) {
+						if (parseInt($scope.page.users[i].id) === parseInt(data.relationships.recipients.data[j].id)) {
+							$scope.page.user.selectedUser.push($scope.page.users[i]);
+						}
 					}
 				}
-				break;
 			}
 		}
 
@@ -218,6 +230,8 @@ angular.module('minovateApp')
 			}
 		}
 
+		$scope.checkSentToAll = data.attributes.send_to_all;
+		$scope.checkSendImmediate = data.attributes.is_immediate;
 		$scope.page.subject.text = data.attributes.title;
 		$scope.page.html.value = data.attributes.html;
 	};
@@ -250,6 +264,11 @@ angular.module('minovateApp')
 			}
 		}
 
+		if (parseInt($scope.page.messageAction.selectedMessageAction.id) === 5 && !Validators.validaRequiredField($scope.page.messageAction.custom.value)) {
+			openModalMessage('Debe indicar la acción');
+			return;
+		}
+
 		if (!Validators.validaRequiredField($scope.page.subject.text)) {
 			openModalMessage('Debe indicar el asunto del mensaje');
 			return;
@@ -266,13 +285,10 @@ angular.module('minovateApp')
 					attributes: {
 						title: $scope.page.subject.text,
 						html: '<style>body{background-color: #ffffff !important; color: #3f5b71 !important;}p>span{background-color: #ffffff !important;color: #3f5b71 !important;}p>strong {background-color: #ffffff !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #ffffff !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html.value + '</html>',
-						// Este campo es OPCIONAL, por mientra no lo pesques
-						// resource_id: 1,
-						// Este campo también es opcional, si NO se manda se envían los mensajes al tiro
-						// Si se fija, se enviarán en la fecha indicada
 						send_at: $scope.page.dateTimePicker.date,
 						is_immediate: $scope.checkSendImmediate, // indica si se envia de inmediato
-						send_to_all: $scope.checkSentToAll // indica si se envia a todos los users
+						send_to_all: $scope.checkSentToAll, // indica si se envia a todos los users
+						action_text: $scope.page.messageAction.custom.value
 					},
 					relationships: {
 						recipients: {
@@ -281,7 +297,7 @@ angular.module('minovateApp')
 						message_action: {
 							data: {
 								type: 'message_actions',
-								id: $scope.page.messageAction.selectedMessageAction.id
+								id: parseInt($scope.page.messageAction.selectedMessageAction.id)
 							}
 						}
 					}
@@ -319,6 +335,14 @@ angular.module('minovateApp')
 
 	$scope.openCalendar = function(e) {
 		$scope.page.dateTimePicker.open = true;
+	};
+
+	$scope.changeAction = function() {
+		if (parseInt($scope.page.messageAction.selectedMessageAction.id) === 5) {
+			$scope.page.messageAction.custom.disabled = false;
+		} else {
+			$scope.page.messageAction.custom.disabled = true;
+		}
 	};
 
 	getUsers({

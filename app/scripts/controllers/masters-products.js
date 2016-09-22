@@ -148,6 +148,23 @@ angular.module('minovateApp')
 		});
 	};
 
+	$scope.openModalUploadProducts = function() {
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: false,
+			templateUrl: 'uploadProducts.html',
+			controller: 'uploadProductsModalInstance',
+			resolve: {}
+		});
+
+		modalInstance.result.then(function() {
+			// closed
+		}, function() {
+			// dismissed 
+		});
+	};
+
 	$scope.uploadCsvProducts = function(e) {
 		// if (!e.success) {
 		// 	$log.error(e.detail);
@@ -890,7 +907,136 @@ angular.module('minovateApp')
 
 })
 
-.controller('ProductImagesModalInstance', function($scope, $log, $uibModalInstance, idProduct) {
+.controller('uploadProductsModalInstance', function($scope, $log, $uibModalInstance, $uibModal, UploadProducts) {
+
+	$scope.modal = {
+		title: {
+			text: 'Carga de productos'
+		},
+		subtitle: {
+			text: ''
+		},
+		alert: {
+			show: false,
+			title: '',
+			text: '',
+			color: ''
+		},
+		products: {
+			file: {
+				value: null
+			}
+		},
+		buttons: {
+			upload: {
+				text: 'Cargar',
+				show: true,
+				border: false
+			}
+		},
+		overlay: {
+			show: false
+		}
+	};
+
+	var removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.show = true;
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.createProducts = function() {
+
+		if ($scope.modal.products.file.value) {
+			uploadProducts({
+				success: true,
+				detail: 'OK'
+			});
+		}
+	};
+
+	var uploadProducts = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		removeAlert();
+
+		if (!$scope.modal.products.file.value) {
+			return;
+		}
+
+		if ($scope.modal.products.file.value.type !== 'text/csv' &&
+			$scope.modal.products.file.value.type !== 'text/comma-separated-values') {
+
+			$scope.modal.alert.color = 'blue-ps-1';
+			$scope.modal.alert.show = true;
+			$scope.modal.alert.title = 'El archivo seleccionado no es válido.';
+			return;
+		}
+
+		$scope.modal.overlay.show = true;
+
+		var fd = new FormData();
+		fd.append('csv', $scope.modal.products.file.value);
+
+		UploadProducts.upload({}, fd).$promise.then(function(success) {
+			$uibModalInstance.close();
+			openModalSummaryLoadProducts(success);
+		}).catch(function(error) {
+			$uibModalInstance.close();
+			openModalMessage({
+				title: 'Error al cargar productos',
+				message: error.data.errors[0].detail
+			});
+		});
+	};
+
+	var openModalSummaryLoadProducts = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'summary.html',
+			controller: 'SummaryLoadProductsModalInstance',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+	};
+
+	var openModalMessage = function(data) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			backdrop: true,
+			templateUrl: 'messageModal.html',
+			controller: 'MessageModalInstance',
+			size: 'md',
+			resolve: {
+				data: function() {
+					return data;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {}, function() {});
+	};
+
+})
+
+.controller('MessageModalInstance', function($scope, $log, $uibModalInstance, data) {
+
+	$scope.modal = {
+		title: data.title,
+		text: data.message
+	};
 
 	$scope.cancel = function() {
 		$uibModalInstance.dismiss('cancel');
@@ -898,7 +1044,65 @@ angular.module('minovateApp')
 
 })
 
-.controller('CsvProductChargeSummaryModalInstance', function($scope, $log, $uibModalInstance, idProduct) {
+.controller('SummaryLoadProductsModalInstance', function($scope, $log, $uibModalInstance, data) {
+
+	$scope.modal = {
+		title: {
+			text: 'Resumen carga de productos'
+		},
+		subtitle: {
+			text: ''
+		},
+		alert: {
+			show: false,
+			title: '',
+			text: '',
+			color: ''
+		},
+		summaryData: data,
+		successes: {
+			data: [],
+			count: 0
+		},
+		errors: {
+			data: [],
+			count: 0
+		}
+	};
+
+	var i = 0,
+		j = 0;
+
+	for (i = 0; i < data.data.length; i++) {
+		// éxito
+		if (data.data[i].meta.success) {
+			$scope.modal.successes.count++;
+			$scope.modal.successes.data.push({
+				storeCode: data.data[i].meta.row_data.description
+			});
+
+			// error
+		} else {
+			$scope.modal.errors.count++;
+
+			var storeCode = data.data[i].meta.errors.description ? storeCode = 'Código producto' : storeCode = null;
+			var descriptionStoreCode = data.data[i].meta.errors.description ? descriptionStoreCode = data.data[i].meta.errors.description[0] : descriptionStoreCode = null;
+
+			var monthlyGoal = data.data[i].meta.errors.monthly_goal ? monthlyGoal = 'Monto' : monthlyGoal = null;
+			var descriptionMonthlyGoal = data.data[i].meta.errors.monthly_goal ? descriptionMonthlyGoal = data.data[i].meta.errors.monthly_goal[0] : descriptionMonthlyGoal = null;
+
+			$scope.modal.errors.data.push({
+				rowNumber: data.data[i].meta.row_number + 1,
+				fields: [{
+					name: storeCode,
+					detail: descriptionStoreCode
+				}, {
+					name: monthlyGoal,
+					detail: descriptionMonthlyGoal
+				}]
+			});
+		}
+	}
 
 	$scope.cancel = function() {
 		$uibModalInstance.dismiss('cancel');

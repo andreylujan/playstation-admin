@@ -9,10 +9,10 @@
  */
 angular.module('minovateApp')
 
-.controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, $timeout, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
-		title: 'Seguimiento de tareas',
+		title: 'Seguimiento Tareas',
 		finishedTasks: {
 			total: 0
 		},
@@ -33,19 +33,523 @@ angular.module('minovateApp')
 		pendingTasks: {
 			pages: {
 				actual: 1,
-				size: 30,
+				size: 15,
 				_current: 1,
 				total: 0,
 			}
 		}
 	};
+	$scope.filters = {
+		id: null,
+		title: null,
+		createdAt: null,
+		limitDate: null,
+		finishedAt: null,
+		zoneName: null,
+		dealerName: null,
+		storeName: null,
+		creatorName: null,
+		assignedUserNames: null
+	};
 
-	var reports = [];
 	var zones = [];
 	var dealers = [];
 	var stores = [];
 	var users = [];
 	var i, j;
+	var finishedTasks = [],
+		pendingTasks = [];
+
+	$scope.tableParamsFinishedTasks = new NgTableParams({
+		count: finishedTasks.length,
+	}, {
+		dataset: finishedTasks,
+		counts: [],
+		total: finishedTasks.length,
+		filterOptions: {
+			filterDelay: 1500
+		}
+	});
+
+	var filterTimeout, filterTimeoutDuration = 1000;
+
+	$scope.$watch('tableParamsFinishedTasks.filter().id', function(newId) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.id = newId;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().createdAt', function(newCreatedAt) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.createdAt = newCreatedAt;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().limitDate', function(newLimitDate) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.limitDate = newLimitDate;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().title', function(newTitle) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.title = newTitle;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().zoneName', function(newZoneName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.zoneName = newZoneName;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().dealerName', function(newDealerName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.dealerName = newDealerName;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().storeName', function(newStoreName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.storeName = newStoreName;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().creatorName', function(newCreatorName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.creatorName = newCreatorName;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsFinishedTasks.filter().creatorName', function(newCreatorName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.creatorName = newCreatorName;
+			$scope.getFinishedTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.finishedTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+
+	$scope.$watch('tableParamsFinishedTasks.filter().assignedUserNames', function(newAssignedUserNames) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.assignedUserNames = newAssignedUserNames;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.tableParamsPendingTasks = new NgTableParams({
+		count: pendingTasks.length,
+	}, {
+		dataset: pendingTasks,
+		counts: [],
+		total: pendingTasks.length,
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().id', function(newId) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.id = newId;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().createdAt', function(newCreatedAt) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.createdAt = newCreatedAt;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().limitDate', function(newLimitDate) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.limitDate = newLimitDate;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().title', function(newTitle) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.title = newTitle;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().zoneName', function(newZoneName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.zoneName = newZoneName;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().dealerName', function(newDealerName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.dealerName = newDealerName;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().storeName', function(newStoreName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.storeName = newStoreName;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().creatorName', function(newCreatorName) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.creatorName = newCreatorName;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
+
+	$scope.$watch('tableParamsPendingTasks.filter().assignedUserNames', function(newAssignedUserNames) {
+		if (filterTimeout) {
+			$timeout.cancel(filterTimeout);
+		}
+
+		filterTimeout = $timeout(function() {
+			$scope.filters.assignedUserNames = newAssignedUserNames;
+			$scope.getPendingTasks({
+				success: true,
+				detail: 'OK'
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				finishedAt: $scope.filters.finishedAt,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
+		}, filterTimeoutDuration);
+	});
 
 	$scope.incrementPageFinishedTasks = function() {
 		if ($scope.pagination.finishedTasks.pages._current <= $scope.pagination.finishedTasks.pages.total - 1) {
@@ -53,7 +557,7 @@ angular.module('minovateApp')
 			$scope.getFinishedTasks({
 				success: true,
 				detail: 'OK'
-			}, $scope.pagination.finishedTasks.pages._current);
+			}, $scope.pagination.finishedTasks.pages._current, 15, $scope.filters);
 		}
 	};
 
@@ -63,7 +567,7 @@ angular.module('minovateApp')
 			$scope.getFinishedTasks({
 				success: true,
 				detail: 'OK'
-			}, $scope.pagination.finishedTasks.pages._current);
+			}, $scope.pagination.finishedTasks.pages._current, 15, $scope.filters);
 		}
 	};
 
@@ -73,7 +577,17 @@ angular.module('minovateApp')
 			$scope.getPendingTasks({
 				success: true,
 				detail: 'OK'
-			}, $scope.pagination.pendingTasks.pages._current);
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
 		}
 	};
 
@@ -83,7 +597,17 @@ angular.module('minovateApp')
 			$scope.getPendingTasks({
 				success: true,
 				detail: 'OK'
-			}, $scope.pagination.pendingTasks.pages._current);
+			}, $scope.pagination.pendingTasks.pages._current, 15, {
+				id: $scope.filters.id,
+				title: $scope.filters.title,
+				zoneName: $scope.filters.zoneName,
+				createdAt: $scope.filters.createdAt,
+				limitDate: $scope.filters.limitDate,
+				dealerName: $scope.filters.dalerName,
+				storeName: $scope.filters.storeName,
+				creatorName: $scope.filters.creatorName,
+				assignedUserNames: $scope.filters.assignedUserNames
+			});
 		}
 	};
 
@@ -210,23 +734,32 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.getFinishedTasks = function(e, page) {
-
+	$scope.getFinishedTasks = function(e, page, pageSize, filters) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
 
-		var finishedTasks = [];
-
 		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
-			'page[size]': $scope.pagination.finishedTasks.pages.size,
+			'page[size]': pageSize,
 			'filter[finished]': true,
+			'filter[id]': filters.id || null,
+			'filter[created_at]': filters.createdAt || null,
+			'filter[limit_date]': filters.limitDate || null,
+			'filter[finished_at]': filters.finishedAt || null,
+			'filter[title]': filters.title || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
+			'filter[assigned_user_names]': filters.assignedUserNames || null,
+			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf,finished_at'
 		}, function(success) {
 
 			if (success.data) {
+				finishedTasks = [];
 				$scope.page.finishedTasks.total = success.meta.finished_reports_count;
 				$scope.pagination.finishedTasks.pages.total = success.meta.page_count;
 
@@ -242,7 +775,7 @@ angular.module('minovateApp')
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
 						title: success.data[i].attributes.title,
 						description: success.data[i].attributes.description,
-						assignedUserName: success.data[i].attributes.assigned_user_name,
+						assignedUserNames: success.data[i].attributes.assigned_user_names,
 						creatorName: success.data[i].attributes.creator_name,
 						storeName: success.data[i].attributes.store_name,
 						zoneName: success.data[i].attributes.zone_name,
@@ -250,48 +783,53 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.tableParamsFinishedTasks = new NgTableParams({
-					page: 1, // show first page
-					count: finishedTasks.length, // count per page
-					sorting: {
-						limitDate: 'asc' // initial sorting
-					},
-					filter: {
-						storeName: ''
-					}
-				}, {
+				$scope.tableParamsFinishedTasks.count(finishedTasks.length);
+				$scope.tableParamsFinishedTasks.settings({
+					dataset: finishedTasks,
 					counts: [],
-					total: finishedTasks.length, // length of stores
-					dataset: finishedTasks
+					total: finishedTasks.length,
+					filterOptions: {
+						filterDelay: 1500
+					},
 				});
-				$log.log($scope.tableParamsFinishedTasks);
+
 			} else {
 				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.getFinishedTasks);
 			}
 		});
 	};
 
-	$scope.getPendingTasks = function(e, page) {
-
+	$scope.getPendingTasks = function(e, page, pageSize, filters) {
 		if (!e.success) {
 			$log.error(e.detail);
 			return;
 		}
-		var pendingTasks = [];
 
 		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
-			'page[size]': $scope.pagination.pendingTasks.pages.size,
-			'filter[finished]': false
+			'page[size]': pageSize,
+			'filter[finished]': false,
+			'filter[id]': filters.id || null,
+			'filter[created_at]': filters.createdAt || null,
+			'filter[limit_date]': filters.limitDate || null,
+			'filter[finished_at]': filters.finishedAt || null,
+			'filter[title]': filters.title || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
+			'filter[assigned_user_names]': filters.assignedUserNames || null,
+			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
 			if (success.data) {
+				pendingTasks = [];
 				$scope.page.pendingTasks.total = success.meta.pending_reports_count;
 				$scope.pagination.pendingTasks.pages.total = success.meta.page_count;
 
@@ -307,7 +845,7 @@ angular.module('minovateApp')
 						pdfUploaded: success.data[i].attributes.pdf_uploaded,
 						title: success.data[i].attributes.title,
 						description: success.data[i].attributes.description,
-						assignedUserName: success.data[i].attributes.assigned_user_name,
+						assignedUserNames: success.data[i].attributes.assigned_user_names,
 						creatorName: success.data[i].attributes.creator_name,
 						storeName: success.data[i].attributes.store_name,
 						zoneName: success.data[i].attributes.zone_name,
@@ -316,17 +854,17 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.tableParamsPendingTasks = new NgTableParams({
-					page: 1, // show first page
-					count: pendingTasks.length, // count per page
-					sorting: {
-						limitDate: 'asc' // initial sorting
-					}
-				}, {
+				$scope.tableParamsPendingTasks.count(pendingTasks.length);
+				$scope.tableParamsPendingTasks.settings({
+					dataset: pendingTasks,
 					counts: [],
-					total: pendingTasks.length, // length of stores
-					dataset: pendingTasks
+					total: pendingTasks.length,
+					filterOptions: {
+						filterDelay: 1500
+					},
 				});
+
+
 			} else {
 				$log.error(success);
 			}
@@ -338,21 +876,22 @@ angular.module('minovateApp')
 		});
 	};
 
-	$scope.downloadPdf = function(event) {
-		var pdf = angular.element(event.target).data('pdf');
-		if (pdf) {
-			$window.open(pdf, '_blank');
-		}
-	};
-
-	$scope.getPendingTasks({
-		success: true,
-		detail: 'OK'
-	}, $scope.pagination.pendingTasks.pages._current);
+	$scope.downloadPdf =
+		function(event) {
+			var pdf = angular.element(event.target).data('pdf');
+			if (pdf) {
+				$window.open(pdf, '_blank');
+			}
+		};
 
 	$scope.getFinishedTasks({
 		success: true,
 		detail: 'OK'
-	}, $scope.pagination.finishedTasks.pages._current);
+	}, $scope.pagination.finishedTasks.pages._current, 15, $scope.filters);
+
+	$scope.getPendingTasks({
+		success: true,
+		detail: 'OK'
+	}, $scope.pagination.pendingTasks.pages._current, 15, $scope.filters);
 
 });
