@@ -255,6 +255,7 @@ angular.module('minovateApp')
 			}
 		});
 	};
+
 	$scope.getDealers = function(e, zones) {
 		// Valida si el parametro e.success se seteó true para el refresh token
 		if (!e.success) {
@@ -312,13 +313,8 @@ angular.module('minovateApp')
 
 	$scope.dealerMultiselectEvents = {
 		onItemSelect: function(item) {
-			// $log.log(item);
-			// se recorre el arreglo q contiene TODOS los dealers
 			for (i = 0; i < $scope.page.dealers.length; i++) {
-				// Si el dealer q se seleccionó es el misma q el q se se está recorriedo
-				$log.log('comparo ' + $scope.page.dealers[i].id + ' con ' + item.id);
 				if (parseInt($scope.page.dealers[i].id) === parseInt(item.id)) {
-					// se agrega al arreglo de dealers seleccionada, con toda su info (name, dealersIds, etc)
 					$scope.page.dealer.selectedDealer.push({
 						type: 'dealers',
 						id: parseInt(item.id),
@@ -334,9 +330,7 @@ angular.module('minovateApp')
 					$scope.page.dealer.selectedDealer.splice(i, 1);
 				}
 			}
-			// $log.log('$scope.page.dealer.selectedDealer');
-			// $log.log($scope.page.dealer.selectedDealer);
-		},
+		}
 	};
 
 	var getUsers = function(e) {
@@ -400,12 +394,6 @@ angular.module('minovateApp')
 				type: $scope.page.dealer.selectedDealer[i].type
 			});
 		}
-		for (i = 0; i < $scope.page.user.selectedUser.length; i++) {
-			users.push({
-				id: $scope.page.user.selectedUser[i].id,
-				type: $scope.page.user.selectedUser[i].type
-			});
-		}
 
 		if (zones.length === 0) {
 			openModalMessage('Debe indicar al menos una zona');
@@ -415,10 +403,6 @@ angular.module('minovateApp')
 			openModalMessage('Debe indicar al menos un dealer');
 			return;
 		}
-		// if (users.length === 0) {
-		// 	openModalMessage('Debe indicar al menos un usuario');
-		// 	return;
-		// }
 		if (!Validators.validaRequiredField($scope.page.startDate)) {
 			openModalMessage('Debe indicar la fecha de inicio de la promoción');
 			return;
@@ -442,33 +426,24 @@ angular.module('minovateApp')
 		if ($stateParams.idPromotion) {
 			Promotions.update({
 				idPromotion: $stateParams.idPromotion,
-				'data': {
-					'id': $stateParams.idPromotion,
-					'type': 'promotions',
-					'attributes': {
-						'title': $scope.page.subject,
-						'start_date': startDate,
-						'end_date': endDate,
-						'html': $scope.page.html
+				data: {
+					id: $stateParams.idPromotion,
+					type: 'promotions',
+					attributes: {
+						title: $scope.page.subject,
+						start_date: startDate,
+						end_date: endDate,
+						html: $scope.page.html
 					},
-					'relationships': {
-						// 'checklist': {
-						// 	'data': {
-						// 		'type': 'checklists',
-						// 		'id': '1'
-						// 	}
-						// },
-						'zones': {
-							'data': zones
+					relationships: {
+						zones: {
+							data: zones
 						},
-						'dealers': {
-							'data': dealers
+						dealers: {
+							data: dealers
 						},
-						// 'users': {
-						// 	'data': users
-						// },
-						'users': {
-							'data': []
+						users: {
+							data: []
 						}
 					}
 				}
@@ -527,7 +502,7 @@ angular.module('minovateApp')
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'messageModal.html',
-			controller: 'MessageModalInstance',
+			controller: 'NewPromotionMessageModalInstance',
 			resolve: {
 				title: function() {
 					return title;
@@ -555,13 +530,13 @@ angular.module('minovateApp')
 			detail: 'OK'
 		});
 	} else {
-		$scope.page.title = 'Nueva promoción';
+		$scope.page.title = 'Nueva Promoción';
 		$scope.page.buttons.sendInvitation.show = true;
 	}
 
 })
 
-.controller('MessageModalInstance', function($scope, $log, $uibModalInstance, title) {
+.controller('NewPromotionMessageModalInstance', function($scope, $log, $uibModalInstance, title) {
 
 	$scope.modal = {
 		message: {

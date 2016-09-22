@@ -21,7 +21,7 @@ angular.module('minovateApp')
   var filteredStoreIds = [];
 
   $scope.page = {
-    title: 'Crear tarea',
+    title: 'Crear Tarea',
     prevBtn: {
       disabled: true
     },
@@ -130,6 +130,7 @@ angular.module('minovateApp')
       return;
     }
 
+
     var selectedZones = [];
 
     var selectedZoneIds = $scope.zone_ids;
@@ -162,7 +163,6 @@ angular.module('minovateApp')
         }
         $scope.zone_ids = _.union(selectedZoneIds, newZoneIds);
         filteredZoneIds = newZoneIds;
-        console.log('New zone ids: ' + newZoneIds);
 
         $scope.page.newTask.zones.disabled = false;
 
@@ -188,11 +188,8 @@ angular.module('minovateApp')
       return;
     }
     var selectedDealerIds = $scope.dealer_ids;
-    // console.log('Was selected: ' + selectedDealerIds)
 
     $scope.page.newTask.dealers.disabled = true;
-    // $scope.page.newTask.dealers.selectedDealer = [];
-
 
     Dealers.query({
       'filter[zone_ids]': $scope.zone_ids.toString(),
@@ -210,7 +207,6 @@ angular.module('minovateApp')
             type: 'dealers'
           };
           $scope.page.newTask.dealers.list.push(dealer);
-          // console.log('Checking if ' + success.data[i].id + ' is in ' + selectedDealerIds);
           if (_.indexOf(selectedDealerIds, parseInt(success.data[i].id)) !== -1) {
             newDealerIds.push(dealer.id);
             $scope.page.newTask.dealers.selectedDealer.push(dealer);
@@ -221,7 +217,6 @@ angular.module('minovateApp')
         $scope.dealer_ids = _.union(newDealerIds, selectedDealerIds);
         filteredDealerIds = newDealerIds;
 
-        console.log('New selected dealer ids: ' + newDealerIds);
         $scope.page.newTask.dealers.disabled = false;
 
 
@@ -248,6 +243,8 @@ angular.module('minovateApp')
 
     $scope.page.newTask.stores.disabled = true;
     // $scope.page.newTask.stores.selectedStore = [];
+
+
 
     Stores.query({
       'filter[dealer_ids]': $scope.dealer_ids.toString(),
@@ -276,7 +273,6 @@ angular.module('minovateApp')
         $scope.store_ids = _.union(newStoreIds, selectedStoreIds);
         filteredStoreIds = newStoreIds;
 
-        console.log('New selected store ids: ' + newStoreIds);
         $scope.page.newTask.stores.disabled = false;
 
 
@@ -334,7 +330,6 @@ angular.module('minovateApp')
         $scope.promoter_ids = _.union(newPromoterIds, selectedPromoterIds);
         filteredPromoterIds = newPromoterIds;
         
-        console.log('New selected promoter ids: ' + newPromoterIds);
         $scope.page.newTask.promoters.disabled = false;
 
       } else {
@@ -372,7 +367,6 @@ angular.module('minovateApp')
   };
 
   $scope.page.newTask.zones.events.onChange = function() {
-    console.log('On change zones');
     $scope.zone_ids = _.map($scope.page.newTask.zones.selectedZone, function(o) {
       return o.id;
     });
@@ -395,7 +389,6 @@ angular.module('minovateApp')
   $scope.page.newTask.dealers.events.onItemSelect = function() {};
 
   $scope.page.newTask.dealers.events.onChange = function() {
-    console.log('On change dealers');
     // $log.log($scope.page.newTask.dealers.selectedDealer);
     $scope.dealer_ids = _.map($scope.page.newTask.dealers.selectedDealer, function(o) {
       return o.id;
@@ -413,19 +406,11 @@ angular.module('minovateApp')
       success: true,
       detail: 'OK'
     });
-
-
-    /* getZonesFromDealers({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.dealers.selectedDealer);
-		*/
   };
 
   $scope.page.newTask.stores.events.onItemSelect = function() {};
 
   $scope.page.newTask.stores.events.onChange = function() {
-    console.log('On change dealers');
 
     $scope.store_ids = _.map($scope.page.newTask.stores.selectedStore, function(o) {
       return o.id;
@@ -443,12 +428,6 @@ angular.module('minovateApp')
       success: true,
       detail: 'OK'
     });
-
-    /* getDealersFromStores({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.stores.selectedStore);
-		*/
   };
 
   $scope.page.newTask.promoters.events.onItemSelect = function() {};
@@ -470,11 +449,6 @@ angular.module('minovateApp')
       success: true,
       detail: 'OK'
     });
-    /* getStoresFromPromoters({
-			success: true,
-			detail: 'OK'
-		}, $scope.page.newTask.promoters.selectedPromoter);
-		*/
   };
 
   $scope.setAlertProperties = function(show, color, title, text) {

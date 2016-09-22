@@ -88,8 +88,8 @@
 									{{inbox.sendAt | date: 'dd/MM/yyyy'}}
 								</td>
 								<td data-title="'Usuarios'" sortable="'recipients'" filter="{ 'recipients': 'text' }">
-									<span ng-show="!inbox.sendToAll" ng-bind-html="inbox.recipients"></span>
-									<span ng-show="inbox.sendToAll">Todos</span>
+									<span ng-if="!inbox.sendToAll" ng-bind-html="inbox.recipients"></span>
+									<span ng-if="inbox.sendToAll"><strong>Todos los usuarios</strong></span>
 								</td>
 							</tr>
 						</table>

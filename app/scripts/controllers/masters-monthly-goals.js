@@ -12,7 +12,7 @@ angular.module('minovateApp')
 .controller('MonthlyGoalsCtrl', function($scope, $log, $uibModal, $filter, NgTableParams, SaleGoalUploads, Utils) {
 
 	$scope.page = {
-		title: 'Metas mensuales',
+		title: 'Metas Mensuales',
 		dateSearch: {
 			value: new Date()
 		}
@@ -144,7 +144,7 @@ angular.module('minovateApp')
 		},
 		buttons: {
 			create: {
-				text: 'Guardar',
+				text: 'Cargar',
 				show: false,
 				border: false
 			},

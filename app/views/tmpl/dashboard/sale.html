@@ -83,7 +83,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Sell Out </strong>Ventas</h1>
+					<h1 class="custom-font"><strong>Sell Out </strong></h1>
 				</div>
 
 				<div class="tile-widget">
@@ -114,9 +114,9 @@
 						<tfoot>
 							<tr class="text-orange-ps text-bold" ng-repeat="total in totalsSale">
 								<td>{{total.title}}</td>
-								<td>{{total.hardwareTotal | currency:'$':0}}</td>
-								<td>{{total.accessoriesTotal | currency:'$':0}}</td>
-								<td>{{total.gamesTotal | currency:'$':0}}</td>
+								<td></td>
+								<td></td>
+								<td></td>
 								<td>{{total.totals | currency:'$':0}}</td>
 							</tr>
 						</tfoot>
@@ -144,7 +144,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Share de ventas </strong>Venta por zona</h1>
+					<h1 class="custom-font"><strong>Share de Ventas </strong></h1>
 				</div>
 				<!-- /tile header -->
 
@@ -159,7 +159,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Share de ventas </strong>Valores venta</h1>
+					<h1 class="custom-font"><strong>Share de Ventas </strong></h1>
 				</div>
 				<!-- /tile header -->
 
@@ -191,7 +191,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h2 class="custom-font"><strong>Share de ventas </strong>Ventas global</h2>
+					<h2 class="custom-font"><strong>Share Global</strong></h2>
 				</div>
 				<!-- /tile header -->
 
@@ -210,7 +210,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Por categorías</h1>
+					<h1 class="custom-font"><strong>Productos más Vendidos </strong></h1>
 				</div>
 				<!-- /tile header -->
 
@@ -231,7 +231,7 @@
 
 				<!-- tile header -->
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Productos más vendidos </strong>Cantidad</h1>
+					<h1 class="custom-font"><strong>Productos más Vendidos </strong>QTY</h1>
 					<select class="pull-right" ng-options="category as category.name for category in topPorductsCategories" ng-model="selectedCategory" ng-change="getProductsByCategory(selectedCategory.name)"></select>
 				</div>
 				<!-- /tile header -->
@@ -265,7 +265,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Best practice semanales </strong>Venta entre consolas</h1>
+					<h1 class="custom-font"><strong>Best Practice Semanales </strong></h1>
 				</div>
 
 				<div class="tile-widget">

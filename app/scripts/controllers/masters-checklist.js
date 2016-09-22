@@ -28,6 +28,7 @@ angular.module('minovateApp')
 		Checklists.query({
 			'filter[type]': 'Checklist'
 		}, function(success) {
+			$log.log(success);
 
 			for (var i = 0; i < success.data.length; i++) {
 				checklists.push({

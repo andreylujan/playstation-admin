@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users) {
+.controller('DashboardSaleCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
 
   var currentDate = new Date();
   var firstMonthDay = new Date();
@@ -40,8 +40,7 @@ angular.module('minovateApp')
       supervisor: {
         list: [],
         selected: null,
-        disabled: false,
-        loaded: false
+        disabled: false
       },
       month: {
         value: new Date(),
@@ -93,6 +92,7 @@ angular.module('minovateApp')
   $scope.$watch('page.filters.supervisor.loaded', function() {
     if ($scope.page.filters.supervisor.loaded) {
       $scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+
         var startDate = new Date($scope.page.filters.dateRange.date.startDate);
         var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
@@ -114,6 +114,7 @@ angular.module('minovateApp')
       });
     }
   });
+
 
   var openModalMessage = function(data) {
     var modalInstance = $uibModal.open({
@@ -565,29 +566,13 @@ angular.module('minovateApp')
           }
         }
 
-        $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
-
-        $log.log($scope.topPorductsCategories);
-
         $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {
           min: 0,
           title: {
             text: null
           }
         }, {
-          categories: $scope.topPorductsCategories,
-          // labels: {
-          //   formatter: function() {
-          //     var text = this.value,
-          //       formatted = text.length > 10 ? text.substring(0, 10) + '...' : text;
-
-          //     return '<div class="js-ellipse" style="width:150px; " title="' + text + '">' + formatted + '</div>';
-          //   },
-          //   style: {
-          //     width: '150px'
-          //   },
-          //   useHTML: true
-          // }
+          categories: $scope.topPorductsCategories
         }, [{
           name: 'Productos',
           data: topProductsQuantities

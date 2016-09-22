@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users) {
+.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $filter, $uibModal, $moment, $timeout, Utils, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -35,12 +35,12 @@ angular.module('minovateApp')
 			instructor: {
 				list: [],
 				selected: null,
-				disabled: false
+				disabled: false,
 			},
 			supervisor: {
 				list: [],
 				selected: null,
-				disabled: true,
+				disabled: false,
 				loaded: false
 			},
 			month: {
@@ -215,26 +215,28 @@ angular.module('minovateApp')
 
 	$scope.$watch('page.filters.supervisor.loaded', function() {
 		if ($scope.page.filters.supervisor.loaded) {
-			$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
-				var startDate = new Date($scope.page.filters.dateRange.date.startDate);
-				var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+			if (!$scope.page.filters.supervisor.disabled) {
+				$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+					var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+					var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
-				if (startDate.getMonth() !== endDate.getMonth()) {
-					openModalMessage({
-						title: 'Error en el rango de fechas ',
-						message: 'El rango de fechas debe estar dentro del mismo mes.'
+					if (startDate.getMonth() !== endDate.getMonth()) {
+						openModalMessage({
+							title: 'Error en el rango de fechas ',
+							message: 'El rango de fechas debe estar dentro del mismo mes.'
+						});
+
+						$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+						$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+						return;
+					}
+
+					$scope.getDashboardInfo({
+						success: true,
+						detail: 'OK'
 					});
-
-					$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
-					$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
-					return;
-				}
-
-				$scope.getDashboardInfo({
-					success: true,
-					detail: 'OK'
 				});
-			});
+			}
 		}
 	});
 

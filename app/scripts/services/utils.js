@@ -87,9 +87,6 @@ angular.module('minovateApp')
 			return;
 		}
 
-		// $log.log('functionToCall');
-		// $log.log(functionToCall);
-
 		var that = this.setInStorage;
 		var that2 = this.getInStorage;
 
@@ -97,7 +94,6 @@ angular.module('minovateApp')
 			refresh_token: that2('refresh_t'),
 			grant_type: 'refresh_token'
 		}, function(success) {
-			$log.info(success);
 
 			$auth.setToken(success.data.attributes.access_token);
 			that('refresh_t', success.data.attributes.refresh_token);
@@ -121,9 +117,6 @@ angular.module('minovateApp')
 	};
 
 	this.setChartConfig = function(type, height, plotOptions, yAxisData, xAxisData, series) {
-		// if (!type) {
-		// 	type = 'column';
-		// }
 		if (!height) {
 			height = 250;
 		}
@@ -137,7 +130,7 @@ angular.module('minovateApp')
 						enabled: false
 					}
 				},
-				colors: ['#015496', '#221f1f', '#a8a9ac', '#6d6e71'],
+				colors: ['#015496', '#221f1f', '#a8a9ac'],
 				tooltip: {
 					style: {
 						padding: 10,

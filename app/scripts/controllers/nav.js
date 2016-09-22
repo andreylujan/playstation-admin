@@ -17,7 +17,6 @@ angular.module('minovateApp')
 			isThirdOpen: true
 		};
 
-
 		$scope.nav = {
 			dashboard: {
 				show: true
@@ -40,6 +39,9 @@ angular.module('minovateApp')
 					show: true
 				},
 				createTask: {
+					show: true
+				},
+				taskTracking: {
 					show: true
 				}
 			},
@@ -65,7 +67,14 @@ angular.module('minovateApp')
 				}
 			},
 			promotions: {
+				show: true,
+				new: {
+					show: true
+				},
 				list: {
+					show: true
+				},
+				tracking: {
 					show: true
 				}
 			},
@@ -77,38 +86,50 @@ angular.module('minovateApp')
 			}
 		};
 
-		if (Utils.getInStorage('role') === 1) {
+		if (Utils.getInStorage('role') === 1) { //SUPERVISOR
 			$scope.nav.dashboard.show = true;
 			$scope.nav.users.show = true;
 			$scope.nav.reports.show = true;
 			$scope.nav.reports.reports.show = true;
 			$scope.nav.reports.myReportsMyTasks.show = true;
 			$scope.nav.reports.createTask.show = true;
+			$scope.nav.reports.taskTracking.show = true;
 			$scope.nav.masters.show = true;
+			$scope.nav.promotions.show = true;
 			$scope.nav.promotions.list.show = true;
+			$scope.nav.promotions.new.show = true;
+			$scope.nav.promotions.tracking.show = true;
 			$scope.nav.inbox.show = true;
 			$scope.nav.images.show = true;
-		} else if (Utils.getInStorage('role') === 2) {
+		} else if (Utils.getInStorage('role') === 2) { //PROMOTOR
 			$scope.nav.dashboard.show = false;
 			$scope.nav.users.show = false;
 			$scope.nav.reports.show = true;
 			$scope.nav.reports.reports.show = false;
 			$scope.nav.reports.myReportsMyTasks.show = true;
-			$scope.nav.reports.createTask.show = true;
-			$scope.nav.masters.show = false;
-			$scope.nav.promotions.list.show = false;
-			$scope.nav.inbox.show = true;
-			$scope.nav.images.show = true;
-		} else if (Utils.getInStorage('role') === 3) {
-			$scope.nav.dashboard.show = true;
-			$scope.nav.users.show = false;
-			$scope.nav.reports.show = true;
-			$scope.nav.reports.reports.show = false;
-			$scope.nav.reports.myReportsMyTasks.show = true;
 			$scope.nav.reports.createTask.show = false;
+			$scope.nav.reports.taskTracking.show = false;
 			$scope.nav.masters.show = false;
+			$scope.nav.promotions.show = false;
 			$scope.nav.promotions.list.show = false;
+			$scope.nav.promotions.new.show = false;
+			$scope.nav.promotions.tracking.show = false;
 			$scope.nav.inbox.show = false;
+			$scope.nav.images.show = false;
+		} else if (Utils.getInStorage('role') === 3) { // INSTRUCTOR
+			$scope.nav.dashboard.show = true;
+			$scope.nav.users.show = true;
+			$scope.nav.reports.show = true;
+			$scope.nav.reports.reports.show = true;
+			$scope.nav.reports.myReportsMyTasks.show = true;
+			$scope.nav.reports.createTask.show = true;
+			$scope.nav.reports.taskTracking.show = true;
+			$scope.nav.masters.show = true;
+			$scope.nav.promotions.show = true;
+			$scope.nav.promotions.list.show = true;
+			$scope.nav.promotions.new.show = true;
+			$scope.nav.promotions.tracking.show = true;
+			$scope.nav.inbox.show = true;
 			$scope.nav.images.show = true;
 		}
 

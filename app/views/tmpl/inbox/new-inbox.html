@@ -77,25 +77,21 @@
 
 						<div class="row">
 							<div class="col-md-12 mb-5">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="selUser" class="col-md-5 control-label">Fecha/hora de envío</label>
-										<div class="col-sm-6">
-											<p class="input-group">
-												<input type="text" class="form-control bg-red-ps br-15-l" datetime-picker="dd/MM/yyyy HH:mm" ng-model="page.dateTimePicker.date" is-open="page.dateTimePicker.open" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled" />
-												<span class="input-group-btn">
-													<button type="button" class="btn btn-default bg-red-ps br-15-r" ng-click="openCalendar($event)" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled"><i class="fa fa-calendar"></i></button>
-												</span>
-											</p>
-										</div>
+								<div class="form-group">
+									<label for="selUser" class="col-md-2 control-label" >Fecha/hora de envío</label>
+									<div class="col-sm-4">
+										<p class="input-group">
+											<input type="text" class="form-control bg-red-ps br-15-l" datetime-picker="dd/MM/yyyy HH:mm" ng-model="page.dateTimePicker.date" is-open="page.dateTimePicker.open" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled" />
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default bg-red-ps br-15-r" ng-click="openCalendar($event)" ng-disabled="checkSendImmediate || page.dateTimePicker.disabled"><i class="fa fa-calendar"></i></button>
+											</span>
+										</p>
 									</div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-sm-4 control-label">Enviar de inmediato</label>
-										<div class="col-sm-2">
-											<input type="checkbox" ng-model="checkSendImmediate" ng-init="checkSendImmediate = true" ng-disabled="page.checkSendImmediate.disabled">
-										</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Enviar de inmediato</label>
+									<div class="col-sm-1">
+										<input type="checkbox" ng-model="checkSendImmediate" ng-init="checkSendImmediate = true" ng-disabled="page.checkSendImmediate.disabled">
 									</div>
 								</div>
 							</div>
@@ -103,23 +99,19 @@
 						<hr class="mt-10 mb-10">
 						<div class="row">
 							<div class="col-md-12 mb-5">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="selUser" class="col-md-5 control-label" >Usuarios</label>
-										<div class="col-md-6">
-											<ui-select class="bg-blue-ps-1 br-15 b-0" multiple ng-model="page.user.selectedUser" sortable="true" close-on-select="false" ng-disabled="checkSentToAll || page.user.disabled">
-												<ui-select-match placeholder="Seleccionar usuarios...">{{$item.fullName}}</ui-select-match>
-												<ui-select-choices repeat="user in page.users | propsFilter: {fullName: $select.search}">
-													<div ng-bind-html="user.fullName | highlight: $select.search" ></div>
-												</ui-select-choices>
-											</ui-select>
-										</div>
-									</div>
+								<label for="selUser" class="col-md-2 control-label" >Usuarios</label>
+								<div class="col-md-4">
+									<ui-select class="bg-blue-ps-1 br-15 b-0" multiple ng-model="page.user.selectedUser" sortable="true" close-on-select="false" ng-disabled="checkSentToAll || page.user.disabled">
+										<ui-select-match placeholder="Seleccionar usuarios...">{{$item.fullName}}</ui-select-match>
+										<ui-select-choices repeat="user in page.users | propsFilter: {fullName: $select.search}">
+											<div ng-bind-html="user.fullName | highlight: $select.search" ></div>
+										</ui-select-choices>
+									</ui-select>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="form-group">
-										<label class="col-sm-4 control-label">Enviar a todos</label>
-										<div class="col-sm-2">
+										<label class="col-sm-5 control-label">Enviar a todos</label>
+										<div class="col-sm-3">
 											<input type="checkbox" ng-model="checkSentToAll" ng-init="checkSentToAll = true" ng-disabled="page.checkSendToAll.disabled">
 										</div>
 									</div>
@@ -128,37 +120,30 @@
 						</div>
 						<hr class="mt-10 mb-10">
 						<div class="row">
-							<div class="col-md-12 mb-5">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="selUser" class="col-md-5 control-label">Acción</label>
-										<div class="col-md-6">
-											<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled" ng-change="changeMessageAction()">
-												<ui-select-match placeholder="Seleccione acción..."><span ng-bind="$select.selected.name"></span></ui-select-match>
-												<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id"><span ng-bind="messageAction.name"></span></ui-select-choices>
-											</ui-select>
-										</div>
-									</div>
+							<div class="col-md-6 mb-5">
+								<label for="selUser" class="col-md-4 control-label">Acción</label>
+								<div class="col-md-8">
+									<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.messageAction.selectedMessageAction" sortable="true" ng-disabled="page.messageAction.disabled" ng-change="changeAction()">
+										<ui-select-match placeholder="Seleccione acción..."><span ng-bind="$select.selected.name"></span></ui-select-match>
+										<ui-select-choices repeat="messageAction in (page.messageActions | filter: $select.search) track by messageAction.id"><span ng-bind="messageAction.name"></span></ui-select-choices>
+									</ui-select>
 								</div>
-								<div class="col-md-6">
-									<input type="text" class="form-control underline-input" placeholder="Indique acción" ng-model="page.messageAction.custom.value" ng-disabled="page.messageAction.custom.disabled">
-								</div>
+							</div>
+							<div class="col-md-6 mb-5">
+								<input type="text" class="form-control underline-input" ng-model="page.messageAction.custom.value" placeholder="Acción" ng-disabled="page.messageAction.custom.disabled">
 							</div>
 						</div>
 						<hr class="mt-10 mb-10">
 						<div class="row">
 							<div class="col-md-12 mb-5">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-md-5 control-label">Título</label>
-										<div class="col-md-6">
-											<div class="form-group">
-												<input type="text" class="form-control underline-input" ng-model="page.subject.value" placeholder="Asunto/título" ng-disabled="page.subject.disabled">
-											</div>
+								<div class="form-group">
+									<label class="col-md-2 control-label" >Título</label>
+									<div class="col-md-9">
+										<div class="form-group">
+											<input type="text" class="form-control underline-input" ng-model="page.subject.text" placeholder="Asunto/título" ng-disabled="page.subject.disabled">
 										</div>
 									</div>
 								</div>
-								
 							</div>
 						</div>
 

@@ -9,14 +9,15 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users) {
+.controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
 	firstMonthDay.setDate(1);
 	var stockBreaks = [],
 		topProducts = [],
-		i = 0;
+		i = 0,
+		j = 0;
 
 	$scope.page = {
 		title: 'Stock',
@@ -43,8 +44,7 @@ angular.module('minovateApp')
 			supervisor: {
 				list: [],
 				selected: null,
-				disabled: false,
-				loaded: false
+				disabled: false
 			},
 			month: {
 				value: new Date(),
@@ -174,19 +174,6 @@ angular.module('minovateApp')
 				Utils.refreshToken(getZones);
 			}
 		});
-		// DataPlayStation.getZones({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }).then(function(data) {
-		// 	$scope.page.filters.zone.list = data.data;
-		// 	$scope.page.filters.zone.selected = data.data[0];
-		// 	$scope.getDealers({
-		// 		success: true,
-		// 		detail: 'OK'
-		// 	}, $scope.page.filters.zone.selected);
-		// }).catch(function(error) {
-		// 	$log.error(error);
-		// });
 	};
 
 	$scope.getDealers = function(e, zoneSelected) {
@@ -229,26 +216,6 @@ angular.module('minovateApp')
 				Utils.refreshToken($scope.getDealers);
 			}
 		});
-
-		// $scope.page.filters.dealer.disabled = true;
-		// DataPlayStation.getDealers({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }, zoneSelected).then(function(data) {
-		// 	$scope.page.filters.dealer.list = data.data;
-		// 	$scope.page.filters.dealer.selected = data.data[0];
-		// 	$scope.page.filters.dealer.disabled = false;
-		// 	$scope.getStores({
-		// 		success: true,
-		// 		detail: 'OK'
-		// 	}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
-		// }).catch(function(error) {
-		// 	$log.error(error);
-		// });
-
-		// // Cada vez que se cargan los dealers, se limpia la lista de tiendas y se deselecciona la tienda anteriormente seleccionada
-		// $scope.page.filters.store.list = [];
-		// $scope.page.filters.store.selected = null;
 	};
 
 	$scope.getStores = function(e, zoneSelected, dealerSelected) {
@@ -292,22 +259,6 @@ angular.module('minovateApp')
 				Utils.refreshToken($scope.getStores);
 			}
 		});
-
-		// $scope.page.filters.store.disabled = true;
-		// DataPlayStation.getStores({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }, zoneSelected, dealerSelected).then(function(data) {
-		// 	$scope.page.filters.store.list = data.data;
-		// 	$scope.page.filters.store.selected = data.data[0];
-		// 	$scope.page.filters.store.disabled = false;
-		// 	getUsers({
-		// 		success: true,
-		// 		detail: 'OK'
-		// 	});
-		// }).catch(function(error) {
-		// 	$log.error(error);
-		// });
 	};
 
 	var getUsers = function(e) {
@@ -360,23 +311,6 @@ angular.module('minovateApp')
 				Utils.refreshToken(getUsers);
 			}
 		});
-
-		// $scope.page.filters.supervisor.disabled = true;
-		// $scope.page.filters.instructor.disabled = true;
-		// DataPlayStation.getUsers({
-		// 	success: true,
-		// 	detail: 'OK'
-		// }).then(function(data) {
-		// 	$scope.page.filters.instructor.list = data.data;
-		// 	$scope.page.filters.supervisor.list = data.data;
-		// 	$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
-		// 	$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
-		// 	$scope.page.filters.instructor.disabled = false;
-		// 	$scope.page.filters.supervisor.disabled = false;
-		// 	$scope.page.filters.supervisor.loaded = true;
-		// }).catch(function(error) {
-		// 	$log.error(error);
-		// });
 	};
 
 	$scope.getDashboardInfo = function(e) {
@@ -449,23 +383,9 @@ angular.module('minovateApp')
 				units: "desc"
 			}
 		}, {
-			dataset: stockBreaks,
-			// filterOptions: {
-			// 	filterFn: ageRangeFilter
-			// },
+			dataset: stockBreaks
 		});
 	};
-
-	// function ageRangeFilter(data, filterValues /*, comparator*/ ) {
-	// 	$log.log(data);
-	// 	$log.log(filterValues);
-
-	// 	return data.filter(function(item) {
-	// 		var start = filterValues.start == null ? Number.MIN_VALUE : filterValues.start;
-	// 		var end = filterValues.end == null ? Number.MAX_VALUE : filterValues.end;
-	// 		return start <= item.age && end >= item.age;
-	// 	});
-	// };
 
 	var getProductsHighRotation = function(data) {
 		angular.forEach(data.data.attributes.top_products, function(value, key) {
@@ -529,11 +449,6 @@ angular.module('minovateApp')
 	};
 
 	getZones();
-
-	// $scope.getDashboardInfo({
-	// 	success: true,
-	// 	detail: 'OK'
-	// });
 
 
 });
