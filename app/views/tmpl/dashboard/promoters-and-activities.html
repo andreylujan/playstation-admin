@@ -606,6 +606,31 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-md-12">
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Best Practice Semanales </strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<div style="width:95%;margin:0 auto" ng-if="page.sales.bestPractices.loaded" >
+						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1"  ng-show="page.sales.bestPractices.list.length">
+							<div ng-repeat="image in page.sales.bestPractices.list">
+								<div class="" ng-include="'imagesTmpl.html'"></div>
+							</div>
+						</slick>
+					</div>
+					<a ui-sref="app.images.list" style="cursor:pointer"><p class="text-orange-ps mt-10 mb-10 text-right">Ver todas ></p></a>
+					<h3 class="text-center" ng-show="!page.sales.bestPractices.list.length">No se registraron fotos de best practices</h3>
+				</div>
+
+			</section>
+
+		</div>
+	</div>
+
 	<script type="text/ng-template" id="viewAllDataTable.html">
 		<div class="modal-body text-gray">
 
