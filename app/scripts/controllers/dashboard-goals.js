@@ -674,7 +674,11 @@ angular.module('minovateApp')
 		if (!$scope.modal.goals.file.value) {
 			return;
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> master
 		if ($scope.modal.goals.file.value.type !== 'text/csv' &&
 			$scope.modal.goals.file.value.type !== 'text/comma-separated-values' &&
 			$scope.modal.goals.file.value.type !== 'application/csv' &&
