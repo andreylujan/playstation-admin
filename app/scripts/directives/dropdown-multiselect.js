@@ -209,7 +209,7 @@ angular.module('minovateApp')
                 if (totalSelected === 0) {
                   return $scope.texts.buttonDefaultText;
                 } else {
-                  return $scope.texts.dynamicButtonTextSuffix;
+                  return totalSelected + ' ' + $scope.texts.dynamicButtonTextSuffix;
                 }
               }
             } else {
