@@ -870,6 +870,7 @@ angular.module('minovateApp')
 	});
 })
 
+
 //Promoters
 .factory('Promoters', function($resource) {
 	return $resource(API_URL + '/promoters', {}, {
