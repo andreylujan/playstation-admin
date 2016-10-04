@@ -31,7 +31,7 @@
 				</ui-select>
 			</div>
 			<div class="col-md-2 mt-5">
-				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
+				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
 						<div ng-bind-html="dealer.name | highlight: $select.search | capitalize:true"></div>
@@ -84,11 +84,7 @@
 			<section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
-<<<<<<< HEAD
 					<h1 class="custom-font"><strong>Promotores </strong>Visitas Tiendas</h1>
-=======
-					<h1 class="custom-font"><strong>Promotores </strong>Reportes y Tareas</h1>
->>>>>>> master
 				</div>
 
 				<div class="tile-widget">
