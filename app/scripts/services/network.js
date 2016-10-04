@@ -868,21 +868,6 @@ angular.module('minovateApp')
 		}
 	});
 
-//UploadProducts
-.factory('UploadProducts', function($resource, $http) {
-	return $resource(API_URL + '/products/csv/:csv', {
-		csv: '@csv'
-	}, {
-		upload: {
-			method: "POST",
-			transformRequest: angular.identity,
-			headers: {
-				'Content-Type': undefined
-			}
-		}
-	});
-})
-
 //Promoters
 .factory('Promoters', function($resource) {
 	return $resource(API_URL + '/promoters', {}, {
