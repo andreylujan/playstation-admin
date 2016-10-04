@@ -842,7 +842,6 @@ angular.module('minovateApp')
 
 //weekly_business_sales
 .factory('WeeklyBusinessSales', function($resource, $http) {
-
 	return $resource(API_URL + '/weekly_business_sales/csv/:csv', {
 		csv: '@csv'
 	}, {
