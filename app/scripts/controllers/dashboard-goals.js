@@ -674,7 +674,6 @@ angular.module('minovateApp')
 		if (!$scope.modal.goals.file.value) {
 			return;
 		}
-
 		console.log($scope.modal.goals.file.value.type);
 		
 		if ($scope.modal.goals.file.value.type !== 'text/csv' &&

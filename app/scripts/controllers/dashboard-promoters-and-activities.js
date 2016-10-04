@@ -199,12 +199,6 @@ angular.module('minovateApp')
 				}
 			}
 		},
-		sales: {
-      		bestPractices: {
-        		loaded: false,
-        		list: []
-      		}
-    	},
 		buttons: {
 			getExcel: {
 				disabled: false
@@ -494,8 +488,6 @@ angular.module('minovateApp')
 		var endDay = endDate.getDate();
 		var month = startDate.getMonth() + 1;
 		var year = startDate.getFullYear();
-
-		$scope.page.sales.bestPractices.loaded = false;
 
 		Dashboard.query({
 			category: 'promoter_activity',
@@ -964,20 +956,6 @@ angular.module('minovateApp')
 				$scope.page.promotors.promotionsCommunicated.byDay.all = $scope.page.promotors.promotionsCommunicated.byDay.all.reverse();
 
 				// FIN Promociones destacadas  - Al día
-
-				//// INI Best Practices
-		        var bestPractices = [];
-
-		        angular.forEach(success.data.attributes.best_practices, function(value, key) {
-		          	bestPractices.push({
-		            	src: value
-		          	});
-		        });
-
-		        $scope.page.sales.bestPractices.list = bestPractices;
-		        $scope.page.sales.bestPractices.loaded = true;
-
-		        // FIN Best Practices
 
 			}
 		}, function(error) {
