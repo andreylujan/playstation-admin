@@ -854,8 +854,6 @@ angular.module('minovateApp')
 		}
 	});
 })
-<<<<<<< HEAD
-
 //UploadProducts
 .factory('UploadProducts', function($resource, $http) {
 	return $resource(API_URL + '/products/csv/:csv', {
@@ -869,8 +867,6 @@ angular.module('minovateApp')
 			}
 		}
 	});
-=======
->>>>>>> staging
 
 //UploadProducts
 .factory('UploadProducts', function($resource, $http) {
