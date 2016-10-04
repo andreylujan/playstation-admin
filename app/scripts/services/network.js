@@ -867,6 +867,7 @@ angular.module('minovateApp')
 			}
 		}
 	});
+})
 
 //Promoters
 .factory('Promoters', function($resource) {
