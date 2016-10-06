@@ -89,7 +89,7 @@
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{report.title | capitalize:true}}
+									<p uib-tooltip="{{report.description}}" tooltip-placement="top">{{report.title | capitalize:true}}</p>
 								</td>
 								<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
 									{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}
@@ -199,7 +199,7 @@
 									{{report.id}}
 								</td>
 								<td data-title="'Título'" sortable="'title'" filter="{ 'title': 'text' }">
-									{{report.title }}
+									<p uib-tooltip="{{report.description}}" tooltip-placement="top">{{report.title }}</p>
 								</td>
 								<td data-title="'Fecha creación'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }">
 									{{report.createdAt | date: 'dd/MM/yyyy HH:mm'}}

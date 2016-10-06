@@ -1,92 +1,40 @@
 <div class="page">
-
-
-
-
 	<!-- page header -->
-	<div class="pageheader">
+	<div class="p-0 page page-core page-login">
+		<div class="pagecontent">
+			<img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/top_login2.png" style="width: 100%;top:0;position:fixed">
 
-		<h2>{{page.title}} <span></h2>
+			<div class="mt-70">
+				<div class="text-center"><img src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/s2go2-logo3.png" alt="play_logo"></div>
 
-		<!-- <div class="page-bar">
-
-			<ul class="page-breadcrumb">
-				<li>
-					<a ui-sref="app.dashboard"><i class="fa fa-home"></i> {{main.title}}</a>
-				</li>
-				<li>
-					<a href="javascript:;">Usuarios</a>
-				</li>
-				<li>
-					<a ui-sref="app.tables.bootstrap">{{page.title}}</a>
-				</li>
-			</ul>
-
-		</div> -->
-
-	</div>
-	<!-- /page header -->
+				<div class="container w-420 p-20 bg-blue-ps-3 mt-40 text-center br-25">
 
 
+					<h2 class="text-light text-black">{{page.title}}</h2>
 
+					<h4 class="text-black">Ingresa el mail de los usuarios que quieres invitar. Puede ser más de uno</h4>
 
-
-
-	<!-- page content -->
-	<div class="pagecontent">
-
-
-		<!-- row -->
-		<div class="row">
-
-			<!-- col -->
-			<div class="col-md-12">
-				<p class="lead">Ingresa el mail de los usuarios que quieres invitar. Puede ser más de uno</p>
-			</div>
-			<!-- /col -->
-
-		</div>
-		<!-- /row -->
-
-		<!-- row -->
-		<div class="row">
-
-			<!-- col -->
-			<div class="col-md-12">
-
-				<h4 class="text-{{page.msg.color}}" ng-show="page.msg.show">{{page.msg.text}}</h4>
-
-				<ul class="list-unstyled">
-					<li><p ng-repeat="email in responseInvitations"><fa name="{{email.icon}}"></fa> {{email.email}}</p></li>
-				</ul>
-
-				<form class="form-horizontal form-validation" name="form" novalidate>
-
-					<div class="form-group" ng-repeat="formGroup in page.formGroups.invite">
-						<div class="col-sm-4">
-
-							<input class="form-control rounded" type="email" placeholder="Email de usuario..." ng-model="formGroup.email" ng-change="validateMailAndRol({{formGroup.index}})" required>
-
-							<div style="display: inline-block">
-								<label class="checkbox checkbox-custom-alt" style="display: inline-block; padding-right: 7px" ng-repeat="role in roles"> <input type="radio" value="{{role.id}}" name="{{formGroup.index}}" ng-model="formGroup.roleId" ng-change="validateMailAndRol({{formGroup.index}})" required><i></i> {{role.name}} </label>
+					<h3 class="text-light text-red" ng-show="page.msg.show"> {{page.msg.text}}</h3>
+					<div class="col-md-12">
+						<ul class="list-unstyled">
+							<li><p ng-repeat="email in responseInvitations"><fa name="{{email.icon}}"></fa> {{email.email}}</p></li>
+						</ul>
+						<form class="form-horizontal form-validation" name="form" novalidate>
+							<div class="form-group" ng-repeat="formGroup in page.formGroups.invite">
+								<div class="col-sm-12">
+									<input class="form-control rounded" type="email" placeholder="Email de usuario..." ng-model="formGroup.email" ng-change="validateMailAndRol({{formGroup.index}})" required>
+									<div style="display: inline-block">
+										<label class="checkbox checkbox-custom-alt text-black" style="display: inline-block; padding-right: 7px" ng-repeat="role in roles"> <input type="radio" value="{{role.id}}" name="{{formGroup.index}}" ng-model="formGroup.roleId" ng-change="validateMailAndRol({{formGroup.index}})" required><i></i> {{role.name}} </label>
+									</div>
+								</div>
+								<label class="col-sm-1 control-label text-left text-orange-ps" ng-show="formGroup.showIcon"><fa name="{{formGroup.faIcon}}" style="cursor:pointer" ng-click="addFormGroup($index)"></fa></label>
 							</div>
-
-						</div>
-						<label class="col-sm-1 control-label text-left text-orange-ps" ng-show="formGroup.showIcon"><fa name="{{formGroup.faIcon}}" style="cursor:pointer" ng-click="addFormGroup($index)"></fa></label>
+							<button class="btn btn-orange-ps br-20 text-md pl-20 pr-20" type="submit" ng-disabled="form.$invalid" ng-click="sendInvitations({success: true,detail: 'OK'})">Enviar</button>					
+						</form>
 					</div>
-
-					<button class="btn btn-orange-ps br-20 text-md pl-20 pr-20" type="submit" ng-disabled="form.$invalid" ng-click="sendInvitations({success: true,detail: 'OK'})">Enviar</button>
-					
-				</form>
-
-
+				</div>
 			</div>
-			<!-- /col -->
-
 		</div>
-		<!-- /row -->
-
+		<!-- /page header -->
 	</div>
-	<!-- /page content -->
-
 </div>
