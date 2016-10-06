@@ -610,7 +610,7 @@ angular.module('minovateApp')
 
         angular.forEach(success.data.attributes.best_practices, function(value, key) {
           bestPractices.push({
-            src: value
+            src: value.url
           });
         });
 
