@@ -17,6 +17,7 @@ angular.module('minovateApp')
 	currentDate.setSeconds(0);
 	currentDate.setMilliseconds(0);
 
+
 	var tomorrowDate = new Date();
 	tomorrowDate.setHours(0);
 	tomorrowDate.setMinutes(0);
