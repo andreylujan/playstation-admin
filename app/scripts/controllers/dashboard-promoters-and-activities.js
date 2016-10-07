@@ -613,13 +613,15 @@ angular.module('minovateApp')
 						$scope.page.promotors.registry.mothlyExitsPerDay.all.push({
 							weekDay: success.data.attributes.checkins_by_day[i].week_day,
 							monthDay: success.data.attributes.checkins_by_day[i].month_day,
-							amount: success.data.attributes.checkins_by_day[i].amount
+							amount: success.data.attributes.checkins_by_day[i].amount,
+							arrivals: success.data.attributes.checkins_by_day[i].amount_arrivals
 						});
 						if (c < 15) {
 							$scope.page.promotors.registry.mothlyExitsPerDay.latest15.push({
 								weekDay: success.data.attributes.checkins_by_day[i].week_day,
 								monthDay: success.data.attributes.checkins_by_day[i].month_day,
-								amount: success.data.attributes.checkins_by_day[i].amount
+								amount: success.data.attributes.checkins_by_day[i].amount,
+								arrivals: success.data.attributes.checkins_by_day[i].amount_arrivals
 							});
 							c++;
 						}

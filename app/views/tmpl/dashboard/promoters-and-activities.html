@@ -167,6 +167,7 @@
 							<tr>
 								<th>Día Semana</th>
 								<th class="text-center">Día</th>
+								<th class="text-center">Cantidad Llegadas</th>
 								<th class="text-center">Cantidad Salidas</th>
 							</tr>
 						</thead>
@@ -174,6 +175,7 @@
 							<tr ng-repeat="checkin in page.promotors.registry.mothlyExitsPerDay.latest15">
 								<td>{{checkin.weekDay}}</td>
 								<td class="text-center">{{checkin.monthDay}}</td>
+								<td class="text-center">{{checkin.arrivals}}</td>
 								<td class="text-gray-ps-2 text-center">{{checkin.amount}}</td>
 							</tr>
 						</tbody>
