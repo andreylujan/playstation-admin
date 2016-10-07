@@ -150,7 +150,7 @@
 												Tienda: {{image.store_name}} 
 												Creador:  {{image.creator_name}}
 												Email:  {{image.creator_email}}
-												Fecha:  {{image.created_at | date : 'dd/MM/yyyy'}}" tooltip-style="width:200px;" tooltip-placement="right">
+												Fecha:  {{image.created_at | date : 'dd/MM/yyyy'}}" tooltip-style="width:200px;" tooltip-placement="top">
 										</a>
 										<img uib-tooltip="Eliminar foto" ng-click="deleteImage(image.id)" style="position:absolute;width:30px;left: 50%;bottom: 25px;cursor:pointer" src="images/delete_pic.png" alt="image_{{image.url}}" >
 									</div>
