@@ -755,7 +755,7 @@ angular.module('minovateApp')
 			'filter[store_name]': filters.storeName || null,
 			'filter[creator_name]': filters.creatorName || null,
 			'filter[assigned_user_names]': filters.assignedUserNames || null,
-			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf,finished_at'
+			'fields[reports]': 'zone_name,store_name,description,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf,finished_at'
 		}, function(success) {
 
 			if (success.data) {
@@ -825,7 +825,7 @@ angular.module('minovateApp')
 			'filter[store_name]': filters.storeName || null,
 			'filter[creator_name]': filters.creatorName || null,
 			'filter[assigned_user_names]': filters.assignedUserNames || null,
-			'fields[reports]': 'zone_name,store_name,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
+			'fields[reports]': 'zone_name,store_name,description,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
 			if (success.data) {
