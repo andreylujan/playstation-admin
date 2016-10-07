@@ -34,8 +34,7 @@
 
 
 #header {
-  background-image: url("../../images/banner.jpg");
-  background-size: 100% 100%;
+  background-color: #0c7ebd;
   z-index: 1001;
   @include transition(right .25s $ease-in-circ, padding-right .25s $ease-in-circ);
 
