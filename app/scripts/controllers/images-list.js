@@ -17,6 +17,7 @@ angular.module('minovateApp')
 	currentDate.setSeconds(0);
 	currentDate.setMilliseconds(0);
 
+
 	var tomorrowDate = new Date();
 	tomorrowDate.setHours(0);
 	tomorrowDate.setMinutes(0);
@@ -240,6 +241,12 @@ angular.module('minovateApp')
 					$scope.page.images.push({
 						id: success.data[i].id,
 						url: success.data[i].attributes.url,
+						zone_name: success.data[i].attributes.zone_name,
+						dealer_name: success.data[i].attributes.dealer_name,
+						store_name: success.data[i].attributes.store_name,
+						creator_name: success.data[i].attributes.creator_name,
+						creator_email: success.data[i].attributes.creator_email,
+						created_at: success.data[i].attributes.created_at,
 						show: false
 					});
 				}
