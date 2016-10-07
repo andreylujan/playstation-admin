@@ -199,6 +199,12 @@ angular.module('minovateApp')
 				}
 			}
 		},
+		sales: {
+      		bestPractices: {
+        		loaded: false,
+        		list: []
+      		}
+    	},
 		buttons: {
 			getExcel: {
 				disabled: false
@@ -489,6 +495,8 @@ angular.module('minovateApp')
 		var month = startDate.getMonth() + 1;
 		var year = startDate.getFullYear();
 
+		$scope.page.sales.bestPractices.loaded = false;
+
 		Dashboard.query({
 			category: 'promoter_activity',
 			zone_id: zoneIdSelected,
@@ -605,13 +613,15 @@ angular.module('minovateApp')
 						$scope.page.promotors.registry.mothlyExitsPerDay.all.push({
 							weekDay: success.data.attributes.checkins_by_day[i].week_day,
 							monthDay: success.data.attributes.checkins_by_day[i].month_day,
-							amount: success.data.attributes.checkins_by_day[i].amount
+							amount: success.data.attributes.checkins_by_day[i].amount,
+							arrivals: success.data.attributes.checkins_by_day[i].amount_arrivals
 						});
 						if (c < 15) {
 							$scope.page.promotors.registry.mothlyExitsPerDay.latest15.push({
 								weekDay: success.data.attributes.checkins_by_day[i].week_day,
 								monthDay: success.data.attributes.checkins_by_day[i].month_day,
-								amount: success.data.attributes.checkins_by_day[i].amount
+								amount: success.data.attributes.checkins_by_day[i].amount,
+								arrivals: success.data.attributes.checkins_by_day[i].amount_arrivals
 							});
 							c++;
 						}
@@ -957,6 +967,20 @@ angular.module('minovateApp')
 
 				// FIN Promociones destacadas  - Al día
 
+				//// INI Best Practices
+		        var bestPractices = [];
+
+		        angular.forEach(success.data.attributes.best_practices, function(value, key) {
+		          	bestPractices.push({
+		            	src: value.url
+		          	});
+		        });
+
+		        $scope.page.sales.bestPractices.list = bestPractices;
+		        $scope.page.sales.bestPractices.loaded = true;
+
+		        // FIN Best Practices
+		        
 			}
 		}, function(error) {
 			$log.error(error);

@@ -168,6 +168,7 @@
 							<tr>
 								<th>Día Semana</th>
 								<th class="text-center">Día</th>
+								<th class="text-center">Cantidad Llegadas</th>
 								<th class="text-center">Cantidad Salidas</th>
 							</tr>
 						</thead>
@@ -175,6 +176,7 @@
 							<tr ng-repeat="checkin in page.promotors.registry.mothlyExitsPerDay.latest15">
 								<td>{{checkin.weekDay}}</td>
 								<td class="text-center">{{checkin.monthDay}}</td>
+								<td class="text-center">{{checkin.arrivals}}</td>
 								<td class="text-gray-ps-2 text-center">{{checkin.amount}}</td>
 							</tr>
 						</tbody>
@@ -340,13 +342,13 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<!--div class="row">
 
 		<!-- col -->
-		<div class="col-md-4">
+		<!--div class="col-md-4">
 
 			<!-- tile -->
-			<section class="tile" fullscreen="isFullscreen01">
+			<!--section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Precios Comunicados</strong></h1>
@@ -381,13 +383,13 @@
 			</section>
 			<!-- /tile -->
 
-		</div>
+		<!--/div>
 		<!-- /col -->
 
-		<div class="col-md-8">
+		<!--div class="col-md-8">
 
 			<!-- tile -->
-			<section class="tile" fullscreen="isFullscreen01">
+			<!--section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Precios Comunicados </strong>Tiendas que no cumplen en el periodo seleccionado</h1>
@@ -419,16 +421,16 @@
 			</section>
 			<!-- /tile -->
 
-		</div>
-	</div>
+		<!--/div>
+	</div-->
 
-	<div class="row">
+	<!--div class="row">
 
 		<!-- col -->
-		<div class="col-md-7">
+		<!--div class="col-md-7">
 
 			<!-- tile -->
-			<section class="tile" fullscreen="isFullscreen01">
+			<!--section class="tile" fullscreen="isFullscreen01">
 
 				<div class="tile-header dvd dvd-btm">
 					<h1 class="custom-font"><strong>Precios Comunicados</strong> al Día</h1>
@@ -441,13 +443,13 @@
 			</section>
 			<!-- /tile -->
 
-		</div>
+		<!--/div>
 		<!-- /col -->
 
-		<div class="col-md-5">
+		<!--div class="col-md-5">
 
 			<!-- tile -->
-			<section class="tile" fullscreen="isFullscreen01">
+			<!--section class="tile" fullscreen="isFullscreen01">
 				<div class="tile-widget">
 					<table class="table table-condensed table-hover mt-10">
 						<thead>
@@ -472,8 +474,8 @@
 			</section>
 			<!-- /tile -->
 
-		</div>
-	</div>
+		<!--/div>
+	</div-->
 
 	<div class="row">
 
@@ -606,6 +608,31 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-md-12">
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Best Practice Semanales </strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<div style="width:95%;margin:0 auto" ng-if="page.sales.bestPractices.loaded" >
+						<slick dots=false infinite="true" speed="300" slides-to-show="5" touch-move="true" slides-to-scroll="1"  ng-show="page.sales.bestPractices.list.length">
+							<div ng-repeat="image in page.sales.bestPractices.list">
+								<div class="" ng-include="'imagesTmpl.html'"></div>
+							</div>
+						</slick>
+					</div>
+					<a ui-sref="app.images.list" style="cursor:pointer"><p class="text-orange-ps mt-10 mb-10 text-right">Ver todas ></p></a>
+					<h3 class="text-center" ng-show="!page.sales.bestPractices.list.length">No se registraron fotos de best practices</h3>
+				</div>
+
+			</section>
+
+		</div>
+	</div>
+	
 	<script type="text/ng-template" id="viewAllDataTable.html">
 		<div class="modal-body text-gray">
 
