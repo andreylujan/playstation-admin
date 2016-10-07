@@ -157,7 +157,7 @@
               <div class="col-sm-8">
                 <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersSupervisor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario supervisor" ng-change="removeAlert()">
                   <ui-select-match placeholder="usuario supervisor...">{{$select.selected.fullName | capitalize:true}}</ui-select-match>
-                  <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <ui-select-choices repeat="user in modal.users.users | filter:{ role: 1 } track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
                     <div ng-bind-html="user.fullName | capitalize:true | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
@@ -168,7 +168,7 @@
               <div class="col-sm-8">
                 <ui-select class="bg-white b-solid br-15" ng-model="modal.users.selectedUsersInstructor" sortable="true" theme="bootstrap" ng-disabled="modal.users.disabled" reset-search-input="false" title="Selecciona un usuario instructor" ng-change="removeAlert()">
                   <ui-select-match placeholder="usuario instructor...">{{$select.selected.fullName | capitalize:true}}</ui-select-match>
-                  <ui-select-choices repeat="user in modal.users.users track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
+                  <ui-select-choices repeat="user in modal.users.users | filter:{ role: 3 } track by $index" refresh="refreshAddresses($select.search)" refresh-delay="0">
                     <div ng-bind-html="user.fullName | capitalize:true | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>

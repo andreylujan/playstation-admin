@@ -217,20 +217,24 @@ angular.module('minovateApp')
 							firstName: success.data[i].attributes.first_name,
 							lastName: success.data[i].attributes.last_name,
 							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name,
-							type: 'users'
+							type: 'users',
+							role: success.data[i].attributes.role_id,
 						});
-
-						for (i = 0; i < success.data.length; i++) {
-							var firstName = success.data[i].attributes.first_name;
-							$scope.modal.promoters.list.push({
-								id: success.data[i].id,
-								name: firstName ? success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name : success.data[i].attributes.email,
-								type: 'users'
-							});
-						}
 					}
 				}
 
+				for (i = 0; i < success.data.length; i++) {
+					var firstName = success.data[i].attributes.first_name;
+					if ((success.data[i].attributes.role_id === 2) && (success.data[i].attributes.active)) 
+					{
+						$scope.modal.promoters.list.push({
+							id: success.data[i].id,
+							name: firstName ? success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name : success.data[i].attributes.email,
+							type: 'users'
+						});
+					}
+				}
+				
 				getStoreTypes({
 					success: true,
 					detail: 'OK'
