@@ -1,3 +1,11 @@
+<style type="text/css">
+	.tooltip
+	{
+		width: 550px !important;
+		height: auto;
+		 white-space: pre-line;
+	}
+</style>
 <div class="page page-ng-table">
 
 	<!-- page header -->
@@ -137,9 +145,14 @@
 
 									<div style="border: solid #D9D9D9 1px; margin-bottom: 10px" ng-show="image.show">
 										<a ng-href="{{image.url}}" target="_blank">
-										<img style="margin: 0 auto;" class="img-responsive p-10" ng-src="{{image.url}}" alt="image_{{image.id}}" imageonload="image.show = true">
-									</a>
-									<img uib-tooltip="Eliminar foto" ng-click="deleteImage(image.id)" style="position:absolute;width:30px;left: 50%;bottom: 25px;cursor:pointer" src="images/delete_pic.png" alt="image_{{image.url}}" >
+											<img style="margin: 0 auto;" class="img-responsive p-10" ng-src="{{image.url}}" alt="image_{{image.id}}" imageonload="image.show = true" data-html="true" uib-tooltip="Zona: {{image.zone_name}}  
+												Dealer: {{image.dealer_name}}  
+												Tienda: {{image.store_name}} 
+												Creador:  {{image.creator_name}}
+												Email:  {{image.creator_email}}
+												Fecha:  {{image.created_at | date : 'dd/MM/yyyy'}}" tooltip-style="width:200px;" tooltip-placement="right">
+										</a>
+										<img uib-tooltip="Eliminar foto" ng-click="deleteImage(image.id)" style="position:absolute;width:30px;left: 50%;bottom: 25px;cursor:pointer" src="images/delete_pic.png" alt="image_{{image.url}}" >
 									</div>
 									<img src="images/loader.gif" alt="loader" class="size-20x20 text-center" ng-show="!image.show" style="position:relative;left: 50%">
 								</div>
