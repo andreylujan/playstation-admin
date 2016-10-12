@@ -247,6 +247,7 @@ angular.module('minovateApp')
 						creator_name: success.data[i].attributes.creator_name,
 						creator_email: success.data[i].attributes.creator_email,
 						created_at: success.data[i].attributes.created_at,
+						comment: success.data[i].attributes.comment,
 						show: false
 					});
 				}
