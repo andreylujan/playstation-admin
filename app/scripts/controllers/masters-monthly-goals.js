@@ -210,7 +210,12 @@ angular.module('minovateApp')
 		}
 
 		if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv' &&
-			$scope.modal.monthlyGoal.file.value.type !== 'text/comma-separated-values') {
+			$scope.modal.monthlyGoal.file.value.type !== 'text/comma-separated-values' &&
+			$scope.modal.monthlyGoal.file.value.type !== 'application/csv' &&
+			$scope.modal.monthlyGoal.file.value.type !== 'application/excel' &&
+			$scope.modal.monthlyGoal.file.value.type !== 'application/vnd.ms-excel' &&
+			$scope.modal.monthlyGoal.file.value.type !== 'application/vnd.msexcel' &&
+			$scope.modal.monthlyGoal.file.value.type !== 'text/anytext') {
 
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.show = true;

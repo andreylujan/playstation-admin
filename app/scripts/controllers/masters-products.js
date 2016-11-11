@@ -972,7 +972,12 @@ angular.module('minovateApp')
 		}
 
 		if ($scope.modal.products.file.value.type !== 'text/csv' &&
-			$scope.modal.products.file.value.type !== 'text/comma-separated-values') {
+			$scope.modal.products.file.value.type !== 'text/comma-separated-values' &&
+			$scope.modal.products.file.value.type !== 'application/csv' &&
+			$scope.modal.products.file.value.type !== 'application/excel' &&
+			$scope.modal.products.file.value.type !== 'application/vnd.ms-excel' &&
+			$scope.modal.products.file.value.type !== 'application/vnd.msexcel' &&
+			$scope.modal.products.file.value.type !== 'text/anytext') {
 
 			$scope.modal.alert.color = 'blue-ps-1';
 			$scope.modal.alert.show = true;
