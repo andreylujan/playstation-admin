@@ -484,116 +484,58 @@
  			});
  			categories.push(tiendas);
  			categories.push(stockTienda);
+ 			categories.push(value.product_name);
 
  			contenedorCategories.push(categories);
  		});
 
- 		$scope.page.stock.grafico1 = names[0];
- 		$scope.page.stock.grafico2 = names[1];
- 		$scope.page.stock.grafico3 = names[2];
-
-
- 		$scope.chartStockBreak1 = Utils.setChartConfig('column', 300, {
- 			column: {
- 				stacking: 'normal',
- 				dataLabels: {
- 					enabled: true,
- 					color: 'white',
- 					style: {
- 						textShadow: '0 0 3px black',
- 						fontWeight: 'normal'
+ 		var graficos = [];
+ 		angular.forEach(contenedorCategories, function(value, key) {
+ 			var chartStockBreak = Utils.setChartConfig('column', 300, {
+ 				column: {
+ 					stacking: 'normal',
+ 					dataLabels: {
+ 						enabled: true,
+ 						color: 'white',
+ 						style: {
+ 							textShadow: '0 0 3px black',
+ 							fontWeight: 'normal'
+ 						}
  					}
  				}
- 			}
- 		}, {
- 			min: 0,
- 			title: {
- 				text: null
- 			},
- 			stackLabels: {
- 				enabled: true,
- 				style: {
- 					fontWeight: 'normal',
- 					color: 'gray'
- 				}
- 			}
- 		}, {
- 			categories: contenedorCategories[0][0],
- 			title: {
- 				text: 'Tiendas'
- 			}
- 		}, [{
- 			name: 'Stock',
- 			data: contenedorCategories[0][1]
- 		}]);
-
- 		$scope.chartStockBreak2 = Utils.setChartConfig('column', 300, {
- 			column: {
- 				stacking: 'normal',
- 				dataLabels: {
+ 			}, {
+ 				min: 0,
+ 				title: {
+ 					text: null
+ 				},
+ 				stackLabels: {
  					enabled: true,
- 					color: 'white',
  					style: {
- 						textShadow: '0 0 3px black',
- 						fontWeight: 'normal'
+ 						fontWeight: 'normal',
+ 						color: 'gray'
  					}
  				}
- 			}
- 		}, {
- 			min: 0,
- 			title: {
- 				text: null
- 			},
- 			stackLabels: {
- 				enabled: true,
- 				style: {
- 					fontWeight: 'normal',
- 					color: 'gray'
+ 			}, {
+ 				categories: value[0],
+ 				title: {
+ 					text: 'Tiendas'
  				}
- 			}
- 		}, {
- 			categories: contenedorCategories[1][0],
- 			title: {
- 				text: 'Tiendas'
- 			}
- 		}, [{
- 			name: 'Stock',
- 			data: contenedorCategories[1][1]
- 		}]);
+ 			}, [{
+ 				name: 'Stock',
+ 				data: value[1]
+ 			}]);
 
- 		$scope.chartStockBreak3 = Utils.setChartConfig('column', 300, {
- 			column: {
- 				stacking: 'normal',
- 				dataLabels: {
- 					enabled: true,
- 					color: 'white',
- 					style: {
- 						textShadow: '0 0 3px black',
- 						fontWeight: 'normal'
- 					}
- 				}
- 			}
- 		}, {
- 			min: 0,
- 			title: {
- 				text: null
- 			},
- 			stackLabels: {
- 				enabled: true,
- 				style: {
- 					fontWeight: 'normal',
- 					color: 'gray'
- 				}
- 			}
- 		}, {
- 			categories: contenedorCategories[2][0],
- 			title: {
- 				text: 'Tiendas'
- 			}
- 		}, [{
- 			name: 'Stock',
- 			data: contenedorCategories[2][1]
- 		}]);
+ 			var aux = [{
+ 				'name': value[2],
+ 				'grafico': chartStockBreak
+ 			}];
+
+      //$log.error(aux);
+
+      graficos.push(aux);
+  });
+
+ 		$scope.page.stock.graficos = graficos;
 
  	};
 
@@ -639,6 +581,7 @@
  			});
  		});
 
+
  		$scope.page.stock.topProducts.tableParams = new NgTableParams({
  			sorting: {
  				units: "desc"
@@ -646,6 +589,7 @@
  		}, {
  			dataset: topProducts
  		});
+ 		$log.error($scope.page.stock.topProducts.tableParams.data.length);
  	};
 
  	angular.element('#daterangeDashStock').on('apply.daterangepicker', function(ev, picker) {
