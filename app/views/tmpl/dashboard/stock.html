@@ -128,54 +128,6 @@
 	</div>
 
 
-
-	<div class="row">
-		<div class="col-md-4" ng-repeat="graph in page.stock.graficos">
-			<section class="tile" fullscreen="isFullscreen01">
-
-				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong> {{graph[0].name}} </strong></h1>
-				</div>
-
-				<div class="tile-widget">
-					<highchart config="graph[0].grafico"></highchart>
-				</div>
-
-			</section>
-		</div>
-	</div>
-
-	<div class="row">
-	<div class="col-md-6">
-			<section class="tile" >
-
-				<div class="tile-header dvd dvd-btm">
-					<h1 class="custom-font"><strong>Stock valorizado </strong></h1>
-				</div>
-
-				<div class="tile-widget">
-					<highchart config="charValueStock"></highchart>
-				</div>
-
-			</section>
-		</div>
-		<!-- /col -->
-
-		<div class="col-md-6">
-			<section class="tile">
-
-				<div class="tile-header dvd dvd-btm">
-					<h2 class="custom-font"><strong>Share de Stock</strong></h2>
-				</div>
-
-				<div class="tile-widget">
-					<div morris-donut-chart donut-data='donutData' style="height: 513px" data-formatter="$"></div>
-				</div>
-
-			</section>
-		</div>
-	</div>
-
 	<div class="row">
 
 		<!-- col -->
@@ -227,6 +179,53 @@
 	</div>
 
 </div>
+
+<div class="row">
+		<div class="col-md-4" ng-repeat="graph in page.stock.graficos">
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong> {{graph[0].name}} </strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="graph[0].grafico"></highchart>
+				</div>
+
+			</section>
+		</div>
+	</div>
+
+	<div class="row">
+	<div class="col-md-6">
+			<section class="tile" >
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Stock valorizado </strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="charValueStock"></highchart>
+				</div>
+
+			</section>
+		</div>
+		<!-- /col -->
+
+		<div class="col-md-6">
+			<section class="tile">
+
+				<div class="tile-header dvd dvd-btm">
+					<h2 class="custom-font"><strong>Share de Stock</strong></h2>
+				</div>
+
+				<div class="tile-widget">
+					<div morris-donut-chart donut-data='donutData' style="height: 513px" data-formatter="$"></div>
+				</div>
+
+			</section>
+		</div>
+	</div>
 
 <script type="text/ng-template" id="messageModal.html">
 
