@@ -127,6 +127,97 @@
 		<!-- /col -->
 	</div>
 
+
+
+	<div class="row">
+
+		<!-- col -->
+		<div class="col-md-4">
+
+			<!-- tile -->
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong> {{page.stock.grafico1}}</strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="chartStockBreak1"></highchart>
+				</div>
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+
+		<div class="col-md-4">
+
+			<!-- tile -->
+			<section class="tile" fullscreen="isFullscreen01">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong> {{page.stock.grafico2}}</strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="chartStockBreak2"></highchart>
+				</div>
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+
+		<div class="col-md-4">
+
+			<!-- tile -->
+			<section class="tile" fullscreen="isFullscreen03">
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong> {{page.stock.grafico3}}</strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="chartStockBreak3"></highchart>
+				</div>
+
+			</section>
+			<!-- /tile -->
+
+		</div>
+	</div>
+
+	<div class="row">
+	<div class="col-md-6">
+			<section class="tile" >
+
+				<div class="tile-header dvd dvd-btm">
+					<h1 class="custom-font"><strong>Stock valorizado </strong></h1>
+				</div>
+
+				<div class="tile-widget">
+					<highchart config="charValueStock"></highchart>
+				</div>
+
+			</section>
+		</div>
+		<!-- /col -->
+
+		<div class="col-md-6">
+			<section class="tile">
+
+				<div class="tile-header dvd dvd-btm">
+					<h2 class="custom-font"><strong>Share de Stock</strong></h2>
+				</div>
+
+				<div class="tile-widget">
+					<div morris-donut-chart donut-data='donutData' style="height: 513px" data-formatter="$"></div>
+				</div>
+
+			</section>
+		</div>
+	</div>
+
 	<div class="row">
 
 		<!-- col -->
