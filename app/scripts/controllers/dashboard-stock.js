@@ -379,256 +379,256 @@
  	var getShareStock = function(data) {
 
  		var donutData = [],
- 		donutColors = ['#015496', '#0c7ebd', '#a8a9ac', '#6d6e71'];
- 		angular.forEach(data.data.attributes.share_percentages, function(value, key) {
- 			donutData.push({
- 				label: value.name,
- 				value: Math.round(value.share_percentage * 10000) / 100,
- 				color: donutColors[key]
- 			});
- 		});
+    donutColors = ['#015496', '#0c7ebd', '#a8a9ac', '#6d6e71'];
+    angular.forEach(data.data.attributes.share_percentages, function(value, key) {
+      donutData.push({
+        label: value.name,
+        value: Math.round(value.share_percentage * 10000) / 100,
+        color: donutColors[key]
+      });
+    });
 
- 		$scope.donutData = donutData;
- 	};
-
-
- 	var getStockByCompany = function(data) {
-
- 		$scope.charValueStock = Utils.setChartConfig('column', 400, {}, {}, {}, []);
-
- 		var categories = [];
- 		$scope.categories = [];
- 		var hardwareSales = [];
- 		var accesoriesSales = [];
- 		var gamesSales = [];
- 		var totals = [];
-
- 		angular.forEach(data.data.attributes.stocks_by_company, function(value, key) {
- 			categories.push(value.name);
- 			hardwareSales.push(value.stocks_by_type.hardware);
- 			accesoriesSales.push(value.stocks_by_type.accessories);
- 			gamesSales.push(value.stocks_by_type.games);
- 			totals.push(value.stocks_by_type.total);
-
- 			$scope.categories.push({
- 				name: value.name,
- 				hardware: value.stocks_by_type.hardware,
- 				accessories: value.stocks_by_type.accessories,
- 				games: value.stocks_by_type.games,
- 				total: value.stocks_by_type.total
- 			});
- 		});
+    $scope.donutData = donutData;
+  };
 
 
- 		$scope.charValueStock = Utils.setChartConfig('column', 300, {
- 			column: {
- 				stacking: 'normal',
- 				dataLabels: {
- 					enabled: true,
- 					color: 'white',
- 					style: {
- 						textShadow: '0 0 3px black',
- 						fontWeight: 'normal'
- 					}
- 				}
- 			}
- 		}, {
- 			min: 0,
- 			title: {
- 				text: null
- 			},
- 			stackLabels: {
- 				enabled: true,
- 				style: {
- 					fontWeight: 'normal',
- 					color: 'gray'
- 				}
- 			}
- 		}, {
- 			categories: categories,
- 			title: {
- 				text: 'Marcas'
- 			}
- 		}, [{
- 			name: 'Hardware',
- 			data: hardwareSales
- 		}, {
- 			name: 'Accesorios',
- 			data: accesoriesSales
- 		}, {
- 			name: 'Juegos',
- 			data: gamesSales
- 		}]);
- 	};
+  var getStockByCompany = function(data) {
 
- 	var getTopStockBreaks = function(data) {
+   $scope.charValueStock = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
- 		$scope.page.stock.grafico1 = "1";
- 		$scope.page.stock.grafico2 = "2";
- 		$scope.page.stock.grafico3 = "3";
+   var categories = [];
+   $scope.categories = [];
+   var hardwareSales = [];
+   var accesoriesSales = [];
+   var gamesSales = [];
+   var totals = [];
 
- 		var categories;
- 		var contenedorCategories = [];
- 		var names = [];
+   angular.forEach(data.data.attributes.stocks_by_company, function(value, key) {
+    categories.push(value.name);
+    hardwareSales.push(value.stocks_by_type.hardware);
+    accesoriesSales.push(value.stocks_by_type.accessories);
+    gamesSales.push(value.stocks_by_type.games);
+    totals.push(value.stocks_by_type.total);
+
+    $scope.categories.push({
+      name: value.name,
+      hardware: value.stocks_by_type.hardware,
+      accessories: value.stocks_by_type.accessories,
+      games: value.stocks_by_type.games,
+      total: value.stocks_by_type.total
+    });
+  });
 
 
- 		angular.forEach(data.data.attributes.top_stock_breaks, function(value, key) {
- 			categories = [];
- 			var tiendas = [];
- 			var stockTienda = [];
- 			names.push(value.product_name);
- 			angular.forEach(value.stock_breaks_by_dealer, function(item, key) {
+   $scope.charValueStock = Utils.setChartConfig('column', 300, {
+    column: {
+      stacking: 'normal',
+      dataLabels: {
+        enabled: true,
+        color: 'white',
+        style: {
+          textShadow: '0 0 3px black',
+          fontWeight: 'normal'
+        }
+      }
+    }
+  }, {
+    min: 0,
+    title: {
+      text: null
+    },
+    stackLabels: {
+      enabled: true,
+      style: {
+        fontWeight: 'normal',
+        color: 'gray'
+      }
+    }
+  }, {
+    categories: categories,
+    title: {
+      text: 'Marcas'
+    }
+  }, [{
+    name: 'Hardware',
+    data: hardwareSales
+  }, {
+    name: 'Accesorios',
+    data: accesoriesSales
+  }, {
+    name: 'Juegos',
+    data: gamesSales
+  }]);
+ };
+
+ var getTopStockBreaks = function(data) {
+
+   $scope.page.stock.grafico1 = "1";
+   $scope.page.stock.grafico2 = "2";
+   $scope.page.stock.grafico3 = "3";
+
+   var categories;
+   var contenedorCategories = [];
+   var names = [];
+
+
+   angular.forEach(data.data.attributes.top_stock_breaks, function(value, key) {
+    categories = [];
+    var tiendas = [];
+    var stockTienda = [];
+    names.push(value.product_name);
+    angular.forEach(value.stock_breaks_by_dealer, function(item, key) {
  				//$log.error(item.dealer_name);
  				tiendas.push(item.dealer_name);
  				stockTienda.push(item.num_stock_breaks);
  			});
- 			categories.push(tiendas);
- 			categories.push(stockTienda);
- 			categories.push(value.product_name);
+    categories.push(tiendas);
+    categories.push(stockTienda);
+    categories.push(value.product_name);
 
- 			contenedorCategories.push(categories);
- 		});
+    contenedorCategories.push(categories);
+  });
 
- 		var graficos = [];
- 		angular.forEach(contenedorCategories, function(value, key) {
- 			var chartStockBreak = Utils.setChartConfig('column', 300, {
- 				column: {
- 					stacking: 'normal',
- 					dataLabels: {
- 						enabled: true,
- 						color: 'white',
- 						style: {
- 							textShadow: '0 0 3px black',
- 							fontWeight: 'normal'
- 						}
- 					}
- 				}
- 			}, {
- 				min: 0,
- 				title: {
- 					text: null
- 				},
- 				stackLabels: {
- 					enabled: true,
- 					style: {
- 						fontWeight: 'normal',
- 						color: 'gray'
- 					}
- 				}
- 			}, {
- 				categories: value[0],
- 				title: {
- 					text: 'Tiendas'
- 				}
- 			}, [{
- 				name: 'Stock',
- 				data: value[1]
- 			}]);
+   var graficos = [];
+   angular.forEach(contenedorCategories, function(value, key) {
+      var chartStockBreak = Utils.setChartConfig('column', 300, {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true,
+            color: 'white',
+            style: {
+              textShadow: '0 0 3px black',
+              fontWeight: 'normal'
+            }
+          }
+        }
+      }, {
+        min: 0,
+        title: {
+          text: null
+        },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'normal',
+            color: 'gray'
+          }
+        }
+      }, {
+        categories: value[0],
+        title: {
+          text: 'Tiendas'
+        }
+      }, [{
+        name: 'Stock',
+        data: value[1]
+      }]);
 
- 			var aux = [{
- 				'name': value[2],
- 				'grafico': chartStockBreak
- 			}];
+      var aux = [{
+        'name': value[2],
+        'grafico': chartStockBreak
+      }];
 
       //$log.error(aux);
 
       graficos.push(aux);
+    });
+
+   $scope.page.stock.graficos = graficos;
+
+ };
+
+
+
+ var getStockProducts = function(data) {
+   angular.forEach(data.data.attributes.stock_breaks, function(value, key) {
+
+    stockBreaks.push({
+     storeName: value.store_name,
+     dealerName: value.dealer_name,
+     description: value.description,
+     category: value.category,
+     platform: value.platform,
+     publisher: value.publisher,
+     units: value.units,
+     ean: value.ean
+   });
   });
 
- 		$scope.page.stock.graficos = graficos;
+   $scope.page.stock.stockBreaks.tableParams = new NgTableParams({
+    sorting: {
+     units: "desc"
+   }
+ }, {
+  dataset: stockBreaks
+});
+ };
 
- 	};
+ var getProductsHighRotation = function(data) {
+   angular.forEach(data.data.attributes.top_products, function(value, key) {
 
-
-
- 	var getStockProducts = function(data) {
- 		angular.forEach(data.data.attributes.stock_breaks, function(value, key) {
-
- 			stockBreaks.push({
- 				storeName: value.store_name,
- 				dealerName: value.dealer_name,
- 				description: value.description,
- 				category: value.category,
- 				platform: value.platform,
- 				publisher: value.publisher,
- 				units: value.units,
- 				ean: value.ean
- 			});
- 		});
-
- 		$scope.page.stock.stockBreaks.tableParams = new NgTableParams({
- 			sorting: {
- 				units: "desc"
- 			}
- 		}, {
- 			dataset: stockBreaks
- 		});
- 	};
-
- 	var getProductsHighRotation = function(data) {
- 		angular.forEach(data.data.attributes.top_products, function(value, key) {
-
- 			topProducts.push({
- 				dealerName: value.dealer_name,
- 				storeName: value.store_name,
- 				ean: value.ean,
- 				description: value.description,
- 				category: value.category,
- 				platform: value.platform,
- 				publisher: value.publisher,
- 				units: value.units,
- 				salesAmount: value.sales_amount
- 			});
- 		});
+    topProducts.push({
+     dealerName: value.dealer_name,
+     storeName: value.store_name,
+     ean: value.ean,
+     description: value.description,
+     category: value.category,
+     platform: value.platform,
+     publisher: value.publisher,
+     units: value.units,
+     salesAmount: value.sales_amount
+   });
+  });
 
 
- 		$scope.page.stock.topProducts.tableParams = new NgTableParams({
- 			sorting: {
- 				units: "desc"
- 			}
- 		}, {
- 			dataset: topProducts
- 		});
- 		$log.error($scope.page.stock.topProducts.tableParams.data.length);
- 	};
+   $scope.page.stock.topProducts.tableParams = new NgTableParams({
+    sorting: {
+     units: "desc"
+   }
+ }, {
+  dataset: topProducts
+});
+   $log.error($scope.page.stock.topProducts.tableParams.data.length);
+ };
 
- 	angular.element('#daterangeDashStock').on('apply.daterangepicker', function(ev, picker) {
- 		$scope.getDashboardInfo({
- 			success: true,
- 			detail: 'OK'
- 		});
- 	});
-
- 	$scope.getExcel = function(e) {
-
- 		if (!e.success) {
- 			$log.error(e.detail);
- 			return;
- 		}
-
- 		if ($scope.page.buttons.getExcel.disabled) {
- 			return;
- 		}
- 		$scope.page.buttons.getExcel.disabled = true;
- 		$scope.page.loader.show = true;
-
- 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
- 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
- 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
- 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
- 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
- 		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
- 		var yearSelected = $scope.page.filters.month.value.getFullYear();
-
- 		ExcelDashboard.getFile('#excelBtn', 'stock', 'stock', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
-
- 		$timeout(function() {
- 			$scope.page.buttons.getExcel.disabled = false;
- 			$scope.page.loader.show = false;
- 		}, 2500);
- 	};
-
- 	getZones();
-
-
+ angular.element('#daterangeDashStock').on('apply.daterangepicker', function(ev, picker) {
+   $scope.getDashboardInfo({
+    success: true,
+    detail: 'OK'
+  });
  });
+
+ $scope.getExcel = function(e) {
+
+   if (!e.success) {
+    $log.error(e.detail);
+    return;
+  }
+
+  if ($scope.page.buttons.getExcel.disabled) {
+    return;
+  }
+  $scope.page.buttons.getExcel.disabled = true;
+  $scope.page.loader.show = true;
+
+  var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+  var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+  var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+  var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+  var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+  var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
+  var yearSelected = $scope.page.filters.month.value.getFullYear();
+
+  ExcelDashboard.getFile('#excelBtn', 'stock', 'stock', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
+
+  $timeout(function() {
+    $scope.page.buttons.getExcel.disabled = false;
+    $scope.page.loader.show = false;
+  }, 2500);
+};
+
+getZones();
+
+
+});
