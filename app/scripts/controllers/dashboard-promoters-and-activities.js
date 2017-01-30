@@ -7,406 +7,406 @@
  * # DashboardPromotersAndActivitiesCtrl
  * Controller of the minovateApp
  */
-angular.module('minovateApp')
+ angular.module('minovateApp')
 
-.controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $filter, $uibModal, $moment, $timeout, Utils, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
+ .controller('DashboardPromotersAndActivitiesCtrl', function($scope, $log, $filter, $uibModal, $moment, $timeout, Utils, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
 
-	var currentDate = new Date();
-	var firstMonthDay = new Date();
-	firstMonthDay.setDate(1);
+ 	var currentDate = new Date();
+ 	var firstMonthDay = new Date();
+ 	firstMonthDay.setDate(1);
 
-	$scope.page = {
-		title: 'Promotores y Actividades',
-		filters: {
-			zone: {
-				list: [],
-				selected: null
-			},
-			dealer: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			store: {
-				list: [],
-				selected: null,
-				disabled: false
-			},
-			instructor: {
-				list: [],
-				selected: null,
-				disabled: false,
-			},
-			supervisor: {
-				list: [],
-				selected: null,
-				disabled: false,
-				loaded: false
-			},
-			month: {
-				value: new Date(),
-				isOpen: false,
-				options: {
-					minMode: 'month',
-					maxDate: new Date()
-				}
-			},
-			dateRange: {
-				options: {
-					locale: {
-						format: 'DD/MM/YYYY',
-						applyLabel: 'Buscar',
-						cancelLabel: 'Cerrar',
-						fromLabel: 'Desde',
-						toLabel: 'Hasta',
-						customRangeLabel: 'Personalizado',
-						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
-						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-						firstDay: 1
-					},
-					autoApply: true,
-					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
-				},
-				date: {
-					startDate: firstMonthDay,
-					endDate: currentDate
-				}
-			}
-		},
-		promotors: {
-			storeVisits: {
-				countTotalReports: 0,
-				countReportsToday: 0,
-				countReportsYesterday: 0
-			},
-			mothlyReportsPerDay: {
-				latest15: [],
-				all: [],
-				seeAll: {
-					disabled: true
-				}
-			},
-			registry: {
-				entranceAndExit: {
-					countTotalExits: 0,
-					countExitsToday: 0,
-					countExitsYesterday: 0
-				},
-				mothlyExitsPerDay: {
-					latest15: [],
-					all: [],
-					seeAll: {
-						disabled: true
-					}
-				},
-				hours: {
-					countTotalHours: 0,
-					countHoursToday: 0,
-					countHoursYesterday: 0
-				},
-				mothlyHoursPerDay: {
-					latest15: [],
-					all: [],
-					seeAll: {
-						disabled: true
-					}
-				},
-			},
-			headCounts: {
-				byDealer: [],
-				byStore: []
-			},
-			pricesCommunicated: {
-				percenToday: {
-					value: 0,
-					show: true,
-					options: {
-						animate: {
-							duration: 3000,
-							enabled: true
-						},
-						barColor: '#0c7ebd',
-						scaleColor: false,
-						lineCap: 'round',
-						size: 140,
-						lineWidth: 4
-					}
-				},
-				percentYesterday: {
-					value: 0,
-					show: true,
-					options: {
-						animate: {
-							duration: 3000,
-							enabled: true
-						},
-						barColor: '#221f1f',
-						scaleColor: false,
-						lineCap: 'round',
-						size: 140,
-						lineWidth: 4
-					}
-				},
-				byStore: {
-					show: true,
-					list: []
-				},
-				byDay: {
-					show: true,
-					all: [],
-					latest15: []
-				}
-			},
-			promotionsCommunicated: {
-				percenToday: {
-					value: 0,
-					show: true,
-					options: {
-						animate: {
-							duration: 3000,
-							enabled: true
-						},
-						barColor: '#0c7ebd',
-						scaleColor: false,
-						lineCap: 'round',
-						size: 140,
-						lineWidth: 4
-					}
-				},
-				percentYesterday: {
-					value: 0,
-					show: true,
-					options: {
-						animate: {
-							duration: 3000,
-							enabled: true
-						},
-						barColor: '#221f1f',
-						scaleColor: false,
-						lineCap: 'round',
-						size: 140,
-						lineWidth: 4
-					}
-				},
-				byStore: {
-					show: true,
-					list: []
-				},
-				byDay: {
-					show: true,
-					all: [],
-					latest15: []
-				}
-			}
-		},
-		sales: {
-      		bestPractices: {
-        		loaded: false,
-        		list: []
-      		}
-    	},
-		buttons: {
-			getExcel: {
-				disabled: false
-			}
-		},
-		loader: {
-			show: false
-		}
-	};
+ 	$scope.page = {
+ 		title: 'Promotores y Actividades',
+ 		filters: {
+ 			zone: {
+ 				list: [],
+ 				selected: null
+ 			},
+ 			dealer: {
+ 				list: [],
+ 				selected: null,
+ 				disabled: false
+ 			},
+ 			store: {
+ 				list: [],
+ 				selected: null,
+ 				disabled: false
+ 			},
+ 			instructor: {
+ 				list: [],
+ 				selected: null,
+ 				disabled: false,
+ 			},
+ 			supervisor: {
+ 				list: [],
+ 				selected: null,
+ 				disabled: false,
+ 				loaded: false
+ 			},
+ 			month: {
+ 				value: new Date(),
+ 				isOpen: false,
+ 				options: {
+ 					minMode: 'month',
+ 					maxDate: new Date()
+ 				}
+ 			},
+ 			dateRange: {
+ 				options: {
+ 					locale: {
+ 						format: 'DD/MM/YYYY',
+ 						applyLabel: 'Buscar',
+ 						cancelLabel: 'Cerrar',
+ 						fromLabel: 'Desde',
+ 						toLabel: 'Hasta',
+ 						customRangeLabel: 'Personalizado',
+ 						daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'],
+ 						monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ 						firstDay: 1
+ 					},
+ 					autoApply: true,
+ 					maxDate: $moment().add(1, 'months').date(1).subtract(1, 'days'),
+ 				},
+ 				date: {
+ 					startDate: firstMonthDay,
+ 					endDate: currentDate
+ 				}
+ 			}
+ 		},
+ 		promotors: {
+ 			storeVisits: {
+ 				countTotalReports: 0,
+ 				countReportsToday: 0,
+ 				countReportsYesterday: 0
+ 			},
+ 			mothlyReportsPerDay: {
+ 				latest15: [],
+ 				all: [],
+ 				seeAll: {
+ 					disabled: true
+ 				}
+ 			},
+ 			registry: {
+ 				entranceAndExit: {
+ 					countTotalExits: 0,
+ 					countExitsToday: 0,
+ 					countExitsYesterday: 0
+ 				},
+ 				mothlyExitsPerDay: {
+ 					latest15: [],
+ 					all: [],
+ 					seeAll: {
+ 						disabled: true
+ 					}
+ 				},
+ 				hours: {
+ 					countTotalHours: 0,
+ 					countHoursToday: 0,
+ 					countHoursYesterday: 0
+ 				},
+ 				mothlyHoursPerDay: {
+ 					latest15: [],
+ 					all: [],
+ 					seeAll: {
+ 						disabled: true
+ 					}
+ 				},
+ 			},
+ 			headCounts: {
+ 				byDealer: [],
+ 				byStore: []
+ 			},
+ 			pricesCommunicated: {
+ 				percenToday: {
+ 					value: 0,
+ 					show: true,
+ 					options: {
+ 						animate: {
+ 							duration: 3000,
+ 							enabled: true
+ 						},
+ 						barColor: '#0c7ebd',
+ 						scaleColor: false,
+ 						lineCap: 'round',
+ 						size: 140,
+ 						lineWidth: 4
+ 					}
+ 				},
+ 				percentYesterday: {
+ 					value: 0,
+ 					show: true,
+ 					options: {
+ 						animate: {
+ 							duration: 3000,
+ 							enabled: true
+ 						},
+ 						barColor: '#221f1f',
+ 						scaleColor: false,
+ 						lineCap: 'round',
+ 						size: 140,
+ 						lineWidth: 4
+ 					}
+ 				},
+ 				byStore: {
+ 					show: true,
+ 					list: []
+ 				},
+ 				byDay: {
+ 					show: true,
+ 					all: [],
+ 					latest15: []
+ 				}
+ 			},
+ 			promotionsCommunicated: {
+ 				percenToday: {
+ 					value: 0,
+ 					show: true,
+ 					options: {
+ 						animate: {
+ 							duration: 3000,
+ 							enabled: true
+ 						},
+ 						barColor: '#0c7ebd',
+ 						scaleColor: false,
+ 						lineCap: 'round',
+ 						size: 140,
+ 						lineWidth: 4
+ 					}
+ 				},
+ 				percentYesterday: {
+ 					value: 0,
+ 					show: true,
+ 					options: {
+ 						animate: {
+ 							duration: 3000,
+ 							enabled: true
+ 						},
+ 						barColor: '#221f1f',
+ 						scaleColor: false,
+ 						lineCap: 'round',
+ 						size: 140,
+ 						lineWidth: 4
+ 					}
+ 				},
+ 				byStore: {
+ 					show: true,
+ 					list: []
+ 				},
+ 				byDay: {
+ 					show: true,
+ 					all: [],
+ 					latest15: []
+ 				}
+ 			}
+ 		},
+ 		sales: {
+ 			bestPractices: {
+ 				loaded: false,
+ 				list: []
+ 			}
+ 		},
+ 		buttons: {
+ 			getExcel: {
+ 				disabled: false
+ 			}
+ 		},
+ 		loader: {
+ 			show: false
+ 		}
+ 	};
 
-	var storesIncluded = [],
-		i = 0,
-		j = 0;
+ 	var storesIncluded = [],
+ 	i = 0,
+ 	j = 0;
 
-	$scope.$watch('page.filters.supervisor.loaded', function() {
-		if ($scope.page.filters.supervisor.loaded) {
-			if (!$scope.page.filters.supervisor.disabled) {
-				$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
-					var startDate = new Date($scope.page.filters.dateRange.date.startDate);
-					var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+ 	$scope.$watch('page.filters.supervisor.loaded', function() {
+ 		if ($scope.page.filters.supervisor.loaded) {
+ 			if (!$scope.page.filters.supervisor.disabled) {
+ 				$scope.$watch('page.filters.dateRange.date', function(newValue, oldValue) {
+ 					var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+ 					var endDate = new Date($scope.page.filters.dateRange.date.endDate);
 
-					if (startDate.getMonth() !== endDate.getMonth()) {
-						openModalMessage({
-							title: 'Error en el rango de fechas ',
-							message: 'El rango de fechas debe estar dentro del mismo mes.'
-						});
+ 					if (startDate.getMonth() !== endDate.getMonth()) {
+ 						openModalMessage({
+ 							title: 'Error en el rango de fechas ',
+ 							message: 'El rango de fechas debe estar dentro del mismo mes.'
+ 						});
 
-						$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
-						$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
-						return;
-					}
+ 						$scope.page.filters.dateRange.date.startDate = new Date(oldValue.startDate);
+ 						$scope.page.filters.dateRange.date.endDate = new Date(oldValue.endDate);
+ 						return;
+ 					}
 
-					$scope.getDashboardInfo({
-						success: true,
-						detail: 'OK'
-					});
-				});
-			}
-		}
-	});
+ 					$scope.getDashboardInfo({
+ 						success: true,
+ 						detail: 'OK'
+ 					});
+ 				});
+ 			}
+ 		}
+ 	});
 
-	var openModalMessage = function(data) {
-		var modalInstance = $uibModal.open({
-			animation: true,
-			backdrop: true,
-			templateUrl: 'messageModal.html',
-			controller: 'MessageModalInstance',
-			size: 'md',
-			resolve: {
-				data: function() {
-					return data;
-				}
-			}
-		});
+ 	var openModalMessage = function(data) {
+ 		var modalInstance = $uibModal.open({
+ 			animation: true,
+ 			backdrop: true,
+ 			templateUrl: 'messageModal.html',
+ 			controller: 'MessageModalInstance',
+ 			size: 'md',
+ 			resolve: {
+ 				data: function() {
+ 					return data;
+ 				}
+ 			}
+ 		});
 
-		modalInstance.result.then(function() {}, function() {});
-	};
+ 		modalInstance.result.then(function() {}, function() {});
+ 	};
 
-	var getZones = function() {
+ 	var getZones = function() {
 
-		$scope.page.filters.zone.list = [];
+ 		$scope.page.filters.zone.list = [];
 
-		Zones.query({}, function(success) {
-			if (success.data) {
+ 		Zones.query({}, function(success) {
+ 			if (success.data) {
 
-				$scope.page.filters.zone.list.push({
-					id: '',
-					name: 'Todas las Zonas',
-					dealersIds: []
-				});
+ 				$scope.page.filters.zone.list.push({
+ 					id: '',
+ 					name: 'Todas las Zonas',
+ 					dealersIds: []
+ 				});
 
-				angular.forEach(success.data, function(value, key) {
-					$scope.page.filters.zone.list.push({
-						id: parseInt(value.id),
-						name: value.attributes.name,
-						dealersIds: value.attributes.dealer_ids
-					});
-				});
+ 				angular.forEach(success.data, function(value, key) {
+ 					$scope.page.filters.zone.list.push({
+ 						id: parseInt(value.id),
+ 						name: value.attributes.name,
+ 						dealersIds: value.attributes.dealer_ids
+ 					});
+ 				});
 
-				$scope.page.filters.zone.selected = $scope.page.filters.zone.list[0];
-				$scope.getDealers({
-					success: true,
-					detail: 'OK'
-				}, $scope.page.filters.zone.selected);
+ 				$scope.page.filters.zone.selected = $scope.page.filters.zone.list[0];
+ 				$scope.getDealers({
+ 					success: true,
+ 					detail: 'OK'
+ 				}, $scope.page.filters.zone.selected);
 
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getZones);
-			}
-		});
-	};
+ 			} else {
+ 				$log.error(success);
+ 			}
+ 		}, function(error) {
+ 			$log.error(error);
+ 			if (error.status === 401) {
+ 				Utils.refreshToken(getZones);
+ 			}
+ 		});
+ 	};
 
-	$scope.getDealers = function(e, zoneSelected) {
+ 	$scope.getDealers = function(e, zoneSelected) {
 
-		$scope.page.filters.dealer.selected = [];
-		$scope.page.filters.dealer.list = [];
+ 		$scope.page.filters.dealer.selected = [];
+ 		$scope.page.filters.dealer.list = [];
 
-		Dealers.query({
-			'filter[zone_ids]': zoneSelected.id
-		}, function(success) {
-			if (success.data) {
+ 		Dealers.query({
+ 			'filter[zone_ids]': zoneSelected.id
+ 		}, function(success) {
+ 			if (success.data) {
 
-				$scope.page.filters.dealer.list.push({
-					id: '',
-					name: 'Todos los dealers'
-				});
+ 				$scope.page.filters.dealer.list.push({
+ 					id: '',
+ 					name: 'Todos los dealers'
+ 				});
 
-				for (i = 0; i < success.data.length; i++) {
-					$scope.page.filters.dealer.list.push({
-						id: parseInt(success.data[i].id),
-						name: $filter('capitalize')(success.data[i].attributes.name, true),
-						type: 'dealers'
-					});
-				}
+ 				for (i = 0; i < success.data.length; i++) {
+ 					$scope.page.filters.dealer.list.push({
+ 						id: parseInt(success.data[i].id),
+ 						name: $filter('capitalize')(success.data[i].attributes.name, true),
+ 						type: 'dealers'
+ 					});
+ 				}
 
-				$scope.page.filters.dealer.selected = $scope.page.filters.dealer.list[0];
-				$scope.page.filters.dealer.disabled = false;
+ 				$scope.page.filters.dealer.selected = $scope.page.filters.dealer.list[0];
+ 				$scope.page.filters.dealer.disabled = false;
 
-				$scope.getStores({
-					success: true,
-					detail: 'OK'
-				}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
+ 				$scope.getStores({
+ 					success: true,
+ 					detail: 'OK'
+ 				}, $scope.page.filters.zone.selected, $scope.page.filters.dealer.selected);
 
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getDealers);
-			}
-		});
-	};
+ 			} else {
+ 				$log.error(success);
+ 			}
+ 		}, function(error) {
+ 			$log.error(error);
+ 			if (error.status === 401) {
+ 				Utils.refreshToken($scope.getDealers);
+ 			}
+ 		});
+ 	};
 
-	$scope.getStores = function(e, zoneSelected, dealerSelected) {
+ 	$scope.getStores = function(e, zoneSelected, dealerSelected) {
 
-		$scope.page.filters.store.selected = [];
-		$scope.page.filters.store.list = [];
+ 		$scope.page.filters.store.selected = [];
+ 		$scope.page.filters.store.list = [];
 
-		Stores.query({
-			'filter[dealer_ids]': dealerSelected.id,
-			'filter[zone_ids]': zoneSelected.id
-		}, function(success) {
-			if (success.data) {
+ 		Stores.query({
+ 			'filter[dealer_ids]': dealerSelected.id,
+ 			'filter[zone_ids]': zoneSelected.id
+ 		}, function(success) {
+ 			if (success.data) {
 
-				$scope.page.filters.store.list.push({
-					id: '',
-					name: 'Todas las tiendas'
-				});
+ 				$scope.page.filters.store.list.push({
+ 					id: '',
+ 					name: 'Todas las tiendas'
+ 				});
 
-				for (i = 0; i < success.data.length; i++) {
-					$scope.page.filters.store.list.push({
-						id: parseInt(success.data[i].id),
-						name: $filter('capitalize')(success.data[i].attributes.name, true),
-						type: 'dealers'
-					});
-				}
+ 				for (i = 0; i < success.data.length; i++) {
+ 					$scope.page.filters.store.list.push({
+ 						id: parseInt(success.data[i].id),
+ 						name: $filter('capitalize')(success.data[i].attributes.name, true),
+ 						type: 'dealers'
+ 					});
+ 				}
 
-				$scope.page.filters.store.selected = $scope.page.filters.store.list[0];
-				$scope.page.filters.store.disabled = false;
+ 				$scope.page.filters.store.selected = $scope.page.filters.store.list[0];
+ 				$scope.page.filters.store.disabled = false;
 
-				getUsers({
-					success: true,
-					detail: 'OK'
-				});
+ 				getUsers({
+ 					success: true,
+ 					detail: 'OK'
+ 				});
 
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getStores);
-			}
-		});
-	};
+ 			} else {
+ 				$log.error(success);
+ 			}
+ 		}, function(error) {
+ 			$log.error(error);
+ 			if (error.status === 401) {
+ 				Utils.refreshToken($scope.getStores);
+ 			}
+ 		});
+ 	};
 
-	var getUsers = function(e) {
+ 	var getUsers = function(e) {
 
-		$scope.page.filters.instructor.selected = [];
-		$scope.page.filters.instructor.list = [];
-		$scope.page.filters.supervisor.selected = [];
-		$scope.page.filters.supervisor.list = [];
+ 		$scope.page.filters.instructor.selected = [];
+ 		$scope.page.filters.instructor.list = [];
+ 		$scope.page.filters.supervisor.selected = [];
+ 		$scope.page.filters.supervisor.list = [];
 
-		Users.query({}, function(success) {
-			if (success.data) {
+ 		Users.query({}, function(success) {
+ 			if (success.data) {
 
-				$scope.page.filters.instructor.list.push({
-					id: '',
-					name: 'Todos los instructores'
-				});
+ 				$scope.page.filters.instructor.list.push({
+ 					id: '',
+ 					name: 'Todos los instructores'
+ 				});
 
-				$scope.page.filters.supervisor.list.push({
-					id: '',
-					name: 'Todos los supervisores'
-				});
+ 				$scope.page.filters.supervisor.list.push({
+ 					id: '',
+ 					name: 'Todos los supervisores'
+ 				});
 
-				angular.forEach(success.data, function(value, key) {
+ 				angular.forEach(success.data, function(value, key) {
 					if (value.attributes.role_id === 1) { // supervisor
 						$scope.page.filters.supervisor.list.push({
 							id: parseInt(value.id),
@@ -422,93 +422,93 @@ angular.module('minovateApp')
 
 				});
 
-				$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
-				$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
+ 				$scope.page.filters.supervisor.selected = $scope.page.filters.supervisor.list[0];
+ 				$scope.page.filters.instructor.selected = $scope.page.filters.instructor.list[0];
 
-				$scope.page.filters.supervisor.loaded = true;
+ 				$scope.page.filters.supervisor.loaded = true;
 
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getUsers);
-			}
-		});
-	};
+ 			} else {
+ 				$log.error(success);
+ 			}
+ 		}, function(error) {
+ 			$log.error(error);
+ 			if (error.status === 401) {
+ 				Utils.refreshToken(getUsers);
+ 			}
+ 		});
+ 	};
 
-	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {}, {}, []);
+ 	$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {}, {}, []);
 
-	$scope.openModalMonthlyReportsPerDay = function(data, headers) {
+ 	$scope.openModalMonthlyReportsPerDay = function(data, headers) {
 
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'viewAllDataTable.html',
-			controller: 'ViewAllDataTableModalInstance',
-			size: 'md',
-			resolve: {
-				data: function() {
-					return data;
-				},
-				headers: function() {
-					return headers;
-				}
-			}
-		});
+ 		var modalInstance = $uibModal.open({
+ 			animation: true,
+ 			templateUrl: 'viewAllDataTable.html',
+ 			controller: 'ViewAllDataTableModalInstance',
+ 			size: 'md',
+ 			resolve: {
+ 				data: function() {
+ 					return data;
+ 				},
+ 				headers: function() {
+ 					return headers;
+ 				}
+ 			}
+ 		});
 
-		modalInstance.result.then(function() {}, function() {});
-	};
+ 		modalInstance.result.then(function() {}, function() {});
+ 	};
 
-	$scope.openModalAllDataTableCommunicatedPricesByDay = function(data) {
+ 	$scope.openModalAllDataTableCommunicatedPricesByDay = function(data) {
 
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'allDataTableCommunicatedPricesByDay.html',
-			controller: 'allDataTableCommunicatedPricesByDayModalInstance',
-			size: 'md',
-			resolve: {
-				data: function() {
-					return data;
-				}
-			}
-		});
+ 		var modalInstance = $uibModal.open({
+ 			animation: true,
+ 			templateUrl: 'allDataTableCommunicatedPricesByDay.html',
+ 			controller: 'allDataTableCommunicatedPricesByDayModalInstance',
+ 			size: 'md',
+ 			resolve: {
+ 				data: function() {
+ 					return data;
+ 				}
+ 			}
+ 		});
 
-		modalInstance.result.then(function() {}, function() {});
-	};
+ 		modalInstance.result.then(function() {}, function() {});
+ 	};
 
-	$scope.getDashboardInfo = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+ 	$scope.getDashboardInfo = function(e) {
+ 		if (!e.success) {
+ 			$log.error(e.detail);
+ 			return;
+ 		}
 
-		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
-		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
-		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
-		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
-		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
-		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
-		var startDay = startDate.getDate();
-		var endDay = endDate.getDate();
-		var month = startDate.getMonth() + 1;
-		var year = startDate.getFullYear();
+ 		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+ 		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+ 		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+ 		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+ 		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+ 		var startDate = new Date($scope.page.filters.dateRange.date.startDate);
+ 		var endDate = new Date($scope.page.filters.dateRange.date.endDate);
+ 		var startDay = startDate.getDate();
+ 		var endDay = endDate.getDate();
+ 		var month = startDate.getMonth() + 1;
+ 		var year = startDate.getFullYear();
 
-		$scope.page.sales.bestPractices.loaded = false;
+ 		$scope.page.sales.bestPractices.loaded = false;
 
-		Dashboard.query({
-			category: 'promoter_activity',
-			zone_id: zoneIdSelected,
-			dealer_id: dealerIdSelected,
-			store_id: storeIdSelected,
-			instructor_id: instructorIdSelected,
-			supervisor_id: supervisorIdSelected,
-			month: month,
-			year: year,
-			start_day: startDay,
-			end_day: endDay
-		}, function(success) {
+ 		Dashboard.query({
+ 			category: 'promoter_activity',
+ 			zone_id: zoneIdSelected,
+ 			dealer_id: dealerIdSelected,
+ 			store_id: storeIdSelected,
+ 			instructor_id: instructorIdSelected,
+ 			supervisor_id: supervisorIdSelected,
+ 			month: month,
+ 			year: year,
+ 			start_day: startDay,
+ 			end_day: endDay
+ 		}, function(success) {
 			// $log.log(success);
 			if (success.data) {
 
@@ -519,16 +519,18 @@ angular.module('minovateApp')
 				$scope.page.promotors.storeVisits.countReportsYesterday = success.data.attributes.num_reports_yesterday;
 
 				var categories = [],
-					values = [],
-					c = 0;
+				values = [],
+				valuesHist = [],
+				c = 0;
 
 				angular.forEach(success.data.attributes.accumulated_reports, function(value, key) {
 					categories.push(value[0]);
 					values.push(value[1]);
+					valuesHist.push(value[2]);
 				});
 
 				$scope.chartConfigStoreVisits = Utils.setChartConfig('', 409, {}, {
-					min: 0,
+					min: 0,	
 					title: {
 						text: null
 					},
@@ -541,6 +543,10 @@ angular.module('minovateApp')
 				}, [{
 					name: 'Reportes',
 					data: values
+				},
+				{
+					name: 'Reportes mes anterior',
+					data: valuesHist
 				}]);
 
 				$scope.page.promotors.mothlyReportsPerDay.all = [];
@@ -571,8 +577,9 @@ angular.module('minovateApp')
 				// INI Registro promotores - entrada y salida
 
 				var categoriesAccumulatedCheckins = [],
-					valuesAccumulatedCheckins = [],
-					totalExits = 0;
+				valuesAccumulatedCheckins = [],
+				valuesAccumulatedCheckinsLast = [],
+				totalExits = 0;
 				c = 0;
 
 				angular.forEach(success.data.attributes.accumulated_checkins, function(value, key) {
@@ -582,6 +589,7 @@ angular.module('minovateApp')
 					}
 					categoriesAccumulatedCheckins.push(value[0]);
 					valuesAccumulatedCheckins.push(value[1]);
+					valuesAccumulatedCheckinsLast.push(value[2]);
 				});
 
 				$scope.page.promotors.registry.entranceAndExit.countTotalExits = totalExits;
@@ -600,9 +608,13 @@ angular.module('minovateApp')
 						text: ''
 					}
 				}, [{
-					name: 'Salidas',
-					data: valuesAccumulatedCheckins
-				}]);
+						name: 'Salidas',
+						data: valuesAccumulatedCheckins
+					},
+					{
+						name: 'Salidas mes anterior',
+						data: valuesAccumulatedCheckinsLast
+					}]);
 
 				$scope.page.promotors.registry.mothlyExitsPerDay.latest15 = [];
 				$scope.page.promotors.registry.mothlyExitsPerDay.all = [];
@@ -636,14 +648,16 @@ angular.module('minovateApp')
 				//  INI Registro de promotores - Horas trabajadas
 
 				var categoriesHours = [],
-					valuesHours = [],
-					totalHours = 0;
+				valuesHours = [],
+				valuesHoursLast = [],
+				totalHours = 0;
 				c = 0;
 
 				angular.forEach(success.data.attributes.accumulated_hours, function(value, key) {
 					totalHours += value[1];
 					categoriesHours.push(value[0]);
 					valuesHours.push(value[1]);
+					valuesHoursLast.push(value[2]);
 				});
 
 
@@ -663,9 +677,15 @@ angular.module('minovateApp')
 						text: ''
 					}
 				}, [{
-					name: 'Horas',
-					data: valuesHours
-				}]);
+						name: 'Horas',
+						data: valuesHours
+					},
+					{
+						name: 'Horas mes anterior',
+						data: valuesHoursLast
+					}
+				]
+				);
 
 				$scope.page.promotors.registry.mothlyHoursPerDay.latest15 = [];
 				$scope.page.promotors.registry.mothlyHoursPerDay.all = [];
@@ -702,15 +722,18 @@ angular.module('minovateApp')
 						name: dealer.name,
 						playstation: {
 							full: 0,
-							part: 0
+							part: 0,
+							apoyo: 0
 						},
 						nintendo: {
 							full: 0,
-							part: 0
+							part: 0,
+							apoyo: 0
 						},
 						xbox: {
 							full: 0,
-							part: 0
+							part: 0,
+							apoyo: 0
 						}
 					});
 
@@ -718,14 +741,17 @@ angular.module('minovateApp')
 						if (brand.name === 'PlayStation') {
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].playstation.full = brand.num_full_time;
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].playstation.part = brand.num_part_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].playstation.apoyo = brand.num_apoyo_time;
 						}
 						if (brand.name === 'Nintendo') {
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].nintendo.full = brand.num_full_time;
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].nintendo.part = brand.num_part_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].nintendo.apoyo = brand.num_apoyo_time;
 						}
 						if (brand.name === 'Xbox') {
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].xbox.full = brand.num_full_time;
 							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].xbox.part = brand.num_part_time;
+							$scope.page.promotors.headCounts.byDealer[$scope.page.promotors.headCounts.byDealer.length - 1].xbox.apoyo = brand.num_apoyo_time;
 						}
 					});
 				});
@@ -801,8 +827,9 @@ angular.module('minovateApp')
 
 				// INI Precios comunicados Al día
 				var accuulatedPricesCategories = [],
-					accumulatedPricesCreatedReports = [],
-					accumulatedPricesReportsThatMeet = [];
+				accumulatedPricesCreatedReports = [],
+				accumulatedPricesReportsThatMeetLastMonth = [],
+				accumulatedPricesReportsThatMeet = [];
 
 				angular.forEach(success.data.attributes.accumulated_prices, function(value, key) {
 					accuulatedPricesCategories.push(value[0]);
@@ -900,13 +927,15 @@ angular.module('minovateApp')
 
 				// INI Promociones destacadas  - Al día
 				var accumulatedPromotionsCategories = [],
-					accumulatedPromotionsCreatedReports = [],
-					accumulatedPromotionsReportsThatMeet = [];
+				accumulatedPromotionsCreatedReports = [],
+				accumulatedPromotionsCreatedReportsLast = [],
+				accumulatedPromotionsReportsThatMeet = [];
 
 				angular.forEach(success.data.attributes.accumulated_promotions, function(value, key) {
 					accumulatedPromotionsCategories.push(value[0]);
 					accumulatedPromotionsReportsThatMeet.push(value[1]);
 					accumulatedPromotionsCreatedReports.push(value[2]);
+					accumulatedPromotionsCreatedReportsLast.push(value[3]);
 				});
 
 				$scope.promotions = Utils.setChartConfig('column', 455, {}, [{
@@ -935,6 +964,10 @@ angular.module('minovateApp')
 					name: 'Reportes que cumplen',
 					type: 'spline',
 					data: accumulatedPromotionsReportsThatMeet
+				}, {
+					name: 'Reportes que cumplen mes anterior',
+					type: 'spline',
+					data: accumulatedPromotionsCreatedReportsLast
 				}]);
 
 
@@ -968,58 +1001,58 @@ angular.module('minovateApp')
 				// FIN Promociones destacadas  - Al día
 
 				//// INI Best Practices
-		        var bestPractices = [];
+				var bestPractices = [];
 
-		        angular.forEach(success.data.attributes.best_practices, function(value, key) {
-		          	bestPractices.push({
-		            	src: value.url
-		          	});
-		        });
+				angular.forEach(success.data.attributes.best_practices, function(value, key) {
+					bestPractices.push({
+						src: value.url
+					});
+				});
 
-		        $scope.page.sales.bestPractices.list = bestPractices;
-		        $scope.page.sales.bestPractices.loaded = true;
+				$scope.page.sales.bestPractices.list = bestPractices;
+				$scope.page.sales.bestPractices.loaded = true;
 
 		        // FIN Best Practices
 
-			}
+		    }
 		}, function(error) {
 			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.getDashboardInfo);
 			}
 		});
-	};
+};
 
-	$scope.getExcel = function(e) {
+$scope.getExcel = function(e) {
 
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
+	if (!e.success) {
+		$log.error(e.detail);
+		return;
+	}
 
-		if ($scope.page.buttons.getExcel.disabled) {
-			return;
-		}
-		$scope.page.buttons.getExcel.disabled = true;
-		$scope.page.loader.show = true;
+	if ($scope.page.buttons.getExcel.disabled) {
+		return;
+	}
+	$scope.page.buttons.getExcel.disabled = true;
+	$scope.page.loader.show = true;
 
-		var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
-		var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
-		var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
-		var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
-		var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
-		var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
-		var yearSelected = $scope.page.filters.month.value.getFullYear();
+	var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
+	var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
+	var storeIdSelected = $scope.page.filters.store.selected ? $scope.page.filters.store.selected.id : '';
+	var instructorIdSelected = $scope.page.filters.instructor.selected ? $scope.page.filters.instructor.selected.id : '';
+	var supervisorIdSelected = $scope.page.filters.supervisor.selected ? $scope.page.filters.supervisor.selected.id : '';
+	var monthSelected = $scope.page.filters.month.value.getMonth() + 1;
+	var yearSelected = $scope.page.filters.month.value.getFullYear();
 
-		ExcelDashboard.getFile('#excelBtn', 'promoter_activity', 'promotores_actividades', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
+	ExcelDashboard.getFile('#excelBtn', 'promoter_activity', 'promotores_actividades', monthSelected, yearSelected, instructorIdSelected, supervisorIdSelected, zoneIdSelected, dealerIdSelected, storeIdSelected);
 
-		$timeout(function() {
-			$scope.page.buttons.getExcel.disabled = false;
-			$scope.page.loader.show = false;
-		}, 7000);
-	};
+	$timeout(function() {
+		$scope.page.buttons.getExcel.disabled = false;
+		$scope.page.loader.show = false;
+	}, 7000);
+};
 
-	getZones();
+getZones();
 
 })
 
