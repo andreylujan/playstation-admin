@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('ImagesListCtrl', function($scope, $log, $state, $moment, $uibModal, Utils, DataPlayStation, Images) {
+.controller('ImagesListCtrl', function($scope, $log, $state, $moment, $uibModal, ImagesCategories, Utils, DataPlayStation, Images) {
 
 	var currentDate = new Date();
 	currentDate.setHours(0);
