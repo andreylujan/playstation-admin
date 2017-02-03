@@ -58,6 +58,23 @@
 				</ui-select>
 			</div>
 			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategoryPrincipal.selected" close-on-select="true" ng-disabled="page.filters.imageCategoryPrincipal.disabled" ng-change="changePrincipalCategories()" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="imageCategoryPrincipal in page.filters.imageCategoryPrincipal.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="imageCategoryPrincipal.name | highlight: $select.search"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategorySecundary.selected" close-on-select="true" ng-disabled="page.filters.imageCategorySecundary.disabled" ng-change="changeSecundaryCategories()" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="imageCategorySecundary in page.filters.imageCategorySecundary.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="imageCategorySecundary.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+
+			<div class="col-md-3 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategory.selected" close-on-select="true" ng-disabled="page.filters.imageCategory.disabled" ng-change="getImages({success:true,detail:'OK'},pagination.pages._current)" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="imageCategory in page.filters.imageCategory.list | propsFilter: {name: $select.search}">

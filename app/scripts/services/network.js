@@ -779,7 +779,7 @@ angular.module('minovateApp')
 
 //ImagesCategories
 .factory('ImagesCategories', function($resource) {
-	return $resource(API_URL + '/categories', {}, {
+	return $resource(API_URL + '/principalcategories', {}, {
 		query: {
 			method: 'GET',
 			headers: {
