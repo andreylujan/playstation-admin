@@ -148,6 +148,10 @@
           <th class="text-center">Opción</th>
           <th class="text-center">Visibilidad App</th>
           <th class="text-center">Pantalla detalle</th>
+          <th class="text-center">Observación</th>
+          <th class="text-center">Cantidad</th>
+          <th class="text-center">Fotos</th>
+          <th class="text-center">Cuál</th>
         </tr>
       </thead>
       <tbody>
@@ -156,10 +160,22 @@
             <p class="form-control-static">{{option.name}}</p>
           </td>
           <td>
-            <input type="checkbox" class="" ng-model="option.appVisibility">
+            <input type="checkbox" ng-model="option.appVisibility">
           </td>
           <td>
-            <input type="checkbox" class="" ng-model="option.detail">
+            <input type="checkbox" ng-model="option.detail">
+          </td>
+          <td>
+            <input type="checkbox" ng-model="option.data.observacion.visibility">
+          </td>
+          <td>
+            <input type="checkbox" ng-model="option.data.cant.visibility">
+          </td>
+          <td>
+            <input type="checkbox" ng-model="option.data.cual.visibility">
+          </td>
+          <td>
+            <input type="checkbox" ng-model="option.data.foto.visibility">
           </td>
         </tr>
       </tbody>
