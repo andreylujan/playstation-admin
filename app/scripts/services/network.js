@@ -98,6 +98,16 @@ angular.module('minovateApp')
 				'filter[promoter_ids]': '@promoters'
 			}
 		},
+		detail: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'filter[promoter_ids]': '@promoters',
+				include: 'supervised_stores,supervised_stores.dealer,supervised_stores.zone,instructed_stores,instructed_stores.dealer,instructed_stores.zone,promoted_stores,promoted_stores.dealer,promoted_stores.zone',
+			}
+		},
 		update: {
 			method: 'PUT',
 			headers: {
