@@ -160,11 +160,69 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="userPhoneNumber" class="col-sm-3 control-label">Teléfono de emergencia</label>
+              <div class="col-md-8">
+                <input type="text" id="userEmergencyPhone" class="form-control underline-input" placeholder="Teléfono de emergencia..." ng-model="user.emergencyPhone.text" ng-disabled="user.emergencyPhone.disabled" ng-change="hideAlert()" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userPhoneNumber" class="col-sm-3 control-label">Fecha inicio contrato</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <input type="text" uib-datepicker-popup="dd-MMMM-yyyy" class="form-control" ng-model="user.contractDate.value" is-open="user.contractDate.isOpen" ng-disabled="user.contractDate.disabled" datepicker-options=""/>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default " ng-click="user.contractDate.isOpen=!user.contractDate.isOpen" ng-disabled=""><i class="fa fa-calendar"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userPhoneNumber" class="col-sm-3 control-label">Fecha termino contrato</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <input type="text" uib-datepicker-popup="dd-MMMM-yyyy" class="form-control" ng-model="user.contractEndDate.value" is-open="user.contractEndDate.isOpen" ng-disabled="user.contractEndDate.disabled" datepicker-options=""/>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default " ng-click="user.contractEndDate.isOpen=!user.contractEndDate.isOpen" ng-disabled=""><i class="fa fa-calendar"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userAddress" class="col-sm-3 control-label">Dirección (particular)</label>
+              <div class="col-md-8">
+                <input type="text" id="userAddress" class="form-control underline-input" placeholder="Dirección..." ng-model="user.address.text" ng-disabled="user.address.disabled" ng-change="hideAlert()" >
+              </div>
+            </div>
+            <div class="form-group">
               <label for="userRole" class="col-sm-3 control-label">Rol</label>
               <div class="col-md-8">
                 <label class="checkbox checkbox-custom-alt" id="userRole" ng-repeat="role in roles">
                   <input type="radio" value="{{role.id}}" name="{{role.index}}" ng-model="user.role.id" ng-disabled="user.role.disabled" ng-change="hideAlert()" required><i></i> {{role.name}}
                 </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userRole" class="col-sm-3 control-label">Tiendas asignadas</label>
+              <div class="col-md-8">
+                <ul class="list-group"> 
+                  <li class="list-group-item" ng-repeat="tienda in user.stores" >{{tienda.attributes.name}}</li> 
+                </ul>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userRole" class="col-sm-3 control-label">Dealers asignados</label>
+              <div class="col-md-8">
+                <ul class="list-group"> 
+                  <li class="list-group-item" ng-repeat="dealer in user.dealers" >{{dealer.attributes.name}}</li> 
+                </ul>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userRole" class="col-sm-3 control-label">Zonas asignadas</label>
+              <div class="col-md-8">
+                <ul class="list-group"> 
+                  <li class="list-group-item" ng-repeat="zone in user.zones" >{{zone.attributes.name}}</li> 
+                </ul>
               </div>
             </div>
           </form>
