@@ -190,7 +190,28 @@ angular.module('minovateApp')
 		phoneNumber: {
 			text: '',
 			disabled: true
-		}
+		},
+		emergencyPhone: {
+			text: '',
+			disabled: true
+		},
+		contractDate: {
+			value: new Date(),
+			isOpen: false,
+			disabled: true
+		},
+		contractEndDate: {
+			value: new Date(),
+			isOpen: false,
+			disabled: true
+		},
+		address: {
+			text: '',
+			disabled: true
+		},
+		stores: [],
+		zones: [],
+		dealers: []
 	};
 	$scope.roles = [];
 	$scope.elements = {
@@ -230,11 +251,10 @@ angular.module('minovateApp')
 			return;
 		}
 
-		Users.query({
+		Users.detail({
 			idUser: idUser
 		}, function(success) {
 			if (success.data) {
-
 				$scope.elements.title = success.data.attributes.first_name + ' ' + success.data.attributes.last_name;
 
 				$scope.user.id = success.data.id;
@@ -245,6 +265,14 @@ angular.module('minovateApp')
 				$scope.user.role.text = success.data.attributes.role_name;
 				$scope.user.phoneNumber.text = success.data.attributes.phone_number;
 				$scope.user.rut.text = success.data.attributes.rut;
+				$scope.user.emergencyPhone.text = success.data.attributes.emergency_phone;
+				$scope.user.contractDate.value = Date.parse(success.data.attributes.contract_date);
+				$scope.user.contractEndDate.value = Date.parse(success.data.attributes.contract_end_date);
+				$scope.user.address.text = success.data.attributes.address;
+
+				$scope.user.stores = _.uniq(_.where(success.included, { type: 'stores'}));
+				$scope.user.dealers = _.where(success.included, { type: 'dealers'});
+				$scope.user.zones = _.where(success.included, { type: 'zones'});
 
 				if (success.data.attributes.image) {
 					$scope.user.image = success.data.attributes.image;
@@ -340,7 +368,8 @@ angular.module('minovateApp')
 			$scope.elements.buttons.editUser.text = 'Editar';
 			// $scope.elements.buttons.editUser.border = 'btn-border';
 			disableFormInputs();
-
+			var fecha_inicio = $scope.user.contractDate.value === null? null : new Date($scope.user.contractDate.value)
+			var fecha_termino = $scope.user.contractEndDate.value === null? null : new Date($scope.user.contractEndDate.value)
 			Users.update({
 				data: {
 					type: 'users',
@@ -350,6 +379,10 @@ angular.module('minovateApp')
 						last_name: $scope.user.lastName.text,
 						rut: $scope.user.rut.text,
 						phone_number: $scope.user.phoneNumber.text,
+						emergency_phone: $scope.user.emergencyPhone.text,
+						address: $scope.user.address.text,
+						contract_date: fecha_inicio,
+						contract_end_date: fecha_termino,
 						image: '',
 						role_id: $scope.user.role.id
 					}
@@ -440,6 +473,10 @@ angular.module('minovateApp')
 		$scope.user.lastName.disabled = false;
 		$scope.user.rut.disabled = false;
 		$scope.user.phoneNumber.disabled = false;
+		$scope.user.contractDate.disabled = false;
+		$scope.user.contractEndDate.disabled = false;
+		$scope.user.address.disabled = false;
+		$scope.user.emergencyPhone.disabled = false;
 		$scope.user.role.disabled = false;
 	};
 
@@ -448,6 +485,10 @@ angular.module('minovateApp')
 		$scope.user.lastName.disabled = true;
 		$scope.user.rut.disabled = true;
 		$scope.user.phoneNumber.disabled = true;
+		$scope.user.contractDate.disabled = true;
+		$scope.user.contractEndDate.disabled = true;
+		$scope.user.address.disabled = true;
+		$scope.user.emergencyPhone.disabled = true;
 		$scope.user.role.disabled = true;
 	};
 

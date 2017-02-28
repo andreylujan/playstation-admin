@@ -1,9 +1,6 @@
 <!--style type="text/css">
 	.tooltip
 	{
-		width: 550px !important;
-		height: auto;
-		 white-space: pre-line;
 	}
 </style-->
 <div class="page page-ng-table">
@@ -58,6 +55,23 @@
 				</ui-select>
 			</div>
 			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategoryPrincipal.selected" close-on-select="true" ng-disabled="page.filters.imageCategoryPrincipal.disabled" ng-change="changePrincipalCategories()" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="imageCategoryPrincipal in page.filters.imageCategoryPrincipal.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="imageCategoryPrincipal.name | highlight: $select.search"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategorySecundary.selected" close-on-select="true" ng-disabled="page.filters.imageCategorySecundary.disabled" ng-change="changeSecundaryCategories()" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="imageCategorySecundary in page.filters.imageCategorySecundary.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="imageCategorySecundary.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+
+			<div class="col-md-3 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.imageCategory.selected" close-on-select="true" ng-disabled="page.filters.imageCategory.disabled" ng-change="getImages({success:true,detail:'OK'},pagination.pages._current)" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar categoría..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="imageCategory in page.filters.imageCategory.list | propsFilter: {name: $select.search}">
@@ -65,6 +79,7 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
+
 			<div class="col-md-3 mt-5">
 				<div class="input-group">
 					<button id="daterange" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate" popup-placement="right" >
@@ -93,11 +108,8 @@
 
 		<!-- row -->
 		<div class="row">
-
 			<!-- col -->
 			<div class="col-md-12">
-
-
 				<!-- tile -->
 				<section class="tile" fullscreen="isFullscreen06">
 
@@ -139,20 +151,24 @@
 					<div class="tile-body">
 
 						<div class="row">
-							<div ng-repeat="image in page.images" ng-show="page.images.length">
+							<div ng-repeat="image in page.images " ng-show="page.images.length">
 								
-								<div class="col-md-4" >
+								<div class="col-md-4">
 
 									<div style="border: solid #D9D9D9 1px; margin-bottom: 10px" ng-show="image.show">
 										<a ng-href="{{image.url}}" target="_blank">
-											<img style="margin: 0 auto;" class="img-responsive p-10" ng-src="{{image.url}}" alt="image_{{image.id}}" imageonload="image.show = true" data-html="true" uib-tooltip="Zona: {{image.zone_name}}  
+											<div>
+												<img style="margin: 0 auto;" class="img-responsive p-10" ng-src="{{image.url}}" alt="image_{{image.id}}" imageonload="image.show = true" data-html="true" uib-tooltip="Zona: {{image.zone_name}}  
 												Dealer: {{image.dealer_name}}  
 												Tienda: {{image.store_name}} 
 												Creador:  {{image.creator_name}}
 												Fecha:  {{image.created_at | date : 'dd/MM/yyyy'}}
 												{{ image.comment != null ? 'Comentario:   ' : ''}} {{image.comment}}" tooltip-style="width:200px;" tooltip-placement="top">
+											</div>
 										</a>
 										<img uib-tooltip="Eliminar foto" ng-click="deleteImage(image.id)" style="position:absolute;width:30px;left: 50%;bottom: 25px;cursor:pointer" src="images/delete_pic.png" alt="image_{{image.url}}" >
+									</div>
+									<div style="border: solid #D9D9D9 1px; margin-bottom: 10px; color: black; display:none" >
 									</div>
 									<img src="images/loader.gif" alt="loader" class="size-20x20 text-center" ng-show="!image.show" style="position:relative;left: 50%">
 								</div>
@@ -205,4 +221,7 @@
 			<button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
 		</div>
 	</div>
+</script>
+<script type="text/javascript">
+	$(".img-responsive").hover(function() { alert('hola');});
 </script>

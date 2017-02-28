@@ -149,7 +149,28 @@ angular.module('minovateApp')
 			userInstructorId: null,
 			zoneId: null,
 			dealerId: null,
-			storeTypeId: null
+			storeTypeId: null,
+			storeManager: {
+				text: null,
+				disabled: true
+			},
+			floorManager: {
+				text: null,
+				disabled: true
+			},
+			visual: {
+				text: null,
+				disabled: true
+			},
+			areaSalesperson: {
+				text: null,
+				disabled: true
+			},
+			kam: '',
+			supervisor: [],
+			instructor: [],
+			promotores: []
+
 		},
 		users: {
 			selectedUsersSupervisor: [],
@@ -234,7 +255,7 @@ angular.module('minovateApp')
 						});
 					}
 				}
-				
+
 				getStoreTypes({
 					success: true,
 					detail: 'OK'
@@ -370,10 +391,24 @@ angular.module('minovateApp')
 
 		Stores.query({
 			storeId: idStore,
-			include: 'store_type,supervisor,instructor,promoters'
+			include: 'store_type,zone,dealer,instructor,supervisor,promoters'
 		}, function(success) {
-			// $log.log(success);
+			//$log.log(success);
 			if (success.data) {
+
+				$scope.modal.store.supervisor = null;
+				$scope.modal.store.instructor = null;
+				$scope.modal.store.promotores = null;
+				var datos = _.where(success.included, { type: 'users'});
+				var dealers = _.where(success.included, { type: 'dealers'});
+				var supervisor = _.filter(datos, function(object){ return object.attributes.role_name == 'Supervisor'; });
+				var instructor = _.filter(datos, function(object){ return object.attributes.role_name == 'Instructor'; });
+				var promotores = _.filter(datos, function(object){ return object.attributes.role_name == 'Promotor'; });
+				
+				$scope.modal.store.supervisor = supervisor;
+				$scope.modal.store.instructor = instructor;
+				$scope.modal.store.promotores = promotores;
+
 				$scope.modal.store.name.text = success.data.attributes.name;
 				$scope.modal.store.contact.text = success.data.attributes.contact;
 				$scope.modal.store.phone.text = success.data.attributes.phone_number;
@@ -389,6 +424,13 @@ angular.module('minovateApp')
 				$scope.modal.store.code.text = success.data.attributes.code;
 
 				$scope.modal.store.storeTypeId = success.data.relationships.store_type.data ? success.data.relationships.store_type.data.id : null;
+
+
+				$scope.modal.store.storeManager.text = success.data.attributes.store_manager;
+				$scope.modal.store.floorManager.text = success.data.attributes.floor_manager;
+				$scope.modal.store.visual.text = success.data.attributes.visual;
+				$scope.modal.store.areaSalesperson.text = success.data.attributes.area_salesperson;
+				$scope.modal.store.kam = dealers[0].attributes.kam;
 
 
 				// Se seleccionan los datos de la tienda a editar
@@ -641,6 +683,10 @@ angular.module('minovateApp')
 			$scope.modal.store.contact.disabled = false;
 			$scope.modal.store.phone.disabled = false;
 			$scope.modal.store.address.disabled = false;
+			$scope.modal.store.storeManager.disabled = false;
+			$scope.modal.store.floorManager.disabled = false;
+			$scope.modal.store.visual.disabled = false;
+			$scope.modal.store.areaSalesperson.disabled = false;
 			// $scope.modal.store.montlyGoalClp.disabled = false;
 			// $scope.modal.store.montlyGoalUsd.disabled = false;
 			$scope.modal.users.disabled = false;
@@ -653,6 +699,7 @@ angular.module('minovateApp')
 			$scope.modal.alert.title = 'Para efectuar la edición, presione el botón Guardar';
 			$scope.modal.alert.text = '';
 			$scope.modal.alert.show = true;
+
 		} else {
 			$scope.modal.buttons.edit.text = 'Editar';
 			$scope.modal.store.name.disabled = true;
@@ -660,6 +707,10 @@ angular.module('minovateApp')
 			$scope.modal.store.contact.disabled = true;
 			$scope.modal.store.phone.disabled = true;
 			$scope.modal.store.address.disabled = true;
+			$scope.modal.store.storeManager.disabled = true;
+			$scope.modal.store.floorManager.disabled = true;
+			$scope.modal.store.visual.disabled = true;
+			$scope.modal.store.areaSalesperson.disabled = true;
 			// $scope.modal.store.montlyGoalClp.disabled = true;
 			// $scope.modal.store.montlyGoalUsd.disabled = true;
 			$scope.modal.users.disabled = true;
@@ -733,7 +784,11 @@ angular.module('minovateApp')
 					contact: $scope.modal.store.contact.text,
 					phone_number: $scope.modal.store.phone.text,
 					address: $scope.modal.store.address.text,
-					code: $scope.modal.store.code.text
+					code: $scope.modal.store.code.text,
+					store_manager: $scope.modal.store.storeManager.text,
+					floor_manager: $scope.modal.store.floorManager.text,
+					visual: $scope.modal.store.visual.text,
+					area_salesperson: $scope.modal.store.areaSalesperson.text
 				},
 				relationships: {
 					zone: {

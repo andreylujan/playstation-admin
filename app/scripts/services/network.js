@@ -98,6 +98,16 @@ angular.module('minovateApp')
 				'filter[promoter_ids]': '@promoters'
 			}
 		},
+		detail: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'filter[promoter_ids]': '@promoters',
+				include: 'supervised_stores,supervised_stores.dealer,supervised_stores.zone,instructed_stores,instructed_stores.dealer,instructed_stores.zone,promoted_stores,promoted_stores.dealer,promoted_stores.zone',
+			}
+		},
 		update: {
 			method: 'PUT',
 			headers: {
@@ -779,7 +789,7 @@ angular.module('minovateApp')
 
 //ImagesCategories
 .factory('ImagesCategories', function($resource) {
-	return $resource(API_URL + '/categories', {}, {
+	return $resource(API_URL + '/principalcategories', {}, {
 		query: {
 			method: 'GET',
 			headers: {
@@ -887,15 +897,6 @@ angular.module('minovateApp')
 })
 
 .factory('ExcelDashboard', function($auth) {
-
-	// return {
-	// 	getFile: function(elem, dashboard, fileName, month, year, instructorId, supervisorId, zoneId, dealerId, storeId) {
-	// 		var downloadLink = angular.element(elem);
-	// 		downloadLink.attr('href', API_URL + '/dashboard/' + dashboard + '.xlsx?month=' + month + '&year=' + year + '&instructor_id=' + instructorId + '&supervisor_id=' + supervisorId + '&zone_id=' + zoneId + '&dealer_id=' + dealerId + '&store_id=' + storeId + '&access_token=' + $auth.getToken());
-	// 		downloadLink.attr('download', fileName + '.xlsx');
-	// 	}
-	// };
-
 	return {
 		getFile: function(elem, dashboard, fileName, month, year) {
 			var downloadLink = angular.element(elem);

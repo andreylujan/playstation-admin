@@ -9,14 +9,13 @@
  */
 angular.module('minovateApp')
 
-.controller('ImagesListCtrl', function($scope, $log, $state, $moment, $uibModal, Utils, DataPlayStation, Images) {
+.controller('ImagesListCtrl', function($scope, $log, $state, $moment, $uibModal, Utils, ImagesCategories, DataPlayStation, Images) {
 
 	var currentDate = new Date();
 	currentDate.setHours(0);
 	currentDate.setMinutes(0);
 	currentDate.setSeconds(0);
 	currentDate.setMilliseconds(0);
-
 
 	var tomorrowDate = new Date();
 	tomorrowDate.setHours(0);
@@ -50,6 +49,16 @@ angular.module('minovateApp')
 				disabled: false
 			},
 			supervisor: {
+				list: [],
+				selected: null,
+				disabled: false
+			},
+			imageCategoryPrincipal: {
+				list: [],
+				selected: null,
+				disabled: false
+			},
+			imageCategorySecundary: {
 				list: [],
 				selected: null,
 				disabled: false
@@ -91,6 +100,9 @@ angular.module('minovateApp')
 			total: 0,
 		}
 	};
+	var imagesPrincipalCategories = [],
+	imagesSubCategories = [],
+	imagesCategories = [];
 
 	var getZones = function(e) {
 		DataPlayStation.getZones({
@@ -166,18 +178,67 @@ angular.module('minovateApp')
 		});
 	};
 
-	var getImagesCategories = function(e) {
+	$scope.changePrincipalCategories = function(e){
+		var subcategorias = _.where(imagesSubCategories, {id_categoria: $scope.page.filters.imageCategoryPrincipal.selected.id});
+		$scope.page.filters.imageCategorySecundary.list = subcategorias;
+		$scope.page.filters.imageCategorySecundary.selected = subcategorias[0];
+		$scope.page.filters.imageCategorySecundary.disabled = false;
+		$scope.changeSecundaryCategories();
 
+	}
+	$scope.changeSecundaryCategories = function(e){
+		var subcategorias = _.where(imagesCategories, {id_categoria: $scope.page.filters.imageCategorySecundary.selected.id});
+		$scope.page.filters.imageCategory.list = subcategorias;
+		$scope.page.filters.imageCategory.selected = subcategorias[0];
+		$scope.page.filters.imageCategory.disabled = false;
+		$scope.getImages({success:true,detail:'OK'},$scope.pagination.pages._current);
+	}
+
+	var getImagesCategories = function(e) {
+		$scope.page.filters.imageCategoryPrincipal.disabled = true;
+		$scope.page.filters.imageCategorySecundary.disabled = true;
 		$scope.page.filters.imageCategory.disabled = true;
-		DataPlayStation.getImagesCategories({
-			success: true,
-			detail: 'OK'
-		}).then(function(data) {
-			$scope.page.filters.imageCategory.list = data.data;
-			$scope.page.filters.imageCategory.selected = data.data[0];
-			$scope.page.filters.imageCategory.disabled = false;
-		}).catch(function(error) {
-			$log.error(error);
+
+		ImagesCategories.query({}, function(success) {
+			if (success.data) {
+				//$log.error(success.data);
+
+				imagesPrincipalCategories.push({
+					id: '',
+					name: 'Todas las categorías'
+				});
+
+				for (i = 0; i < success.data.length; i++) {
+					imagesPrincipalCategories.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].name
+					});
+					for (var j = 0; j < success.data[i].subcategories.length; j++) {
+						imagesSubCategories.push({
+							id: parseInt(success.data[i].subcategories[j].id),
+							name: success.data[i].subcategories[j].name,
+							id_categoria: success.data[i].subcategories[j].id_principal_category
+						});
+						for (var k = 0; k < success.data[i].subcategories[j].categories.length; k++) {
+							imagesCategories.push({
+								id: parseInt(success.data[i].subcategories[j].categories[k].id),
+								name: success.data[i].subcategories[j].categories[k].name,
+								id_categoria: success.data[i].subcategories[j].categories[k].secundary_category_id
+							});
+						}
+					}
+				}
+
+				$scope.page.filters.imageCategoryPrincipal.list = imagesPrincipalCategories;
+				$scope.page.filters.imageCategoryPrincipal.selected = imagesPrincipalCategories[0];
+				$scope.page.filters.imageCategoryPrincipal.disabled = false;
+			}
+
+		}, function(error) {
+			$log.log(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getImagesCategories);
+			}
 		});
 	};
 

@@ -422,7 +422,7 @@ angular.module('minovateApp')
 		return promise;
 	};
 
-	var getImagesCategories = function(e) {
+	/*var getImagesCategories = function(e) {
 
 		var defered = $q.defer();
 		var promise = defered.promise;
@@ -440,6 +440,7 @@ angular.module('minovateApp')
 
 		ImagesCategories.query({}, function(success) {
 			if (success.data) {
+				$log.error(success.data);
 
 				imagesCategories.push({
 					id: '',
@@ -477,14 +478,13 @@ angular.module('minovateApp')
 			}
 		});
 		return promise;
-	};
+	};*/
 
 	return {
 		getZones: getZones,
 		getDealers: getDealers,
 		getStores: getStores,
-		getUsers: getUsers,
-		getImagesCategories: getImagesCategories
+		getUsers: getUsers
 	};
 
 });

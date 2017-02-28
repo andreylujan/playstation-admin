@@ -262,17 +262,20 @@
 						<thead>
 							<tr>
 								<th ROWSPAN="2">Dealer</th>
-								<th class="text-center" colspan="2">PlayStation</th>
-								<th class="text-center" colspan="2">Nintendo</th>
-								<th class="text-center" colspan="2">XBox</th>
+								<th class="text-center" colspan="3">PlayStation</th>
+								<th class="text-center" colspan="3">Nintendo</th>
+								<th class="text-center" colspan="3">XBox</th>
 							</tr>
 							<tr>
 								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
+								<th class="text-center">Apoyo</th>
 								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
+								<th class="text-center">Apoyo</th>
 								<th class="text-center text-gray-ps-2">Full</th>
 								<th class="text-center">PT</th>
+								<th class="text-center">Apoyo</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -280,10 +283,13 @@
 								<td>{{hcByDealer.name | capitalize:true}}</td>
 								<td class="text-center text-gray-ps-2">{{hcByDealer.playstation.full}}</td>
 								<td class="text-center">{{hcByDealer.playstation.part}}</td>
+								<td class="text-center">{{hcByDealer.playstation.apoyo}}</td>
 								<td class="text-center text-gray-ps-2">{{hcByDealer.nintendo.full}}</td>
 								<td class="text-center">{{hcByDealer.nintendo.part}}</td>
+								<td class="text-center">{{hcByDealer.nintendo.apoyo}}</td>
 								<td class="text-center text-gray-ps-2">{{hcByDealer.xbox.full}}</td>
 								<td class="text-center">{{hcByDealer.xbox.part}}</td>
+								<td class="text-center">{{hcByDealer.xbox.apoyo}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -421,8 +427,8 @@
 			</section>
 			<!-- /tile -->
 
-		<!--/div>
-	</div-->
+		<!--/div-->
+	<!--/div>
 
 	<!--div class="row">
 
@@ -635,7 +641,7 @@
 	<script type="text/ng-template" id="imagesTmpl.html">
 		<a ng-href="{{image.src}}" target="_blank"><img src="{{image.src}}" alt="pic" style="width:100%"></a>
 	</script>
-	
+
 	<script type="text/ng-template" id="viewAllDataTable.html">
 		<div class="modal-body text-gray">
 

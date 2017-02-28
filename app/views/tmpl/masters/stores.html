@@ -218,6 +218,72 @@
                 </ui-select>
               </div>
             </div>
+            <div class="form-group">
+              <label for="inputStoreManager" class="col-sm-3 control-label">Gerente de tienda</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputStoreManager" placeholder="Gerente de tienda" ng-model="modal.store.storeManager.text" ng-disabled="modal.store.storeManager.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputFloorManager" class="col-sm-3 control-label">Gerente de piso</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputFloorManager" placeholder="Gerente de piso" ng-model="modal.store.floorManager.text" ng-disabled="modal.store.floorManager.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputVisual" class="col-sm-3 control-label">Visual</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputVisual" placeholder="Visual" ng-model="modal.store.visual.text" ng-disabled="modal.store.visual.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputAreaSalesperson" class="col-sm-3 control-label">Vendedor del área</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputAreaSalesperson" placeholder="Vendedor del área" ng-model="modal.store.areaSalesperson.text" ng-disabled="modal.store.areaSalesperson.disabled" ng-change="removeAlert()">
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.supervisor.length" >
+              <label for="lblContactoSupervisor" class="col-sm-3 control-label">Mail contacto Supervisor</label>
+              <div class="col-sm-8">
+                <label class="form-control" id="lblContactoSupervisor">{{modal.store.supervisor[0].attributes.email}} - {{modal.store.supervisor[0].attributes.first_name}} {{modal.store.supervisor[0].attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.instructor.length" >
+              <label for="lblContactoInstructor" class="col-sm-3 control-label">Mail contacto Instructor</label>
+              <div class="col-sm-8">
+                <label class="form-control" id="lblContactoInstructor">{{modal.store.instructor[0].attributes.email}} - {{modal.store.instructor[0].attributes.first_name}} {{modal.store.instructor[0].attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.promotores.length" >
+              <label for="lblContactoPromotores" class="col-sm-3 control-label">Mail contacto promotores</label>
+              <div class="col-sm-8" ng-repeat="promotor in modal.store.promotores" >
+                <label class="form-control" id="lblContactoPromotores">{{promotor.attributes.email}} - {{promotor.attributes.first_name}} {{promotor.attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.supervisor.length" >
+              <label for="lblContactoSupervisor" class="col-sm-3 control-label">Telefono contacto Supervisor</label>
+              <div class="col-sm-8">
+                <label class="form-control" id="lblContactoSupervisor">{{modal.store.supervisor[0].attributes.phone_number}} - {{modal.store.supervisor[0].attributes.first_name}} {{modal.store.supervisor[0].attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.instructor.length" >
+              <label for="lblContactoInstructor" class="col-sm-3 control-label">Telefono contacto Instructor</label>
+              <div class="col-sm-8">
+                <label class="form-control" id="lblContactoInstructor">{{modal.store.instructor[0].attributes.phone_number}} - {{modal.store.instructor[0].attributes.first_name}}  {{modal.store.instructor[0].attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group" ng-show="modal.store.promotores.length" >
+              <label for="lblContactoPromotores" class="col-sm-3 control-label">Telefono contacto promotores</label>
+              <div class="col-sm-8" ng-repeat="promotor in modal.store.promotores" >
+                <label class="form-control" id="lblContactoPromotores">{{promotor.attributes.phone_number}} - {{promotor.attributes.first_name}} {{promotor.attributes.last_name}}</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="lblKam" class="col-sm-3 control-label">Kam del dealer</label>
+              <div class="col-sm-8">
+                <label class="form-control" id="lblKam">{{modal.store.kam}}</label>
+              </div>
+            </div>
           </form>
         </div>
       </div>
