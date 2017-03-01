@@ -421,6 +421,22 @@ angular.module('minovateApp')
 									selected: null,
 									data: success.data.attributes.children[i].data.options[j].data
 								});
+
+								var llaves = _.keys($scope.modal.options[j].data);
+								for (k = 0; k < llaves.length; k++) {
+									if(_.propertyOf($scope.modal.options[j].data)(llaves[k]).id === undefined){
+										//$log.error($scope.modal.options[i].data[llaves[k]].visibility);
+										var jsonCant = {id: 185, type: "Comment", name: "Cantidad", required: true, max_length: 4,
+								        			multiline: false, field_type: "number", visibility: $scope.modal.options[j].data[llaves[k]].visibility},
+											jsonObs  = {id: 184, type: "Comment", name: "Observación", required: true, max_length: 2048,
+								        			multiline: true, field_type: "text", visibility: $scope.modal.options[j].data[llaves[k]].visibility},
+											jsonFoto = {id: 26, type: "Gallery", name: "Fotos", icon: "/images/fotos.png", required: true,
+								        			max_images: 0, visibility: $scope.modal.options[j].data[llaves[k]].visibility},
+											jsonCual = {id: 24, type: "Comment", name: "Cuál", required: true, max_length: 140,
+								        			multiline: true, field_type: "text", visibility: $scope.modal.options[j].data[llaves[k]].visibility};
+										$scope.modal.options[j].data = {cant: jsonCant, observacion: jsonObs, foto: jsonFoto, cual: jsonCual};
+									}
+								}
 							}
 						}
 					}
