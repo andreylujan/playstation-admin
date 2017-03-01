@@ -450,7 +450,8 @@ angular.module('minovateApp')
 								if ($scope.modal.options[j].detail) {
 									$scope.modal.checklistOptions[i].detail = true;
 								}
-								if ($scope.modal.options[j].data === null || $scope.modal.options[j].data.length === 0) {
+								var llaves = _.keys($scope.modal.options[j].data);
+								if ($scope.modal.options[j].data === null || llaves.length === 0) {
 									var jsonCant = {id: 185, type: "Comment", name: "Cantidad", required: true, max_length: 4,
 								        			multiline: false, field_type: "number", visibility: false},
 										jsonObs  = {id: 184, type: "Comment", name: "Observación", required: true, max_length: 2048,
