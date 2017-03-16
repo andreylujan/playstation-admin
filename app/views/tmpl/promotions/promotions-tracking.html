@@ -218,6 +218,9 @@
 								<td data-title="'Creador'" sortable="'creatorName'" filter="{ 'creatorName': 'text' }">
 									{{promotion.creatorName}}
 								</td>
+								<td data-title="'Eliminar'">
+									<img ng-click="openModalDeletePromotion(promotion.id)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer">
+								</td>
 							</tr>
 						</table>
 
@@ -233,22 +236,25 @@
 
 					</div>
 					<!-- /tile body -->
-
 				</section>
 				<!-- /tile -->
-
 			</div>
 			<!-- /col -->
-
-
 		</div>
 		<!-- /row -->
-
-
-
-
-
 	</div>
 	<!-- /page content -->
 
 </div>
+
+<script type="text/ng-template" id="messageListPromotion.html">
+  <div class="modal-body text-gray text-center">
+    <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
+    <h3>¿Seguro que deseas eliminar esta promoción?</h3>
+    <p>Al eliminar la promoción, se perderá toda la información contenida en esta. Verifica si quieres eliminar esta promoción</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deletePromotion({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>    
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>

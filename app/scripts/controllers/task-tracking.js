@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('TaskTrackingCtrl', function($scope, $filter, $log, $window, $timeout, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('TaskTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, $timeout, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
 
 	$scope.page = {
 		title: 'Seguimiento Tareas',
@@ -755,7 +755,7 @@ angular.module('minovateApp')
 			'filter[store_name]': filters.storeName || null,
 			'filter[creator_name]': filters.creatorName || null,
 			'filter[assigned_user_names]': filters.assignedUserNames || null,
-			'fields[reports]': 'zone_name,store_name,description,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf,finished_at'
+			'fields[reports]': 'zone_name,store_name,dealer_name,description,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf,finished_at'
 		}, function(success) {
 
 			if (success.data) {
@@ -825,14 +825,14 @@ angular.module('minovateApp')
 			'filter[store_name]': filters.storeName || null,
 			'filter[creator_name]': filters.creatorName || null,
 			'filter[assigned_user_names]': filters.assignedUserNames || null,
-			'fields[reports]': 'zone_name,store_name,description,dealer_name,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
+			'fields[reports]': 'zone_name,store_name,dealer_name,description,created_at,limit_date,task_start,title,assigned_user_names,creator_name,pdf_uploaded,pdf'
 		}, function(success) {
 
 			if (success.data) {
 				pendingTasks = [];
 				$scope.page.pendingTasks.total = success.meta.pending_reports_count;
 				$scope.pagination.pendingTasks.pages.total = success.meta.page_count;
-
+				console.log(success.data);
 
 				for (i = 0; i < success.data.length; i++) {
 					pendingTasks.push({
@@ -893,5 +893,87 @@ angular.module('minovateApp')
 		success: true,
 		detail: 'OK'
 	}, $scope.pagination.pendingTasks.pages._current, 15, $scope.filters);
+
+
+	$scope.openModalDeleteReport = function(idReport) {
+
+		//$log.error(idReport);
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'messageListReport.html',
+			controller: 'MessageListReportModalInstance',
+			resolve: {
+				idReport: function() {
+					return idReport;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			$window.location.reload();
+		}, function() {});
+	};
+
+})
+
+.controller('MessageListReportModalInstance', function($scope, $log, $uibModalInstance, idReport, Reportes, Validators, Utils) {
+	//$log.error(idReport);
+	$scope.modal = {
+		title: {
+			text: null
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: null
+		},
+		buttons: {
+			delete: {
+				border: false,
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+
+	$scope.deleteReport = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		Reportes.delete({
+			idReport: idReport
+		}, function(success) {
+			$log.log(success);
+			$uibModalInstance.close();
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.deleteReport);
+			}
+		});
+
+	};
+
+	$scope.ok = function() {
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.text = '';
+		$scope.modal.alert.show = false;
+	};
 
 });
