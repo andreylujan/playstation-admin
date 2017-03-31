@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('PromotionsTrackingCtrl', function($scope, $filter, $log, $window, $timeout, NgTableParams, Reports, Zones, Dealers, Stores, Users, PromotionsStates, Utils) {
+.controller('PromotionsTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, $timeout, NgTableParams, Reports, Zones, Dealers, Stores, Users, PromotionsStates, Utils) {
 
 	$scope.page = {
 		title: 'Seguimiento de Promociones',
@@ -870,5 +870,84 @@ angular.module('minovateApp')
 		success: true,
 		detail: 'OK'
 	}, $scope.pagination.finishedPromotions.pages._current, $scope.pageSize, $scope.filters);
+
+	$scope.openModalDeletePromotion = function(idPromotion) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'messageListPromotion.html',
+			controller: 'MessageListPromotionModalInstance',
+			resolve: {
+				idPromotion: function() {
+					return idPromotion;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			$window.location.reload();
+		}, function() {});
+	};
+
+})
+
+.controller('MessageListPromotionModalInstance', function($scope, $log, $uibModalInstance, idPromotion, PromotionsStatesDelete, Validators, Utils) {
+	//$log.error(idReport);
+	$scope.modal = {
+		title: {
+			text: null
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: null
+		},
+		buttons: {
+			delete: {
+				border: false,
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+
+	$scope.deletePromotion = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		PromotionsStatesDelete.delete({
+			idPromotion: idPromotion
+		}, function(success) {
+			$log.log(success);
+			$uibModalInstance.close();
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.deleteReport);
+			}
+		});
+
+	};
+
+	$scope.ok = function() {
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.text = '';
+		$scope.modal.alert.show = false;
+	};
 
 });

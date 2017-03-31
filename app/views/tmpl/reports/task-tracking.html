@@ -222,6 +222,10 @@
 								<td data-title="'Asignados'" sortable="'assignedUserNames'" filter="{ 'assignedUserNames': 'text' }">
 									{{report.assignedUserNames}}
 								</td>
+								<td data-title="'Eliminar'">
+									<!--{{report.assignedUserNames}}-->
+									<img ng-click="openModalDeleteReport(report.id)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar Tarea">
+								</td>
 							</tr>
 						</table>
 
@@ -234,25 +238,26 @@
 								<pager all="pagination.pendingTasks.pages.total" prev="decrementPagePendingTasks()" next="incrementPagePendingTasks()" change-page="getPendingTasks({success:true,detail:'OK'},pagination.reports.pages._current,pageSize,filters)" current-page="pagination.pendingTasks.pages._current" />
 							</div>
 						</div>
-
 					</div>
 					<!-- /tile body -->
-
 				</section>
 				<!-- /tile -->
-
 			</div>
 			<!-- /col -->
-
-
 		</div>
 		<!-- /row -->
-
-
-
-
-
 	</div>
 	<!-- /page content -->
-
 </div>
+
+<script type="text/ng-template" id="messageListReport.html">
+  <div class="modal-body text-gray text-center">
+    <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
+    <h3>¿Seguro que deseas eliminar esta tarea?</h3>
+    <p>Al eliminar la tarea, se perderá toda la información contenida en ésta. Verifica si quieres eliminar esta tarea</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deletePromotion({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>    
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>

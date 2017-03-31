@@ -191,6 +191,28 @@ angular.module('minovateApp')
 				'Content-Type': 'application/vnd.api+json',
 				Accept: 'application/vnd.api+json'
 			}
+		},
+		delete: {
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+
+})
+
+// REPORTS
+.factory('Reportes', function($resource) {
+
+	return $resource(API_URL + '/reports/:idReport', {
+		idReport: '@idReport'
+	}, {
+		delete: {
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
 		}
 	});
 
@@ -487,6 +509,36 @@ angular.module('minovateApp')
 .factory('PromotionsStates', function($resource) {
 
 	return $resource(API_URL + '/promotion-states', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				'page[number]': '@number',
+				'page[size]': '@size',
+				'filter[id]': '@id',
+				'filter[title]': '@title',
+				'filter[activated_at]': '@activatedAt',
+				'filter[end_date]': '@endDate',
+				'filter[start_date]': '@startDate',
+				'filter[zone_name]': '@zoneName',
+				'filter[dealer_name]': '@dealerName',
+				'filter[store_name]': '@storeName',
+				'filter[creator_name]': '@creatorName',
+				'filter[activator_name]': '@activatorName'
+			}
+		}
+	});
+
+})
+
+// promotions-states
+.factory('PromotionsStatesDelete', function($resource) {
+
+	return $resource(API_URL + '/promotion-states/:idPromotion', {
+		idPromotion: '@idPromotion'
+		}, {
 		query: {
 			method: 'GET',
 			headers: {
