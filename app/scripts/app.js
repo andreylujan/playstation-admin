@@ -99,7 +99,9 @@ angular
 	function(uiSelectConfig, localStorageServiceProvider, $authProvider) {
 		uiSelectConfig.theme = 'bootstrap';
 		localStorageServiceProvider.setStorageType('localStorage');
-		$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token'; //PRODUCCION
+		//$authProvider.loginUrl = 'http://50.16.161.152/eretail/oauth/token'; 				//PRODUCCION Chile
+		//$authProvider.loginUrl = 'http://50.16.161.152/eretail/colombia/oauth/token'; 		//PRODUCCION Colombia
+		$authProvider.loginUrl = 'http://50.16.161.152/eretail/peru/oauth/token'; 			//PRODUCCION Peru
 		// $authProvider.loginUrl = 'http://50.16.161.152/eretail-staging/oauth/token'; //DESARROLLO
 		// $authProvider.loginUrl = 'http://192.168.1.184:3000/oauth/token'; //DESARROLLO PABLO
 		$authProvider.tokenName = 'access_token';
