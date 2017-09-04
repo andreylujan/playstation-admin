@@ -119,14 +119,14 @@ angular.module('minovateApp')
 
 		$scope.saveAccount = function() {
 
-			var rutUnformatted = Utils.replaceAll($scope.page.elements.newUser.rut.text, '.', '');
+			//var rutUnformatted = Utils.replaceAll($scope.page.elements.newUser.rut.text, '.', '');
 
-			if (!Validators.validateRutCheckDigit(rutUnformatted)) {
+			/*if (!Validators.validateRutCheckDigit(rutUnformatted)) {
 				$scope.page.elements.message.color = 'danger';
 				$scope.page.elements.message.text = 'Rut no válido';
 				$scope.page.elements.message.show = true;
 				return;
-			}
+			}*/
 
 			if (!Validators.validaRequiredField($scope.page.elements.newUser.email.text) || !Validators.validaRequiredField($scope.page.elements.newUser.firstName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.lastName.text) || !Validators.validaRequiredField($scope.page.elements.newUser.password.text) || !Validators.validaRequiredField($scope.page.elements.newUser.passwordConfirmation.text)) {
 				$scope.page.elements.message.color = 'danger';
@@ -158,7 +158,6 @@ angular.module('minovateApp')
 							email: $scope.page.elements.newUser.email.text,
 							first_name: $filter('capitalize')($scope.page.elements.newUser.firstName.text, true),
 							last_name: $filter('capitalize')($scope.page.elements.newUser.lastName.text, true),
-							rut: $scope.page.elements.newUser.rut.text,
 							password: $scope.page.elements.newUser.password.text,
 							password_confirmation: $scope.page.elements.newUser.passwordConfirmation.text,
 							phone_number: $scope.page.elements.newUser.phoneNumber.text,
@@ -237,7 +236,7 @@ angular.module('minovateApp')
 			$scope.page.elements.newUser.phoneNumber.disabled = true;
 		};
 
-		$scope.formatRut = function(rut) {
+		/*$scope.formatRut = function(rut) {
 
 			if (Validators.validateRutCheckDigit(rut)) {
 				$scope.page.elements.newUser.rut.text = Utils.formatRut(rut);
@@ -248,6 +247,6 @@ angular.module('minovateApp')
 				// $log.log('dv NO valido');
 			}
 
-		};
+		};*/
 
 	});
