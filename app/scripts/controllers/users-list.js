@@ -264,7 +264,7 @@ angular.module('minovateApp')
 				$scope.user.role.id = success.data.attributes.role_id;
 				$scope.user.role.text = success.data.attributes.role_name;
 				$scope.user.phoneNumber.text = success.data.attributes.phone_number;
-				$scope.user.rut.text = success.data.attributes.rut;
+				//$scope.user.rut.text = success.data.attributes.rut;
 				$scope.user.emergencyPhone.text = success.data.attributes.emergency_phone;
 				$scope.user.contractDate.value = Date.parse(success.data.attributes.contract_date);
 				$scope.user.contractEndDate.value = Date.parse(success.data.attributes.contract_end_date);
@@ -355,15 +355,15 @@ angular.module('minovateApp')
 				return;
 			}
 
-			var rutUnformatted = Utils.replaceAll($scope.user.rut.text, '.', '');
+			//var rutUnformatted = Utils.replaceAll($scope.user.rut.text, '.', '');
 
-			if (!Validators.validateRutCheckDigit(rutUnformatted)) {
+			/*if (!Validators.validateRutCheckDigit(rutUnformatted)) {
 				$scope.elements.alert.color = 'danger';
 				$scope.elements.alert.title = 'Rut no válido';
 				$scope.elements.alert.text = 'Revise el dígito verificador';
 				$scope.elements.alert.show = true;
 				return;
-			}
+			}*/
 
 			$scope.elements.buttons.editUser.text = 'Editar';
 			// $scope.elements.buttons.editUser.border = 'btn-border';
@@ -377,7 +377,6 @@ angular.module('minovateApp')
 					attributes: {
 						first_name: $scope.user.firstName.text,
 						last_name: $scope.user.lastName.text,
-						rut: $scope.user.rut.text,
 						phone_number: $scope.user.phoneNumber.text,
 						emergency_phone: $scope.user.emergencyPhone.text,
 						address: $scope.user.address.text,
@@ -461,12 +460,12 @@ angular.module('minovateApp')
 		}
 	};
 
-	$scope.formatRut = function(rut) {
+	/*$scope.formatRut = function(rut) {
 
 		if (Validators.validateRutCheckDigit(rut)) {
 			$scope.user.rut.text = Utils.formatRut(rut);
 		}
-	};
+	};*/
 
 	var enableFormInputs = function() {
 		$scope.user.firstName.disabled = false;
