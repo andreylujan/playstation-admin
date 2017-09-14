@@ -6,8 +6,11 @@
 //var API_URL = 'http://50.16.161.152/eretail/colombia/api/v1'; 		// PRODUCCIÓN Colombia
 //var URL_SERVER = 'http://50.16.161.152/eretail/colombia'; 			// PRODUCCIÓN Colombia
 
-var API_URL = 'http://50.16.161.152/eretail/peru/api/v1'; 				// PRODUCCIÓN Peru
-var URL_SERVER = 'http://50.16.161.152/eretail/peru'; 					// PRODUCCIÓN Peru
+//var API_URL = 'http://50.16.161.152/eretail/peru/api/v1'; 			// PRODUCCIÓN Peru
+//var URL_SERVER = 'http://50.16.161.152/eretail/peru'; 				// PRODUCCIÓN Peru
+
+var API_URL = 'http://50.16.161.152/eretail/interamerica/api/v1'; 		// PRODUCCIÓN Interamerica
+var URL_SERVER = 'http://50.16.161.152/eretail/interamerica'; 			// PRODUCCIÓN Interamerica
 
 //var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
 //var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
