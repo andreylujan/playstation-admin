@@ -10,7 +10,7 @@
 server '50.16.161.152', port: 60, user: 'ubuntu', roles: [:web, :app, :db]
 
 set :ssh_options, {
- keys: [ "#{ENV['HOME']}/.ssh/echeckit_production.pem" ],
+ keys: [ "#{ENV['HOME']}/.ssh/echeckit_production.pem", "./keys/echeckit_production.pem" ],
  forward_agent: true,
  auth_methods: ["publickey"]
 }
