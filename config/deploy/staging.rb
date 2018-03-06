@@ -7,13 +7,7 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-server '50.16.161.152', port: 60, user: 'ubuntu', roles: [:web, :app, :db]
-
-set :ssh_options, {
- keys: [ "#{ENV['HOME']}/.ssh/nandilagos", "#{ENV['HOME']}/.ssh/leibniz_rsa" ],
- forward_agent: true,
- auth_methods: ["publickey"]
-}
+server '34.227.102.74', port: 60, user: 'ubuntu', roles: [:web, :app, :db]
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/srv/http/www/echeckit/eretail-staging/admin'
@@ -51,11 +45,11 @@ set :branch, 'staging'
 #
 # Global options
 # --------------
-#  set :ssh_options, {
-#    keys: %w(/home/rlisowski/.ssh/id_rsa),
-#    forward_agent: false,
-#    auth_methods: %w(password)
-#  }
+  set :ssh_options, {
+    keys: '~/.ssh/id_rsa',
+    forward_agent: false,
+    auth_methods: %w(password)
+  }
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
