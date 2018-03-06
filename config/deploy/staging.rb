@@ -10,7 +10,7 @@
 server '34.227.102.74', port: 60, user: 'ubuntu', roles: [:web, :app, :db]
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/srv/http/www/echeckit/eretail-staging/admin'
+set :deploy_to, '/srv/http/www/echeckit/eretail/admin'
 set :branch, 'staging'
 
 # role-based syntax
