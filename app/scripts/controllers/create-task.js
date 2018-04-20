@@ -165,6 +165,7 @@ angular.module('minovateApp')
         filteredZoneIds = newZoneIds;
 
         $scope.page.newTask.zones.disabled = false;
+        //$scope.page.newTask.zones.selectedZone = $scope.page.newTask.zones.list.slice();
 
         /* $scope.getDealers({
 					success: true,
@@ -218,6 +219,7 @@ angular.module('minovateApp')
         filteredDealerIds = newDealerIds;
 
         $scope.page.newTask.dealers.disabled = false;
+        //$scope.page.newTask.dealers.selectedDealer = $scope.page.newTask.dealers.list.slice();
 
 
       } else {
@@ -272,6 +274,7 @@ angular.module('minovateApp')
 
         $scope.store_ids = _.union(newStoreIds, selectedStoreIds);
         filteredStoreIds = newStoreIds;
+        //$scope.page.newTask.stores.selectedStore = $scope.page.newTask.stores.list.slice();
 
         $scope.page.newTask.stores.disabled = false;
 
@@ -329,6 +332,7 @@ angular.module('minovateApp')
 
         $scope.promoter_ids = _.union(newPromoterIds, selectedPromoterIds);
         filteredPromoterIds = newPromoterIds;
+        $scope.page.newTask.promoters.selectedPromoter = $scope.page.newTask.promoters.list.slice();
         
         $scope.page.newTask.promoters.disabled = false;
 
@@ -473,10 +477,10 @@ angular.module('minovateApp')
       $scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe indicar una fecha límite para realizar la tarea');
       return false;
     }
-    if ($scope.dealer_ids.length === 0 &&
-      $scope.zone_ids.length === 0 &&
-      $scope.store_ids.length === 0 &&
-      $scope.promoter_ids.length === 0) {
+    if ($scope.page.newTask.dealers.selectedDealer.length === 0 &&
+      $scope.page.newTask.zones.selectedZone.length === 0 &&
+      $scope.page.newTask.stores.selectedStore.length === 0 &&
+      $scope.page.newTask.promoters.selectedPromoter.length === 0) {
       $scope.setAlertProperties(true, 'danger', 'Faltan campos', 'Debe seleccionar al menos una zona/dealer/tienda o promotor');
       return false;
     }
