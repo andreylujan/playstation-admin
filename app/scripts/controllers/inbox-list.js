@@ -39,7 +39,6 @@ angular.module('minovateApp')
 		Inbox.query({
 			include: 'message_action,recipients'
 		}, function(success) {
-
 			if (success.data) {
 
 				inboxIncluded = success.included;
@@ -58,43 +57,26 @@ angular.module('minovateApp')
 						}
 					}
 
-					for (k = 0; k < success.data[i].relationships.recipients.data.length; k++) {
-						for (j = 0; j < inboxIncluded.length; j++) {
-							if (inboxIncluded[j].type === 'users') {
-								if (success.data[i].relationships.recipients.data[k].id === inboxIncluded[j].id) {
-									if (k === 0) {
-										recipientsNames = inboxIncluded[j].attributes.first_name + ' ' + inboxIncluded[j].attributes.last_name;
-									} else {
-										recipientsNames = inboxIncluded[j].attributes.first_name + ' ' + inboxIncluded[j].attributes.last_name + ' <br>' + recipientsNames;
-									}
-								}
-							}
-						}
-					}
-
 					data.push({
 						id: parseInt(success.data[i].id),
 						messageActionId: success.data[i].relationships.message_action.data.id,
 						messageActionName: messageActionName,
 						title: success.data[i].attributes.title,
-						sendAt: success.data[i].attributes.send_at,
-						recipients: recipientsNames,
-						sendToAll: success.data[i].attributes.send_to_all
+						sendAt: success.data[i].attributes.send_at
 					});
 
 				}
 
 				$scope.tableParams = new NgTableParams({
-					page: 1, // show first page
+					page: 1,
 					count: 50,
 					filter: {
-						//name: 'M'       // initial filter
 					},
 					sorting: {
-						id: 'asc' // initial sorting
+						sendAt: 'desc'
 					}
 				}, {
-					total: data.length, // length of data
+					total: data.length,
 					dataset: data
 				});
 
@@ -280,6 +262,8 @@ angular.module('minovateApp')
 		});
 	};
 
+	//FALTA QUE SERVICIO RETORNE MENSAJE
+
 	$scope.removeInbox = function(e) {
 		if (!e.success) {
 			$log.error(e.detail);
@@ -295,7 +279,7 @@ angular.module('minovateApp')
 				$log.error(success);
 			}
 		}, function(error) {
-			$log.log(error);
+			$log.error(error);
 			if (error.status === 401) {
 				Utils.refreshToken($scope.removeInbox);
 			}

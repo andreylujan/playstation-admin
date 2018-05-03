@@ -1,12 +1,8 @@
 <div class="page page-ng-table">
-
 	<!-- page header -->
 	<div class="pageheader">
-
 		<h2>{{page.title}} <span></span></h2>
-
 		<div class="page-bar">
-
 			<ul class="page-breadcrumb">
 				<li>
 					<a ui-sref="app.dashboard"> {{main.title}}</a>
@@ -15,68 +11,26 @@
 					<a ui-sref="app.playStation.reports">{{page.title}}</a>
 				</li>
 			</ul>
-
 		</div>
-
 	</div>
 	<!-- /page header -->
-
 	<!-- page content -->
 	<div class="pagecontent">
-
 		<!-- row -->
 		<div class="row">
-
 			<!-- col -->
 			<div class="col-md-12">
-
-
 				<!-- tile -->
 				<section class="tile" fullscreen="isFullscreen06">
-
-					<!-- tile header -->
-					<div class="tile-header dvd dvd-btm">
-						<h1 class="custom-font"></h1>
-						<ul class="controls">
-							<li class="dropdown" dropdown on-toggle="toggled(open)">
-
-								<a href dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
-
-								<ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
-									<li>
-										<a href tile-control-toggle>
-											<span class="minimize"><fa name="angle-down"></fa>&nbsp;&nbsp;&nbsp;Minimizar</span>
-											<span class="expand"><fa name="angle-up"></fa>&nbsp;&nbsp;&nbsp;Maximizar</span>
-										</a>
-									</li>
-									<li>
-										<a href ng-click="getPromotions({success: true,detail: 'OK'})">
-											<fa name="refresh"></fa> Refrescar
-										</a>
-									</li>
-									<li>
-										<a href tile-control-fullscreen ng-click="isFullscreen06 = !isFullscreen06">
-											<fa name="expand"></fa> Pantalla completa
-										</a>
-									</li>
-
-								</ul>
-
-							</li>
-							<li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
-						</ul>
-					</div>
-					<!-- /tile header -->
-
 					<!-- tile body -->
 					<div class="tile-body">
 
 						<button class="bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="gotoNewInbox()" uib-tooltip="Nuevo mensaje"><i class="fa fa-plus-circle"></i> </button>
 
 						<table ng-table="tableParams" show-filter="true" class="table table-custom table-hover" ng-show="tableParams.data.length">
-							<tr ng-repeat="inbox in $data" ng-click="gotoNewInbox(inbox.id)" style="cursor:pointer;">
-								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }">
-									{{inbox.id | number}}
+							<tr ng-repeat="inbox in $data" style="cursor:pointer;">
+								<td data-title="'ID'" sortable="'id'" filter="{ 'id': 'text' }" ng-click="gotoNewInbox(inbox.id)">
+									<a>{{inbox.id | number}}</a>
 								</td>
 								<td data-title="'Tipo'" sortable="'messageActionName'" filter="{ 'messageActionName': 'text' }">
 									{{inbox.messageActionName}}
@@ -87,9 +41,8 @@
 								<td data-title="'Fecha'" sortable="'sendAt'" filter="{ 'sendAt': 'text' }">
 									{{inbox.sendAt | date: 'dd/MM/yyyy'}}
 								</td>
-								<td data-title="'Usuarios'" sortable="'recipients'" filter="{ 'recipients': 'text' }">
-									<span ng-if="!inbox.sendToAll" ng-bind-html="inbox.recipients"></span>
-									<span ng-if="inbox.sendToAll"><strong>Todos los usuarios</strong></span>
+								<td data-title="'Eliminar'">
+									<img ng-click="openModalRemovePromotion(inbox.id)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar Mensaje">
 								</td>
 							</tr>
 						</table>
@@ -111,16 +64,16 @@
 </div>
 <!-- /page content -->
 
-<script type="text/ng-template" id="removeModal.html" class="">
+<script type="text/ng-template" id="removeInboxModal.html" class="">
   <div class="modal-body text-gray">
     <div class="row">
       <div class="col-md-12">
-        <h4 class="text-center">¿Seguro desea eliminar la promoción <strong>{{modal.promotion.title}}</strong>? </h4>
+        <h4 class="text-center">¿Seguro desea eliminar el Mensaje <strong>{{modal.promotion.title}}</strong>? </h4>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-  	<button class="btn btn-danger" ng-click="removePromotion({success: true,detail: 'OK'})">Si, eliminar</button>
+  	<button class="btn btn-danger" ng-click="removeInbox({success: true,detail: 'OK'})">Si, eliminar</button>
   	<button class="btn btn-default" ng-click="cancel()">Cancelar</button>
   </div>
 </script>
