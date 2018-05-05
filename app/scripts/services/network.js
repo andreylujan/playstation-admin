@@ -1,13 +1,13 @@
 'use strict';
 
- var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
- var URL_SERVER = 'http://50.16.161.152/eretail'; // PRODUCCIÓN
+var API_URL = 'http://50.16.161.152/eretail/api/v1'; // PRODUCCIÓN
+var URL_SERVER = 'http://50.16.161.152/eretail'; // PRODUCCIÓN
 
 //var API_URL = 'http://50.16.161.152/eretail-staging/api/v1'; // DESARROLLO
 //var URL_SERVER = 'http://50.16.161.152/eretail-staging'; // DESARROLLO
 
-// var API_URL = 'http://192.168.1.184:3000/api/v1'; // DESARROLLO PABLO
-// var URL_SERVER = 'http://192.168.1.184:3000/'; // DESARROLLO PABLO
+//var API_URL = 'http://192.168.100.13:3000/api/v1'; // DESARROLLO PABLO
+//var URL_SERVER = 'http://192.168.100.13:3000/'; // DESARROLLO PABLO
 
 angular.module('minovateApp')
 
@@ -653,7 +653,10 @@ angular.module('minovateApp')
 		},
 		delete: {
 			method: 'DELETE',
-			headers: {}
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json'
+			}
 		},
 		save: {
 			method: 'POST',
@@ -842,6 +845,18 @@ angular.module('minovateApp')
 //ImagesCategories
 .factory('ImagesCategories', function($resource) {
 	return $resource(API_URL + '/principalcategories', {}, {
+		query: {
+			method: 'GET',
+			headers: {
+				Accept: 'application/vnd.api+json'
+			}
+		}
+	});
+})
+
+//Goals Categories
+.factory('Categories', function($resource) {
+	return $resource(API_URL + '/sale_goals/category', {}, {
 		query: {
 			method: 'GET',
 			headers: {

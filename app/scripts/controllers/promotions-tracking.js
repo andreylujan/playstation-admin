@@ -68,20 +68,394 @@ angular.module('minovateApp')
 		pendingPromotions = [];
 
 	$scope.tableParamsFinishedPromotions = new NgTableParams({
-		count: finishedPromotions.length,
+		page: 1,
+		count: 15,
+		filter: {
+		},
+		sorting: {
+			activatedAt: 'desc'
+		}
 	}, {
 		dataset: finishedPromotions,
-		counts: [],
 		total: finishedPromotions.length,
 	});
 
 	$scope.tableParamsPendingPromotions = new NgTableParams({
-		count: pendingPromotions.length,
+		page: 1,
+		count: 15,
+		filter: {
+		}
 	}, {
 		dataset: pendingPromotions,
 		counts: [],
 		total: pendingPromotions.length,
 	});
+
+	var getZones = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		zones = [];
+
+		Zones.query({}, function(success) {
+			for (var i = 0; i < success.data.length; i++) {
+				zones.push({
+					id: parseInt(success.data[i].id),
+					name: success.data[i].attributes.name
+				});
+			}
+
+			getDealers({
+				success: true,
+				detail: 'OK'
+			});
+
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getZones);
+			}
+		});
+	};
+
+	var getDealers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		dealers = [];
+
+		Dealers.query({}, function(success) {
+			for (var i = 0; i < success.data.length; i++) {
+				dealers.push({
+					id: parseInt(success.data[i].id),
+					name: success.data[i].attributes.name
+				});
+			}
+
+			getStores({
+				success: true,
+				detail: 'OK'
+			});
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getDealers);
+			}
+		});
+	};
+
+	var getStores = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		stores = [];
+
+		Stores.query({}, function(success) {
+			if (success.data) {
+				for (var i = 0; i < success.data.length; i++) {
+					stores.push({
+						id: parseInt(success.data[i].id),
+						name: success.data[i].attributes.name
+					});
+				}
+				getUsers({
+					success: true,
+					detail: 'OK'
+				});
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getStores);
+			}
+		});
+	};
+
+	var getUsers = function(e) {
+		// Valida si el parametro e.success se seteó true para el refresh token
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		users = [];
+
+		Users.query({}, function(success) {
+			if (success.data) {
+				for (i = 0; i < success.data.length; i++) {
+					if (success.data[i].attributes.active) {
+						users.push({
+							id: parseInt(success.data[i].id),
+							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
+						});
+					}
+				}
+
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken(getUsers);
+			}
+		});
+	};
+
+	$scope.getFinishedPromotions = function(e, page, pageSize, filters) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		var finishedPromotions = [];
+
+		PromotionsStates.query({
+			'page[number]': 1,
+			'filter[activated]': true,
+			'filter[id]': filters.id || null,
+			'filter[title]': filters.title || null,
+			'filter[activated_at]': filters.activatedAt || null,
+			'filter[end_date]': filters.endDate || null,
+			'filter[start_date]': filters.startDate || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
+			'filter[activator_name]': filters.activatorName || null,
+		}, function(success) {
+			console.error(success.data);
+			if (success.data) {
+				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
+				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
+
+				for (i = 0; i < success.data.length; i++) {
+					finishedPromotions.push({
+						id: success.data[i].id,
+						title: success.data[i].attributes.title,
+						activatedAt: success.data[i].attributes.activated_at,
+						startDate: success.data[i].attributes.start_date,
+						endDate: success.data[i].attributes.end_date,
+						zoneName: success.data[i].attributes.zone_name,
+						dealerName: success.data[i].attributes.dealer_name,
+						storeName: success.data[i].attributes.store_name,
+						creatorName: success.data[i].attributes.creator_name,
+						activatorName: success.data[i].attributes.activator_name,
+						pdf: success.data[i].attributes.pdf,
+						pdfUploaded: success.data[i].attributes.pdf_uploaded
+					});
+				}
+
+				$scope.tableParamsFinishedPromotions = new NgTableParams({
+					page: 1,
+					count: 15,
+					filter: {
+					},
+					sorting: {
+						activatedAt: 'desc'
+					}
+				}, {
+					total: finishedPromotions.length,
+					dataset: finishedPromotions
+				});
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getFinishedPromotions);
+			}
+		});
+	};
+
+	$scope.getPendingPromotions = function(e, page, pageSize, filters) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		var pendingPromotions = [];
+
+		PromotionsStates.query({
+			'page[number]': 1,
+			'filter[activated]': false,
+			'filter[id]': filters.id || null,
+			'filter[title]': filters.title || null,
+			// 'filter[activated_at]': filters.activatedAt || null,
+			'filter[end_date]': filters.endDate || null,
+			'filter[start_date]': filters.startDate || null,
+			'filter[zone_name]': filters.zoneName || null,
+			'filter[dealer_name]': filters.dealerName || null,
+			'filter[store_name]': filters.storeName || null,
+			'filter[creator_name]': filters.creatorName || null,
+			'filter[activator_name]': filters.activatorName || null,
+		}, function(success) {
+
+			if (success.data) {
+				$scope.page.pendingPromotions.total = success.meta.pending_promotions_count;
+				$scope.pagination.pendingPromotions.pages.total = success.meta.page_count;
+
+				for (i = 0; i < success.data.length; i++) {
+					if (!success.data[i].attributes.activated) {
+						pendingPromotions.push({
+							id: success.data[i].id,
+							title: success.data[i].attributes.title,
+							activatedAt: success.data[i].attributes.activated_at,
+							startDate: success.data[i].attributes.start_date,
+							endDate: success.data[i].attributes.end_date,
+							zoneName: success.data[i].attributes.zone_name,
+							dealerName: success.data[i].attributes.dealer_name,
+							storeName: success.data[i].attributes.store_name,
+							creatorName: success.data[i].attributes.creator_name,
+							activatorName: success.data[i].attributes.activator_name,
+							pdf: success.data[i].attributes.pdf,
+							pdfUploaded: success.data[i].attributes.pdf_uploaded
+						});
+					}
+				}
+
+				/*$scope.tableParamsPendingPromotions.count(pendingPromotions.length);
+				$scope.tableParamsPendingPromotions.settings({
+					dataset: pendingPromotions,
+					counts: [],
+					total: pendingPromotions.length
+				});*/
+
+				$scope.tableParamsPendingPromotions = new NgTableParams({
+					page: 1,
+					count: 15,
+					filter: {
+					}
+				}, {
+					total: pendingPromotions.length,
+					dataset: pendingPromotions
+				});
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getFinishedPromotions);
+			}
+		});
+	};
+
+	$scope.downloadPdf = function(event) {
+		var pdf = angular.element(event.target).data('pdf');
+		if (pdf) {
+			$window.open(pdf, '_blank');
+		}
+	};
+
+	$scope.getPendingPromotions({
+		success: true,
+		detail: 'OK'
+	}, $scope.pagination.pendingPromotions.pages._current, $scope.pageSize, $scope.filters);
+
+	$scope.getFinishedPromotions({
+		success: true,
+		detail: 'OK'
+	}, $scope.pagination.finishedPromotions.pages._current, $scope.pageSize, $scope.filters);
+
+	$scope.openModalDeletePromotion = function(idPromotion) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'messageListPromotion.html',
+			controller: 'MessageListPromotionModalInstance',
+			resolve: {
+				idPromotion: function() {
+					return idPromotion;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			$window.location.reload();
+		}, function() {});
+	};
+
+})
+
+.controller('MessageListPromotionModalInstance', function($scope, $log, $uibModalInstance, idPromotion, PromotionsStatesDelete, Validators, Utils) {
+	//$log.error(idReport);
+	$scope.modal = {
+		title: {
+			text: null
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: null
+		},
+		buttons: {
+			delete: {
+				border: false,
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+
+	$scope.deletePromotion = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		PromotionsStatesDelete.delete({
+			idPromotion: idPromotion
+		}, function(success) {
+			$log.log(success);
+			$uibModalInstance.close();
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.deleteReport);
+			}
+		});
+
+	};
+
+	$scope.ok = function() {
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.text = '';
+		$scope.modal.alert.show = false;
+	};
+
+});
+
+/*
+
 
 	var filterTimeout, filterTimeoutDuration = 1000;
 
@@ -601,353 +975,4 @@ angular.module('minovateApp')
 		}
 	};
 
-	var getZones = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		zones = [];
-
-		Zones.query({}, function(success) {
-			for (var i = 0; i < success.data.length; i++) {
-				zones.push({
-					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
-				});
-			}
-
-			getDealers({
-				success: true,
-				detail: 'OK'
-			});
-
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getZones);
-			}
-		});
-	};
-
-	var getDealers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		dealers = [];
-
-		Dealers.query({}, function(success) {
-			for (var i = 0; i < success.data.length; i++) {
-				dealers.push({
-					id: parseInt(success.data[i].id),
-					name: success.data[i].attributes.name
-				});
-			}
-
-			getStores({
-				success: true,
-				detail: 'OK'
-			});
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getDealers);
-			}
-		});
-	};
-
-	var getStores = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		stores = [];
-
-		Stores.query({}, function(success) {
-			if (success.data) {
-				for (var i = 0; i < success.data.length; i++) {
-					stores.push({
-						id: parseInt(success.data[i].id),
-						name: success.data[i].attributes.name
-					});
-				}
-				getUsers({
-					success: true,
-					detail: 'OK'
-				});
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getStores);
-			}
-		});
-	};
-
-	var getUsers = function(e) {
-		// Valida si el parametro e.success se seteó true para el refresh token
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		users = [];
-
-		Users.query({}, function(success) {
-			if (success.data) {
-				for (i = 0; i < success.data.length; i++) {
-					if (success.data[i].attributes.active) {
-						users.push({
-							id: parseInt(success.data[i].id),
-							fullName: success.data[i].attributes.first_name + ' ' + success.data[i].attributes.last_name
-						});
-					}
-				}
-
-
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken(getUsers);
-			}
-		});
-	};
-
-	$scope.getFinishedPromotions = function(e, page, pageSize, filters) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		var finishedPromotions = [];
-
-		PromotionsStates.query({
-			'page[number]': page,
-			'page[size]': pageSize,
-			'filter[activated]': true,
-			'filter[id]': filters.id || null,
-			'filter[title]': filters.title || null,
-			'filter[activated_at]': filters.activatedAt || null,
-			'filter[end_date]': filters.endDate || null,
-			'filter[start_date]': filters.startDate || null,
-			'filter[zone_name]': filters.zoneName || null,
-			'filter[dealer_name]': filters.dealerName || null,
-			'filter[store_name]': filters.storeName || null,
-			'filter[creator_name]': filters.creatorName || null,
-			'filter[activator_name]': filters.activatorName || null,
-		}, function(success) {
-
-			if (success.data) {
-				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
-				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
-
-				for (i = 0; i < success.data.length; i++) {
-					// if (success.data[i].attributes.activated) {
-						finishedPromotions.push({
-							id: success.data[i].id,
-							title: success.data[i].attributes.title,
-							activatedAt: success.data[i].attributes.activated_at,
-							startDate: success.data[i].attributes.start_date,
-							endDate: success.data[i].attributes.end_date,
-							zoneName: success.data[i].attributes.zone_name,
-							dealerName: success.data[i].attributes.dealer_name,
-							storeName: success.data[i].attributes.store_name,
-							creatorName: success.data[i].attributes.creator_name,
-							activatorName: success.data[i].attributes.activator_name,
-							pdf: success.data[i].attributes.pdf,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded
-						});
-					// }
-				}
-
-				$scope.tableParamsFinishedPromotions.count(finishedPromotions.length);
-				$scope.tableParamsFinishedPromotions.settings({
-					dataset: finishedPromotions,
-					counts: [],
-					total: finishedPromotions.length
-				});
-
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getFinishedPromotions);
-			}
-		});
-	};
-
-	$scope.getPendingPromotions = function(e, page, pageSize, filters) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		var pendingPromotions = [];
-
-		PromotionsStates.query({
-			'page[number]': page,
-			'page[size]': pageSize,
-			'filter[activated]': false,
-			'filter[id]': filters.id || null,
-			'filter[title]': filters.title || null,
-			// 'filter[activated_at]': filters.activatedAt || null,
-			'filter[end_date]': filters.endDate || null,
-			'filter[start_date]': filters.startDate || null,
-			'filter[zone_name]': filters.zoneName || null,
-			'filter[dealer_name]': filters.dealerName || null,
-			'filter[store_name]': filters.storeName || null,
-			'filter[creator_name]': filters.creatorName || null,
-			'filter[activator_name]': filters.activatorName || null,
-		}, function(success) {
-
-			if (success.data) {
-				$scope.page.pendingPromotions.total = success.meta.pending_promotions_count;
-				$scope.pagination.pendingPromotions.pages.total = success.meta.page_count;
-
-				for (i = 0; i < success.data.length; i++) {
-					if (!success.data[i].attributes.activated) {
-						pendingPromotions.push({
-							id: success.data[i].id,
-							title: success.data[i].attributes.title,
-							activatedAt: success.data[i].attributes.activated_at,
-							startDate: success.data[i].attributes.start_date,
-							endDate: success.data[i].attributes.end_date,
-							zoneName: success.data[i].attributes.zone_name,
-							dealerName: success.data[i].attributes.dealer_name,
-							storeName: success.data[i].attributes.store_name,
-							creatorName: success.data[i].attributes.creator_name,
-							activatorName: success.data[i].attributes.activator_name,
-							pdf: success.data[i].attributes.pdf,
-							pdfUploaded: success.data[i].attributes.pdf_uploaded
-						});
-					}
-				}
-
-				$scope.tableParamsPendingPromotions.count(pendingPromotions.length);
-				$scope.tableParamsPendingPromotions.settings({
-					dataset: pendingPromotions,
-					counts: [],
-					total: pendingPromotions.length
-				});
-
-			} else {
-				$log.error(success);
-			}
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.getFinishedPromotions);
-			}
-		});
-	};
-
-	$scope.downloadPdf = function(event) {
-		var pdf = angular.element(event.target).data('pdf');
-		if (pdf) {
-			$window.open(pdf, '_blank');
-		}
-	};
-
-	$scope.getPendingPromotions({
-		success: true,
-		detail: 'OK'
-	}, $scope.pagination.pendingPromotions.pages._current, $scope.pageSize, $scope.filters);
-
-	$scope.getFinishedPromotions({
-		success: true,
-		detail: 'OK'
-	}, $scope.pagination.finishedPromotions.pages._current, $scope.pageSize, $scope.filters);
-
-	$scope.openModalDeletePromotion = function(idPromotion) {
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'messageListPromotion.html',
-			controller: 'MessageListPromotionModalInstance',
-			resolve: {
-				idPromotion: function() {
-					return idPromotion;
-				}
-			}
-		});
-
-		modalInstance.result.then(function() {
-			$window.location.reload();
-		}, function() {});
-	};
-
-})
-
-.controller('MessageListPromotionModalInstance', function($scope, $log, $uibModalInstance, idPromotion, PromotionsStatesDelete, Validators, Utils) {
-	//$log.error(idReport);
-	$scope.modal = {
-		title: {
-			text: null
-		},
-		subtitle: {
-			text: null
-		},
-		alert: {
-			color: '',
-			show: false,
-			title: '',
-			text: null
-		},
-		buttons: {
-			delete: {
-				border: false,
-				show: true,
-				text: 'Eliminar'
-			}
-		}
-	};
-
-	$scope.deletePromotion = function(e) {
-		if (!e.success) {
-			$log.error(e.detail);
-			return;
-		}
-
-		PromotionsStatesDelete.delete({
-			idPromotion: idPromotion
-		}, function(success) {
-			$log.log(success);
-			$uibModalInstance.close();
-		}, function(error) {
-			$log.error(error);
-			if (error.status === 401) {
-				Utils.refreshToken($scope.deleteReport);
-			}
-		});
-
-	};
-
-	$scope.ok = function() {
-		// $uibModalInstance.close($scope.selected.item);
-		$uibModalInstance.close();
-	};
-
-	$scope.cancel = function() {
-		$uibModalInstance.dismiss('cancel');
-	};
-
-	$scope.removeAlert = function() {
-		$scope.modal.alert.color = '';
-		$scope.modal.alert.title = '';
-		$scope.modal.alert.text = '';
-		$scope.modal.alert.show = false;
-	};
-
-});
+*/

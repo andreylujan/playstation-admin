@@ -25,7 +25,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
 				<ui-select class="gray-ps-3 br-15 b-0" ng-model="page.filters.zone.selected" close-on-select="true" ng-change="getDealers({success:true,detail:'OK'},page.filters.zone.selected);getDashboardInfo({success:true,detail:'OK'})" title="Zonas">
 					<ui-select-match placeholder="Seleccionar zona..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="zone in page.filters.zone.list | propsFilter: {name: $select.search}">
@@ -33,7 +33,7 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
 				<ui-select class="blue-ps-1 br-15 b-0" ng-model="page.filters.dealer.selected" close-on-select="true" ng-change="getStores({success:true,detail:'OK'},page.filters.zone.selected,page.filters.dealer.selected);getDashboardInfo({success:true,detail:'OK'})" ng-disabled="page.filters.dealer.disabled" title="Dealers">
 					<ui-select-match placeholder="Seleccionar dealer..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="dealer in page.filters.dealer.list | propsFilter: {name: $select.search}">
@@ -41,7 +41,7 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
 				<ui-select class="blue-ps-2 br-15 b-0" ng-model="page.filters.store.selected" sortable="true" close-on-select="true" ng-disabled="page.filters.store.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Tiendas">
 					<ui-select-match placeholder="Seleccionar tienda..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="store in page.filters.store.list | propsFilter: {name: $select.search}">
@@ -49,7 +49,7 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
 				<ui-select class="gray-ps-2 br-15 b-0" ng-model="page.filters.instructor.selected" close-on-select="true" ng-disabled="page.filters.instructor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Instructores">
 					<ui-select-match placeholder="Seleccionar instructor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.instructor.list | propsFilter: {name: $select.search}">
@@ -57,7 +57,7 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<div class="col-md-3 mt-5">
 				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.supervisor.selected" close-on-select="true" ng-disabled="page.filters.supervisor.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
 					<ui-select-match placeholder="Seleccionar supervisor..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
 					<ui-select-choices repeat="user in page.filters.supervisor.list | propsFilter: {name: $select.search}">
@@ -65,7 +65,15 @@
 					</ui-select-choices>
 				</ui-select>
 			</div>
-			<div class="col-md-2 mt-5">
+			<!--div class="col-md-3 mt-5">
+				<ui-select class="gray-ps-1 br-15 b-0" ng-model="page.filters.category.selected" close-on-select="true" ng-disabled="page.filters.category.disabled" ng-change="getDashboardInfo({success:true,detail:'OK'})" title="Supervisores">
+					<ui-select-match placeholder="Seleccionar categoria..."><span ng-bind="$select.selected.name | capitalize:true"></span></ui-select-match>
+					<ui-select-choices repeat="user in page.filters.category.list | propsFilter: {name: $select.search}">
+						<div ng-bind-html="user.name | highlight: $select.search | capitalize:true"></div>
+					</ui-select-choices>
+				</ui-select>
+			</div-->
+			<div class="col-md-3 mt-5">
 				<div class="input-group">
 					<!-- <button id="daterangeDashGoals" class="bg-gray-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" daterangepicker="page.filters.dateRange.options" date-begin="page.filters.dateRange.startDate" date-end="page.filters.dateRange.endDate">
 						<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span>{{page.filters.dateRange.startDate | date: 'dd/MM/yyyy'}} - {{page.filters.dateRange.endDate | date: 'dd/MM/yyyy'}}</span>&nbsp;&nbsp;<i class="fa fa-angle-down"></i>
@@ -95,7 +103,7 @@
 
 					<h3 class="text-orange-ps text-center" ng-show="!page.goals.monthlySalesVsGoals.chartConfig.xAxis.categories.length">No se encontraron datos</h3>
 
-					<div ng-show="page.goals.monthlySalesVsGoals.table.headers.length">
+					<!--div ng-show="page.goals.monthlySalesVsGoals.table.headers.length">
 						<hr>
 						<table class="table" style="width: 100%">
 							<thead>
@@ -119,11 +127,30 @@
 								</tr>
 							</tbody>
 						</table>
+					</div-->
+
+					<div>
+						<table class="table table-bordered" style="width: 100%">
+							<colgroup span="2"></colgroup>
+ 							<colgroup span="2"></colgroup>
+						  	<thead>
+						    	<tr>
+						    		<th rowspan="2"></th>
+						      		<th colspan="3" ng-repeat="item in page.filters.category.list">{{ item.name }}</th>
+						    	</tr>
+						    	<tr>
+						    		<th scope="col" ng-repeat="item in page.goals.headers track by $index">{{ item.name }}</th>
+						    	</tr>
+						  	</thead>
+						  	<tbody>
+						    	<tr ng-repeat="item in page.goals.monthlySalesVsGoals.table.data track by $index">
+						      		<th>{{item.name}}</th>
+						      		<td ng-repeat="data in item.data track by $index"> {{ data }}</td>
+						    	</tr>
+						  </tbody>
+						</table>
 					</div>
-
-					<h3></h3>
 				</div>
-
 			</section>
 			<!-- /tile -->
 

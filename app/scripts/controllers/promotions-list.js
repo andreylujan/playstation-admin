@@ -38,7 +38,6 @@ angular.module('minovateApp')
 		}, function(success) {
 
 			if (success.data) {
-
 				for (i = 0; i < success.data.length; i++) {
 
 					promotions.push({
@@ -47,10 +46,9 @@ angular.module('minovateApp')
 						startDate: success.data[i].attributes.start_date,
 						endDate: success.data[i].attributes.end_date,
 						zones: success.data[i].relationships.zones.data,
-						dealers: success.data[i].relationships.dealers.data
-							// users: success.data[i].relationships.users.data
+						dealers: success.data[i].relationships.dealers.data,
+						creator: success.data[i].attributes.creator_name
 					});
-
 				}
 
 				for (i = 0; i < promotions.length; i++) {

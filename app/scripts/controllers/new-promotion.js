@@ -149,6 +149,7 @@ angular.module('minovateApp')
 				include: 'checklist,users,zones,dealers'
 			}, function(success) {
 				if (success.data) {
+					console.error(success.data);
 					selectInfoPromotion(success.data);
 				} else {
 					$log.log(success);

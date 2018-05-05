@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('DashboardGoalsCtrl', function($scope, $log, $filter, $uibModal, $moment, $state, $location, $window, $timeout, Utils, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users) {
+.controller('DashboardGoalsCtrl', function($scope, $log, $filter, $uibModal, $moment, $state, $location, $window, $timeout, Utils, Dashboard, ExcelDashboard, Zones, Dealers, Stores, Users, Categories) {
 
 	var currentDate = new Date();
 	var firstMonthDay = new Date();
@@ -45,6 +45,11 @@ angular.module('minovateApp')
 				disabled: false,
 				loaded: false
 			},
+			category: {
+	        	list: [],
+	        	selected: null,
+	        	disabled: false
+	      	},
 			dateRange: {
 				options: {
 					locale: {
@@ -68,6 +73,12 @@ angular.module('minovateApp')
 			}
 		},
 		goals: {
+			tableHeader: [
+				"Meta",
+				"Venta",
+				"Cumpl"
+			],
+			headers: [],
 			monthlySalesVsGoals: {
 				loaded: false,
 				table: {
@@ -287,6 +298,34 @@ angular.module('minovateApp')
 					detail: 'OK'
 				});
 
+				$scope.getCategories({
+					success: true,
+					detail: 'OK'
+				});
+
+			} else {
+				$log.error(success);
+			}
+		}, function(error) {
+			$log.error(error);
+			if (error.status === 401) {
+				Utils.refreshToken($scope.getStores);
+			}
+		});
+	};
+
+	$scope.getCategories = function(e) {
+
+		Categories.query({
+		}, function(success) {
+			if (success.category) {
+				for (i = 0; i < success.category.length; i++) {
+					$scope.page.filters.category.list.push({
+						name: $filter('capitalize')(success.category[i], true),
+					});
+				}
+				$scope.page.filters.category.disabled = false;
+
 			} else {
 				$log.error(success);
 			}
@@ -380,7 +419,6 @@ angular.module('minovateApp')
 			start_day: startDay,
 			end_day: endDay
 		}, function(success) {
-
 			var monthlySalesVsGoals = {
 				categories: [],
 				data: {
@@ -417,22 +455,52 @@ angular.module('minovateApp')
 			};
 
 			// INI Metas Metas v/s Ventas
+			$scope.page.goals.monthlySalesVsGoals.table.data = [];
 			$scope.page.goals.monthlySalesVsGoals.table.headers = [];
 			$scope.page.goals.monthlySalesVsGoals.table.row1 = [];
 			$scope.page.goals.monthlySalesVsGoals.table.row2 = [];
 			$scope.page.goals.monthlySalesVsGoals.table.row3 = [];
 
+
+			$scope.page.goals.headers = [];
+			$scope.page.goals.monthlySalesVsGoals.table.data = [];
+
+
+			angular.forEach($scope.page.filters.category.list, function(value, key) {
+				$scope.page.goals.headers.push({
+					cod: "goal",
+					name: "Meta",
+					category: value.name
+				});
+				$scope.page.goals.headers.push({
+					cod: "sale",
+					name: "Venta",
+					category: value.name
+				});
+				$scope.page.goals.headers.push({
+					cod: "percentage",
+					name: "Cumpl",
+					category: value.name
+				});
+			});
 			angular.forEach(success.data.attributes.monthly_sales_vs_goals, function(value, key) {
 
 				monthlySalesVsGoals.categories.push($filter('capitalize')(value.name, true));
-				monthlySalesVsGoals.data.sales.push(value.sales);
-				monthlySalesVsGoals.data.goals.push(value.goal);
+				monthlySalesVsGoals.data.sales.push(value.sales_unit);
+				monthlySalesVsGoals.data.goals.push(value.goal_unit);
 
-				$scope.page.goals.monthlySalesVsGoals.table.headers.push($filter('capitalize')(value.name, true));
-				$scope.page.goals.monthlySalesVsGoals.table.row1.push(value.goal);
-				$scope.page.goals.monthlySalesVsGoals.table.row2.push(value.sales);
-				$scope.page.goals.monthlySalesVsGoals.table.row3.push(value.goal_percentage);
+				$scope.page.goals.monthlySalesVsGoals.table.data.push({
+					name: value.name,
+					key: '',
+					data: []
+				});
 
+				angular.forEach($scope.page.goals.headers, function(header, index) {
+					const aux = _.find(value.categories, function(val) { return val.name == header.category });
+					if (aux != undefined) {
+						$scope.page.goals.monthlySalesVsGoals.table.data[key].data.push(aux[header.cod])
+					}
+				});
 			});
 
 			$scope.page.goals.monthlySalesVsGoals.chartConfig = Utils.setChartConfig('column', 400, {}, {
@@ -459,6 +527,7 @@ angular.module('minovateApp')
 			$scope.page.goals.lastWeekComparison.table.row1 = [];
 			$scope.page.goals.lastWeekComparison.table.row2 = [];
 			$scope.page.goals.lastWeekComparison.table.row3 = [];
+			console.error(success.data.attributes.last_week_comparison);
 
 			angular.forEach(success.data.attributes.last_week_comparison, function(value, key) {
 

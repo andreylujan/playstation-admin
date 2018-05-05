@@ -93,6 +93,9 @@
 								<td data-title="'Dealers'" sortable="'dealerNames'" filter="{ 'dealerNames': 'text' }">
 									<span ng-bind-html="promotion.dealerNames"></span>
 								</td>
+								<td data-title="'Creador'" sortable="'creator'" filter="{ 'creator': 'text' }">
+									{{promotion.creator | capitalize:true}}
+								</td>
 								<td data-title="'Info'">
 									<img ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/info2.png" style="width:24px; cursor:pointer" tooltip="Más info" ng-click="gotoNewPromotion(promotion.id)">
 								</td>
