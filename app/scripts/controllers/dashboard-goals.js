@@ -319,6 +319,7 @@ angular.module('minovateApp')
 		Categories.query({
 		}, function(success) {
 			if (success.category) {
+				$scope.page.filters.category.list = [];
 				for (i = 0; i < success.category.length; i++) {
 					$scope.page.filters.category.list.push({
 						name: $filter('capitalize')(success.category[i], true),
@@ -483,6 +484,7 @@ angular.module('minovateApp')
 					category: value.name
 				});
 			});
+			console.error(success.data.attributes.last_week_comparison);
 			angular.forEach(success.data.attributes.monthly_sales_vs_goals, function(value, key) {
 
 				monthlySalesVsGoals.categories.push($filter('capitalize')(value.name, true));
