@@ -339,14 +339,10 @@ angular.module('minovateApp')
 			});
 		}
 		for (i = 0; i < $scope.page.dealer.selectedDealer.length; i++) {
-			dealers.push({
-				id: $scope.page.dealer.selectedDealer[i].id
-			});
+			dealers.push($scope.page.dealer.selectedDealer[i].id);
 		}
 		for (i = 0; i < $scope.page.store.selectedStore.length; i++) {
-			stores.push({
-				id: $scope.page.store.selectedStore[i].id
-			});
+			stores.push($scope.page.store.selectedStore[i].id);
 		}
 
 		if (!$scope.checkSentToAll) {
