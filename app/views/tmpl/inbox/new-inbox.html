@@ -1,13 +1,9 @@
 <div class="page page-ng-table">
-
 	<!-- page header -->
 	<div class="pageheader">
-
 		<h2>{{page.title}} <span></span></h2>
 		<button class="pull-right bg-blue-ps-1 pt-7 pb-7 pr-12 pl-12 br-15 b-0 text-white" ng-click="createInbox({success: true,detail: 'OK'})" ng-show="page.buttons.sendInbox.show" uib-tooltip="Enviar mensaje" tooltip-placement="bottom"><i class="fa fa-paper-plane"></i></button>
-
 		<div class="page-bar">
-
 			<ul class="page-breadcrumb">
 				<li>
 					<a ui-sref="app.dashboard"> {{main.title}}</a>
@@ -19,33 +15,17 @@
 					<a ui-sref="#">{{page.title}}</a>
 				</li>
 			</ul>
-
 		</div>
-
 	</div>
-	<!-- /page header -->
-
-	<!-- page content -->
 	<div class="pagecontent">
-
-		<!-- row -->
 		<div class="row">
-
-			<!-- col -->
 			<div class="col-md-12">
-
-
-				<!-- tile -->
 				<section class="tile" fullscreen="isFullscreen06">
-
-					<!-- tile header -->
 					<div class="tile-header dvd dvd-btm">
 						<h1 class="custom-font"></h1>
 						<ul class="controls">
 							<li class="dropdown" dropdown on-toggle="toggled(open)">
-
 								<a href dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
-
 								<ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
 									<li>
 										<a href tile-control-toggle>
@@ -63,18 +43,12 @@
 											<fa name="expand"></fa> Pantalla completa
 										</a>
 									</li>
-
 								</ul>
-
 							</li>
 							<li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
 						</ul>
 					</div>
-					<!-- /tile header -->
-
-					<!-- tile body -->
 					<div class="tile-body">
-
 						<div class="row">
 							<div class="col-md-12 mb-5">
 								<div class="form-group">
@@ -97,6 +71,50 @@
 							</div>
 						</div>
 						<hr class="mt-10 mb-10">
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<label for="selUser" class="col-md-2 control-label" >Dealers</label>
+								<div class="col-md-4">
+									<ui-select class="bg-blue-ps-1 br-15 b-0" multiple ng-model="page.dealer.selectedDealer" sortable="true" close-on-select="false" ng-disabled="checkSentToAllDealers || page.dealer.disabled">
+										<ui-select-match placeholder="Seleccionar dealers...">{{$item.name}}</ui-select-match>
+										<ui-select-choices repeat="dealer in page.dealers track by $index">
+											<div ng-bind-html="dealer.name" ></div>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Enviar a todos</label>
+										<div class="col-sm-3">
+											<input type="checkbox" ng-model="checkSentToAllDealers" ng-init="checkSentToAllDealers = true" ng-disabled="page.checkSentToAllDealers.disabled">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<label for="selUser" class="col-md-2 control-label" >Tiendas</label>
+								<div class="col-md-4">
+									<ui-select class="bg-blue-ps-1 br-15 b-0" multiple ng-model="page.store.selectedStore" sortable="true" close-on-select="false" ng-disabled="checkSentToAllStores || page.store.disabled">
+										<ui-select-match placeholder="Seleccionar Tiendas...">{{$item.name}}</ui-select-match>
+										<ui-select-choices repeat="store in page.stores | propsFilter: {name: $select.search}">
+											<div ng-bind-html="store.name | highlight: $select.search" ></div>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Enviar a todos</label>
+										<div class="col-sm-3">
+											<input type="checkbox" ng-model="checkSentToAllStores" ng-init="checkSentToAllStores = true" ng-disabled="page.checkSendToAllStores.disabled">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div class="row">
 							<div class="col-md-12 mb-5">
 								<label for="selUser" class="col-md-2 control-label" >Usuarios</label>

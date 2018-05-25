@@ -9,7 +9,7 @@
  */
 angular.module('minovateApp')
 
-.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Inbox, Users, Validators, MessageActions, Utils) {
+.controller('NewInboxCtrl', function($scope, $filter, $log, $window, $moment, $uibModal, $stateParams, $state, Inbox, Stores, Users, Dealers, Validators, MessageActions, Utils) {
 
 	var i = 0,
 		j = 0;
@@ -25,8 +25,18 @@ angular.module('minovateApp')
 			disabled: false
 		},
 		users: [],
+		dealers: [],
+		stores: [],
 		user: {
 			selectedUser: [],
+			disabled: false
+		},
+		dealer: {
+			selectedDealer: [],
+			disabled: false
+		},
+		store: {
+			selectedStore: [],
 			disabled: false
 		},
 		messageActions: [],
@@ -47,6 +57,12 @@ angular.module('minovateApp')
 			disabled: false
 		},
 		checkSendToAll: {
+			disabled: false
+		},
+		checkSendToAllDealers: {
+			disabled: false
+		},
+		checkSendToAllStores: {
 			disabled: false
 		},
 		buttons: {
@@ -87,6 +103,7 @@ angular.module('minovateApp')
 					}
 				}
 				$scope.page.user.selectedUser = $scope.page.users[0];
+				$scope.page.user.disabled = false;
 
 				getMessageActions({
 					success: true,
@@ -102,6 +119,71 @@ angular.module('minovateApp')
 				Utils.refreshToken(getUsers);
 			}
 		});
+	};
+
+	$scope.getDealers = function(e) {
+	    // Valida si el parametro e.success se seteó true para el refresh token
+	    if (!e.success) {
+	      $log.error(e.detail);
+	      return;
+	    }
+
+	    $scope.page.dealers = [];
+
+	    Dealers.query({
+	    }, function(success) {
+	    	if (success.data) {
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.dealers.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+				$scope.page.dealer.selectedDealer = $scope.page.dealers[0];
+				$scope.page.dealer.disabled = false;
+
+			} else {
+				$log.log(success);
+			}
+	    }, function(error) {
+	      $log.error(error);
+	      if (error.status === 401) {
+	        Utils.refreshToken($scope.getDealers);
+	      }
+	    });
+	};
+
+	$scope.getStores = function(e) {
+	    // Valida si el parametro e.success se seteó true para el refresh token
+	    if (!e.success) {
+	      $log.error(e.detail);
+	      return;
+	    }
+
+	    $scope.page.stores = [];
+
+	    Stores.query({
+	    }, function(success) {
+	    	if (success.data) {
+	    		console.error(success.data);
+				for (i = 0; i < success.data.length; i++) {
+					$scope.page.stores.push({
+						id: success.data[i].id,
+						name: success.data[i].attributes.name
+					});
+				}
+				$scope.page.store.selectedStore = $scope.page.stores[0];
+				$scope.page.store.disabled = false;
+
+			} else {
+				$log.log(success);
+			}
+	    }, function(error) {
+	      $log.error(error);
+	      if (error.status === 401) {
+	        Utils.refreshToken($scope.getStores);
+	      }
+	    });
 	};
 
 	var getMessageActions = function(e) {
@@ -134,6 +216,8 @@ angular.module('minovateApp')
 					$scope.page.dateTimePicker.disabled = true;
 					$scope.page.checkSendImmediate.disabled = true;
 					$scope.page.checkSendToAll.disabled = true;
+					$scope.page.checkSendToAllDealers.disabled = true;
+					$scope.page.checkSendToAllStores.disabled = true;
 					$scope.page.user.disabled = true;
 					$scope.page.messageAction.disabled = true;
 					$scope.page.subject.disabled = true;
@@ -145,6 +229,8 @@ angular.module('minovateApp')
 					$scope.page.dateTimePicker.disabled = false;
 					$scope.page.checkSendImmediate.disabled = false;
 					$scope.page.checkSendToAll.disabled = false;
+					$scope.page.checkSendToAllDealers.disabled = false;
+					$scope.page.checkSendToAllStores.disabled = false;
 					$scope.page.user.disabled = false;
 					$scope.page.messageAction.disabled = false;
 					$scope.page.subject.disabled = false;
@@ -243,6 +329,8 @@ angular.module('minovateApp')
 		}
 
 		var users = [];
+		var dealers = [];
+		var stores = [];
 
 		for (i = 0; i < $scope.page.user.selectedUser.length; i++) {
 			users.push({
@@ -250,10 +338,32 @@ angular.module('minovateApp')
 				type: $scope.page.user.selectedUser[i].type
 			});
 		}
+		for (i = 0; i < $scope.page.dealer.selectedDealer.length; i++) {
+			dealers.push({
+				id: $scope.page.dealer.selectedDealer[i].id
+			});
+		}
+		for (i = 0; i < $scope.page.store.selectedStore.length; i++) {
+			stores.push({
+				id: $scope.page.store.selectedStore[i].id
+			});
+		}
 
 		if (!$scope.checkSentToAll) {
 			if (users.length === 0) {
 				openModalMessage('Debe indicar al menos un usuario');
+				return;
+			}
+		}
+		if (!$scope.checkSentToAllDealers) {
+			if (dealers.length === 0) {
+				openModalMessage('Debe indicar al menos un Dealer');
+				return;
+			}
+		}
+		if (!$scope.checkSentToAllStores) {
+			if (stores.length === 0) {
+				openModalMessage('Debe indicar al menos una Tienda');
 				return;
 			}
 		}
@@ -278,7 +388,34 @@ angular.module('minovateApp')
 			return;
 		}
 
+		//CAMBIAR ESTO POR DEALERS Y TIENDAS
 		if (!$stateParams.idInbox) {
+
+			var data =  {
+				type: 'broadcasts',
+				attributes: {
+					title: $scope.page.subject.text,
+					html: '<style>body{background-color: #ffffff !important; color: #3f5b71 !important;}p>span{background-color: #ffffff !important;color: #3f5b71 !important;}p>strong {background-color: #ffffff !important;color: #3f5b71 !important;}img {width: 100% !important;height: auto !important;}ol>li>span{background-color: #ffffff !important;}</style><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' + $scope.page.html.value + '</html>',
+					send_at: $scope.page.dateTimePicker.date,
+					is_immediate: $scope.checkSendImmediate, // indica si se envia de inmediato
+					send_to_all: $scope.checkSentToAll, // indica si se envia a todos los users
+					action_text: $scope.page.messageAction.custom.value,
+					dealers: dealers,
+					stores: stores
+				},
+				relationships: {
+					recipients: {
+						data: users
+					},
+					message_action: {
+						data: {
+							type: 'message_actions',
+							id: parseInt($scope.page.messageAction.selectedMessageAction.id)
+						}
+					}
+				}
+			}
+			console.error(data);
 			Inbox.save({
 				data: {
 					type: 'broadcasts',
@@ -288,7 +425,9 @@ angular.module('minovateApp')
 						send_at: $scope.page.dateTimePicker.date,
 						is_immediate: $scope.checkSendImmediate, // indica si se envia de inmediato
 						send_to_all: $scope.checkSentToAll, // indica si se envia a todos los users
-						action_text: $scope.page.messageAction.custom.value
+						action_text: $scope.page.messageAction.custom.value,
+						dealers: dealers,
+						stores: stores
 					},
 					relationships: {
 						recipients: {
@@ -346,6 +485,16 @@ angular.module('minovateApp')
 	};
 
 	getUsers({
+		success: true,
+		detail: 'OK'
+	});
+
+	$scope.getDealers({
+		success: true,
+		detail: 'OK'
+	});
+
+	$scope.getStores({
 		success: true,
 		detail: 'OK'
 	});
