@@ -353,14 +353,12 @@ angular.module('minovateApp')
 		}
 		if (!$scope.checkSentToAllDealers) {
 			if (dealers.length === 0) {
-				openModalMessage('Debe indicar al menos un Dealer');
-				return;
+				dealers = null;
 			}
 		}
 		if (!$scope.checkSentToAllStores) {
 			if (stores.length === 0) {
-				openModalMessage('Debe indicar al menos una Tienda');
-				return;
+				stores = null;
 			}
 		}
 		if (!$scope.checkSendImmediate) {
@@ -411,7 +409,7 @@ angular.module('minovateApp')
 					}
 				}
 			}
-			console.error(data);
+			//console.error(data);
 			Inbox.save({
 				data: {
 					type: 'broadcasts',
