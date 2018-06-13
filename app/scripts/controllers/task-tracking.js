@@ -25,7 +25,7 @@ angular.module('minovateApp')
 		finishedTasks: {
 			pages: {
 				actual: 1,
-				size: 10,
+				size: 10000000000,
 				_current: 1,
 				total: 0,
 			}
@@ -33,7 +33,7 @@ angular.module('minovateApp')
 		pendingTasks: {
 			pages: {
 				actual: 1,
-				size: 15,
+				size: 10000000000,
 				_current: 1,
 				total: 0,
 			}
@@ -61,10 +61,11 @@ angular.module('minovateApp')
 		pendingTasks = [];
 
 	$scope.tableParamsFinishedTasks = new NgTableParams({
-		count: finishedTasks.length,
+		count: 15,
+		page: 1,
+
 	}, {
 		dataset: finishedTasks,
-		counts: [],
 		total: finishedTasks.length,
 		filterOptions: {
 			filterDelay: 1500
@@ -319,10 +320,10 @@ angular.module('minovateApp')
 	});
 
 	$scope.tableParamsPendingTasks = new NgTableParams({
-		count: pendingTasks.length,
+		count: 15,
+		page: 1
 	}, {
 		dataset: pendingTasks,
-		counts: [],
 		total: pendingTasks.length,
 	});
 
@@ -743,7 +744,6 @@ angular.module('minovateApp')
 		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
-			'page[size]': pageSize,
 			'filter[finished]': true,
 			'filter[id]': filters.id || null,
 			'filter[created_at]': filters.createdAt || null,
@@ -783,10 +783,9 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.tableParamsFinishedTasks.count(finishedTasks.length);
+				//$scope.tableParamsFinishedTasks.count(15);
 				$scope.tableParamsFinishedTasks.settings({
 					dataset: finishedTasks,
-					counts: [],
 					total: finishedTasks.length,
 					filterOptions: {
 						filterDelay: 1500
@@ -813,7 +812,6 @@ angular.module('minovateApp')
 		AssignedReports.query({
 			'all': true,
 			'page[number]': page,
-			'page[size]': pageSize,
 			'filter[finished]': false,
 			'filter[id]': filters.id || null,
 			'filter[created_at]': filters.createdAt || null,
@@ -854,10 +852,9 @@ angular.module('minovateApp')
 					});
 				}
 
-				$scope.tableParamsPendingTasks.count(pendingTasks.length);
+				//$scope.tableParamsPendingTasks.count(pendingTasks.length);
 				$scope.tableParamsPendingTasks.settings({
 					dataset: pendingTasks,
-					counts: [],
 					total: pendingTasks.length,
 					filterOptions: {
 						filterDelay: 1500
