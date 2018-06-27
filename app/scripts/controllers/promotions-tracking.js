@@ -9,7 +9,9 @@
  */
 angular.module('minovateApp')
 
-.controller('PromotionsTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, $timeout, NgTableParams, Reports, Zones, Dealers, Stores, Users, PromotionsStates, Utils) {
+.controller('PromotionsTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, 
+	$timeout, NgTableParams, Reports, Zones, Dealers, Stores, Users, PromotionsStates, 
+	Utils, $element) {
 
 	$scope.page = {
 		title: 'Seguimiento de Promociones',
@@ -64,10 +66,15 @@ angular.module('minovateApp')
 		activatorName: null
 	};
 
+	$scope.checkboxes = {
+      checked: false,
+      items: {}
+    };
+
 	var finishedPromotions = [],
 		pendingPromotions = [];
 
-	$scope.tableParamsFinishedPromotions = new NgTableParams({
+	/*$scope.tableParamsFinishedPromotions = new NgTableParams({
 		page: 1,
 		count: 15,
 		filter: {
@@ -78,9 +85,9 @@ angular.module('minovateApp')
 	}, {
 		dataset: finishedPromotions,
 		total: finishedPromotions.length,
-	});
+	});*/
 
-	$scope.tableParamsPendingPromotions = new NgTableParams({
+	/*$scope.tableParamsPendingPromotions = new NgTableParams({
 		page: 1,
 		count: 15,
 		filter: {
@@ -89,7 +96,7 @@ angular.module('minovateApp')
 		dataset: pendingPromotions,
 		counts: [],
 		total: pendingPromotions.length,
-	});
+	});*/
 
 	var getZones = function(e) {
 		// Valida si el parametro e.success se seteó true para el refresh token
@@ -236,7 +243,6 @@ angular.module('minovateApp')
 			'filter[creator_name]': filters.creatorName || null,
 			'filter[activator_name]': filters.activatorName || null,
 		}, function(success) {
-			console.error(success.data);
 			if (success.data) {
 				$scope.page.finishedPromotions.total = success.meta.activated_promotions_count;
 				$scope.pagination.finishedPromotions.pages.total = success.meta.page_count;
@@ -287,15 +293,12 @@ angular.module('minovateApp')
 			$log.error(e.detail);
 			return;
 		}
-
-		var pendingPromotions = [];
-
+		pendingPromotions = []
 		PromotionsStates.query({
 			'page[number]': 1,
 			'filter[activated]': false,
 			'filter[id]': filters.id || null,
 			'filter[title]': filters.title || null,
-			// 'filter[activated_at]': filters.activatedAt || null,
 			'filter[end_date]': filters.endDate || null,
 			'filter[start_date]': filters.startDate || null,
 			'filter[zone_name]': filters.zoneName || null,
@@ -344,6 +347,30 @@ angular.module('minovateApp')
 					total: pendingPromotions.length,
 					dataset: pendingPromotions
 				});
+				// watch for check all checkbox
+			    $scope.$watch(function() {
+			      	return $scope.checkboxes.checked;
+			    }, function(value) {
+			      	angular.forEach(pendingPromotions, function(promotion) {
+			        	$scope.checkboxes.items[promotion.id] = value;
+			      	});
+			    });
+
+			    $scope.$watch(function() {
+			      	return $scope.checkboxes.items;
+			    }, function(values) {
+			      	var checked = 0, unchecked = 0,
+			          total = pendingPromotions.length;
+			      	angular.forEach(pendingPromotions, function(promotion) {
+			        	checked   +=  ($scope.checkboxes.items[promotion.id]) || 0;
+			        	unchecked += (!$scope.checkboxes.items[promotion.id]) || 0;
+			      	});
+			      	if ((unchecked == 0) || (checked == 0)) {
+			        	$scope.checkboxes.checked = (checked == total);
+			      	}
+			      	// grayed checkbox
+			      	angular.element($element[0].getElementsByClassName("select-all")).prop("indeterminate", (checked != 0 && unchecked != 0));
+			    }, true);
 
 			} else {
 				$log.error(success);
@@ -390,6 +417,112 @@ angular.module('minovateApp')
 		}, function() {});
 	};
 
+	$scope.openModalDeletePromotionGroup = function() {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'messageListPromotionGroup.html',
+			controller: 'MessageListPromotionModalInstanceGroup',
+			resolve: {
+				promotions: function() {
+					return $scope.checkboxes;
+				}
+			}
+		});
+		modalInstance.result.then(function(datos) {
+			$window.location.reload();
+		}, function() {});
+	};
+
+})
+
+.controller('MessageListPromotionModalInstanceGroup', function($scope, $log, $uibModalInstance, 
+	promotions, PromotionsStatesDelete, Validators, Utils, $q) {
+	$scope.modal = {
+		cant: 0,
+		title: {
+			text: null
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: null
+		},
+		buttons: {
+			delete: {
+				border: false,
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+
+	var promotionsToDelete = []
+
+	angular.forEach(promotions.items, function(value, key) {
+		if (value) {
+			promotionsToDelete.push(key)
+		}
+	});
+
+	$scope.modal.cat = promotionsToDelete.length
+
+
+
+	$scope.deletePromotions = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		var deleted = 0;
+		var error = 0;
+		var promises = [];
+
+		angular.forEach(promotionsToDelete, function(value, key) {
+			var promise = PromotionsStatesDelete.delete({
+				idPromotion: value
+			}, function(success) {
+				deleted++;
+			}, function(error) {
+				error++;
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteReport);
+				}
+			});
+			promises.push(promise);
+		});
+		$q.all(promises).then(()=> {
+			console.error(promises)
+			$uibModalInstance.close({
+				action: 'close',
+				success: promises
+			});
+		}).catch(function (err) {
+            console.error(err)
+        });
+
+	};
+
+	$scope.ok = function() {
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.text = '';
+		$scope.modal.alert.show = false;
+	};
 })
 
 .controller('MessageListPromotionModalInstance', function($scope, $log, $uibModalInstance, idPromotion, PromotionsStatesDelete, Validators, Utils) {

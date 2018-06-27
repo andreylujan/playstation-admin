@@ -9,7 +9,9 @@
  */
 angular.module('minovateApp')
 
-.controller('TaskTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, $timeout, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, Utils) {
+.controller('TaskTrackingCtrl', function($scope, $filter, $uibModal, $log, $window, 
+	$timeout, AssignedReports, NgTableParams, Reports, Zones, Dealers, Stores, Users, 
+	Utils, $element) {
 
 	$scope.page = {
 		title: 'Seguimiento Tareas',
@@ -72,9 +74,14 @@ angular.module('minovateApp')
 		}
 	});
 
+	$scope.checkboxes = {
+      	checked: false,
+      	items: {}
+    };
+
 	var filterTimeout, filterTimeoutDuration = 1000;
 
-	$scope.$watch('tableParamsFinishedTasks.filter().id', function(newId) {
+	/*$scope.$watch('tableParamsFinishedTasks.filter().id', function(newId) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
 		}
@@ -293,7 +300,6 @@ angular.module('minovateApp')
 		}, filterTimeoutDuration);
 	});
 
-
 	$scope.$watch('tableParamsFinishedTasks.filter().assignedUserNames', function(newAssignedUserNames) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
@@ -317,7 +323,7 @@ angular.module('minovateApp')
 				assignedUserNames: $scope.filters.assignedUserNames
 			});
 		}, filterTimeoutDuration);
-	});
+	});*/
 
 	$scope.tableParamsPendingTasks = new NgTableParams({
 		count: 15,
@@ -327,7 +333,7 @@ angular.module('minovateApp')
 		total: pendingTasks.length,
 	});
 
-	$scope.$watch('tableParamsPendingTasks.filter().id', function(newId) {
+	/*$scope.$watch('tableParamsPendingTasks.filter().id', function(newId) {
 		if (filterTimeout) {
 			$timeout.cancel(filterTimeout);
 		}
@@ -550,9 +556,9 @@ angular.module('minovateApp')
 				assignedUserNames: $scope.filters.assignedUserNames
 			});
 		}, filterTimeoutDuration);
-	});
+	});*/
 
-	$scope.incrementPageFinishedTasks = function() {
+	/*$scope.incrementPageFinishedTasks = function() {
 		if ($scope.pagination.finishedTasks.pages._current <= $scope.pagination.finishedTasks.pages.total - 1) {
 			$scope.pagination.finishedTasks.pages._current++;
 			$scope.getFinishedTasks({
@@ -610,7 +616,7 @@ angular.module('minovateApp')
 				assignedUserNames: $scope.filters.assignedUserNames
 			});
 		}
-	};
+	};*/
 
 	var getZones = function(e) {
 		// Valida si el parametro e.success se seteó true para el refresh token
@@ -861,6 +867,31 @@ angular.module('minovateApp')
 					},
 				});
 
+				$scope.$watch(function() {
+			      	return $scope.checkboxes.checked;
+			    }, function(value) {
+			    	console.error(value)
+			      	angular.forEach(pendingTasks, function(task) {
+			        	$scope.checkboxes.items[task.id] = value;
+			      	});
+			    });
+
+			    $scope.$watch(function() {
+			      	return $scope.checkboxes.items;
+			    }, function(values) {
+			      	var checked = 0, unchecked = 0,
+			          total = pendingTasks.length;
+			      	angular.forEach(pendingTasks, function(task) {
+			        	checked   +=  ($scope.checkboxes.items[task.id]) || 0;
+			        	unchecked += (!$scope.checkboxes.items[task.id]) || 0;
+			      	});
+			      	if ((unchecked == 0) || (checked == 0)) {
+			        	$scope.checkboxes.checked = (checked == total);
+			      	}
+			      	// grayed checkbox
+			      	angular.element($element[0].getElementsByClassName("select-all")).prop("indeterminate", (checked != 0 && unchecked != 0));
+			    }, true);
+
 
 			} else {
 				$log.error(success);
@@ -893,8 +924,6 @@ angular.module('minovateApp')
 
 
 	$scope.openModalDeleteReport = function(idReport) {
-
-		//$log.error(idReport);
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'messageListReport.html',
@@ -911,6 +940,111 @@ angular.module('minovateApp')
 		}, function() {});
 	};
 
+	$scope.openModalDeleteReportGroup = function(idReport) {
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'messageListReportGroup.html',
+			controller: 'MessageListReportGroupModalInstance',
+			resolve: {
+				reports: function() {
+					return $scope.checkboxes;
+				}
+			}
+		});
+
+		modalInstance.result.then(function() {
+			$window.location.reload();
+		}, function() {});
+	};
+
+})
+
+.controller('MessageListReportGroupModalInstance', function($scope, $log, $uibModalInstance, 
+	reports, Reportes, Validators, Utils) {
+	$log.error(reports);
+	$scope.modal = {
+		cant: 0,
+		title: {
+			text: null
+		},
+		subtitle: {
+			text: null
+		},
+		alert: {
+			color: '',
+			show: false,
+			title: '',
+			text: null
+		},
+		buttons: {
+			delete: {
+				border: false,
+				show: true,
+				text: 'Eliminar'
+			}
+		}
+	};
+	var reportes = []
+
+	angular.forEach(reports.items, function(value, key) {
+		if (value) {
+			reportes.push(key)
+		}
+	});
+
+	$scope.modal.cat = reportes.length
+
+	$scope.deleteReport = function(e) {
+		if (!e.success) {
+			$log.error(e.detail);
+			return;
+		}
+
+		var deleted = 0;
+		var error = 0;
+		var promises = [];
+
+		angular.forEach(reportes, function(value, key) {
+			var promise = Reportes.delete({
+				idReport: value
+			}, function(success) {
+				$log.log(success);
+				$uibModalInstance.close();
+			}, function(error) {
+				$log.error(error);
+				if (error.status === 401) {
+					Utils.refreshToken($scope.deleteReport);
+				}
+			});
+			promises.push(promise);
+		});
+		$q.all(promises).then(()=> {
+			console.error(promises)
+			$uibModalInstance.close({
+				action: 'close',
+				success: promises
+			});
+		}).catch(function (err) {
+            console.error(err)
+        });
+
+	};
+
+	$scope.ok = function() {
+		// $uibModalInstance.close($scope.selected.item);
+		$uibModalInstance.close();
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+
+	$scope.removeAlert = function() {
+		$scope.modal.alert.color = '';
+		$scope.modal.alert.title = '';
+		$scope.modal.alert.text = '';
+		$scope.modal.alert.show = false;
+	};
 })
 
 .controller('MessageListReportModalInstance', function($scope, $log, $uibModalInstance, idReport, Reportes, Validators, Utils) {
@@ -972,5 +1106,4 @@ angular.module('minovateApp')
 		$scope.modal.alert.text = '';
 		$scope.modal.alert.show = false;
 	};
-
 });

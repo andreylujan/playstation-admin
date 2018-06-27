@@ -1,3 +1,6 @@
+<script type="text/ng-template" id="headerCheckbox.html">
+	<input type="checkbox" ng-model="checkboxes.checked" class="select-all" value="" />
+</script>
 <div class="page page-ng-table">
 
 	<!-- page header -->
@@ -160,34 +163,7 @@
 					<!-- tile header -->
 					<div class="tile-header dvd dvd-btm">
 						<h1 class="custom-font">Tareas Pendientes</h1>
-						<ul class="controls">
-							<li class="dropdown" uib-dropdown on-toggle="toggled(open)">
-
-								<a href uib-dropdown-toggle class="dropdown-toggle settings"><i class="fa fa-cog"></i></a>
-
-								<ul class="dropdown-menu pull-right with-arrow animated littleFadeInUp">
-									<li>
-										<a href tile-control-toggle>
-											<span class="minimize"><fa name="angle-down"></fa>&nbsp;&nbsp;&nbsp;Minimizar</span>
-											<span class="expand"><fa name="angle-up"></fa>&nbsp;&nbsp;&nbsp;Maximizar</span>
-										</a>
-									</li>
-									<li>
-										<a href ng-click="getReports('prev',{success: true,detail: 'OK'})">
-											<fa name="refresh"></fa> Refrescar
-										</a>
-									</li>
-									<li>
-										<a href tile-control-fullscreen ng-click="isFullscreen06 = !isFullscreen06">
-											<fa name="expand"></fa> Pantalla completa
-										</a>
-									</li>
-
-								</ul>
-
-							</li>
-							<li class="remove"><a href tile-control-close><i class="fa fa-times"></i></a></li>
-						</ul>
+						<button style="float:right; margin-right: 20px;" class="btn btn-orange-ps br-20 text-md pl-20 pr-20" ng-click="openModalDeleteReportGroup()">Eliminar</button>
 					</div>
 					<!-- /tile header -->
 
@@ -226,6 +202,9 @@
 									<!--{{report.assignedUserNames}}-->
 									<img ng-click="openModalDeleteReport(report.id)" ng-src="http://dhg7r6mxe01qf.cloudfront.net/icons/admin/delete.png" style="width:19px; cursor:pointer" uib-tooltip="Eliminar Tarea">
 								</td>
+								<td data-title="'Eliminar Individual'" header="'headerCheckbox.html'">
+									<input type="checkbox" ng-model="checkboxes.items[report.id]" />
+								</td>
 							</tr>
 						</table>
 
@@ -250,6 +229,17 @@
 	<!-- /page content -->
 </div>
 
+<script type="text/ng-template" id="messageListReportGroup.html">
+  <div class="modal-body text-gray text-center">
+    <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
+    <h3>¿Seguro que deseas eliminar {{modal.cat}} tareas?</h3>
+    <p>Al eliminar las tareas, se perderá toda la información contenida en éstas. Verifica si quieres eliminar estas tareas</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-rounded-10 mb-10" ng-class="{'btn-border': modal.buttons.delete.border}" type="button" ng-show="modal.buttons.delete.show" ng-click="deleteReport({success: true,detail: 'OK'})" >{{modal.buttons.delete.text}}</button>    
+    <button class="btn btn-cancelRecit btn-rounded-10 mb-10" type="button" ng-click="cancel()">Cerrar</button>
+  </div>
+</script>
 <script type="text/ng-template" id="messageListReport.html">
   <div class="modal-body text-gray text-center">
     <img class="img-responsive center-block" src="images/delete.png" width="50" alt="delete_img">
