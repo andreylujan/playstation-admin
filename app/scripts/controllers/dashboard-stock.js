@@ -9,7 +9,8 @@
  */
  angular.module('minovateApp')
 
- .controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, NgTableParams, Dashboard, Zones, Dealers, Stores, Users, ExcelDashboard) {
+ .controller('DashboardStockCtrl', function($scope, $log, $uibModal, $moment, $filter, $timeout, Utils, 
+  NgTableParams, Dashboard, DashboardStock, Zones, Dealers, Stores, Users, ExcelDashboard) {
 
  	var currentDate = new Date();
  	var firstMonthDay = new Date();
@@ -46,6 +47,20 @@
  				selected: null,
  				disabled: false
  			},
+      zone_second: {
+        list: [],
+        selected: null
+      },
+      dealer_second: {
+        list: [],
+        selected: null,
+        disabled: false
+      },
+      store_second: {
+        list: [],
+        selected: null,
+        disabled: false
+      },
  			month: {
  				value: new Date(),
  				isOpen: false,
@@ -72,7 +87,8 @@
  				},
  				date: {
  					startDate: firstMonthDay,
- 					endDate: currentDate
+ 					endDate: currentDate,
+          selected_second: currentDate
  				}
  			}
  		},
@@ -93,7 +109,8 @@
  		},
  		loader: {
  			show: false
- 		}
+ 		},
+    stock_graph: {}
  	};
 
  	$scope.$watch('page.filters.supervisor.loaded', function() {
@@ -117,6 +134,10 @@
  					success: true,
  					detail: 'OK'
  				});
+        $scope.getDashboardStock({
+          success: true,
+          detail: 'OK'
+        });
  			});
  		}
  	});
@@ -261,6 +282,124 @@
  		});
  	};
 
+  var getZonesSecond = function() {
+
+    $scope.page.filters.zone_second.list = [];
+
+    Zones.query({}, function(success) {
+      if (success.data) {
+
+        $scope.page.filters.zone_second.list.push({
+          id: '',
+          name: 'Todas las Zonas',
+          dealersIds: []
+        });
+
+        angular.forEach(success.data, function(value, key) {
+          $scope.page.filters.zone_second.list.push({
+            id: parseInt(value.id),
+            name: value.attributes.name,
+            dealersIds: value.attributes.dealer_ids
+          });
+        });
+
+        $scope.page.filters.zone_second.selected = $scope.page.filters.zone_second.list[0];
+        $scope.getDealersSecond({
+          success: true,
+          detail: 'OK'
+        }, $scope.page.filters.zone_second.selected);
+
+      } else {
+        $log.error(success);
+      }
+    }, function(error) {
+      $log.error(error);
+      if (error.status === 401) {
+        Utils.refreshToken(getZonesSecond);
+      }
+    });
+  };
+
+  $scope.getDealersSecond = function(e, zoneSelected) {
+
+    $scope.page.filters.dealer_second.selected = [];
+    $scope.page.filters.dealer_second.list = [];
+
+    Dealers.query({
+      'filter[zone_ids]': zoneSelected.id
+    }, function(success) {
+      if (success.data) {
+
+        $scope.page.filters.dealer_second.list.push({
+          id: '',
+          name: 'Todos los dealers'
+        });
+
+        for (i = 0; i < success.data.length; i++) {
+          $scope.page.filters.dealer_second.list.push({
+            id: parseInt(success.data[i].id),
+            name: $filter('capitalize')(success.data[i].attributes.name, true),
+            type: 'dealers'
+          });
+        }
+
+        $scope.page.filters.dealer_second.selected = $scope.page.filters.dealer_second.list[0];
+        $scope.page.filters.dealer_second.disabled = false;
+
+        $scope.getStoresSecond({
+          success: true,
+          detail: 'OK'
+        }, $scope.page.filters.zone.selected, $scope.page.filters.dealer_second.selected);
+
+      } else {
+        $log.error(success);
+      }
+    }, function(error) {
+      $log.error(error);
+      if (error.status === 401) {
+        Utils.refreshToken($scope.getDealersSecond);
+      }
+    });
+  };
+
+  $scope.getStoresSecond = function(e, zoneSelected, dealerSelected) {
+
+    $scope.page.filters.store_second.selected = [];
+    $scope.page.filters.store_second.list = [];
+
+    Stores.query({
+      'filter[dealer_ids]': dealerSelected.id,
+      'filter[zone_ids]': zoneSelected.id
+    }, function(success) {
+      if (success.data) {
+
+        $scope.page.filters.store_second.list.push({
+          id: '',
+          name: 'Todas las tiendas'
+        });
+
+        for (i = 0; i < success.data.length; i++) {
+          $scope.page.filters.store_second.list.push({
+            id: parseInt(success.data[i].id),
+            name: $filter('capitalize')(success.data[i].attributes.name, true),
+            type: 'dealers'
+          });
+        }
+
+        $scope.page.filters.store_second.selected = $scope.page.filters.store_second.list[0];
+        $scope.page.filters.store_second.disabled = false;
+
+      } else {
+        $log.error(success);
+      }
+    }, function(error) {
+      $log.error(error);
+      if (error.status === 401) {
+        Utils.refreshToken($scope.getStoresSecond);
+      }
+    });
+  };
+
  	var getUsers = function(e) {
 
  		$scope.page.filters.instructor.selected = [];
@@ -376,6 +515,46 @@
 		});
  	};
 
+  $scope.getDashboardStock = function(e) {
+  if (!e.success) {
+    $log.error(e.detail);
+    return;
+  }
+
+  var dealerIdSelected = $scope.page.filters.dealer_second.selected.name != 'Todos los dealers' ? $scope.page.filters.dealer_second.selected.name : '';
+  var storeIdSelected = $scope.page.filters.store_second.selected ? $scope.page.filters.store_second.selected.id : '';
+  var startDate = new Date($scope.page.filters.dateRange.date.selected_second);
+  var weeknumber = moment(startDate).week();
+
+  DashboardStock.query({
+    dealer_id: dealerIdSelected,
+    store_id: storeIdSelected,
+    week: weeknumber
+  }, function(success) {
+      $scope.page.stock_graph.chartConfig = Utils.setChartConfig('column', 400, {}, {
+        min: 0,
+        title: {
+          text: null
+        }
+      }, {
+        categories: _.map(success.data, function(s){ return s.category; }),
+        title: {
+          text: 'Categorias'
+        }
+      }, 
+      [{        
+        data: _.map(success.data, function(s){ return s.total_stock; }),
+        name: 'Total'
+      }]);
+
+  }, function(error) {
+    $log.error(error);
+    if (error.status === 401) {
+      Utils.refreshToken($scope.getDashboardInfo);
+    }
+  });
+};
+
  	var getShareStock = function(data) {
 
  		var donutData = [],
@@ -390,7 +569,6 @@
 
     $scope.donutData = donutData;
   };
-
 
   var getStockByCompany = function(data) {
 
@@ -585,7 +763,6 @@
  }, {
   dataset: topProducts
 });
-   $log.error($scope.page.stock.topProducts.tableParams.data.length);
  };
 
  angular.element('#daterangeDashStock').on('apply.daterangepicker', function(ev, picker) {
@@ -625,6 +802,245 @@
 };
 
 getZones();
+getZonesSecond();
 
+$scope.openModalStock = function(idMonthlyGoal) {
+  var modalInstance = $uibModal.open({
+    animation: true,
+    backdrop: false,
+    templateUrl: 'newStock.html',
+    controller: 'newStockModalInstance',
+    resolve: {
+    }
+  });
+
+  modalInstance.result.then(function() {
+    // $scope.getDashboardStock();
+  }, function() {
+    // $scope.getStockBreaks();
+  });
+};
+
+})
+.controller('newStockModalInstance', function($scope, $log, $uibModalInstance, $uibModal, 
+  CsvStock, Utils) {
+
+  $scope.modal = {
+    title: {
+      text: 'Carga de metas mensuales'
+    },
+    subtitle: {
+      text: ''
+    },
+    alert: {
+      show: false,
+      title: '',
+      text: '',
+      color: ''
+    },
+    monthlyGoal: {
+      date: {
+        value: new Date()
+      },
+      goal: {
+        value: null
+      },
+      file: {
+        value: null
+      }
+    },
+    datepicker: {
+      opened: false
+    },
+    buttons: {
+      create: {
+        text: 'Cargar',
+        show: true,
+        border: false
+      },
+      edit: {
+        text: 'Editar',
+        show: false,
+        border: false
+      },
+      delete: {
+        text: 'Eliminar',
+        show: false,
+        border: false
+      }
+    },
+    overlay: {
+      show: false
+    }
+  };
+
+  var i = 0,
+    j = 0;
+
+  $scope.openDatePicker = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.modal.datepicker.opened = !$scope.modal.datepicker.opened;
+  };
+
+  $scope.cancel = function() {
+    $uibModalInstance.close();
+  };
+
+  var removeAlert = function() {
+    $scope.modal.alert.color = '';
+    $scope.modal.alert.title = '';
+    $scope.modal.alert.show = true;
+  };
+
+  $scope.createMonthlyGoal = function() {
+
+    if ($scope.modal.monthlyGoal.file.value) {
+      uploadCsvMonthlyGoals({
+        success: true,
+        detail: 'OK'
+      });
+    } else {
+
+    }
+  };
+
+  var uploadCsvMonthlyGoals = function(e) {
+    if (!e.success) {
+      $log.error(e.detail);
+      return;
+    }
+
+    // openModalSummaryLoadMonthlyGoal();
+
+    removeAlert();
+
+    if (!$scope.modal.monthlyGoal.file.value) {
+      return;
+    }
+
+    if ($scope.modal.monthlyGoal.file.value.type !== 'text/csv' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'text/comma-separated-values' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'application/csv' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'application/excel' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'application/vnd.ms-excel' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'application/vnd.msexcel' &&
+      $scope.modal.monthlyGoal.file.value.type !== 'text/anytext') {
+
+      $scope.modal.alert.color = 'blue-ps-1';
+      $scope.modal.alert.show = true;
+      $scope.modal.alert.title = 'El archivo seleccionado no es válido.';
+      return;
+    }
+
+    $scope.modal.overlay.show = true;
+
+    var form = [{
+      field: 'csv',
+      value: $scope.modal.monthlyGoal.file.value
+    }, {
+      field: 'month',
+      value: $scope.modal.monthlyGoal.date.value.getMonth() + 1
+    }, {
+      field: 'year',
+      value: $scope.modal.monthlyGoal.date.value.getFullYear()
+    }];
+
+    CsvStock.upload(form).success(function(success) {
+      $uibModalInstance.close();
+      openModalSummaryLoadMonthlyGoal(success);
+    }, function(error) {
+      $log.error(error);
+      if (error.status === 401) {
+        Utils.refreshToken(uploadCsvMonthlyGoals);
+      }
+    });
+  };
+
+  var openModalSummaryLoadMonthlyGoal = function(data) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      backdrop: false,
+      templateUrl: 'summaryLoadMonthlyGoal.html',
+      controller: 'SummaryLoadMonthlyGoalModalInstance',
+      resolve: {
+        data: function() {
+          return data;
+        }
+      }
+    });
+
+    modalInstance.result.then(function() {
+      // $scope.getStockBreaks();
+    }, function() {
+      // $scope.getStockBreaks();
+    });
+  };
+
+})
+
+.controller('SummaryLoadMonthlyGoalModalInstance', function($scope, $log, $uibModalInstance, data) {
+
+  $scope.modal = {
+    title: {
+      text: 'Resumen carga de metas mensuales'
+    },
+    subtitle: {
+      text: ''
+    },
+    alert: {
+      show: false,
+      title: '',
+      text: '',
+      color: ''
+    },
+    summaryData: data,
+    successes: {
+      data: [],
+      count: 0
+    },
+    errors: {
+      data: [],
+      count: 0
+    }
+  };
+
+  var i = 0,
+    j = 0;
+
+  for (i = 0; i < data.data.length; i++) {
+    // éxito
+    if (data.data[i].meta.success) {
+      $scope.modal.successes.count++;
+      $scope.modal.successes.data.push({
+        storeCode: data.data[i].meta.row_data.store_code
+      });
+
+      // error
+    } else {
+      $scope.modal.errors.count++;
+
+      var storeCode = data.data[i].meta.errors.store_code ? storeCode = 'Código producto' : storeCode = null;
+      var descriptionStoreCode = data.data[i].meta.errors.store_code ? descriptionStoreCode = data.data[i].meta.errors.store_code[0] : descriptionStoreCode = null;
+
+      var monthlyGoal = data.data[i].meta.errors.monthly_goal ? monthlyGoal = 'Monto' : monthlyGoal = null;
+      var descriptionMonthlyGoal = data.data[i].meta.errors.monthly_goal ? descriptionMonthlyGoal = data.data[i].meta.errors.monthly_goal[0] : descriptionMonthlyGoal = null;
+
+      $scope.modal.errors.data.push({
+        rowNumber: data.data[i].meta.row_number + 1,
+        fields: [{
+          name: storeCode,
+          detail: descriptionStoreCode
+        }, {
+          name: monthlyGoal,
+          detail: descriptionMonthlyGoal
+        }]
+      });
+    }
+  }
+
+  $scope.cancel = function() {
+    $uibModalInstance.close();
+  };
 
 });

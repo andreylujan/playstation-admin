@@ -841,6 +841,24 @@ angular.module('minovateApp')
 		}
 	});
 })
+//DASHBOARD
+.factory('DashboardStock', function($resource) {
+	return $resource(API_URL + '/stock_chart_list', {}, 
+	{
+		query: {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/vnd.api+json',
+				Accept: 'application/vnd.api+json'
+			},
+			params: {
+				week: '@week',
+				dealer_id: '@dealer_id',
+				store_id: '@store_id',
+			}
+		}
+	});
+})
 
 //ImagesCategories
 .factory('ImagesCategories', function($resource) {
@@ -947,6 +965,7 @@ angular.module('minovateApp')
 	});
 })
 
+
 //Promoters
 .factory('Promoters', function($resource) {
 	return $resource(API_URL + '/promoters', {}, {
@@ -973,11 +992,29 @@ angular.module('minovateApp')
 	};
 
 })
+.service('CsvStock', function($http) {
+
+	var fd = new FormData();
+
+	return {
+		upload: function(form) {
+
+			for (var i = 0; i < form.length; i++) {
+				fd.append(form[i].field, form[i].value);
+			}
+
+			return $http.post(API_URL + '/stock_chart/csv', fd, {
+				transformRequest: angular.identity,
+				headers: {
+					'Content-Type': undefined
+				}
+			});
+		}
+	};
+})
 
 // CSV
 .service('Csv', function($http) {
-
-	// this.uploadFileToUrl = function(form) {
 
 	var fd = new FormData();
 
