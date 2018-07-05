@@ -112,7 +112,8 @@ angular.module('minovateApp')
         buttonDefaultText: 'Todos',
         dynamicButtonTextSuffix: 'seleccionados'
       }
-    }
+    },
+    count_users: 0
   };
 
   var i = 0,
@@ -315,6 +316,7 @@ angular.module('minovateApp')
       if (success.data) {
         var newPromoterIds = [];
         $scope.page.newTask.promoters.list = [];
+        $scope.page.count_users = success.data.length;
         // $scope.page.newTask.promoters.selectedPromoter = [];
 
         for (var i = 0; i < success.data.length; i++) {
@@ -346,6 +348,7 @@ angular.module('minovateApp')
       }
     });
   };
+
 
   $scope.page.newTask.zones.events.onSelectAll = function() {
   };
@@ -434,7 +437,23 @@ angular.module('minovateApp')
     });
   };
 
-  $scope.page.newTask.promoters.events.onItemSelect = function() {};
+  $scope.$watch('$scope.page.newTask.promoters.selectedPromoter', function() {
+    //$log.error('watch');
+    //$log.error(document.getElementsByName("dealers")[0].multiselect('rebuild'));
+    $scope.page.newTask.stores.selectedStore = [];
+
+    console.error($scope.page.dropdownMultiselect.texts.buttonDefaultText);
+    $scope.page.dropdownMultiselect.texts.buttonDefaultText = "Ejemplo"
+    console.error($scope.page.dropdownMultiselect.texts.buttonDefaultText);
+  });
+
+  $scope.page.newTask.promoters.events.onItemSelect = function() {
+    $log.error('onItemSelect');
+    $scope.page.newTask.zones.events.onDeselectAll();
+    /*console.error($scope.page.dropdownMultiselect.texts.buttonDefaultText);
+    $scope.page.dropdownMultiselect.texts.buttonDefaultText = "Ejemplo"
+    console.error($scope.page.dropdownMultiselect.texts.buttonDefaultText);*/
+  };
 
   $scope.page.newTask.promoters.events.onChange = function() {
 
@@ -514,7 +533,7 @@ angular.module('minovateApp')
     // $log.log($scope.page.newTask.zones.selectedZone);
     // $log.log($scope.page.newTask.dealers.selectedDealer);
     // $log.log($scope.page.newTask.stores.selectedStore);
-    // $log.log($scope.page.newTask.promoters.selectedPromoter);
+    $log.error($scope.page.newTask.promoters.selectedPromoter);
 
     if (!validateForm()) {
       Utils.gotoAnyPartOfPage('topPageCreateTask');
@@ -535,7 +554,7 @@ angular.module('minovateApp')
       return _.omit(o, 'name');
     });
 
-    Tasks.save({
+    /*Tasks.save({
       'data': {
         type: 'tasks',
         attributes: {
@@ -612,7 +631,7 @@ angular.module('minovateApp')
         $scope.setAlertProperties(true, 'danger', 'Error al crear la tarea', error.data.errors[0].detail);
         Utils.gotoAnyPartOfPage('topPageCreateTask');
       }
-    });
+    });*/
   };
 
   $scope.changeExecImmediately = function() {

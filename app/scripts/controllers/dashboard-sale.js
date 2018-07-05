@@ -42,9 +42,23 @@ angular.module('minovateApp')
         selected: null,
         disabled: false
       },
+      units: {
+        list: [{
+          id: 1,
+          name: 'Unidades'
+        }, {
+          id: 2,
+          name: 'Monto'
+        }],
+        selected: null,
+        disabled: false
+      },
       month: {
         value: new Date(),
         isOpen: false
+      },
+      unit: {
+        selected: null
       },
       dateRange: {
         options: {
@@ -83,6 +97,8 @@ angular.module('minovateApp')
       show: false
     }
   };
+
+  $scope.page.filters.unit.selected = $scope.page.filters.units.list[0];
 
   var storesIncluded = [],
     i = 0,
@@ -332,10 +348,12 @@ angular.module('minovateApp')
   $scope.chartConfigPriceAndAmount = Utils.setChartConfig('column', 400, {}, {}, {}, []);
 
   $scope.getDashboardInfo = function(e) {
+
     if (!e.success) {
       $log.error(e.detail);
       return;
     }
+
 
     var zoneIdSelected = $scope.page.filters.zone.selected ? $scope.page.filters.zone.selected.id : '';
     var dealerIdSelected = $scope.page.filters.dealer.selected ? $scope.page.filters.dealer.selected.id : '';
@@ -381,20 +399,55 @@ angular.module('minovateApp')
           seriesSalesBetweenConsoles = [];
         $scope.categories = [];
 
+        var parameter = 'units';
+        var parameter_by_zone = 'units';
+        var prefix = '';
+        if ($scope.page.filters.unit.selected.name == "Unidades") {
+          parameter = 'units';
+          parameter_by_zone = 'sales_unit';
+          prefix = '';
+        } else {
+          parameter = 'amount';
+          parameter_by_zone = 'sales_amount';
+          prefix = '$';
+        }
+
+        //ELIMINAR ESTO CUANDO SE CONECTE AL SERVICIO
+        for (var i = 0; i < success.data.attributes.sales_by_company.length; i++) {
+          success.data.attributes.sales_by_company[i].sales_by_type.hardware = {
+            amount: success.data.attributes.sales_by_company[i].sales_by_type.hardware,
+            units: 10
+          }
+
+          success.data.attributes.sales_by_company[i].sales_by_type.accessories = {
+            amount: success.data.attributes.sales_by_company[i].sales_by_type.accessories,
+            units: 10
+          }
+
+          success.data.attributes.sales_by_company[i].sales_by_type.games = {
+            amount: success.data.attributes.sales_by_company[i].sales_by_type.games,
+            units: 10
+          }
+
+          success.data.attributes.sales_by_company[i].sales_by_type.total = {
+            amount: success.data.attributes.sales_by_company[i].sales_by_type.total,
+            units: 10
+          }
+        }
         // Rescato los nombres de las plataformas
         angular.forEach(success.data.attributes.sales_by_company, function(value, key) {
           categories.push(value.name);
-          hardwareSales.push(value.sales_by_type.hardware);
-          accesoriesSales.push(value.sales_by_type.accessories);
-          gamesSales.push(value.sales_by_type.games);
-          totals.push(value.sales_by_type.total);
+          hardwareSales.push(value.sales_by_type.hardware[parameter]);
+          accesoriesSales.push(value.sales_by_type.accessories[parameter]);
+          gamesSales.push(value.sales_by_type.games[parameter]);
+          totals.push(value.sales_by_type.total[parameter]);
 
           $scope.categories.push({
             name: value.name,
-            hardware: value.sales_by_type.hardware,
-            accessories: value.sales_by_type.accessories,
-            games: value.sales_by_type.games,
-            total: value.sales_by_type.total
+            hardware: prefix +value.sales_by_type.hardware[parameter],
+            accessories: prefix +value.sales_by_type.accessories[parameter],
+            games: prefix +value.sales_by_type.games[parameter],
+            total: prefix +value.sales_by_type.total[parameter]
           });
         });
         // Suma acumulada de hardware
@@ -418,7 +471,7 @@ angular.module('minovateApp')
           hardwareTotal: hardwareTotal,
           accessoriesTotal: accessoriesTotal,
           gamesTotal: gamesTotal,
-          totals: totalTotals
+          totals: prefix+totalTotals
         }];
 
         $scope.chartConfigSales = Utils.setChartConfig('column', 300, {
@@ -473,14 +526,19 @@ angular.module('minovateApp')
           }
         });
 
+        //ELIMINAR ESTO CUANDO SE CONECTE AL SERVICIO
+        for (var i = 0; i < success.data.attributes.sales_by_company.length; i++) {
+        }
+
         // recorro sales_by_zone
         for (i = 0; i < success.data.attributes.sales_by_zone.length; i++) {
           // dentro de ese arreglo, recorro sales_by_company
           for (j = 0; j < success.data.attributes.sales_by_zone[i].sales_by_company.length; j++) {
             // recorro el arreglo donde anteriormente guardo las companies y agrego loa valores
             for (k = 0; k < seriesSalesBetweenConsoles.length; k++) {
+              success.data.attributes.sales_by_zone[i].sales_by_company[j].sales_unit = 10;
               if (seriesSalesBetweenConsoles[k].name === success.data.attributes.sales_by_zone[i].sales_by_company[j].name) {
-                seriesSalesBetweenConsoles[k].data.push(success.data.attributes.sales_by_zone[i].sales_by_company[j].sales_amount);
+                seriesSalesBetweenConsoles[k].data.push(success.data.attributes.sales_by_zone[i].sales_by_company[j][parameter_by_zone]);
               }
             }
           }
@@ -516,6 +574,17 @@ angular.module('minovateApp')
             text: 'Zonas'
           }
         }, seriesSalesBetweenConsoles);
+
+        //BORRAR ESTO CUANDO SE CONECTE A SERVICIO
+        for (var i = 0; i < success.data.attributes.sales_by_zone.length; i++) {
+          success.data.attributes.sales_by_zone[i].sales_by_company = _.map(success.data.attributes.sales_by_zone[i].sales_by_company, 
+            function(sbc) {
+              return {
+                name: sbc.name,
+                total_param: prefix+sbc[parameter_by_zone]
+              }
+            });
+        };
 
         $scope.tableShareOfSalesAll = success.data.attributes.sales_by_zone;
 
